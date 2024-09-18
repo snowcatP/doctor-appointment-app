@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: doctor-appointment-app
+  datasource:
+    url: jdbc:mysql://localhost:3306/doc_appointment_app
+    username: root
+    password: sesame
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
