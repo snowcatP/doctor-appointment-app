@@ -1,30 +1,39 @@
 package com.hhh.doctor_appointment_app.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
 
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@Data
+@MappedSuperclass
 @Getter
 @Setter
-public class User {
+public abstract class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "fullname")
     private String fullname;
-    private String email;
-    private String username;
-    private String password;
+
+    @Column(name = "gender")
+    private boolean gender;
+
+    @Column(name = "phone")
     private String phone;
-    private String address;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "dateOfBirth")
     private Date dateOfBirth;
-    private Boolean gender;
+
+    @Column(name = "address")
+    private String address;
+
+
+    @ManyToOne()
+    @JoinColumn(name = "role_id")
+    private User_Role userRole;
 }
