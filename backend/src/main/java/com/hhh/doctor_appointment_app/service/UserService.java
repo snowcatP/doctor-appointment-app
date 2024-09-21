@@ -1,9 +1,12 @@
 package com.hhh.doctor_appointment_app.service;
 
-import com.hhh.doctor_appointment_app.dto.UserDto;
-import com.hhh.doctor_appointment_app.entity.User;
+import com.hhh.doctor_appointment_app.dto.request.UserCreateRequest;
+import com.hhh.doctor_appointment_app.entity.Admin;
+import com.hhh.doctor_appointment_app.exception.ApplicationException;
 import com.hhh.doctor_appointment_app.mapper.UserMapper;
-import com.hhh.doctor_appointment_app.repository.UserRepository;
+import com.hhh.doctor_appointment_app.repository.AdminRepository;
+import com.hhh.doctor_appointment_app.repository.DoctorRepository;
+import com.hhh.doctor_appointment_app.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,14 +15,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     @Autowired
-    private UserRepository userRepository;
+    private AdminRepository adminRepository;
     @Autowired
-    private UserMapper userMapper;
+    private DoctorRepository doctorRepository;
+    @Autowired
+    private PatientRepository patientRepository;
 
-    public User CreateUser(UserDto userDto) {
-        User newUser = UserMapper.toUser(userDto);
+    public Admin CreateAdmin(UserCreateRequest request) {
+        if (adminRepository.existsByUsername(request.getEmail())) {
+            throw new ApplicationException("User already exists");
+        }
+        Admin newAdmin = UserMapper.toAdmin(request);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        return userRepository.save(newUser);
+        newAdmin.setPassword(passwordEncoder.encode(request.getPassword()));
+        return adminRepository.save(newAdmin);
     }
 }

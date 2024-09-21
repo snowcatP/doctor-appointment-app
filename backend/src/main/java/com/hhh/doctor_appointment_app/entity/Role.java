@@ -1,9 +1,7 @@
 package com.hhh.doctor_appointment_app.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.hhh.doctor_appointment_app.entity.enums.UserRole;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -14,7 +12,9 @@ import lombok.*;
 @Setter
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String roleName;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole roleName;
 }

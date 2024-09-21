@@ -1,6 +1,5 @@
 package com.hhh.doctor_appointment_app.entity;
 
-import com.hhh.doctor_appointment_app.entity.Enum.Specialty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,8 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "doctor")
 public class Doctor extends User{
-    @Column(name = "specialty")
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "specialty_id")
     private Specialty specialty;
 
     @OneToMany(mappedBy = "doctor",cascade = CascadeType.ALL)

@@ -4,11 +4,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.Set;
 
 @MappedSuperclass
 @Getter
 @Setter
-public abstract class User {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -23,7 +24,7 @@ public abstract class User {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "email")
+    @Column(name = "email",  nullable = false, unique = true)
     private String email;
 
     @Column(name = "dateOfBirth")
@@ -32,8 +33,16 @@ public abstract class User {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "username")
+    private String username;
 
-    @ManyToOne()
-    @JoinColumn(name = "role_id")
-    private User_Role userRole;
+    @Column(name = "password")
+    private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 }
