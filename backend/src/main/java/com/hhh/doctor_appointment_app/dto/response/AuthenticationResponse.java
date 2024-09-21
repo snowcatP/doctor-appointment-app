@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AuthenticationResponse {
     private boolean isAuthenticated;
+    private String token;
 }

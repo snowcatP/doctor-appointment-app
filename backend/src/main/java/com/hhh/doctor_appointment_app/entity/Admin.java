@@ -5,7 +5,6 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Builder
 @Data
 @AllArgsConstructor
 @Table(name = "admin")

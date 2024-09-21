@@ -1,4 +1,4 @@
-package com.hhh.doctor_appointment_app.dto;
+package com.hhh.doctor_appointment_app.dto.request;
 
 import lombok.*;
 
@@ -9,7 +9,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserDto {
+public class UserCreateRequest {
     private String fullname;
     private String email;
     private String password;
