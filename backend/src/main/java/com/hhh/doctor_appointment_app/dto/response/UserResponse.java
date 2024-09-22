@@ -1,4 +1,4 @@
-package com.hhh.doctor_appointment_app.dto.request;
+package com.hhh.doctor_appointment_app.dto.response;
 
 import lombok.*;
 
@@ -10,12 +10,11 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
-public class UserCreateRequest {
+public class UserResponse {
+    private String fullname;
     private String firstName;
     private String lastName;
     private String email;
-    private String password;
     private String phone;
     private String address;
     private Date dateOfBirth;

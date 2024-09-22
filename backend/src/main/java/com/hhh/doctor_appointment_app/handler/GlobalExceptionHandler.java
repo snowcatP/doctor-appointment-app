@@ -1,10 +1,7 @@
 package com.hhh.doctor_appointment_app.handler;
 
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
-import com.hhh.doctor_appointment_app.exception.ApplicationException;
-import com.hhh.doctor_appointment_app.exception.NotFoundException;
-import com.hhh.doctor_appointment_app.exception.UserException;
-import com.hhh.doctor_appointment_app.exception.ValidationException;
+import com.hhh.doctor_appointment_app.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -46,6 +43,13 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ApiResponse<?> handleUserException(UserException ex) {
         return createApiResponse("201", "CREATED_ERROR: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(UnauthenticatedException.class)
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public ApiResponse<?> handleUserException(UnauthenticatedException ex) {
+        return createApiResponse("401", "UNAUTHENTICATED: " + ex.getMessage());
     }
 
     private ApiResponse<?> createApiResponse(String statusCode, String message) {
