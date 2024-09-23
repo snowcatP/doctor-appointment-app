@@ -2,18 +2,24 @@ package com.hhh.doctor_appointment_app.controller;
 
 import com.hhh.doctor_appointment_app.dto.request.UserCreateRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
+import com.hhh.doctor_appointment_app.dto.response.UserResponse;
 import com.hhh.doctor_appointment_app.entity.Admin;
 import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Patient;
+import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class UserController {
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
 
@@ -34,5 +40,25 @@ public class UserController {
     @PostMapping("/register/doctor")
     public ResponseEntity<Doctor> addDoctor(@RequestBody UserCreateRequest request) {
         return null;
+    }
+
+    @GetMapping("/identity/admin/{id}")
+    public ResponseEntity<Admin> getAdminProfile(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getAdminProfile(id));
+    }
+
+    @GetMapping("/identity/users")
+    public ResponseEntity<List<Patient>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllPatients());
+    }
+
+    @GetMapping("/identity/admin")
+    public ResponseEntity<List<Admin>> getAllAdmins() {
+        return ResponseEntity.ok(userService.getAllAdmin());
+    }
+
+    @GetMapping("/identity/myInfo")
+    public ResponseEntity<UserResponse> getMyInfo() {
+        return ResponseEntity.ok(userService.getMyInfo());
     }
 }
