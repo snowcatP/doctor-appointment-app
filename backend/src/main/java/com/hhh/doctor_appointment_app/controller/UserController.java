@@ -2,9 +2,11 @@ package com.hhh.doctor_appointment_app.controller;
 
 import com.hhh.doctor_appointment_app.dto.request.UserCreateRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
+import com.hhh.doctor_appointment_app.dto.response.UserResponse;
 import com.hhh.doctor_appointment_app.entity.Admin;
 import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Patient;
+import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,15 +49,16 @@ public class UserController {
 
     @GetMapping("/identity/users")
     public ResponseEntity<List<Patient>> getAllUsers() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("Username: {}", authentication.getName());
-        authentication.getAuthorities().forEach(g -> log.info("GrantedAuthority: {}", g.getAuthority()));
-
         return ResponseEntity.ok(userService.getAllPatients());
     }
 
     @GetMapping("/identity/admin")
     public ResponseEntity<List<Admin>> getAllAdmins() {
         return ResponseEntity.ok(userService.getAllAdmin());
+    }
+
+    @GetMapping("/identity/myInfo")
+    public ResponseEntity<UserResponse> getMyInfo() {
+        return ResponseEntity.ok(userService.getMyInfo());
     }
 }

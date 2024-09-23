@@ -45,38 +45,33 @@ public class AuthenticationService {
     private PatientRepository patientRepository;
     @Autowired
     private DoctorRepository doctorRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @NonFinal
     @Value("${spring.jwt.signerKey}")
     protected String SIGNER_KEY;
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        var admin = adminRepository.findByUsername(request.getUsername());
-        Optional<Patient> patient = Optional.empty();
-        if (admin.isEmpty()) {
-            patient = patientRepository.findByUsername(request.getUsername());
+        User user = findUserByUsername(request.getUsername())
+                .orElseThrow(() -> new UnauthenticatedException("User not found"));
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new UnauthenticatedException("Invalid username or password");
         }
-        Optional<Doctor> doctor = Optional.empty();
-        if (patient.isEmpty()) {
-            doctor = doctorRepository.findByUsername(request.getUsername());
-        }
-        var user = new User();
-        if (admin.isPresent()) {
-            user = admin.get();
-        } else if (patient.isPresent()) {
-            user = patient.get();
-        } else if (doctor.isPresent()) {
-            user = doctor.get();
-        }
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
-        if (!authenticated) {
-            throw new UnauthenticatedException("Wrong username or password");
-        }
+
         var token = generateToken(user);
         return AuthenticationResponse.builder()
                 .token(token)
                 .isAuthenticated(true)
                 .build();
+    }
+
+    private Optional<User> findUserByUsername(String username) {
+        return adminRepository.findByUsername(username)
+                .map(admin -> (User) admin)   // Cast Admin to User
+                .or(() -> patientRepository.findByUsername(username)
+                        .map(patient -> (User) patient))  // Cast Patient to User
+                .or(() -> doctorRepository.findByUsername(username)
+                        .map(doctor -> (User) doctor));  // Cast Doctor to User
     }
 
     public IntrospectResponse introspect(IntrospectRequest request)
