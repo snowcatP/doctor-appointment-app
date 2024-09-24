@@ -1,6 +1,6 @@
 package com.hhh.doctor_appointment_app.entity;
 
-import com.hhh.doctor_appointment_app.entity.enums.UserRole;
+import com.hhh.doctor_appointment_app.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,6 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

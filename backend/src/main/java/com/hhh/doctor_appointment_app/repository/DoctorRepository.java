@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     boolean existsByUsername(String username);
@@ -15,4 +17,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
     @Query("SELECT d FROM Doctor d")
     Page<Doctor> getDoctorsWithPage(Pageable pageable);
+  
+    Optional<Doctor> findByUsername(String username);
+
 }
