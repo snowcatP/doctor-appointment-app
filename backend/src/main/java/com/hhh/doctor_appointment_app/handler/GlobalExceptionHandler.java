@@ -46,10 +46,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UnauthenticatedException.class)
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     public ApiResponse<?> handleUserException(UnauthenticatedException ex) {
-        return createApiResponse("401", "UNAUTHENTICATED: " + ex.getMessage());
+        return createApiResponse("401", "UNAUTHORIZED: " + ex.getMessage());
     }
 
     private ApiResponse<?> createApiResponse(String statusCode, String message) {

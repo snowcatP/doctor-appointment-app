@@ -1,17 +1,18 @@
 package com.hhh.doctor_appointment_app.service;
 
-import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest;
-import com.hhh.doctor_appointment_app.dto.request.IntrospectRequest;
+import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.AuthenticationRequest;
+import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.IntrospectRequest;
+import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.LogoutRequest;
 import com.hhh.doctor_appointment_app.dto.response.AuthenticationResponse;
 import com.hhh.doctor_appointment_app.dto.response.IntrospectResponse;
-import com.hhh.doctor_appointment_app.entity.Doctor;
-import com.hhh.doctor_appointment_app.entity.Patient;
+import com.hhh.doctor_appointment_app.entity.InvalidatedToken;
 import com.hhh.doctor_appointment_app.entity.User;
-import com.hhh.doctor_appointment_app.exception.ApplicationException;
 import com.hhh.doctor_appointment_app.exception.UnauthenticatedException;
 import com.hhh.doctor_appointment_app.repository.AdminRepository;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
+import com.hhh.doctor_appointment_app.repository.InvalidatedTokenRepository;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
+import com.hhh.doctor_appointment_app.util.singleton.PasswordEncoderSingleton;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -22,19 +23,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
-import java.util.StringJoiner;
+import java.util.UUID;
 
 @Service
 public class AuthenticationService {
@@ -46,7 +43,11 @@ public class AuthenticationService {
     @Autowired
     private DoctorRepository doctorRepository;
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private InvalidatedTokenRepository invalidatedRepository;
+
+    private final PasswordEncoder passwordEncoder = PasswordEncoderSingleton.getPasswordEncoder();
+
+
     @NonFinal
     @Value("${spring.jwt.signerKey}")
     protected String SIGNER_KEY;
@@ -78,6 +79,32 @@ public class AuthenticationService {
             throws JOSEException, ParseException {
         var token = request.getToken();
 
+        boolean isValid = true;
+        try {
+            verifyToken(token);
+        } catch (UnauthenticatedException e) {
+            isValid = false;
+        }
+        return IntrospectResponse.builder()
+                .valid(isValid)
+                .build();
+    }
+
+    public void logout(LogoutRequest request) throws ParseException, JOSEException {
+        var signToken = verifyToken(request.getToken());
+
+        String jit = signToken.getJWTClaimsSet().getJWTID();
+        Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
+
+        InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+                .id(jit)
+                .expiryTime(expiryTime)
+                .build();
+
+        invalidatedRepository.save(invalidatedToken);
+    }
+
+    private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
         SignedJWT signedJWT = SignedJWT.parse(token);
 
@@ -85,9 +112,14 @@ public class AuthenticationService {
 
         var verified = signedJWT.verify(verifier);
 
-        return IntrospectResponse.builder()
-                .valid(verified && expirationTime.after(new Date()))
-                .build();
+        if (!(verified && expirationTime.after(new Date()))) {
+            throw new UnauthenticatedException("Token expired");
+        }
+        if (invalidatedRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID())) {
+            throw new UnauthenticatedException("Token expired");
+        }
+
+        return signedJWT;
     }
 
     private String generateToken(User user) {
@@ -99,6 +131,7 @@ public class AuthenticationService {
                 .expirationTime(new Date(
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
                 ))
+                .jwtID(UUID.randomUUID().toString())
                 .claim("scope", user.getRole().getRoleName().name())
                 .build();
 
