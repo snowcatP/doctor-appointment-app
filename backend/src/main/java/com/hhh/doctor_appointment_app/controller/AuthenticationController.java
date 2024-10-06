@@ -1,14 +1,14 @@
 package com.hhh.doctor_appointment_app.controller;
 
-import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest;
-import com.hhh.doctor_appointment_app.dto.request.IntrospectRequest;
+import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.AuthenticationRequest;
+import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.IntrospectRequest;
+import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.LogoutRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.AuthenticationResponse;
 import com.hhh.doctor_appointment_app.dto.response.IntrospectResponse;
 import com.hhh.doctor_appointment_app.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -33,6 +33,14 @@ public class AuthenticationController {
         var result = authenticationService.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
                 .data(result)
+                .build();
+    }
+
+    @PostMapping("/logout")
+    public ApiResponse<Void> logout(@RequestBody LogoutRequest request)
+            throws ParseException, JOSEException {
+        authenticationService.logout(request);
+        return ApiResponse.<Void>builder()
                 .build();
     }
 }

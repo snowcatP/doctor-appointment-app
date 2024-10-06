@@ -4,7 +4,6 @@ import com.hhh.doctor_appointment_app.dto.request.UserCreateRequest;
 import com.hhh.doctor_appointment_app.dto.response.UserResponse;
 import com.hhh.doctor_appointment_app.entity.Admin;
 import com.hhh.doctor_appointment_app.entity.Patient;
-import com.hhh.doctor_appointment_app.entity.Role;
 import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.enums.UserRole;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
@@ -14,17 +13,16 @@ import com.hhh.doctor_appointment_app.repository.AdminRepository;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
 import com.hhh.doctor_appointment_app.repository.RoleRepository;
+import com.hhh.doctor_appointment_app.util.singleton.PasswordEncoderSingleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,8 +37,7 @@ public class UserService {
     private PatientRepository patientRepository;
     @Autowired
     private RoleRepository roleRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder = PasswordEncoderSingleton.getPasswordEncoder();
 
     public Admin createAdmin(UserCreateRequest request) {
         if (checkUsernameExists(request.getEmail())) {
