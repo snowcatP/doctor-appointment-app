@@ -1,5 +1,7 @@
 package com.hhh.doctor_appointment_app.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,5 +25,6 @@ public class Specialty {
     private String specialtyName;
 
     @OneToMany(mappedBy = "specialty",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Doctor> doctorList = new ArrayList<>();
 }
