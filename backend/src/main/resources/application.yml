@@ -11,3 +11,5 @@ spring:
       ddl-auto: update
   jwt:
     signerKey: "LD4WdV1y2aghWc5XIjI/aLryDMurH2A3Mj/WRFYYTBdIE1t0CR3l4yytQupbEA4G"
+    valid-duration: 3600
+    refreshable-duration: 18000
