@@ -12,11 +12,8 @@ import java.util.Optional;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient,Long> {
-    boolean existsByUsername(String username);
 
-    boolean existsByEmail(String email);
-
-    Optional<Patient> findByUsername(String username);
+    boolean existsByProfile_Email(String email);
 
     @Query("SELECT p FROM Patient p")
     Page<Patient> getPatientsWithPage(Pageable pageable);

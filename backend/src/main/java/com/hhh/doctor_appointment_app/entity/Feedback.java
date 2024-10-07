@@ -12,21 +12,16 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "feedback")
 public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "comment")
     private String comment;
 
-    @Column(name = "dateComment")
     private Date dateComment;
 
-    @Column(name = "rating")
-    private Integer rating;
+    private double rating;
 
     @ManyToOne()
     @JsonIgnore

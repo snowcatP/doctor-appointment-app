@@ -11,8 +11,15 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "doctor")
-public class Doctor extends User{
+public class Doctor{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User profile;
+
     @ManyToOne
     @JoinColumn(name = "specialty_id")
     private Specialty specialty;
