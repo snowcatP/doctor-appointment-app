@@ -11,13 +11,11 @@ import java.util.Optional;
 
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
-    boolean existsByUsername(String username);
 
-    boolean existsByEmail(String email);
+    boolean existsByProfile_Email(String email);
 
     @Query("SELECT d FROM Doctor d")
     Page<Doctor> getDoctorsWithPage(Pageable pageable);
-  
-    Optional<Doctor> findByUsername(String username);
+
 
 }

@@ -40,12 +40,12 @@ public class PatientService {
                 .map(patient -> {
                     PatientResponse response = new PatientResponse();
                     response.setId(patient.getId());
-                    response.setFullname(patient.getFullname());
-                    response.setGender(patient.isGender());
-                    response.setPhone(patient.getPhone());
-                    response.setEmail(patient.getEmail());
-                    response.setDateOfBirth(patient.getDateOfBirth());
-                    response.setAddress(patient.getAddress());
+                    response.setFullname(patient.getProfile().getFullname());
+                    response.setGender(patient.getProfile().isGender());
+                    response.setPhone(patient.getProfile().getPhone());
+                    response.setEmail(patient.getProfile().getEmail());
+                    response.setDateOfBirth(patient.getProfile().getDateOfBirth());
+                    response.setAddress(patient.getProfile().getAddress());
                     return response;
                 })
                 .collect(Collectors.toList());
@@ -63,14 +63,14 @@ public class PatientService {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
             Patient newPatient = new Patient();
-            newPatient.setFullname(addPatientRequest.getFullname());
-            newPatient.setGender(addPatientRequest.isGender());
-            newPatient.setPhone(addPatientRequest.getPhone());
-            newPatient.setEmail(addPatientRequest.getEmail());
-            newPatient.setDateOfBirth(addPatientRequest.getDateOfBirth());
-            newPatient.setAddress(addPatientRequest.getAddress());
+            newPatient.getProfile().setFullname(addPatientRequest.getFullname());
+            newPatient.getProfile().setGender(addPatientRequest.isGender());
+            newPatient.getProfile().setPhone(addPatientRequest.getPhone());
+            newPatient.getProfile().setEmail(addPatientRequest.getEmail());
+            newPatient.getProfile().setDateOfBirth(addPatientRequest.getDateOfBirth());
+            newPatient.getProfile().setAddress(addPatientRequest.getAddress());
 
-            boolean isDuplicate = patientRepository.existsByEmail(newPatient.getEmail());
+            boolean isDuplicate = patientRepository.existsByProfile_Email(newPatient.getProfile().getEmail());
             if(isDuplicate){
                 apiResponse.duplicatedCode();
                 return apiResponse;
@@ -92,8 +92,8 @@ public class PatientService {
                     .orElseThrow(() -> new NotFoundException("Patient Not Found"));
 
             // Kiểm tra xem email trong edit request có khác với email hiện tại hay không
-            if (!editPatientRequest.getEmail().equals(existingPatient.getEmail())) {
-                boolean isDuplicate = patientRepository.existsByEmail(editPatientRequest.getEmail());
+            if (!editPatientRequest.getEmail().equals(existingPatient.getProfile().getEmail())) {
+                boolean isDuplicate = patientRepository.existsByProfile_Email(editPatientRequest.getEmail());
                 if (isDuplicate) {
                     // Nếu email đã tồn tại, trả về lỗi duplicate
                     apiResponse.duplicatedCode();
@@ -101,12 +101,12 @@ public class PatientService {
                 }
             }
 
-            existingPatient.setFullname(editPatientRequest.getFullname());
-            existingPatient.setGender(editPatientRequest.isGender());
-            existingPatient.setPhone(editPatientRequest.getPhone());
-            existingPatient.setEmail(editPatientRequest.getEmail());
-            existingPatient.setDateOfBirth(editPatientRequest.getDateOfBirth());
-            existingPatient.setAddress(editPatientRequest.getAddress());
+            existingPatient.getProfile().setFullname(editPatientRequest.getFullname());
+            existingPatient.getProfile().setGender(editPatientRequest.isGender());
+            existingPatient.getProfile().setPhone(editPatientRequest.getPhone());
+            existingPatient.getProfile().setEmail(editPatientRequest.getEmail());
+            existingPatient.getProfile().setDateOfBirth(editPatientRequest.getDateOfBirth());
+            existingPatient.getProfile().setAddress(editPatientRequest.getAddress());
 
             patientRepository.saveAndFlush(existingPatient);
 

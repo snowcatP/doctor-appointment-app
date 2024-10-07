@@ -1,9 +1,6 @@
 package com.hhh.doctor_appointment_app.entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -14,8 +11,15 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "patient")
-public class Patient extends User {
+public class Patient{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User profile;
 
     @OneToMany(mappedBy = "patient",cascade = CascadeType.ALL)
     private List<MedicalRecord> medicalRecordList = new ArrayList<>();

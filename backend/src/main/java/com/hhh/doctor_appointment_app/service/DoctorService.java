@@ -40,12 +40,12 @@ public class DoctorService {
                 .map(doctor -> {
                     DoctorResponse response = new DoctorResponse();
                     response.setId(doctor.getId());
-                    response.setFullname(doctor.getFullname());
-                    response.setGender(doctor.isGender());
-                    response.setPhone(doctor.getPhone());
-                    response.setEmail(doctor.getEmail());
-                    response.setDateOfBirth(doctor.getDateOfBirth());
-                    response.setAddress(doctor.getAddress());
+                    response.setFullname(doctor.getProfile().getFullname());
+                    response.setGender(doctor.getProfile().isGender());
+                    response.setPhone(doctor.getProfile().getPhone());
+                    response.setEmail(doctor.getProfile().getEmail());
+                    response.setDateOfBirth(doctor.getProfile().getDateOfBirth());
+                    response.setAddress(doctor.getProfile().getAddress());
                     response.setSpecialty(doctor.getSpecialty());
                     return response;
                 })
@@ -64,15 +64,15 @@ public class DoctorService {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
             Doctor newDoctor = new Doctor();
-            newDoctor.setFullname(addDoctorRequest.getFullname());
-            newDoctor.setGender(addDoctorRequest.isGender());
-            newDoctor.setPhone(addDoctorRequest.getPhone());
-            newDoctor.setEmail(addDoctorRequest.getEmail());
-            newDoctor.setDateOfBirth(addDoctorRequest.getDateOfBirth());
-            newDoctor.setAddress(addDoctorRequest.getAddress());
+            newDoctor.getProfile().setFullname(addDoctorRequest.getFullname());
+            newDoctor.getProfile().setGender(addDoctorRequest.isGender());
+            newDoctor.getProfile().setPhone(addDoctorRequest.getPhone());
+            newDoctor.getProfile().setEmail(addDoctorRequest.getEmail());
+            newDoctor.getProfile().setDateOfBirth(addDoctorRequest.getDateOfBirth());
+            newDoctor.getProfile().setAddress(addDoctorRequest.getAddress());
             newDoctor.setSpecialty(addDoctorRequest.getSpecialty());
 
-            boolean isDuplicate = doctorRepository.existsByEmail(newDoctor.getEmail());
+            boolean isDuplicate = doctorRepository.existsByProfile_Email(newDoctor.getProfile().getEmail());
             if(isDuplicate){
                 apiResponse.duplicatedCode();
                 return apiResponse;
@@ -94,9 +94,9 @@ public class DoctorService {
                     .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
 
             // Kiểm tra xem email trong edit request có khác với email của bác sĩ hiện tại hay không
-            if (!editDoctorRequest.getEmail().equals(existingDoctor.getEmail())) {
+            if (!editDoctorRequest.getEmail().equals(existingDoctor.getProfile().getEmail())) {
                 // Nếu khác, kiểm tra xem email này có tồn tại trong hệ thống hay không (ngoại trừ bác sĩ hiện tại)
-                boolean isDuplicate = doctorRepository.existsByEmail(editDoctorRequest.getEmail());
+                boolean isDuplicate = doctorRepository.existsByProfile_Email(editDoctorRequest.getEmail());
                 if (isDuplicate) {
                     // Nếu email đã tồn tại, trả về lỗi duplicate
                     apiResponse.duplicatedCode();
@@ -104,12 +104,12 @@ public class DoctorService {
                 }
             }
 
-            existingDoctor.setFullname(editDoctorRequest.getFullname());
-            existingDoctor.setGender(editDoctorRequest.isGender());
-            existingDoctor.setPhone(editDoctorRequest.getPhone());
-            existingDoctor.setEmail(editDoctorRequest.getEmail());
-            existingDoctor.setDateOfBirth(editDoctorRequest.getDateOfBirth());
-            existingDoctor.setAddress(editDoctorRequest.getAddress());
+            existingDoctor.getProfile().setFullname(editDoctorRequest.getFullname());
+            existingDoctor.getProfile().setGender(editDoctorRequest.isGender());
+            existingDoctor.getProfile().setPhone(editDoctorRequest.getPhone());
+            existingDoctor.getProfile().setEmail(editDoctorRequest.getEmail());
+            existingDoctor.getProfile().setDateOfBirth(editDoctorRequest.getDateOfBirth());
+            existingDoctor.getProfile().setAddress(editDoctorRequest.getAddress());
             existingDoctor.setSpecialty(existingDoctor.getSpecialty());
 
             doctorRepository.saveAndFlush(existingDoctor);

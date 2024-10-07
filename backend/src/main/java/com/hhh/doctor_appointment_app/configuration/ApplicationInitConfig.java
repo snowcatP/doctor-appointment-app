@@ -6,6 +6,7 @@ import com.hhh.doctor_appointment_app.entity.Role;
 import com.hhh.doctor_appointment_app.enums.UserRole;
 import com.hhh.doctor_appointment_app.repository.AdminRepository;
 import com.hhh.doctor_appointment_app.repository.RoleRepository;
+import com.hhh.doctor_appointment_app.repository.UserRepository;
 import com.hhh.doctor_appointment_app.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -15,17 +16,20 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class ApplicationInitConfig implements ApplicationRunner{
-    private final AdminRepository adminRepository;
+    private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final AdminRepository adminRepository;
     private final UserService userService;
 
     ApplicationInitConfig(
+            UserRepository userRepository,
             AdminRepository adminRepository,
             RoleRepository roleRepository,
             UserService userService
     ) {
-        this.adminRepository = adminRepository;
+        this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.adminRepository = adminRepository;
         this.userService = userService;
     }
 
@@ -38,7 +42,7 @@ public class ApplicationInitConfig implements ApplicationRunner{
             }
         }
 
-        if (!adminRepository.existsByUsername("admin@gmail.com")) {
+        if (!userRepository.existsByUsername("admin@gmail.com")) {
             UserCreateRequest request = UserCreateRequest.builder()
                     .email("admin@gmail.com")
                     .password("Hello@123")
@@ -48,9 +52,13 @@ public class ApplicationInitConfig implements ApplicationRunner{
                     .lastName("Admin")
                     .gender(true)
                     .build();
-            Admin admin = userService.createAdmin(request);
-            var result = adminRepository.save(admin);
-            log.info("Admin account created with: username=admin@gmail.com, password=Hello@123");
+            var result = userService.createAdmin(request);
+            if (result != null) {
+                log.info("Admin account created with: username=admin@gmail.com, password=Hello@123");
+            } else {
+                log.info("Can't create admin account");
+            }
+
         }
     }
 }

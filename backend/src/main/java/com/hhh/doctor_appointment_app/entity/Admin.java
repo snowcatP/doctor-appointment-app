@@ -1,12 +1,19 @@
 package com.hhh.doctor_appointment_app.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "admin")
-public class Admin extends User{
+public class Admin{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User profile;
 }

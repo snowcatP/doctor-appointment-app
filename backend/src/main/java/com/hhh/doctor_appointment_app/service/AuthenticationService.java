@@ -10,10 +10,7 @@ import com.hhh.doctor_appointment_app.entity.InvalidatedToken;
 import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.exception.ApplicationException;
 import com.hhh.doctor_appointment_app.exception.UnauthenticatedException;
-import com.hhh.doctor_appointment_app.repository.AdminRepository;
-import com.hhh.doctor_appointment_app.repository.DoctorRepository;
-import com.hhh.doctor_appointment_app.repository.InvalidatedTokenRepository;
-import com.hhh.doctor_appointment_app.repository.PatientRepository;
+import com.hhh.doctor_appointment_app.repository.*;
 import com.hhh.doctor_appointment_app.util.singleton.PasswordEncoderSingleton;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -39,11 +36,7 @@ import java.util.UUID;
 public class AuthenticationService {
     private static final Logger log = LoggerFactory.getLogger(AuthenticationService.class);
     @Autowired
-    private AdminRepository adminRepository;
-    @Autowired
-    private PatientRepository patientRepository;
-    @Autowired
-    private DoctorRepository doctorRepository;
+    private UserRepository userRepository;
     @Autowired
     private InvalidatedTokenRepository invalidatedRepository;
 
@@ -77,12 +70,7 @@ public class AuthenticationService {
     }
 
     private Optional<User> findUserByUsername(String username) {
-        return adminRepository.findByUsername(username)
-                .map(admin -> (User) admin)   // Cast Admin to User
-                .or(() -> patientRepository.findByUsername(username)
-                        .map(patient -> (User) patient))  // Cast Patient to User
-                .or(() -> doctorRepository.findByUsername(username)
-                        .map(doctor -> (User) doctor));  // Cast Doctor to User
+        return userRepository.findByUsername(username);
     }
 
     public IntrospectResponse introspect(IntrospectRequest request)

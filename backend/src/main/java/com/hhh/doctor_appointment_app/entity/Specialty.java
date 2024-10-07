@@ -14,14 +14,10 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "specialty")
 public class Specialty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
-
-    @Column(name = "specialtyName")
     private String specialtyName;
 
     @OneToMany(mappedBy = "specialty",cascade = CascadeType.ALL)
