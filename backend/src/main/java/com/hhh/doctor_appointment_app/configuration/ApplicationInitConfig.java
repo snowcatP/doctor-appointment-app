@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 public class ApplicationInitConfig implements ApplicationRunner{
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final AdminRepository adminRepository;
     private final UserService userService;
 
     ApplicationInitConfig(
@@ -29,7 +28,6 @@ public class ApplicationInitConfig implements ApplicationRunner{
     ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.adminRepository = adminRepository;
         this.userService = userService;
     }
 

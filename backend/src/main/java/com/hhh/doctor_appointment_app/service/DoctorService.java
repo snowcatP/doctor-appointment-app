@@ -7,9 +7,11 @@ import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.entity.Doctor;
+import com.hhh.doctor_appointment_app.entity.Specialty;
 import com.hhh.doctor_appointment_app.exception.ApplicationException;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
+import com.hhh.doctor_appointment_app.repository.SpecialtyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,7 @@ import javax.print.Doc;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +33,8 @@ public class DoctorService {
 
     @Autowired
     private DoctorMapper doctorMapper;
+    @Autowired
+    private SpecialtyRepository specialtyRepository;
 
     public PageResponse<List<DoctorResponse>> getDoctorsWithPage(int page, int size) {
         Pageable pageable = PageRequest.of(page-1, size);
@@ -63,6 +68,9 @@ public class DoctorService {
     public ApiResponse<Object> addDoctor(AddDoctorRequest addDoctorRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
+            Specialty specialty = specialtyRepository.findById(addDoctorRequest.getSpecialtyID())
+                    .orElseThrow(() -> new NotFoundException("Not found specialty"));
+
             Doctor newDoctor = new Doctor();
             newDoctor.getProfile().setFullname(addDoctorRequest.getFullname());
             newDoctor.getProfile().setGender(addDoctorRequest.isGender());
@@ -70,7 +78,7 @@ public class DoctorService {
             newDoctor.getProfile().setEmail(addDoctorRequest.getEmail());
             newDoctor.getProfile().setDateOfBirth(addDoctorRequest.getDateOfBirth());
             newDoctor.getProfile().setAddress(addDoctorRequest.getAddress());
-            newDoctor.setSpecialty(addDoctorRequest.getSpecialty());
+            newDoctor.setSpecialty(specialty);
 
             boolean isDuplicate = doctorRepository.existsByProfile_Email(newDoctor.getProfile().getEmail());
             if(isDuplicate){
