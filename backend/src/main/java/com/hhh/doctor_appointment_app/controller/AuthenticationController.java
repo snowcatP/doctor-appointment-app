@@ -3,6 +3,7 @@ package com.hhh.doctor_appointment_app.controller;
 import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.AuthenticationRequest;
 import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.IntrospectRequest;
 import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.LogoutRequest;
+import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.RefreshTokenRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.AuthenticationResponse;
 import com.hhh.doctor_appointment_app.dto.response.IntrospectResponse;
@@ -41,6 +42,15 @@ public class AuthenticationController {
             throws ParseException, JOSEException {
         authenticationService.logout(request);
         return ApiResponse.<Void>builder()
+                .build();
+    }
+
+    @PostMapping("/refreshToken")
+    public ApiResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest request)
+            throws ParseException, JOSEException {
+        var result = authenticationService.refreshToken(request);
+        return ApiResponse.<AuthenticationResponse>builder()
+                .data(result)
                 .build();
     }
 }
