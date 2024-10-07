@@ -18,13 +18,13 @@ import java.text.ParseException;
 public class AuthenticationController {
     @Autowired
     private AuthenticationService authenticationService;
-
+    @CrossOrigin()
     @PostMapping("/login")
     public ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         var result = authenticationService.authenticate(request);
-        return ApiResponse.<AuthenticationResponse>builder()
+        return (ApiResponse.<AuthenticationResponse>builder()
                 .data(result)
-                .build();
+                .build());
     }
 
     @PostMapping("/introspect")

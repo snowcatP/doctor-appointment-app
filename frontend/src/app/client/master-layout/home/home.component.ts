@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { SlickCarouselModule } from 'ngx-slick-carousel';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [SlickCarouselModule],
+  imports: [],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
