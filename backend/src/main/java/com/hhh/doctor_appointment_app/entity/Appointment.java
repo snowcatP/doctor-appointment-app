@@ -1,6 +1,7 @@
 package com.hhh.doctor_appointment_app.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hhh.doctor_appointment_app.enums.AppointmentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,11 +20,30 @@ public class Appointment {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "fullname")
+    private String fullname;
+
+    @Column(name = "gender")
+    private boolean gender;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "email",  nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "dateOfBirth")
+    private Date dateOfBirth;
+
     @Column(name = "reason")
     private String reason;
 
     @Column(name = "dateBooking")
     private Date dateBooking;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private AppointmentStatus appointmentStatus;
 
     @ManyToOne()
     @JsonIgnore

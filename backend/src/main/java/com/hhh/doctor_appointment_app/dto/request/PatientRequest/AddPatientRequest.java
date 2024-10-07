@@ -23,4 +23,5 @@ public class AddPatientRequest {
     private Date dateOfBirth;
 
     private String address;
+
 }

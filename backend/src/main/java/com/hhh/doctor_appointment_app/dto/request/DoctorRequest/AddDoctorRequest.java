@@ -26,5 +26,5 @@ public class AddDoctorRequest {
 
     private String address;
 
-    private Specialty specialty;
+    private Long specialtyID;
 }
