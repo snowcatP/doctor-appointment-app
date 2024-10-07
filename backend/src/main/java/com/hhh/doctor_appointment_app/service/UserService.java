@@ -9,10 +9,7 @@ import com.hhh.doctor_appointment_app.enums.UserRole;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.exception.UserException;
 import com.hhh.doctor_appointment_app.mapper.UserMapper;
-import com.hhh.doctor_appointment_app.repository.AdminRepository;
-import com.hhh.doctor_appointment_app.repository.DoctorRepository;
-import com.hhh.doctor_appointment_app.repository.PatientRepository;
-import com.hhh.doctor_appointment_app.repository.RoleRepository;
+import com.hhh.doctor_appointment_app.repository.*;
 import com.hhh.doctor_appointment_app.util.singleton.PasswordEncoderSingleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,18 +33,18 @@ public class UserService {
     @Autowired
     private PatientRepository patientRepository;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder = PasswordEncoderSingleton.getPasswordEncoder();
 
     public Admin createAdmin(UserCreateRequest request) {
         if (checkUsernameExists(request.getEmail())) {
             throw new UserException("User already exists");
         }
         Admin newAdmin = UserMapper.toAdmin(request);
-        newAdmin.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        var role = roleRepository.findByRoleName(UserRole.ADMIN);;
-        newAdmin.setRole(role);
+        var role = roleRepository.findByRoleName(UserRole.ADMIN);
+        newAdmin.getProfile().setRole(role);
 
         return adminRepository.save(newAdmin);
     }
@@ -57,15 +54,14 @@ public class UserService {
             throw new UserException("User already exists");
         }
         Patient newPatient = UserMapper.toPatient(request);
-        newPatient.setPassword(passwordEncoder.encode(request.getPassword()));
 
         var role = roleRepository.findByRoleName(UserRole.PATIENT);
-        newPatient.setRole(role);
+        newPatient.getProfile().setRole(role);
 
         return patientRepository.save(newPatient);
     }
 
-    @PostAuthorize("returnObject.username == authentication.name")
+    @PostAuthorize("returnObject.profile.username == authentication.name")
     public Admin getAdminProfile(Long id) {
         log.info("Get admin profile");
         return adminRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
@@ -86,12 +82,7 @@ public class UserService {
     }
 
     private Optional<User> findUserByUsername(String username) {
-        return adminRepository.findByUsername(username)
-                .map(admin -> (User) admin)   // Cast Admin to User
-                .or(() -> patientRepository.findByUsername(username)
-                        .map(patient -> (User) patient))  // Cast Patient to User
-                .or(() -> doctorRepository.findByUsername(username)
-                        .map(doctor -> (User) doctor));  // Cast Doctor to User
+        return userRepository.findByUsername(username);
     }
 
     public List<Admin> getAllAdmin() {
@@ -99,8 +90,6 @@ public class UserService {
     }
 
     private boolean checkUsernameExists(String username) {
-        return adminRepository.existsByUsername(username) ||
-                patientRepository.existsByUsername(username) ||
-                doctorRepository.existsByUsername(username);
+        return userRepository.existsByUsername(username);
     }
 }

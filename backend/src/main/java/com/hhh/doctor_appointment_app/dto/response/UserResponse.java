@@ -7,11 +7,11 @@ import java.util.Date;
 import java.util.Set;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
 public class UserResponse {
     private String fullname;
     private String firstName;

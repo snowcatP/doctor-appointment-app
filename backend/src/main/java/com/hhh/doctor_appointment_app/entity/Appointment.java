@@ -12,17 +12,13 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "appointment")
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "reason")
     private String reason;
 
-    @Column(name = "dateBooking")
     private Date dateBooking;
 
     @ManyToOne()

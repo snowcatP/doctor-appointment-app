@@ -14,20 +14,12 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "medical_record")
 public class MedicalRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
-
-    @Column(name = "description")
     private String description;
-
-    @Column(name = "dateCreated")
     private Date dateCreated;
-
-    @Column(name = "filePath")
     private String filePath;
 
     @ManyToOne()
