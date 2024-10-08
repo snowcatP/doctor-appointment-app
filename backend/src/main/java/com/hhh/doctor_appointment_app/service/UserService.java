@@ -10,14 +10,12 @@ import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.exception.UserException;
 import com.hhh.doctor_appointment_app.mapper.UserMapper;
 import com.hhh.doctor_appointment_app.repository.*;
-import com.hhh.doctor_appointment_app.util.singleton.PasswordEncoderSingleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,7 +1,5 @@
 package com.hhh.doctor_appointment_app.controller;
 
-import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.AddDoctorRequest;
-import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.EditDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.request.SpecialtyRequest.AddSpecialtyRequest;
 import com.hhh.doctor_appointment_app.dto.request.SpecialtyRequest.EditSpecialtyRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;

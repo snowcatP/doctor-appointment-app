@@ -6,13 +6,11 @@ import com.hhh.doctor_appointment_app.dto.response.UserResponse;
 import com.hhh.doctor_appointment_app.entity.Admin;
 import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Patient;
-import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

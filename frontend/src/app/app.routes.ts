@@ -6,7 +6,7 @@ export const routes: Routes = [
     {
         path: '',
         component: HomeComponent,
-        title: 'Online Doctor Booking – Schedule Medical Appointments in Minutes'
+        title: 'Online Doctor Booking - Schedule Medical Appointments in Minutes'
     },
     {
         path: 'login',
