@@ -4,19 +4,12 @@ import com.hhh.doctor_appointment_app.dto.request.UserCreateRequest;
 import com.hhh.doctor_appointment_app.dto.response.UserResponse;
 import com.hhh.doctor_appointment_app.entity.Admin;
 import com.hhh.doctor_appointment_app.entity.Patient;
-import com.hhh.doctor_appointment_app.entity.Role;
 import com.hhh.doctor_appointment_app.entity.User;
-import com.hhh.doctor_appointment_app.enums.UserRole;
-import com.hhh.doctor_appointment_app.repository.RoleRepository;
 import com.hhh.doctor_appointment_app.util.singleton.PasswordEncoderSingleton;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Optional;
 
 @Service
 public class UserMapper {

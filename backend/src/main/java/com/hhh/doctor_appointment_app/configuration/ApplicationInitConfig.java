@@ -1,7 +1,6 @@
 package com.hhh.doctor_appointment_app.configuration;
 
 import com.hhh.doctor_appointment_app.dto.request.UserCreateRequest;
-import com.hhh.doctor_appointment_app.entity.Admin;
 import com.hhh.doctor_appointment_app.entity.Role;
 import com.hhh.doctor_appointment_app.enums.UserRole;
 import com.hhh.doctor_appointment_app.repository.AdminRepository;
@@ -18,18 +17,15 @@ import org.springframework.stereotype.Component;
 public class ApplicationInitConfig implements ApplicationRunner{
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final AdminRepository adminRepository;
     private final UserService userService;
 
     ApplicationInitConfig(
             UserRepository userRepository,
-            AdminRepository adminRepository,
             RoleRepository roleRepository,
             UserService userService
     ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.adminRepository = adminRepository;
         this.userService = userService;
     }
 
