@@ -36,7 +36,8 @@ public class DoctorController {
     }
 
     @PostMapping("/add-doctor")
-    public ResponseEntity<?> addDoctor(@Valid @RequestBody AddDoctorRequest addDoctorRequest, BindingResult bindingResult){
+    public ResponseEntity<?> addDoctor(@Valid @RequestBody AddDoctorRequest addDoctorRequest,
+                                       BindingResult bindingResult){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -62,7 +63,9 @@ public class DoctorController {
     }
 
     @PutMapping("/edit-doctor/{id}")
-    public ResponseEntity<?> editDoctor(@PathVariable Long id, @Valid @RequestBody EditDoctorRequest editDoctorRequest, BindingResult bindingResult){
+    public ResponseEntity<?> editDoctor(@PathVariable Long id,
+                                        @Valid @RequestBody EditDoctorRequest editDoctorRequest,
+                                        BindingResult bindingResult){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();

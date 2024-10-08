@@ -1,5 +1,6 @@
 package com.hhh.doctor_appointment_app.dto.response;
 import lombok.*;
+import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 

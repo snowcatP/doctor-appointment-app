@@ -9,8 +9,6 @@ import com.hhh.doctor_appointment_app.util.singleton.PasswordEncoderSingleton;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-
 @Service
 public class UserMapper {
 
@@ -28,7 +26,6 @@ public class UserMapper {
                 .username(request.getEmail())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .isActive(true)
                 .build();
 
         return Admin.builder()
@@ -48,14 +45,10 @@ public class UserMapper {
                 .username(request.getEmail())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .isActive(true)
                 .build();
 
         return Patient.builder()
                 .profile(user)
-                .appointmentList(new ArrayList<>())
-                .feedbackList(new ArrayList<>())
-                .medicalRecordList(new ArrayList<>())
                 .build();
     }
 
