@@ -35,13 +35,16 @@ public class PatientController {
         }
     }
 
+
     @PostMapping("/add-patient")
     public ResponseEntity<?> addPatient(@Valid @RequestBody AddPatientRequest addPatientRequest, BindingResult bindingResult){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.status(HttpStatus.OK).body(errors);
+            apiResponse.setStatusCode("400");
+            apiResponse.setMessage("An unexpected error occurred: " + errors);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
             apiResponse = patientService.addPatient(addPatientRequest);
@@ -61,13 +64,16 @@ public class PatientController {
         }
     }
 
+
     @PutMapping("/edit-patient/{id}")
     public ResponseEntity<?> editPatient(@PathVariable Long id, @Valid @RequestBody EditPatientRequest editPatientRequest, BindingResult bindingResult){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.status(HttpStatus.OK).body(errors);
+            apiResponse.setStatusCode("400");
+            apiResponse.setMessage("An unexpected error occurred: " + errors);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
             apiResponse = patientService.editPatient(id,editPatientRequest);

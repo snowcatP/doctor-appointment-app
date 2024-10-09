@@ -1,5 +1,6 @@
 package com.hhh.doctor_appointment_app.controller;
 
+import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.AppointmentByGuestRequest;
 import com.hhh.doctor_appointment_app.dto.request.UserCreateRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.UserResponse;
@@ -8,14 +9,19 @@ import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Patient;
 import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.service.UserService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -30,12 +36,33 @@ public class UserController {
                 .build();
     }
 
+//    @PostMapping("/register/user")
+//    public ApiResponse<Patient> addPatient(@RequestBody UserCreateRequest request) {
+//        return ApiResponse.<Patient>builder()
+//                .data(userService.createPatient(request))
+//                .build();
+//    }
     @PostMapping("/register/user")
-    public ApiResponse<Patient> addPatient(@RequestBody UserCreateRequest request) {
-        return ApiResponse.<Patient>builder()
-                .data(userService.createPatient(request))
-                .build();
+    public ResponseEntity<?> addPatient(@Valid @RequestBody UserCreateRequest request, BindingResult bindingResult){
+        ApiResponse<Object> apiResponse = new ApiResponse<>();
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            apiResponse.setStatusCode("400");
+            apiResponse.setMessage("An unexpected error occurred: " + errors);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+        try {
+            apiResponse = userService.createPatient(request);
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
+        }
+        catch (Exception ex) {
+            apiResponse.setStatusCode("400");
+            apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
     }
+
 
     @PostMapping("/register/doctor")
     public ResponseEntity<Doctor> addDoctor(@RequestBody UserCreateRequest request) {

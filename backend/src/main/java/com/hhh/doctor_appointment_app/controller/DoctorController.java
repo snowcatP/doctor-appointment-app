@@ -42,7 +42,9 @@ public class DoctorController {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.status(HttpStatus.OK).body(errors);
+            apiResponse.setStatusCode("400");
+            apiResponse.setMessage("An unexpected error occurred: " + errors);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
             apiResponse = doctorService.addDoctor(addDoctorRequest);
@@ -68,7 +70,9 @@ public class DoctorController {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.status(HttpStatus.OK).body(errors);
+            apiResponse.setStatusCode("400");
+            apiResponse.setMessage("An unexpected error occurred: " + errors);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
             apiResponse = doctorService.editDoctor(id,editDoctorRequest);

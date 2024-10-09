@@ -17,7 +17,7 @@ public class AddPatientRequest {
 
     private String phone;
 
-    @Email(message = "Email không hợp lệ")
+    @Email(message = "Invalid Email")
     private String email;
 
     private Date dateOfBirth;

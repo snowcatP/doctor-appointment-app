@@ -8,6 +8,7 @@ import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Specialty;
+import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.exception.ApplicationException;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
@@ -70,14 +71,16 @@ public class DoctorService {
         try{
             Specialty specialty = specialtyRepository.findById(addDoctorRequest.getSpecialtyID())
                     .orElseThrow(() -> new NotFoundException("Not found specialty"));
+            User user = new User();
+            user.setFullname(addDoctorRequest.getFullname());
+            user.setGender(addDoctorRequest.isGender());
+            user.setPhone(addDoctorRequest.getPhone());
+            user.setEmail(addDoctorRequest.getEmail());
+            user.setDateOfBirth(addDoctorRequest.getDateOfBirth());
+            user.setAddress(addDoctorRequest.getAddress());
 
             Doctor newDoctor = new Doctor();
-            newDoctor.getProfile().setFullname(addDoctorRequest.getFullname());
-            newDoctor.getProfile().setGender(addDoctorRequest.isGender());
-            newDoctor.getProfile().setPhone(addDoctorRequest.getPhone());
-            newDoctor.getProfile().setEmail(addDoctorRequest.getEmail());
-            newDoctor.getProfile().setDateOfBirth(addDoctorRequest.getDateOfBirth());
-            newDoctor.getProfile().setAddress(addDoctorRequest.getAddress());
+            newDoctor.setProfile(user);
             newDoctor.setSpecialty(specialty);
 
             boolean isDuplicate = doctorRepository.existsByProfile_Email(newDoctor.getProfile().getEmail());
@@ -98,6 +101,9 @@ public class DoctorService {
     public ApiResponse<Object> editDoctor(Long id,EditDoctorRequest editDoctorRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try {
+            Specialty specialty = specialtyRepository.findById(editDoctorRequest.getSpecialtyID())
+                    .orElseThrow(() -> new NotFoundException("Not found specialty"));
+
             Doctor existingDoctor = doctorRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
 
@@ -118,7 +124,7 @@ public class DoctorService {
             existingDoctor.getProfile().setEmail(editDoctorRequest.getEmail());
             existingDoctor.getProfile().setDateOfBirth(editDoctorRequest.getDateOfBirth());
             existingDoctor.getProfile().setAddress(editDoctorRequest.getAddress());
-            existingDoctor.setSpecialty(existingDoctor.getSpecialty());
+            existingDoctor.setSpecialty(specialty);
 
             doctorRepository.saveAndFlush(existingDoctor);
 

@@ -19,7 +19,7 @@ public class ApiResponse<T> {
     }
     public void duplicatedCode(){
         this.statusCode = "500";
-        this.message = "The code of training program is duplicated!";
+        this.message = "Duplicated!";
     }
 
     public void ok(T data) {

@@ -1,11 +1,16 @@
 package com.hhh.doctor_appointment_app.service;
 
+import com.hhh.doctor_appointment_app.dto.mapper.PatientMapper;
+import com.hhh.doctor_appointment_app.dto.request.PatientRequest.AddPatientRequest;
 import com.hhh.doctor_appointment_app.dto.request.UserCreateRequest;
+import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
+import com.hhh.doctor_appointment_app.dto.response.PatientResponse.PatientResponse;
 import com.hhh.doctor_appointment_app.dto.response.UserResponse;
 import com.hhh.doctor_appointment_app.entity.Admin;
 import com.hhh.doctor_appointment_app.entity.Patient;
 import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.enums.UserRole;
+import com.hhh.doctor_appointment_app.exception.ApplicationException;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.exception.UserException;
 import com.hhh.doctor_appointment_app.mapper.UserMapper;
@@ -36,6 +41,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private PatientMapper patientMapper;
 
     public Admin createAdmin(UserCreateRequest request) {
         if (checkUsernameExists(request.getEmail())) {
@@ -49,16 +56,46 @@ public class UserService {
         return adminRepository.save(newAdmin);
     }
 
-    public Patient createPatient(UserCreateRequest request) {
-        if (checkUsernameExists(request.getEmail())) {
-            throw new UserException("User already exists");
+//    public Patient createPatient(UserCreateRequest request) {
+//        if (checkUsernameExists(request.getEmail())) {
+//            throw new UserException("User already exists");
+//        }
+//        Patient newPatient = UserMapper.toPatient(request);
+//
+//        var role = roleRepository.findByRoleName(UserRole.PATIENT);
+//        newPatient.getProfile().setRole(role);
+//
+//        return patientRepository.save(newPatient);
+//    }
+
+    public ApiResponse<Object> createPatient(UserCreateRequest userCreateRequest){
+        ApiResponse<Object> apiResponse = new ApiResponse<>();
+        try{
+            if (checkUsernameExists(userCreateRequest.getEmail())) {
+                throw new UserException("User already exists");
+            }
+
+            User user = new User();
+            user.setFullname(userCreateRequest.getFirstName() + " " +  userCreateRequest.getLastName());
+            user.setGender(userCreateRequest.getGender());
+            user.setPhone(userCreateRequest.getPhone());
+            user.setEmail(userCreateRequest.getEmail());
+            user.setDateOfBirth(userCreateRequest.getDateOfBirth());
+            user.setAddress(userCreateRequest.getAddress());
+
+            Patient newPatient = new Patient();
+            newPatient.setProfile(user);
+
+            var role = roleRepository.findByRoleName(UserRole.PATIENT);
+            newPatient.getProfile().setRole(role);
+
+            patientRepository.saveAndFlush(newPatient);
+            PatientResponse patientResponse = patientMapper.toResponse(newPatient);
+            apiResponse.ok(patientResponse);
+            return apiResponse;
+        }catch (Exception ex){
+            throw new ApplicationException("An unexpected error occurred");
         }
-        Patient newPatient = UserMapper.toPatient(request);
-
-        var role = roleRepository.findByRoleName(UserRole.PATIENT);
-        newPatient.getProfile().setRole(role);
-
-        return patientRepository.save(newPatient);
     }
 
     @PostAuthorize("returnObject.profile.username == authentication.name")
