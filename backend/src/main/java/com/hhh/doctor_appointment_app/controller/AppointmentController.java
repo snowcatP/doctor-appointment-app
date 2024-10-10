@@ -28,7 +28,7 @@ public class AppointmentController {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            apiResponse.setStatusCode("400");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + errors);
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
@@ -37,7 +37,7 @@ public class AppointmentController {
             return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
         }
         catch (Exception ex) {
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
@@ -49,7 +49,7 @@ public class AppointmentController {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            apiResponse.setStatusCode("400");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + errors);
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
@@ -58,7 +58,7 @@ public class AppointmentController {
             return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
         }
         catch (Exception ex) {
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
@@ -73,12 +73,12 @@ public class AppointmentController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (NotFoundException ex){
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
             apiResponse.setMessage(ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (Exception ex) {
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage(ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }

@@ -48,7 +48,7 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            apiResponse.setStatusCode("400");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + errors);
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
@@ -57,7 +57,7 @@ public class UserController {
             return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
         }
         catch (Exception ex) {
-            apiResponse.setStatusCode("400");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }

@@ -17,6 +17,7 @@ import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,9 +35,9 @@ public class AppointmentService {
     @Autowired
     private AppointmentMapper appointmentMapper;
 
-    public ApiResponse<Object> createAppointmentByPatient(AppointmentByPatientRequest appointmentByPatientRequest){
+    public ApiResponse<Object> createAppointmentByPatient(AppointmentByPatientRequest appointmentByPatientRequest) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
-        try{
+        try {
             Patient patient = patientRepository.findById(appointmentByPatientRequest.getPatient_ID())
                     .orElseThrow(() -> new NotFoundException("Patient Not Found"));
 
@@ -56,21 +57,22 @@ public class AppointmentService {
                     .appointmentStatus(AppointmentStatus.PENDING)
                     .build();
 
-            if(appointment != null){
+
                 appointmentRepository.saveAndFlush(appointment);
                 AppointmentResponse appointmentResponse = appointmentMapper.toResponse(appointment);
                 apiResponse.setMessage("Appointment Created Successfully !");
                 apiResponse.ok(appointmentResponse);
                 return apiResponse;
-            }
-            return ApiResponse.builder()
-                    .statusCode("400")
-                    .message("Appointment Created Failed !")
-                    .build();
 
-        }catch (Exception ex){
+
+        } catch (NotFoundException ex) {
             return ApiResponse.builder()
-                    .statusCode("400")
+                    .statusCode(HttpStatus.NOT_FOUND.value())
+                    .message(ex.getMessage())
+                    .build();
+        } catch (Exception ex) {
+            return ApiResponse.builder()
+                    .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                     .message("Appointment Created Failed !")
                     .build();
         }
@@ -95,21 +97,21 @@ public class AppointmentService {
                     .appointmentStatus(AppointmentStatus.PENDING)
                     .build();
 
-            if(appointment != null){
                 appointmentRepository.saveAndFlush(appointment);
                 AppointmentResponse appointmentResponse = appointmentMapper.toResponse(appointment);
                 apiResponse.setMessage("Appointment Created Successfully !");
                 apiResponse.ok(appointmentResponse);
                 return apiResponse;
-            }
-            return ApiResponse.builder()
-                    .statusCode("400")
-                    .message("Appointment Created Failed !")
-                    .build();
 
-        }catch (Exception ex){
+        } catch (NotFoundException ex) {
             return ApiResponse.builder()
-                    .statusCode("400")
+                    .statusCode(HttpStatus.NOT_FOUND.value())
+                    .message(ex.getMessage())
+                    .build();
+        }
+        catch (Exception ex){
+            return ApiResponse.builder()
+                    .statusCode(HttpStatus.BAD_REQUEST.value())
                     .message("Appointment Created Failed !")
                     .build();
         }
@@ -123,8 +125,11 @@ public class AppointmentService {
             AppointmentResponse appointmentResponse = appointmentMapper.toResponse(appointment);
             apiResponse.ok(appointmentResponse);
             apiResponse.setMessage("Get Appointment's Information Successfully");
+        }catch(NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
         }catch(Exception ex){
-            apiResponse.setStatusCode("404");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage(ex.getMessage());
         }
         return apiResponse;

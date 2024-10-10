@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.print.Doc;
@@ -130,8 +131,11 @@ public class DoctorService {
 
             DoctorResponse doctorResponse = doctorMapper.toResponse(existingDoctor);
             apiResponse.ok(doctorResponse);
-        } catch (ApplicationException ex) {
-            apiResponse.setStatusCode("400");
+        } catch(NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
+        }catch (ApplicationException ex) {
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("Failed to update");
         }
         return apiResponse;
@@ -146,8 +150,12 @@ public class DoctorService {
             doctorRepository.deleteById(doctor.getId());
             apiResponse.ok();
             apiResponse.setMessage("Doctor successfully deleted");
-        }catch(Exception ex){
-            apiResponse.setStatusCode("500");
+        }catch(NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
+        }
+        catch(Exception ex){
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage(ex.getMessage());
         }
         return apiResponse;
@@ -161,8 +169,12 @@ public class DoctorService {
             DoctorResponse doctorResponse = doctorMapper.toResponse(doctor);
             apiResponse.ok(doctorResponse);
             apiResponse.setMessage("Get Doctor's Information Successfully");
-        }catch(Exception ex){
-            apiResponse.setStatusCode("500");
+        }catch(NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
+        }
+        catch(Exception ex){
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage(ex.getMessage());
         }
         return apiResponse;

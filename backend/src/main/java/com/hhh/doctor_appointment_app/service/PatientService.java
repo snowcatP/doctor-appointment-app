@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -117,8 +118,11 @@ public class PatientService {
 
             PatientResponse patientResponse = patientMapper.toResponse(existingPatient);
             apiResponse.ok(patientResponse);
-        } catch (ApplicationException ex) {
-            apiResponse.setStatusCode("400");
+        } catch(NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
+        }catch (ApplicationException ex) {
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("Failed to update");
         }
         return apiResponse;
@@ -133,8 +137,11 @@ public class PatientService {
             patientRepository.deleteById(patient.getId());
             apiResponse.ok();
             apiResponse.setMessage("Patient successfully deleted");
+        }catch(NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
         }catch(Exception ex){
-            apiResponse.setStatusCode("500");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage(ex.getMessage());
         }
         return apiResponse;
@@ -148,8 +155,11 @@ public class PatientService {
             PatientResponse patientResponse = patientMapper.toResponse(patient);
             apiResponse.ok(patientResponse);
             apiResponse.setMessage("Get Patient's Information Successfully");
+        }catch(NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
         }catch(Exception ex){
-            apiResponse.setStatusCode("500");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage(ex.getMessage());
         }
         return apiResponse;
