@@ -1,8 +1,8 @@
 package com.hhh.doctor_appointment_app.service;
 
 import com.hhh.doctor_appointment_app.dto.mapper.DoctorMapper;
-import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.AddDoctorRequest;
-import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.EditDoctorRequest;
+import com.hhh.doctor_appointment_app.dto.request.doctorRequest.AddDoctorRequest;
+import com.hhh.doctor_appointment_app.dto.request.doctorRequest.EditDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
@@ -37,7 +37,6 @@ public class DoctorService {
                 .map(doctor -> {
                     DoctorResponse response = new DoctorResponse();
                     response.setId(doctor.getId());
-                    response.setFullname(doctor.getProfile().getFullname());
                     response.setGender(doctor.getProfile().isGender());
                     response.setPhone(doctor.getProfile().getPhone());
                     response.setEmail(doctor.getProfile().getEmail());
@@ -61,7 +60,6 @@ public class DoctorService {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
             Doctor newDoctor = new Doctor();
-            newDoctor.getProfile().setFullname(addDoctorRequest.getFullname());
             newDoctor.getProfile().setGender(addDoctorRequest.isGender());
             newDoctor.getProfile().setPhone(addDoctorRequest.getPhone());
             newDoctor.getProfile().setEmail(addDoctorRequest.getEmail());
@@ -101,7 +99,6 @@ public class DoctorService {
                 }
             }
 
-            existingDoctor.getProfile().setFullname(editDoctorRequest.getFullname());
             existingDoctor.getProfile().setGender(editDoctorRequest.isGender());
             existingDoctor.getProfile().setPhone(editDoctorRequest.getPhone());
             existingDoctor.getProfile().setEmail(editDoctorRequest.getEmail());

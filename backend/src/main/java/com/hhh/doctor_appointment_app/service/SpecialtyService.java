@@ -1,8 +1,8 @@
 package com.hhh.doctor_appointment_app.service;
 
 import com.hhh.doctor_appointment_app.dto.mapper.SpecialtyMapper;
-import com.hhh.doctor_appointment_app.dto.request.SpecialtyRequest.AddSpecialtyRequest;
-import com.hhh.doctor_appointment_app.dto.request.SpecialtyRequest.EditSpecialtyRequest;
+import com.hhh.doctor_appointment_app.dto.request.specialtyRequest.AddSpecialtyRequest;
+import com.hhh.doctor_appointment_app.dto.request.specialtyRequest.EditSpecialtyRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.dto.response.SpecialtyResponse.SpecialtyResponse;

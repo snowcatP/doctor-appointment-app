@@ -1,4 +1,4 @@
-package com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest;
+package com.hhh.doctor_appointment_app.dto.request.authenticationRequest;
 
 import lombok.Builder;
 import lombok.Data;

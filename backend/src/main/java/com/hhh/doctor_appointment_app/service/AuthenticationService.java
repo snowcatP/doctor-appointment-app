@@ -1,9 +1,9 @@
 package com.hhh.doctor_appointment_app.service;
 
-import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.AuthenticationRequest;
-import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.IntrospectRequest;
-import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.LogoutRequest;
-import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.RefreshTokenRequest;
+import com.hhh.doctor_appointment_app.dto.request.authenticationRequest.AuthenticationRequest;
+import com.hhh.doctor_appointment_app.dto.request.authenticationRequest.IntrospectRequest;
+import com.hhh.doctor_appointment_app.dto.request.authenticationRequest.LogoutRequest;
+import com.hhh.doctor_appointment_app.dto.request.authenticationRequest.RefreshTokenRequest;
 import com.hhh.doctor_appointment_app.dto.response.AuthenticationResponse;
 import com.hhh.doctor_appointment_app.dto.response.IntrospectResponse;
 import com.hhh.doctor_appointment_app.entity.InvalidatedToken;
@@ -11,7 +11,6 @@ import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.exception.ApplicationException;
 import com.hhh.doctor_appointment_app.exception.UnauthenticatedException;
 import com.hhh.doctor_appointment_app.repository.*;
-import com.hhh.doctor_appointment_app.util.singleton.PasswordEncoderSingleton;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -39,9 +38,8 @@ public class AuthenticationService {
     private UserRepository userRepository;
     @Autowired
     private InvalidatedTokenRepository invalidatedRepository;
-
-    private final PasswordEncoder passwordEncoder = PasswordEncoderSingleton.getPasswordEncoder();
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @NonFinal
     @Value("${spring.jwt.signerKey}")
@@ -70,7 +68,7 @@ public class AuthenticationService {
     }
 
     private Optional<User> findUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findByEmail(username);
     }
 
     public IntrospectResponse introspect(IntrospectRequest request)
@@ -156,7 +154,7 @@ public class AuthenticationService {
     private String generateToken(User user) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(user.getUsername())
+                .subject(user.getEmail())
                 .issuer("docapp.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(

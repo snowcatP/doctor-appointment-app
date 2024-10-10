@@ -1,8 +1,8 @@
 package com.hhh.doctor_appointment_app.service;
 
 import com.hhh.doctor_appointment_app.dto.mapper.PatientMapper;
-import com.hhh.doctor_appointment_app.dto.request.PatientRequest.AddPatientRequest;
-import com.hhh.doctor_appointment_app.dto.request.PatientRequest.EditPatientRequest;
+import com.hhh.doctor_appointment_app.dto.request.patientRequest.AddPatientRequest;
+import com.hhh.doctor_appointment_app.dto.request.patientRequest.EditPatientRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.dto.response.PatientResponse.PatientResponse;
@@ -36,7 +36,6 @@ public class PatientService {
                 .map(patient -> {
                     PatientResponse response = new PatientResponse();
                     response.setId(patient.getId());
-                    response.setFullname(patient.getProfile().getFullname());
                     response.setGender(patient.getProfile().isGender());
                     response.setPhone(patient.getProfile().getPhone());
                     response.setEmail(patient.getProfile().getEmail());
@@ -59,7 +58,6 @@ public class PatientService {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
             Patient newPatient = new Patient();
-            newPatient.getProfile().setFullname(addPatientRequest.getFullname());
             newPatient.getProfile().setGender(addPatientRequest.isGender());
             newPatient.getProfile().setPhone(addPatientRequest.getPhone());
             newPatient.getProfile().setEmail(addPatientRequest.getEmail());
@@ -96,8 +94,7 @@ public class PatientService {
                     return apiResponse;
                 }
             }
-
-            existingPatient.getProfile().setFullname(editPatientRequest.getFullname());
+            
             existingPatient.getProfile().setGender(editPatientRequest.isGender());
             existingPatient.getProfile().setPhone(editPatientRequest.getPhone());
             existingPatient.getProfile().setEmail(editPatientRequest.getEmail());

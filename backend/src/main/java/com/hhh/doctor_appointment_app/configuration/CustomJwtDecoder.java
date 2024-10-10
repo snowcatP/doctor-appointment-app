@@ -1,6 +1,6 @@
 package com.hhh.doctor_appointment_app.configuration;
 
-import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.IntrospectRequest;
+import com.hhh.doctor_appointment_app.dto.request.authenticationRequest.IntrospectRequest;
 import com.hhh.doctor_appointment_app.exception.UnauthenticatedException;
 import com.hhh.doctor_appointment_app.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
