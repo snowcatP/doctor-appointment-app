@@ -15,19 +15,37 @@
                             <div class="login-header">
                                 <h3>Login <span>Doccure</span></h3>
                             </div>
-                            <form action="https://dreamguys.co.in/demo/doccure/index.html">
+                            <form [formGroup]="formLogin" >
                                 <div class="form-group form-focus">
-                                    <input type="email" class="form-control floating">
+                                    <input type="text" formControlName="username" class="form-control floating">
                                     <label class="focus-label">Email</label>
+                                    <small class="form-text text-danger"
+                                        *ngIf="(formLogin.controls.username.touched||formLogin.controls.username.dirty) && formLogin.controls.username.errors">
+                                        <ng-container *ngIf="formLogin.controls.username.errors?.required">
+                                            {{formLogin.controls.username.errors?.required.message}}
+                                        </ng-container>
+                                        <ng-container *ngIf="formLogin.controls.username.errors?.email">
+                                            {{formLogin.controls.username.errors?.email.message}}
+                                        </ng-container>
+                                    </small>
+
                                 </div>
                                 <div class="form-group form-focus">
-                                    <input type="password" class="form-control floating">
-                                    <label class="focus-label">Password</label>
+                                    <div class="password-wrapper">
+                                        <input type="password" formControlName="password" class="form-control floating" [type]="showPass ? 'text' : 'password'" >
+                                        <label class="focus-label">Password</label>
+                                        <small (click)="showPassword()" [ngClass]="showPass ? 'fa fa-eye-slash' : 'fa fa-eye'" class="password-icon"></small>
+                                    </div>
+                                    <small class="form-text text-danger"
+                                        *ngIf="(formLogin.controls.password.touched||formLogin.controls.password.dirty) && formLogin.controls.password.errors">
+                                            {{formLogin.controls.password.errors.required.message}}
+                                    </small>
                                 </div>
                                 <div class="text-right">
                                     <a class="forgot-link" href="forgot-password.html">Forgot Password ?</a>
                                 </div>
-                                <button class="btn btn-primary btn-block btn-lg login-btn" type="submit">Login</button>
+                                <button (click)="onLogin()" class="btn btn-primary btn-block btn-lg login-btn" type="submit"
+                                    [disabled]="!formLogin.valid">Login</button>
                                 <div class="login-or">
                                     <span class="or-line"></span>
                                     <span class="span-or">or</span>
@@ -43,7 +61,7 @@
                                     </div>
                                 </div>
                                 <div class="text-center dont-have">Don’t have an account? <a
-                                        href="register.html">Register</a></div>
+                                      routerLink="/register"  >Register</a></div>
                             </form>
                         </div>
                     </div>
@@ -57,3 +75,4 @@
 
 </div>
 <!-- /Page Content -->
+<p-toast position="bottom-right" key="messageToast" />
