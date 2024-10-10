@@ -42,7 +42,7 @@ public class PatientService {
                 .map(patient -> {
                     PatientResponse response = new PatientResponse();
                     response.setId(patient.getId());
-                    response.setFullname(patient.getProfile().getFullname());
+                    response.setFullname(patient.getProfile().getFirstName() + " " + patient.getProfile().getLastName());
                     response.setGender(patient.getProfile().isGender());
                     response.setPhone(patient.getProfile().getPhone());
                     response.setEmail(patient.getProfile().getEmail());
@@ -65,7 +65,8 @@ public class PatientService {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
             User user = new User();
-            user.setFullname(addPatientRequest.getFullname());
+            user.setFirstName(addPatientRequest.getFirstName());
+            user.setLastName(addPatientRequest.getLastName());
             user.setGender(addPatientRequest.isGender());
             user.setPhone(addPatientRequest.getPhone());
             user.setEmail(addPatientRequest.getEmail());
@@ -107,7 +108,8 @@ public class PatientService {
                 }
             }
 
-            existingPatient.getProfile().setFullname(editPatientRequest.getFullname());
+            existingPatient.getProfile().setFirstName(editPatientRequest.getFirstName());
+            existingPatient.getProfile().setLastName(editPatientRequest.getLastName());
             existingPatient.getProfile().setGender(editPatientRequest.isGender());
             existingPatient.getProfile().setPhone(editPatientRequest.getPhone());
             existingPatient.getProfile().setEmail(editPatientRequest.getEmail());

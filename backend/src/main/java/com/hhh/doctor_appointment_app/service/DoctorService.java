@@ -47,7 +47,7 @@ public class DoctorService {
                 .map(doctor -> {
                     DoctorResponse response = new DoctorResponse();
                     response.setId(doctor.getId());
-                    response.setFullname(doctor.getProfile().getFullname());
+                    response.setFullname(doctor.getProfile().getFirstName() + " " + doctor.getProfile().getLastName() );
                     response.setGender(doctor.getProfile().isGender());
                     response.setPhone(doctor.getProfile().getPhone());
                     response.setEmail(doctor.getProfile().getEmail());
@@ -73,7 +73,8 @@ public class DoctorService {
             Specialty specialty = specialtyRepository.findById(addDoctorRequest.getSpecialtyID())
                     .orElseThrow(() -> new NotFoundException("Not found specialty"));
             User user = new User();
-            user.setFullname(addDoctorRequest.getFullname());
+            user.setFirstName(addDoctorRequest.getFirstName());
+            user.setLastName(addDoctorRequest.getLastName());
             user.setGender(addDoctorRequest.isGender());
             user.setPhone(addDoctorRequest.getPhone());
             user.setEmail(addDoctorRequest.getEmail());
@@ -119,7 +120,8 @@ public class DoctorService {
                 }
             }
 
-            existingDoctor.getProfile().setFullname(editDoctorRequest.getFullname());
+            existingDoctor.getProfile().setFirstName(editDoctorRequest.getFirstName());
+            existingDoctor.getProfile().setLastName(editDoctorRequest.getLastName());
             existingDoctor.getProfile().setGender(editDoctorRequest.isGender());
             existingDoctor.getProfile().setPhone(editDoctorRequest.getPhone());
             existingDoctor.getProfile().setEmail(editDoctorRequest.getEmail());
