@@ -1,12 +1,17 @@
 package com.hhh.doctor_appointment_app.service;
 
 import com.hhh.doctor_appointment_app.dto.mapper.PatientMapper;
+import com.hhh.doctor_appointment_app.dto.request.doctorRequest.AddDoctorRequest;
+import com.hhh.doctor_appointment_app.dto.request.doctorRequest.EditDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.request.patientRequest.AddPatientRequest;
 import com.hhh.doctor_appointment_app.dto.request.patientRequest.EditPatientRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
+import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.dto.response.PatientResponse.PatientResponse;
+import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Patient;
+import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.exception.ApplicationException;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
@@ -14,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +42,7 @@ public class PatientService {
                 .map(patient -> {
                     PatientResponse response = new PatientResponse();
                     response.setId(patient.getId());
+                    response.setFullname(patient.getProfile().getFirstName() + " " + patient.getProfile().getLastName());
                     response.setGender(patient.getProfile().isGender());
                     response.setPhone(patient.getProfile().getPhone());
                     response.setEmail(patient.getProfile().getEmail());
@@ -57,12 +64,17 @@ public class PatientService {
     public ApiResponse<Object> addPatient(AddPatientRequest addPatientRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
+            User user = new User();
+            user.setFirstName(addPatientRequest.getFirstName());
+            user.setLastName(addPatientRequest.getLastName());
+            user.setGender(addPatientRequest.isGender());
+            user.setPhone(addPatientRequest.getPhone());
+            user.setEmail(addPatientRequest.getEmail());
+            user.setDateOfBirth(addPatientRequest.getDateOfBirth());
+            user.setAddress(addPatientRequest.getAddress());
+
             Patient newPatient = new Patient();
-            newPatient.getProfile().setGender(addPatientRequest.isGender());
-            newPatient.getProfile().setPhone(addPatientRequest.getPhone());
-            newPatient.getProfile().setEmail(addPatientRequest.getEmail());
-            newPatient.getProfile().setDateOfBirth(addPatientRequest.getDateOfBirth());
-            newPatient.getProfile().setAddress(addPatientRequest.getAddress());
+            newPatient.setProfile(user);
 
             boolean isDuplicate = patientRepository.existsByProfile_Email(newPatient.getProfile().getEmail());
             if(isDuplicate){
@@ -79,6 +91,7 @@ public class PatientService {
         }
     }
 
+
     public ApiResponse<Object> editPatient(Long id, EditPatientRequest editPatientRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try {
@@ -94,7 +107,9 @@ public class PatientService {
                     return apiResponse;
                 }
             }
-            
+
+            existingPatient.getProfile().setFirstName(editPatientRequest.getFirstName());
+            existingPatient.getProfile().setLastName(editPatientRequest.getLastName());
             existingPatient.getProfile().setGender(editPatientRequest.isGender());
             existingPatient.getProfile().setPhone(editPatientRequest.getPhone());
             existingPatient.getProfile().setEmail(editPatientRequest.getEmail());
@@ -105,8 +120,11 @@ public class PatientService {
 
             PatientResponse patientResponse = patientMapper.toResponse(existingPatient);
             apiResponse.ok(patientResponse);
-        } catch (ApplicationException ex) {
-            apiResponse.setStatusCode("400");
+        } catch(NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
+        }catch (ApplicationException ex) {
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("Failed to update");
         }
         return apiResponse;
@@ -121,8 +139,11 @@ public class PatientService {
             patientRepository.deleteById(patient.getId());
             apiResponse.ok();
             apiResponse.setMessage("Patient successfully deleted");
+        }catch(NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
         }catch(Exception ex){
-            apiResponse.setStatusCode("500");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage(ex.getMessage());
         }
         return apiResponse;
@@ -136,8 +157,11 @@ public class PatientService {
             PatientResponse patientResponse = patientMapper.toResponse(patient);
             apiResponse.ok(patientResponse);
             apiResponse.setMessage("Get Patient's Information Successfully");
+        }catch(NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
         }catch(Exception ex){
-            apiResponse.setStatusCode("500");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage(ex.getMessage());
         }
         return apiResponse;

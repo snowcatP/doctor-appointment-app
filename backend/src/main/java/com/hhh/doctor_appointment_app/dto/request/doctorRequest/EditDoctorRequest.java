@@ -11,8 +11,11 @@ import java.util.Date;
 @Getter
 @Setter
 public class EditDoctorRequest {
-    @Size(max = 50, message = "Full name must not exceed 50 characters")
-    private String fullname;
+    @Size(max = 50, message = "Firstname must not exceed 50 characters")
+    private String firstName;
+
+    @Size(max = 50, message = "Lastname must not exceed 50 characters")
+    private String lastName;
 
     private boolean gender;
 
@@ -25,5 +28,5 @@ public class EditDoctorRequest {
 
     private String address;
 
-    private Specialty specialty;
+    private Long specialtyID;
 }

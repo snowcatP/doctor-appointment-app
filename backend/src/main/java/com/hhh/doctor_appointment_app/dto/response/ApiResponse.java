@@ -10,40 +10,40 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 public class ApiResponse<T> {
-    private String statusCode;
+    private int statusCode;
     private String message;
     private T data;
 
     public void ok() {
-        this.statusCode = "200";
+        this.statusCode = HttpStatus.OK.value();
         this.message="SUCCESS";
     }
     public void duplicatedCode(){
-        this.statusCode = "500";
-        this.message = "The code of training program is duplicated!";
+        this.statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
+        this.message = "Duplicated!";
     }
 
     public void ok(T data) {
-        this.statusCode = "200";
+        this.statusCode = HttpStatus.OK.value();
         this.message="SUCCESS";
         this.data = data;
     }
 
     public void notFound(){
-        this.statusCode = "404";
+        this.statusCode = HttpStatus.NOT_FOUND.value();
         this.message="NOT FOUND";
     }
 
     public void validationError(Map<String, String> errors) {
-        this.statusCode = "400";
+        this.statusCode = HttpStatus.BAD_REQUEST.value();
         this.message = "Validation failed";
         this.data = (T) errors; // Sử dụng cast an toàn, hoặc thay đổi kiểu dữ liệu của `data` để phù hợp
     }
-    public String getStatusCode() {
+    public int getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(String statusCode) {
+    public void setStatusCode(int statusCode) {
         this.statusCode = statusCode;
     }
 

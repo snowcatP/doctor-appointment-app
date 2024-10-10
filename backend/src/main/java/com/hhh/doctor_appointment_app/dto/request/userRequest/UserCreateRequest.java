@@ -1,5 +1,6 @@
 package com.hhh.doctor_appointment_app.dto.request.userRequest;
 
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.Set;
 public class UserCreateRequest {
     private String firstName;
     private String lastName;
+    @Email(message = "Invalid Email")
     private String email;
     private String password;
     private String phone;

@@ -7,16 +7,24 @@ import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.entity.Doctor;
+import com.hhh.doctor_appointment_app.entity.Specialty;
+import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.exception.ApplicationException;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
+import com.hhh.doctor_appointment_app.repository.SpecialtyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.print.Doc;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +35,8 @@ public class DoctorService {
 
     @Autowired
     private DoctorMapper doctorMapper;
+    @Autowired
+    private SpecialtyRepository specialtyRepository;
 
     public PageResponse<List<DoctorResponse>> getDoctorsWithPage(int page, int size) {
         Pageable pageable = PageRequest.of(page-1, size);
@@ -37,6 +47,8 @@ public class DoctorService {
                 .map(doctor -> {
                     DoctorResponse response = new DoctorResponse();
                     response.setId(doctor.getId());
+                    response.setFirstName(doctor.getProfile().getFirstName());
+                    response.setLastName(doctor.getProfile().getLastName());
                     response.setGender(doctor.getProfile().isGender());
                     response.setPhone(doctor.getProfile().getPhone());
                     response.setEmail(doctor.getProfile().getEmail());
@@ -59,13 +71,20 @@ public class DoctorService {
     public ApiResponse<Object> addDoctor(AddDoctorRequest addDoctorRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
+            Specialty specialty = specialtyRepository.findById(addDoctorRequest.getSpecialtyID())
+                    .orElseThrow(() -> new NotFoundException("Not found specialty"));
+            User user = new User();
+            user.setFirstName(addDoctorRequest.getFirstName());
+            user.setLastName(addDoctorRequest.getLastName());
+            user.setGender(addDoctorRequest.isGender());
+            user.setPhone(addDoctorRequest.getPhone());
+            user.setEmail(addDoctorRequest.getEmail());
+            user.setDateOfBirth(addDoctorRequest.getDateOfBirth());
+            user.setAddress(addDoctorRequest.getAddress());
+
             Doctor newDoctor = new Doctor();
-            newDoctor.getProfile().setGender(addDoctorRequest.isGender());
-            newDoctor.getProfile().setPhone(addDoctorRequest.getPhone());
-            newDoctor.getProfile().setEmail(addDoctorRequest.getEmail());
-            newDoctor.getProfile().setDateOfBirth(addDoctorRequest.getDateOfBirth());
-            newDoctor.getProfile().setAddress(addDoctorRequest.getAddress());
-            newDoctor.setSpecialty(addDoctorRequest.getSpecialty());
+            newDoctor.setProfile(user);
+            newDoctor.setSpecialty(specialty);
 
             boolean isDuplicate = doctorRepository.existsByProfile_Email(newDoctor.getProfile().getEmail());
             if(isDuplicate){
@@ -85,6 +104,9 @@ public class DoctorService {
     public ApiResponse<Object> editDoctor(Long id,EditDoctorRequest editDoctorRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try {
+            Specialty specialty = specialtyRepository.findById(editDoctorRequest.getSpecialtyID())
+                    .orElseThrow(() -> new NotFoundException("Not found specialty"));
+
             Doctor existingDoctor = doctorRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
 
@@ -99,19 +121,24 @@ public class DoctorService {
                 }
             }
 
+            existingDoctor.getProfile().setFirstName(editDoctorRequest.getFirstName());
+            existingDoctor.getProfile().setLastName(editDoctorRequest.getLastName());
             existingDoctor.getProfile().setGender(editDoctorRequest.isGender());
             existingDoctor.getProfile().setPhone(editDoctorRequest.getPhone());
             existingDoctor.getProfile().setEmail(editDoctorRequest.getEmail());
             existingDoctor.getProfile().setDateOfBirth(editDoctorRequest.getDateOfBirth());
             existingDoctor.getProfile().setAddress(editDoctorRequest.getAddress());
-            existingDoctor.setSpecialty(existingDoctor.getSpecialty());
+            existingDoctor.setSpecialty(specialty);
 
             doctorRepository.saveAndFlush(existingDoctor);
 
             DoctorResponse doctorResponse = doctorMapper.toResponse(existingDoctor);
             apiResponse.ok(doctorResponse);
-        } catch (ApplicationException ex) {
-            apiResponse.setStatusCode("400");
+        } catch(NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
+        }catch (ApplicationException ex) {
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("Failed to update");
         }
         return apiResponse;
@@ -126,8 +153,12 @@ public class DoctorService {
             doctorRepository.deleteById(doctor.getId());
             apiResponse.ok();
             apiResponse.setMessage("Doctor successfully deleted");
-        }catch(Exception ex){
-            apiResponse.setStatusCode("500");
+        }catch(NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
+        }
+        catch(Exception ex){
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage(ex.getMessage());
         }
         return apiResponse;
@@ -141,8 +172,12 @@ public class DoctorService {
             DoctorResponse doctorResponse = doctorMapper.toResponse(doctor);
             apiResponse.ok(doctorResponse);
             apiResponse.setMessage("Get Doctor's Information Successfully");
-        }catch(Exception ex){
-            apiResponse.setStatusCode("500");
+        }catch(NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
+        }
+        catch(Exception ex){
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage(ex.getMessage());
         }
         return apiResponse;

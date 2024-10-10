@@ -29,7 +29,7 @@ public class DoctorController {
             return new ResponseEntity<>(doctorService.getDoctorsWithPage(page, size), HttpStatus.OK);
         }catch (Exception ex){
             ApiResponse<Object> apiResponse = new ApiResponse<>();
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
@@ -42,13 +42,15 @@ public class DoctorController {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.status(HttpStatus.OK).body(errors);
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage("An unexpected error occurred: " + errors);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
             apiResponse = doctorService.addDoctor(addDoctorRequest);
 
             // Check if the status code is 500 for duplicated code
-            if ("500".equals(apiResponse.getStatusCode())) {
+            if (HttpStatus.INTERNAL_SERVER_ERROR.value() == apiResponse.getStatusCode()) {
                 apiResponse.setMessage("Doctor's Email already exist in the system");
                 return ResponseEntity.status(HttpStatus.OK).body(apiResponse); // Conflict for duplicated code
             }
@@ -56,7 +58,7 @@ public class DoctorController {
         }
         catch (Exception ex) {
 
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
@@ -70,25 +72,27 @@ public class DoctorController {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.status(HttpStatus.OK).body(errors);
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage("An unexpected error occurred: " + errors);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
             apiResponse = doctorService.editDoctor(id,editDoctorRequest);
             // Check if the status code is 500 for duplicated code
-            if ("500".equals(apiResponse.getStatusCode())) {
+            if (HttpStatus.INTERNAL_SERVER_ERROR.equals(apiResponse.getStatusCode())) {
                 apiResponse.setMessage("Doctor's Email already exist in the system");
                 return ResponseEntity.status(HttpStatus.OK).body(apiResponse); // Conflict for duplicated code
             }
             return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
         }
         catch (NotFoundException ex){
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (Exception ex) {
 
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
@@ -102,12 +106,12 @@ public class DoctorController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (NotFoundException ex){
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (Exception ex) {
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
@@ -122,12 +126,12 @@ public class DoctorController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (NotFoundException ex){
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
             apiResponse.setMessage(ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (Exception ex) {
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage(ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }

@@ -14,7 +14,9 @@ import java.util.Date;
 public class DoctorResponse {
     private Long id;
 
-    private String fullname;
+    private String firstName;
+
+    private String lastName;
 
     private boolean gender;
 

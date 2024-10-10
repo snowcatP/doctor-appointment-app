@@ -30,7 +30,7 @@ public class SpecialtyController {
             return new ResponseEntity<>(specialtyService.getSpecialtiesWithPage(page, size), HttpStatus.OK);
         }catch (Exception ex){
             ApiResponse<Object> apiResponse = new ApiResponse<>();
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
@@ -48,7 +48,7 @@ public class SpecialtyController {
             apiResponse = specialtyService.addSpecialty(addSpecialtyRequest);
 
             // Check if the status code is 500 for duplicated code
-            if ("500".equals(apiResponse.getStatusCode())) {
+            if (HttpStatus.INTERNAL_SERVER_ERROR.value() == apiResponse.getStatusCode()) {
                 apiResponse.setMessage("Specialty Name already exist in the system");
                 return ResponseEntity.status(HttpStatus.OK).body(apiResponse); // Conflict for duplicated code
             }
@@ -56,7 +56,7 @@ public class SpecialtyController {
         }
         catch (Exception ex) {
 
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
@@ -73,20 +73,20 @@ public class SpecialtyController {
         try {
             apiResponse = specialtyService.editSpecialty(id,editSpecialtyRequest);
             // Check if the status code is 500 for duplicated code
-            if ("500".equals(apiResponse.getStatusCode())) {
+            if (HttpStatus.INTERNAL_SERVER_ERROR.value() == apiResponse.getStatusCode()){
                 apiResponse.setMessage("Specialty Name already exist in the system");
                 return ResponseEntity.status(HttpStatus.OK).body(apiResponse); // Conflict for duplicated code
             }
             return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
         }
         catch (NotFoundException ex){
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (Exception ex) {
 
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
@@ -100,12 +100,12 @@ public class SpecialtyController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (NotFoundException ex){
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (Exception ex) {
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
@@ -120,12 +120,12 @@ public class SpecialtyController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (NotFoundException ex){
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
             apiResponse.setMessage(ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (Exception ex) {
-            apiResponse.setStatusCode("200");
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage(ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }

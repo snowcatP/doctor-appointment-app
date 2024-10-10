@@ -13,6 +13,10 @@ import java.util.Date;
 public class PatientResponse {
     private Long id;
 
+    private String firstName;
+
+    private String lastName;
+
     private String fullname;
 
     private boolean gender;
