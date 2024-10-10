@@ -1,6 +1,7 @@
 package com.hhh.doctor_appointment_app.controller;
 
-import com.hhh.doctor_appointment_app.dto.request.UserCreateRequest;
+import com.hhh.doctor_appointment_app.dto.request.userRequest.UserCreateRequest;
+import com.hhh.doctor_appointment_app.dto.request.userRequest.UserUpdateProfileRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.UserResponse;
 import com.hhh.doctor_appointment_app.entity.Admin;
@@ -20,6 +21,13 @@ public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
+
+    public ApiResponse<?> updateProfile(UserUpdateProfileRequest request) {
+        var result = userService.updateUserProfile(request);
+
+        return new ApiResponse<>();
+
+    }
 
     @PostMapping("/register/admin")
     public ApiResponse<Admin> addAdmin(@RequestBody UserCreateRequest request) {

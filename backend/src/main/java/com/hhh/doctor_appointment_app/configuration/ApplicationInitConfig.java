@@ -1,9 +1,8 @@
 package com.hhh.doctor_appointment_app.configuration;
 
-import com.hhh.doctor_appointment_app.dto.request.UserCreateRequest;
+import com.hhh.doctor_appointment_app.dto.request.userRequest.UserCreateRequest;
 import com.hhh.doctor_appointment_app.entity.Role;
 import com.hhh.doctor_appointment_app.enums.UserRole;
-import com.hhh.doctor_appointment_app.repository.AdminRepository;
 import com.hhh.doctor_appointment_app.repository.RoleRepository;
 import com.hhh.doctor_appointment_app.repository.UserRepository;
 import com.hhh.doctor_appointment_app.service.UserService;
@@ -38,7 +37,7 @@ public class ApplicationInitConfig implements ApplicationRunner{
             }
         }
 
-        if (!userRepository.existsByUsername("admin@gmail.com")) {
+        if (!userRepository.existsByEmail("admin@gmail.com")) {
             UserCreateRequest request = UserCreateRequest.builder()
                     .email("admin@gmail.com")
                     .password("Hello@123")

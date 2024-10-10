@@ -1,4 +1,4 @@
-package com.hhh.doctor_appointment_app.dto.request.PatientRequest;
+package com.hhh.doctor_appointment_app.dto.request.patientRequest;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class EditPatientRequest {
+public class AddPatientRequest {
     @Size(max = 50, message = "Full name must not exceed 50 characters")
     private String fullname;
 

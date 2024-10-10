@@ -1,4 +1,4 @@
-package com.hhh.doctor_appointment_app.dto.request;
+package com.hhh.doctor_appointment_app.dto.request.userRequest;
 
 import lombok.*;
 
@@ -6,11 +6,9 @@ import java.util.Date;
 import java.util.Set;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@Builder
 public class UserCreateRequest {
     private String firstName;
     private String lastName;
@@ -20,5 +18,5 @@ public class UserCreateRequest {
     private String address;
     private Date dateOfBirth;
     private Boolean gender;
-    private Set<String> roles;
+    private String role;
 }
