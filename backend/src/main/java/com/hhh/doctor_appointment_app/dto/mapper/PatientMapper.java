@@ -11,7 +11,6 @@ public interface PatientMapper {
     @Mappings({
             @Mapping(source = "patient.profile.firstName", target = "firstName"),
             @Mapping(source = "patient.profile.lastName", target = "lastName"),
-            @Mapping(source = "patient.profile.fullname", target = "fullname"),
             @Mapping(source = "patient.profile.gender", target = "gender"),
             @Mapping(source = "patient.profile.phone", target = "phone"),
             @Mapping(source = "patient.profile.email", target = "email"),

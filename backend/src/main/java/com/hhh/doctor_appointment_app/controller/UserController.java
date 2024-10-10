@@ -1,6 +1,6 @@
 package com.hhh.doctor_appointment_app.controller;
 
-import com.hhh.doctor_appointment_app.dto.request.UserCreateRequest;
+import com.hhh.doctor_appointment_app.dto.request.userRequest.UserCreateRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.UserResponse;
 import com.hhh.doctor_appointment_app.entity.Admin;
@@ -37,24 +37,10 @@ public class UserController {
 
     @PostMapping("/register/user")
     @CrossOrigin()
-    public ResponseEntity<?> addPatient(@Valid @RequestBody UserCreateRequest request, BindingResult bindingResult){
-        ApiResponse<Object> apiResponse = new ApiResponse<>();
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
-            apiResponse.setMessage("An unexpected error occurred: " + errors);
-            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
-        }
-        try {
-            apiResponse = userService.createPatient(request);
-            return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
-        }
-        catch (Exception ex) {
-            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
-            apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
-            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
-        }
+    public ApiResponse<Patient> addPatient(@RequestBody UserCreateRequest request) {
+        return ApiResponse.<Patient>builder()
+                .data(userService.createPatient(request))
+                .build();
     }
 
     @PostMapping("/register/doctor")

@@ -1,8 +1,8 @@
 package com.hhh.doctor_appointment_app.service;
 
 import com.hhh.doctor_appointment_app.dto.mapper.DoctorMapper;
-import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.AddDoctorRequest;
-import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.EditDoctorRequest;
+import com.hhh.doctor_appointment_app.dto.request.doctorRequest.AddDoctorRequest;
+import com.hhh.doctor_appointment_app.dto.request.doctorRequest.EditDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
@@ -47,7 +47,8 @@ public class DoctorService {
                 .map(doctor -> {
                     DoctorResponse response = new DoctorResponse();
                     response.setId(doctor.getId());
-                    response.setFullname(doctor.getProfile().getFirstName() + " " + doctor.getProfile().getLastName() );
+                    response.setFirstName(doctor.getProfile().getFirstName());
+                    response.setLastName(doctor.getProfile().getLastName());
                     response.setGender(doctor.getProfile().isGender());
                     response.setPhone(doctor.getProfile().getPhone());
                     response.setEmail(doctor.getProfile().getEmail());

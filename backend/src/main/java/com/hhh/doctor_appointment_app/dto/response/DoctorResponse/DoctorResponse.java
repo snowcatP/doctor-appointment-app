@@ -18,8 +18,6 @@ public class DoctorResponse {
 
     private String lastName;
 
-    private String fullname;
-
     private boolean gender;
 
     private String phone;
