@@ -24,8 +24,8 @@
                                         <ng-container *ngIf="formLogin.controls.username.errors?.required">
                                             {{formLogin.controls.username.errors?.required.message}}
                                         </ng-container>
-                                        <ng-container *ngIf="formLogin.controls.username.errors?.username">
-                                            {{formLogin.controls.username.errors?.username.message}}
+                                        <ng-container *ngIf="formLogin.controls.username.errors?.email">
+                                            {{formLogin.controls.username.errors?.email.message}}
                                         </ng-container>
                                     </small>
 
@@ -61,7 +61,7 @@
                                     </div>
                                 </div>
                                 <div class="text-center dont-have">Don’t have an account? <a
-                                        href="register.html">Register</a></div>
+                                      routerLink="/register"  >Register</a></div>
                             </form>
                         </div>
                     </div>
@@ -75,3 +75,4 @@
 
 </div>
 <!-- /Page Content -->
+<p-toast position="bottom-right" key="messageToast" />

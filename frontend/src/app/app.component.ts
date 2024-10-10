@@ -3,9 +3,10 @@ import { RouterLink, RouterLinkActive, RouterOutlet, RouterModule } from '@angul
 import { HeaderComponent } from './client/master-layout/header/header.component';
 import { FooterComponent } from './client/master-layout/footer/footer.component';
 import { HomeComponent } from './client/master-layout/home/home.component';
-import { LoginComponent } from './client/master-layout/login/login.component';
+import { LoginComponent } from './component/login/login.component';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormConfig } from '@rxweb/reactive-form-validators';
+import { NbLayoutModule, NbThemeModule } from '@nebular/theme';
 
 @Component({
   selector: 'app-root',
@@ -15,8 +16,13 @@ import { ReactiveFormConfig } from '@rxweb/reactive-form-validators';
     HeaderComponent,
     FooterComponent,
     HomeComponent,
-    LoginComponent
-    
+    LoginComponent,
+    NbLayoutModule,
+  ],
+  providers:[
+    NbThemeModule.forRoot().providers,
+    NbThemeModule,
+
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -50,7 +56,7 @@ export class AppComponent {
         minLength: 'Minimum length is {{1}} characters',
         maxNumber: 'Enter value less than or equal to {{1}}',
         minNumber: 'Enter value greater than or equal to {{1}}',
-        password: 'Please enter valid password',
+        password: 'Please enter valid password with letter, number and special charater(Ex: @, #, &,...)',
         pattern: 'Please enter valid zipcode',
         range: 'Please enter value between {{1}} to {{2}}',
         required: 'This field is required',
@@ -62,6 +68,7 @@ export class AppComponent {
         date: 'Please enter valid date format'
       }
     });
+
 
   }
 }

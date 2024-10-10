@@ -10,4 +10,7 @@ export class AccountService {
   onLogin(obj: any): Observable<any> {
     return this.http.post('http://localhost:8080/auth/login', obj);
   }
+  onSignupPatient(obj: any): Observable<any>{
+    return this.http.post('http://localhost:8080/register/user', obj);
+  }
 }

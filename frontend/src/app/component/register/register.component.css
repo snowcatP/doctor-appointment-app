@@ -1,0 +1,44 @@
+.fname,
+.lname {
+    width: 50%
+}
+
+.name {
+    display: flex;
+    gap: 10px;
+}
+
+.gender-radio-group {
+    display: flex;
+    margin: 0 0px;
+
+}
+.gender-radio-button{
+    margin: 0 20px;
+    display: flex;
+    align-items: center;
+}
+#mat-form-field-birthday{
+    width: 100%;
+}
+
+.password-wrapper {
+    position: relative;
+
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px;
+    box-sizing: border-box;
+}
+
+.password-wrapper .password-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 16px;
+    color: #666;
+}

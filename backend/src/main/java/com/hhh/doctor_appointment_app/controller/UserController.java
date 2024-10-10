@@ -31,6 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/register/user")
+    @CrossOrigin()
     public ApiResponse<Patient> addPatient(@RequestBody UserCreateRequest request) {
         return ApiResponse.<Patient>builder()
                 .data(userService.createPatient(request))
