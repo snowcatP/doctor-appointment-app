@@ -1,0 +1,23 @@
+.password-wrapper {
+    position: relative;
+
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px;
+    box-sizing: border-box;
+}
+
+.password-wrapper small {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 16px;
+    color: #666;
+}
+.focus-label{
+    padding-bottom: 15px;
+}

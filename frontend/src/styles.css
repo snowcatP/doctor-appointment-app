@@ -51,7 +51,8 @@ Version      : 1.0
 /*-----------------
 	1. General
 -----------------------*/
-
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
 @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,700,900');
 @font-face {
 	font-family: 'Material Icons';
@@ -195,6 +196,7 @@ input[type=password] {
 .content {
 	min-height: 200px;
 	padding: 30px 0 0;
+	height: 75%;
 }
 
 /*-----------------
@@ -6733,4 +6735,9 @@ html.menu-opened body {
 	.fc-header-toolbar .fc-right {
 		margin-bottom: 10px;
 	}
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.form-text.text-danger{
+    margin: 0 10px;
 }

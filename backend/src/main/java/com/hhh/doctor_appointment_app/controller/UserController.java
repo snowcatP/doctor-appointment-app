@@ -1,6 +1,5 @@
 package com.hhh.doctor_appointment_app.controller;
 
-import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.AppointmentByGuestRequest;
 import com.hhh.doctor_appointment_app.dto.request.UserCreateRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.UserResponse;
@@ -36,13 +35,8 @@ public class UserController {
                 .build();
     }
 
-//    @PostMapping("/register/user")
-//    public ApiResponse<Patient> addPatient(@RequestBody UserCreateRequest request) {
-//        return ApiResponse.<Patient>builder()
-//                .data(userService.createPatient(request))
-//                .build();
-//    }
     @PostMapping("/register/user")
+    @CrossOrigin()
     public ResponseEntity<?> addPatient(@Valid @RequestBody UserCreateRequest request, BindingResult bindingResult){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
@@ -62,7 +56,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
     }
-
 
     @PostMapping("/register/doctor")
     public ResponseEntity<Doctor> addDoctor(@RequestBody UserCreateRequest request) {

@@ -12,6 +12,7 @@ import java.util.Optional;
 @Repository
 public interface SpecialtyRepository extends JpaRepository<Specialty,Long> {
     boolean existsBySpecialtyName(String specialName);
+
     @Query("SELECT s FROM Specialty s")
     Page<Specialty> getSpecialtiesWithPage(Pageable pageable);
 

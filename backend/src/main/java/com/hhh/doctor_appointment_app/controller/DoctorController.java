@@ -1,12 +1,11 @@
 package com.hhh.doctor_appointment_app.controller;
 
-import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.AddDoctorRequest;
-import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.EditDoctorRequest;
+import com.hhh.doctor_appointment_app.dto.request.doctorRequest.AddDoctorRequest;
+import com.hhh.doctor_appointment_app.dto.request.doctorRequest.EditDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.service.DoctorService;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +36,8 @@ public class DoctorController {
     }
 
     @PostMapping("/add-doctor")
-    public ResponseEntity<?> addDoctor(@Valid @RequestBody AddDoctorRequest addDoctorRequest, BindingResult bindingResult){
+    public ResponseEntity<?> addDoctor(@Valid @RequestBody AddDoctorRequest addDoctorRequest,
+                                       BindingResult bindingResult){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -65,7 +65,9 @@ public class DoctorController {
     }
 
     @PutMapping("/edit-doctor/{id}")
-    public ResponseEntity<?> editDoctor(@PathVariable Long id, @Valid @RequestBody EditDoctorRequest editDoctorRequest, BindingResult bindingResult){
+    public ResponseEntity<?> editDoctor(@PathVariable Long id,
+                                        @Valid @RequestBody EditDoctorRequest editDoctorRequest,
+                                        BindingResult bindingResult){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();

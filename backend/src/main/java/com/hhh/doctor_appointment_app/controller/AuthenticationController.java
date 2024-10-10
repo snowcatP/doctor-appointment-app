@@ -1,9 +1,9 @@
 package com.hhh.doctor_appointment_app.controller;
 
-import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.AuthenticationRequest;
-import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.IntrospectRequest;
-import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.LogoutRequest;
-import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.RefreshTokenRequest;
+import com.hhh.doctor_appointment_app.dto.request.authenticationRequest.AuthenticationRequest;
+import com.hhh.doctor_appointment_app.dto.request.authenticationRequest.IntrospectRequest;
+import com.hhh.doctor_appointment_app.dto.request.authenticationRequest.LogoutRequest;
+import com.hhh.doctor_appointment_app.dto.request.authenticationRequest.RefreshTokenRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.AuthenticationResponse;
 import com.hhh.doctor_appointment_app.dto.response.IntrospectResponse;
@@ -19,13 +19,13 @@ import java.text.ParseException;
 public class AuthenticationController {
     @Autowired
     private AuthenticationService authenticationService;
-
+    @CrossOrigin()
     @PostMapping("/login")
     public ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         var result = authenticationService.authenticate(request);
-        return ApiResponse.<AuthenticationResponse>builder()
+        return (ApiResponse.<AuthenticationResponse>builder()
                 .data(result)
-                .build();
+                .build());
     }
 
     @PostMapping("/introspect")

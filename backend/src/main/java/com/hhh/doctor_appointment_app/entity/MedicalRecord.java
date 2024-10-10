@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.Date;
 
@@ -19,8 +21,13 @@ public class MedicalRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
-    private Date dateCreated;
     private String filePath;
+
+    @CreatedDate
+    private Date dateCreated;
+
+    @LastModifiedDate
+    private Date lastModified;
 
     @ManyToOne()
     @JsonIgnore
@@ -30,5 +37,5 @@ public class MedicalRecord {
     @ManyToOne()
     @JsonIgnore
     @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
+    private Doctor doctorModified;
 }

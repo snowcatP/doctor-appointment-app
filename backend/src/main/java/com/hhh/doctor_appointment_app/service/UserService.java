@@ -1,21 +1,16 @@
 package com.hhh.doctor_appointment_app.service;
 
-import com.hhh.doctor_appointment_app.dto.mapper.PatientMapper;
-import com.hhh.doctor_appointment_app.dto.request.PatientRequest.AddPatientRequest;
-import com.hhh.doctor_appointment_app.dto.request.UserCreateRequest;
-import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
-import com.hhh.doctor_appointment_app.dto.response.PatientResponse.PatientResponse;
+import com.hhh.doctor_appointment_app.dto.mapper.UserMapper;
+import com.hhh.doctor_appointment_app.dto.request.userRequest.UserCreateRequest;
+import com.hhh.doctor_appointment_app.dto.request.userRequest.UserUpdateProfileRequest;
 import com.hhh.doctor_appointment_app.dto.response.UserResponse;
 import com.hhh.doctor_appointment_app.entity.Admin;
 import com.hhh.doctor_appointment_app.entity.Patient;
 import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.enums.UserRole;
-import com.hhh.doctor_appointment_app.exception.ApplicationException;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.exception.UserException;
-import com.hhh.doctor_appointment_app.mapper.UserMapper;
 import com.hhh.doctor_appointment_app.repository.*;
-import com.hhh.doctor_appointment_app.util.singleton.PasswordEncoderSingleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +37,17 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
-    private PatientMapper patientMapper;
+    private UserMapper userMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Admin createAdmin(UserCreateRequest request) {
         if (checkUsernameExists(request.getEmail())) {
             throw new UserException("User already exists");
         }
-        Admin newAdmin = UserMapper.toAdmin(request);
+        Admin newAdmin = userMapper.toAdmin(request);
+        newAdmin.getProfile().setPassword(passwordEncoder.encode(request.getPassword()));
+        newAdmin.getProfile().setActive(true);
 
         var role = roleRepository.findByRoleName(UserRole.ADMIN);
         newAdmin.getProfile().setRole(role);
@@ -56,52 +55,23 @@ public class UserService {
         return adminRepository.save(newAdmin);
     }
 
-//    public Patient createPatient(UserCreateRequest request) {
-//        if (checkUsernameExists(request.getEmail())) {
-//            throw new UserException("User already exists");
-//        }
-//        Patient newPatient = UserMapper.toPatient(request);
-//
-//        var role = roleRepository.findByRoleName(UserRole.PATIENT);
-//        newPatient.getProfile().setRole(role);
-//
-//        return patientRepository.save(newPatient);
-//    }
-
-    public ApiResponse<Object> createPatient(UserCreateRequest userCreateRequest){
-        ApiResponse<Object> apiResponse = new ApiResponse<>();
-        try{
-            if (checkUsernameExists(userCreateRequest.getEmail())) {
-                throw new UserException("User already exists");
-            }
-
-            User user = new User();
-            user.setFullname(userCreateRequest.getFirstName() + " " +  userCreateRequest.getLastName());
-            user.setGender(userCreateRequest.getGender());
-            user.setPhone(userCreateRequest.getPhone());
-            user.setEmail(userCreateRequest.getEmail());
-            user.setDateOfBirth(userCreateRequest.getDateOfBirth());
-            user.setAddress(userCreateRequest.getAddress());
-
-            Patient newPatient = new Patient();
-            newPatient.setProfile(user);
-
-            var role = roleRepository.findByRoleName(UserRole.PATIENT);
-            newPatient.getProfile().setRole(role);
-
-            patientRepository.saveAndFlush(newPatient);
-            PatientResponse patientResponse = patientMapper.toResponse(newPatient);
-            apiResponse.ok(patientResponse);
-            return apiResponse;
-        }catch (Exception ex){
-            throw new ApplicationException("An unexpected error occurred");
+    public Patient createPatient(UserCreateRequest request) {
+        if (checkUsernameExists(request.getEmail())) {
+            throw new UserException("User already exists");
         }
+        Patient newPatient = userMapper.toPatient(request);
+        newPatient.getProfile().setPassword(passwordEncoder.encode(request.getPassword()));
+        newPatient.getProfile().setActive(true);
+        var role = roleRepository.findByRoleName(UserRole.PATIENT);
+        newPatient.getProfile().setRole(role);
+
+        return patientRepository.save(newPatient);
     }
 
-    @PostAuthorize("returnObject.profile.username == authentication.name")
+    @PostAuthorize("returnObject.profile.email == authentication.name")
     public Admin getAdminProfile(Long id) {
-        log.info("Get admin profile");
-        return adminRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+        return adminRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -112,21 +82,29 @@ public class UserService {
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();
-        User user = findUserByUsername(username)
+        User user = findUserByEmail(username)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
-        return UserMapper.toUserResponse(user);
+        return userMapper.toUserResponse(user);
     }
+    public boolean updateUserProfile(UserUpdateProfileRequest request) {
+        var user = findUserByEmail(request.getEmail())
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
-    private Optional<User> findUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+        User updatedUser = userMapper.toUser(request);
+        return false;
     }
 
     public List<Admin> getAllAdmin() {
         return adminRepository.findAll();
     }
 
-    private boolean checkUsernameExists(String username) {
-        return userRepository.existsByUsername(username);
+    private Optional<User> findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
+
+    private boolean checkUsernameExists(String username) {
+        return userRepository.existsByEmail(username);
+    }
+
 }

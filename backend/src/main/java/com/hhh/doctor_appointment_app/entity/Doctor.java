@@ -20,11 +20,13 @@ public class Doctor{
     @JoinColumn(name = "user_id")
     private User profile;
 
+    private String schedule;    // MONDAY,TUESDAY
+
     @ManyToOne
     @JoinColumn(name = "specialty_id")
     private Specialty specialty;
 
-    @OneToMany(mappedBy = "doctor",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "doctorModified",cascade = CascadeType.ALL)
     private List<MedicalRecord> medicalRecordList = new ArrayList<>();
 
     @OneToMany(mappedBy = "doctor",cascade = CascadeType.ALL)

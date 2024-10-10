@@ -1,7 +1,7 @@
 package com.hhh.doctor_appointment_app.controller;
 
-import com.hhh.doctor_appointment_app.dto.request.PatientRequest.AddPatientRequest;
-import com.hhh.doctor_appointment_app.dto.request.PatientRequest.EditPatientRequest;
+import com.hhh.doctor_appointment_app.dto.request.patientRequest.AddPatientRequest;
+import com.hhh.doctor_appointment_app.dto.request.patientRequest.EditPatientRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.service.PatientService;
