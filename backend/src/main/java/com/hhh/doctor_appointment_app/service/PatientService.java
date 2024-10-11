@@ -1,15 +1,11 @@
 package com.hhh.doctor_appointment_app.service;
 
 import com.hhh.doctor_appointment_app.dto.mapper.PatientMapper;
-import com.hhh.doctor_appointment_app.dto.request.doctorRequest.AddDoctorRequest;
-import com.hhh.doctor_appointment_app.dto.request.doctorRequest.EditDoctorRequest;
-import com.hhh.doctor_appointment_app.dto.request.patientRequest.AddPatientRequest;
-import com.hhh.doctor_appointment_app.dto.request.patientRequest.EditPatientRequest;
+import com.hhh.doctor_appointment_app.dto.request.PatientRequest.AddPatientRequest;
+import com.hhh.doctor_appointment_app.dto.request.PatientRequest.EditPatientRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
-import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.dto.response.PatientResponse.PatientResponse;
-import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Patient;
 import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.exception.ApplicationException;

@@ -1,6 +1,5 @@
-package com.hhh.doctor_appointment_app.dto.request.doctorRequest;
+package com.hhh.doctor_appointment_app.dto.request.PatientRequest;
 
-import com.hhh.doctor_appointment_app.entity.Specialty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -10,7 +9,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class EditDoctorRequest {
+public class AddPatientRequest {
     @Size(max = 50, message = "Firstname must not exceed 50 characters")
     private String firstName;
 
@@ -21,12 +20,11 @@ public class EditDoctorRequest {
 
     private String phone;
 
-    @Email(message = "Email không hợp lệ")
+    @Email(message = "Invalid Email")
     private String email;
 
     private Date dateOfBirth;
 
     private String address;
 
-    private Long specialtyID;
 }

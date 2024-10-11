@@ -1,8 +1,8 @@
 package com.hhh.doctor_appointment_app.service;
 
 import com.hhh.doctor_appointment_app.dto.mapper.DoctorMapper;
-import com.hhh.doctor_appointment_app.dto.request.doctorRequest.AddDoctorRequest;
-import com.hhh.doctor_appointment_app.dto.request.doctorRequest.EditDoctorRequest;
+import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.AddDoctorRequest;
+import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.EditDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
@@ -20,11 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
