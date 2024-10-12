@@ -7,6 +7,7 @@ import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.entity.Admin;
 import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Patient;
+import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.service.UserService;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +33,22 @@ public class AccountController {
     }
 
     @PostMapping("/reset-password")
-    public ApiResponse<String> changePassword(
+    public ApiResponse<String> resetPassword(
             @RequestParam String token,
             @RequestBody UserChangePasswordRequest request)
             throws ParseException, JOSEException {
         return ApiResponse.<String>builder()
-                .data(userService.changeUserPassword(token, request))
+                .data(userService.resetUserPassword(token, request))
+                .statusCode(HttpStatus.OK.value())
+                .build();
+    }
+
+    @PostMapping("/signup")
+    public ApiResponse<String> userSignup(@RequestBody UserCreateRequest request) {
+        var result = userService.userSignup(request);
+        String message = result != null ? "Sign up successfully!" : "Sign up failed!";
+        return ApiResponse.<String>builder()
+                .data(message)
                 .statusCode(HttpStatus.OK.value())
                 .build();
     }

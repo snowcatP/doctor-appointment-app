@@ -39,7 +39,7 @@ public class EmailService {
         String emailToken = generateEmailToken(email);
 
         String body = "To change your password, please click to the below link to navigate to change password page.\n" +
-                apiEndpoint + "/auth/change-password?token=" + emailToken;
+                apiEndpoint + "/auth/reset-password?token=" + emailToken;
 
         try{
             SimpleMailMessage message = new SimpleMailMessage();
@@ -58,7 +58,7 @@ public class EmailService {
         SignedJWT signedJWT = SignedJWT.parse(token);
 
         Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
-        if (expirationTime.after(Date.from(Instant.now()))) {
+        if (expirationTime.before(Date.from(Instant.now()))) {
             throw new UnauthenticatedException("Reset password token expired");
         }
 

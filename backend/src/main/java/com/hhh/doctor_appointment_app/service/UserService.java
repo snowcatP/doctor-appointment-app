@@ -55,6 +55,22 @@ public class UserService {
         return adminRepository.save(newAdmin);
     }
 
+    public Patient userSignup(UserCreateRequest request) {
+        if (checkUsernameExists(request.getEmail())) {
+            throw new UserException("User already exists");
+        }
+        User user = userMapper.toUser(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        var role = roleRepository.findByRoleName(UserRole.PATIENT);
+        user.setRole(role);
+
+        Patient patient = Patient.builder()
+                .profile(user)
+                .build();
+        return patientRepository.save(patient);
+    }
+
     public Patient createPatient(UserCreateRequest request) {
         if (checkUsernameExists(request.getEmail())) {
             throw new UserException("User already exists");
@@ -166,14 +182,14 @@ public class UserService {
         return "Send email successfully, please check your email to reset password";
     }
 
-    public String changeUserPassword(String token, UserChangePasswordRequest request)
+    public String resetUserPassword(String token, UserChangePasswordRequest request)
             throws ParseException, JOSEException {
         String email = emailService.getEmailFromToken(token);
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
-        if (!request.getNewPassword().equals(user.getPassword())) {
+        if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
             return "Passwords do not match";
         }
 
