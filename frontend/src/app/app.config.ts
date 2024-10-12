@@ -7,14 +7,6 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { 
-  NbThemeModule, 
-  NbToastrModule, 
-  NbLayoutModule, 
-  NbSidebarModule,
-  NbToastrService, // Make sure to import this
-  NbGlobalPhysicalPosition
-} from '@nebular/theme';
 import { OverlayContainer } from '@angular/cdk/overlay';
 export const appConfig: ApplicationConfig = {
   providers: [

@@ -6,7 +6,6 @@ import { HomeComponent } from './client/master-layout/home/home.component';
 import { LoginComponent } from './component/login/login.component';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormConfig } from '@rxweb/reactive-form-validators';
-import { NbLayoutModule, NbThemeModule } from '@nebular/theme';
 
 @Component({
   selector: 'app-root',
@@ -17,11 +16,8 @@ import { NbLayoutModule, NbThemeModule } from '@nebular/theme';
     FooterComponent,
     HomeComponent,
     LoginComponent,
-    NbLayoutModule,
   ],
   providers:[
-    NbThemeModule.forRoot().providers,
-    NbThemeModule,
 
   ],
   templateUrl: './app.component.html',
