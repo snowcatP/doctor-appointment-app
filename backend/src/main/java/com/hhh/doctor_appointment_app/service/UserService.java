@@ -1,18 +1,13 @@
 package com.hhh.doctor_appointment_app.service;
-import com.hhh.doctor_appointment_app.dto.mapper.PatientMapper;
-import com.hhh.doctor_appointment_app.dto.request.patientRequest.AddPatientRequest;
 import com.hhh.doctor_appointment_app.dto.mapper.UserMapper;
-import com.hhh.doctor_appointment_app.dto.request.userRequest.UserCreateRequest;
-import com.hhh.doctor_appointment_app.dto.request.userRequest.UserUpdateProfileRequest;
-import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
+import com.hhh.doctor_appointment_app.dto.request.UserRequest.*;
 import com.hhh.doctor_appointment_app.dto.response.UserResponse;
-import com.hhh.doctor_appointment_app.entity.Admin;
-import com.hhh.doctor_appointment_app.entity.Patient;
-import com.hhh.doctor_appointment_app.entity.User;
+import com.hhh.doctor_appointment_app.entity.*;
 import com.hhh.doctor_appointment_app.enums.UserRole;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.exception.UserException;
 import com.hhh.doctor_appointment_app.repository.*;
+import com.nimbusds.jose.JOSEException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +38,8 @@ public class UserService {
     private UserMapper userMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private EmailService emailService;
 
     public Admin createAdmin(UserCreateRequest request) {
         if (checkUsernameExists(request.getEmail())) {
@@ -57,6 +55,22 @@ public class UserService {
         return adminRepository.save(newAdmin);
     }
 
+    public Patient userSignup(UserCreateRequest request) {
+        if (checkUsernameExists(request.getEmail())) {
+            throw new UserException("User already exists");
+        }
+        User user = userMapper.toUser(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        var role = roleRepository.findByRoleName(UserRole.PATIENT);
+        user.setRole(role);
+
+        Patient patient = Patient.builder()
+                .profile(user)
+                .build();
+        return patientRepository.save(patient);
+    }
+
     public Patient createPatient(UserCreateRequest request) {
         if (checkUsernameExists(request.getEmail())) {
             throw new UserException("User already exists");
@@ -64,10 +78,25 @@ public class UserService {
         Patient newPatient = userMapper.toPatient(request);
         newPatient.getProfile().setPassword(passwordEncoder.encode(request.getPassword()));
         newPatient.getProfile().setActive(true);
+
         var role = roleRepository.findByRoleName(UserRole.PATIENT);
         newPatient.getProfile().setRole(role);
 
         return patientRepository.save(newPatient);
+    }
+
+    public Doctor createDoctor(UserCreateRequest request) {
+        if (checkUsernameExists(request.getEmail())) {
+            throw new UserException("User already exists");
+        }
+        Doctor newDoctor = userMapper.toDoctor(request);
+        newDoctor.getProfile().setPassword(passwordEncoder.encode(request.getPassword()));
+        newDoctor.getProfile().setActive(true);
+
+        var role = roleRepository.findByRoleName(UserRole.DOCTOR);
+        newDoctor.getProfile().setRole(role);
+
+        return doctorRepository.save(newDoctor);
     }
 
     @PostAuthorize("returnObject.profile.email == authentication.name")
@@ -89,12 +118,40 @@ public class UserService {
 
         return userMapper.toUserResponse(user);
     }
-    public boolean updateUserProfile(UserUpdateProfileRequest request) {
+
+    public User updateUserPassword(UserUpdatePasswordRequest request) {
+        if (!checkRightUser(request.getEmail())) {
+            throw new UserException("Username does not match");
+        }
         var user = findUserByEmail(request.getEmail())
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
-        User updatedUser = userMapper.toUser(request);
-        return false;
+        if (!user.getPassword()
+                .equals(passwordEncoder.encode(request.getOldPassword()))){
+            throw new UserException("Password does not match");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        return userRepository.save(user);
+
+    }
+
+    public User updateUserProfile(UserUpdateProfileRequest request) {
+        if (!checkRightUser(request.getEmail())) {
+            throw new UserException("Username does not match");
+        }
+
+        var user = findUserByEmail(request.getEmail())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setAddress(request.getAddress());
+        user.setDateOfBirth(request.getDateOfBirth());
+        user.setGender(request.isGender());
+        user.setPhone(request.getPhone());
+
+        return userRepository.save(user);
     }
 
     public List<Admin> getAllAdmin() {
@@ -105,8 +162,39 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    private boolean checkUsernameExists(String username) {
-        return userRepository.existsByEmail(username);
+    private boolean checkUsernameExists(String email) {
+        return userRepository.existsByEmail(email);
     }
 
+    private boolean checkRightUser(String requestEmail) {
+        var context = SecurityContextHolder.getContext();
+        String email = context.getAuthentication().getName();
+
+        return email.equals(requestEmail);
+    }
+
+    public String forgotPassword(UserForgotPasswordRequest request) {
+//        if (!checkUsernameExists(request.getEmail())){
+//            return false;
+//        }
+        emailService.sendChangePasswordEmail(request.getEmail());
+
+        return "Send email successfully, please check your email to reset password";
+    }
+
+    public String resetUserPassword(String token, UserChangePasswordRequest request)
+            throws ParseException, JOSEException {
+        String email = emailService.getEmailFromToken(token);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
+            return "Passwords do not match";
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+        return "Reset password successfully";
+    }
 }

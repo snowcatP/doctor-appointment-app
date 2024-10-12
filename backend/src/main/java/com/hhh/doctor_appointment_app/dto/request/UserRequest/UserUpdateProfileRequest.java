@@ -1,4 +1,4 @@
-package com.hhh.doctor_appointment_app.dto.request.userRequest;
+package com.hhh.doctor_appointment_app.dto.request.UserRequest;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

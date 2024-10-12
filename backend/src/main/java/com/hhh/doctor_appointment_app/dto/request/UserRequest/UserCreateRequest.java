@@ -1,10 +1,9 @@
-package com.hhh.doctor_appointment_app.dto.request.userRequest;
+package com.hhh.doctor_appointment_app.dto.request.UserRequest;
 
 import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.util.Date;
-import java.util.Set;
 
 @Data
 @Builder

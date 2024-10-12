@@ -1,6 +1,6 @@
 package com.hhh.doctor_appointment_app.configuration;
 
-import com.hhh.doctor_appointment_app.dto.request.userRequest.UserCreateRequest;
+import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserCreateRequest;
 import com.hhh.doctor_appointment_app.entity.Role;
 import com.hhh.doctor_appointment_app.enums.UserRole;
 import com.hhh.doctor_appointment_app.repository.RoleRepository;
