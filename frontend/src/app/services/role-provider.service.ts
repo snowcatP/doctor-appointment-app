@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { NbRoleProvider } from '@nebular/security';
-import { map, Observable, of } from 'rxjs';
 import { AuthService } from './auth.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Observable, of, map } from 'rxjs';
+
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class RoleProviderService implements NbRoleProvider {
+export class RoleProviderService {
+
   constructor(
     private authService: AuthService,
     private jwtHelperService: JwtHelperService

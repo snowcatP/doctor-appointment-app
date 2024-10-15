@@ -1,12 +1,9 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { CarouselModule } from 'primeng/carousel';
+
 @Component({
   selector: 'app-home',
-  standalone: true,
-  imports: [CarouselModule, CommonModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+  styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
   ngOnInit(): void {}
