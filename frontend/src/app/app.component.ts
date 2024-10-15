@@ -6,6 +6,7 @@ import { HomeComponent } from './client/master-layout/home/home.component';
 import { LoginComponent } from './component/login/login.component';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormConfig } from '@rxweb/reactive-form-validators';
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-root',
@@ -17,9 +18,7 @@ import { ReactiveFormConfig } from '@rxweb/reactive-form-validators';
     HomeComponent,
     LoginComponent,
   ],
-  providers:[
-
-  ],
+  providers: [JwtHelperService,{ provide: JWT_OPTIONS, useValue: JWT_OPTIONS },],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

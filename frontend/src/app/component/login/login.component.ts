@@ -1,5 +1,5 @@
 import { CommonModule, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, importProvidersFrom, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -18,8 +18,9 @@ import { CarouselModule } from 'primeng/carousel';
   imports: [ReactiveFormsModule, CommonModule, RxReactiveFormsModule, FormsModule, RouterLink, ToastModule, CarouselModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
-  providers:[MessageService]
+  providers:[MessageService],
 })
+
 export class LoginComponent implements OnInit {
   formLogin: FormGroup;
   showPass: boolean = false;
