@@ -11,6 +11,6 @@ export class AccountService {
     return this.http.post('http://localhost:8080/auth/login', obj);
   }
   onSignupPatient(obj: any): Observable<any>{
-    return this.http.post('http://localhost:8080/register/user', obj);
+    return this.http.post('http://localhost:8080/auth/signup', obj);
   }
 }

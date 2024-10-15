@@ -44,6 +44,7 @@ public class AccountController {
     }
 
     @PostMapping("/signup")
+    @CrossOrigin()
     public ApiResponse<String> userSignup(@RequestBody UserCreateRequest request) {
         var result = userService.userSignup(request);
         String message = result != null ? "Sign up successfully!" : "Sign up failed!";
