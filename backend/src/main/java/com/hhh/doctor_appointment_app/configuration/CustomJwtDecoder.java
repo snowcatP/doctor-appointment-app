@@ -2,7 +2,7 @@ package com.hhh.doctor_appointment_app.configuration;
 
 import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.IntrospectRequest;
 import com.hhh.doctor_appointment_app.exception.UnauthenticatedException;
-import com.hhh.doctor_appointment_app.service.AuthenticationService;
+import com.hhh.doctor_appointment_app.service.AuthenticationService.Query.Introspect.IntrospectQuery;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +23,7 @@ public class CustomJwtDecoder implements JwtDecoder {
     private String signerKey;
 
     @Autowired
-    private AuthenticationService authenticationService;
+    private IntrospectQuery introspectQuery;
 
     private NimbusJwtDecoder nimbusJwtDecoder = null;
 
@@ -31,7 +31,7 @@ public class CustomJwtDecoder implements JwtDecoder {
     public Jwt decode(String token) throws JwtException, UnauthenticatedException {
 
         try {
-            var response = authenticationService.introspect(
+            var response = introspectQuery.introspect(
                     IntrospectRequest.builder().token(token).build());
 
             if (!response.isValid()) throw new JwtException("Token invalid");

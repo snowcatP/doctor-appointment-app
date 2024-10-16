@@ -4,7 +4,11 @@ import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.AddDoctorRequest
 import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.EditDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
-import com.hhh.doctor_appointment_app.service.DoctorService;
+import com.hhh.doctor_appointment_app.service.DoctorService.Command.CreateDoctor.CreateDoctorByAdminCommand;
+import com.hhh.doctor_appointment_app.service.DoctorService.Command.DeleteDoctor.DeleteDoctorCommand;
+import com.hhh.doctor_appointment_app.service.DoctorService.Command.EditDoctor.EditDoctorCommand;
+import com.hhh.doctor_appointment_app.service.DoctorService.Query.GetDetailDoctor.GetDetailDoctorQuery;
+import com.hhh.doctor_appointment_app.service.DoctorService.Query.GetDoctorWithPage.GetDoctorWithPageQuery;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,13 +24,25 @@ import java.util.Map;
 @CrossOrigin
 public class DoctorController {
     @Autowired
-    private DoctorService doctorService;
+    private GetDoctorWithPageQuery getDoctorsWithPage;
+
+    @Autowired
+    private CreateDoctorByAdminCommand createDoctorCommand;
+
+    @Autowired
+    private EditDoctorCommand editDoctorCommand;
+
+    @Autowired
+    private DeleteDoctorCommand deleteDoctorCommand;
+
+    @Autowired
+    private GetDetailDoctorQuery getDoctorDetail;
 
     @GetMapping("/list-doctor")
     public ResponseEntity<?> getDoctors(@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "10") int size){
         try{
-            return new ResponseEntity<>(doctorService.getDoctorsWithPage(page, size), HttpStatus.OK);
+            return new ResponseEntity<>(getDoctorsWithPage.getDoctorsWithPage(page, size), HttpStatus.OK);
         }catch (Exception ex){
             ApiResponse<Object> apiResponse = new ApiResponse<>();
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
@@ -47,7 +63,7 @@ public class DoctorController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
-            apiResponse = doctorService.addDoctor(addDoctorRequest);
+            apiResponse = createDoctorCommand.addDoctor(addDoctorRequest);
 
             // Check if the status code is 500 for duplicated code
             if (HttpStatus.INTERNAL_SERVER_ERROR.value() == apiResponse.getStatusCode()) {
@@ -77,7 +93,7 @@ public class DoctorController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
-            apiResponse = doctorService.editDoctor(id,editDoctorRequest);
+            apiResponse = editDoctorCommand.editDoctor(id,editDoctorRequest);
             // Check if the status code is 500 for duplicated code
             if (HttpStatus.INTERNAL_SERVER_ERROR.equals(apiResponse.getStatusCode())) {
                 apiResponse.setMessage("Doctor's Email already exist in the system");
@@ -102,7 +118,7 @@ public class DoctorController {
     public ResponseEntity<?> deleteDoctor(@PathVariable Long id){
         ApiResponse<?> apiResponse = new ApiResponse<>();
         try {
-            apiResponse = doctorService.deleteByIdDoctor(id);
+            apiResponse = deleteDoctorCommand.deleteByIdDoctor(id);
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (NotFoundException ex){
@@ -122,7 +138,7 @@ public class DoctorController {
     {
         ApiResponse<?> apiResponse = new ApiResponse<>();
         try {
-            apiResponse = doctorService.getDoctorDetail(id);
+            apiResponse = getDoctorDetail.getDoctorDetail(id);
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (NotFoundException ex){
@@ -136,4 +152,6 @@ public class DoctorController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
     }
+
+
 }

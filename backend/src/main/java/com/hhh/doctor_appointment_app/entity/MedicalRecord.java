@@ -8,14 +8,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 public class MedicalRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,10 +26,10 @@ public class MedicalRecord {
     private String filePath;
 
     @CreatedDate
-    private Date dateCreated;
+    private LocalDateTime dateCreated;
 
     @LastModifiedDate
-    private Date lastModified;
+    private LocalDateTime lastModified;
 
     @ManyToOne()
     @JsonIgnore

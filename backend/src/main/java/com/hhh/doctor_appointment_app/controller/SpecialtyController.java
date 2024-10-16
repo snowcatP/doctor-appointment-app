@@ -4,11 +4,16 @@ import com.hhh.doctor_appointment_app.dto.request.SpecialtyRequest.AddSpecialtyR
 import com.hhh.doctor_appointment_app.dto.request.SpecialtyRequest.EditSpecialtyRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
-import com.hhh.doctor_appointment_app.service.SpecialtyService;
+import com.hhh.doctor_appointment_app.service.SpecialtyService.Command.CreateSpecialty.CreateSpecialtyCommand;
+import com.hhh.doctor_appointment_app.service.SpecialtyService.Command.DeleteSpecialty.DeleteSpecialtyCommand;
+import com.hhh.doctor_appointment_app.service.SpecialtyService.Command.EditSpecialty.EditSpecialtyCommand;
+import com.hhh.doctor_appointment_app.service.SpecialtyService.Query.GetDetailSpecialty.GetDetailSpecialtyQuery;
+import com.hhh.doctor_appointment_app.service.SpecialtyService.Query.GetSpecialtyWithPage.GetSpecialtyWithPageQuery;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,13 +26,25 @@ import java.util.Map;
 public class SpecialtyController {
 
     @Autowired
-    private SpecialtyService specialtyService;
+    private GetSpecialtyWithPageQuery getSpecialtiesWithPage;
+
+    @Autowired
+    private CreateSpecialtyCommand createSpecialtyCommand;
+
+    @Autowired
+    private EditSpecialtyCommand editSpecialtyCommand;
+
+    @Autowired
+    private DeleteSpecialtyCommand deleteSpecialtyCommand;
+
+    @Autowired
+    private GetDetailSpecialtyQuery getDetailSpecialtyQuery;
 
     @GetMapping("/list-specialty")
     public ResponseEntity<?> getDoctors(@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "10") int size){
         try{
-            return new ResponseEntity<>(specialtyService.getSpecialtiesWithPage(page, size), HttpStatus.OK);
+            return new ResponseEntity<>(getSpecialtiesWithPage.getSpecialtiesWithPage(page, size), HttpStatus.OK);
         }catch (Exception ex){
             ApiResponse<Object> apiResponse = new ApiResponse<>();
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
@@ -45,7 +62,7 @@ public class SpecialtyController {
             return ResponseEntity.status(HttpStatus.OK).body(errors);
         }
         try {
-            apiResponse = specialtyService.addSpecialty(addSpecialtyRequest);
+            apiResponse = createSpecialtyCommand.addSpecialty(addSpecialtyRequest);
 
             // Check if the status code is 500 for duplicated code
             if (HttpStatus.INTERNAL_SERVER_ERROR.value() == apiResponse.getStatusCode()) {
@@ -71,7 +88,7 @@ public class SpecialtyController {
             return ResponseEntity.status(HttpStatus.OK).body(errors);
         }
         try {
-            apiResponse = specialtyService.editSpecialty(id,editSpecialtyRequest);
+            apiResponse = editSpecialtyCommand.editSpecialty(id,editSpecialtyRequest);
             // Check if the status code is 500 for duplicated code
             if (HttpStatus.INTERNAL_SERVER_ERROR.value() == apiResponse.getStatusCode()){
                 apiResponse.setMessage("Specialty Name already exist in the system");
@@ -96,7 +113,7 @@ public class SpecialtyController {
     public ResponseEntity<?> deleteDoctor(@PathVariable Long id){
         ApiResponse<?> apiResponse = new ApiResponse<>();
         try {
-            apiResponse = specialtyService.deleteByIdSpecialty(id);
+            apiResponse = deleteSpecialtyCommand.deleteByIdSpecialty(id);
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (NotFoundException ex){
@@ -116,7 +133,7 @@ public class SpecialtyController {
     {
         ApiResponse<?> apiResponse = new ApiResponse<>();
         try {
-            apiResponse = specialtyService.getSpecialtyDetail(id);
+            apiResponse = getDetailSpecialtyQuery.getSpecialtyDetail(id);
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (NotFoundException ex){
