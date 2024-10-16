@@ -1,4 +1,4 @@
-package com.hhh.doctor_appointment_app.service;
+package com.hhh.doctor_appointment_app.service.SpecialtyService.Command.CreateSpecialty;
 
 import com.hhh.doctor_appointment_app.dto.mapper.SpecialtyMapper;
 import com.hhh.doctor_appointment_app.dto.request.SpecialtyRequest.AddSpecialtyRequest;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class SpecialtyService {
+public class CreateSpecialtyCommand {
     @Autowired
     private SpecialtyRepository specialtyRepository;
 

@@ -4,7 +4,10 @@ import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.Appointment
 import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.AppointmentByPatientRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
-import com.hhh.doctor_appointment_app.service.AppointmentService;
+import com.hhh.doctor_appointment_app.service.AppointmentService.Command.CreateAppointment.CreateAppointmentByGuestCommand;
+import com.hhh.doctor_appointment_app.service.AppointmentService.Command.CreateAppointment.CreateAppointmentByPatientCommand;
+import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetAppointmentWithPage.GetAppointmentWithPageQuery;
+import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetDetailAppointment.GetDetailAppointmentByPatientQuery;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +23,29 @@ import java.util.Map;
 @CrossOrigin
 public class AppointmentController {
     @Autowired
-    private AppointmentService appointmentService;
+    private CreateAppointmentByPatientCommand createAppointmentByPatient;
+
+    @Autowired
+    private CreateAppointmentByGuestCommand createAppointmentByGuest;
+
+    @Autowired
+    private GetDetailAppointmentByPatientQuery getAppointmentDetailByPatient;
+
+    @Autowired
+    private GetAppointmentWithPageQuery getAppointmentWithPageQuery;
+
+    @GetMapping("/list")
+    public ResponseEntity<?> getDoctors(@RequestParam(defaultValue = "1") int page,
+                                        @RequestParam(defaultValue = "10") int size){
+        try{
+            return new ResponseEntity<>(getAppointmentWithPageQuery.getAppointmentsWithPage(page, size), HttpStatus.OK);
+        }catch (Exception ex){
+            ApiResponse<Object> apiResponse = new ApiResponse<>();
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+    }
 
     @PostMapping("/patient/create-appoinment")
     public ResponseEntity<?> createAppointmentByPatient(@Valid @RequestBody AppointmentByPatientRequest appointmentByPatientRequest, BindingResult bindingResult){
@@ -33,7 +58,7 @@ public class AppointmentController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
-            apiResponse = appointmentService.createAppointmentByPatient(appointmentByPatientRequest);
+            apiResponse = createAppointmentByPatient.createAppointmentByPatient(appointmentByPatientRequest);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
         }
         catch (Exception ex) {
@@ -54,7 +79,7 @@ public class AppointmentController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
-            apiResponse = appointmentService.createAppointmentByGuest(appointmentByGuestRequest);
+            apiResponse = createAppointmentByGuest.createAppointmentByGuest(appointmentByGuestRequest);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
         }
         catch (Exception ex) {
@@ -69,7 +94,7 @@ public class AppointmentController {
     {
         ApiResponse<?> apiResponse = new ApiResponse<>();
         try {
-            apiResponse = appointmentService.getAppointmentDetailByPatient(id);
+            apiResponse = getAppointmentDetailByPatient.getAppointmentDetailByPatient(id);
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (NotFoundException ex){

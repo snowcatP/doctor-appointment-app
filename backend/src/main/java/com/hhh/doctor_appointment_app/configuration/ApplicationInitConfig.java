@@ -5,7 +5,7 @@ import com.hhh.doctor_appointment_app.entity.Role;
 import com.hhh.doctor_appointment_app.enums.UserRole;
 import com.hhh.doctor_appointment_app.repository.RoleRepository;
 import com.hhh.doctor_appointment_app.repository.UserRepository;
-import com.hhh.doctor_appointment_app.service.UserService;
+import com.hhh.doctor_appointment_app.service.UserService.Command.CreateAdmin.CreateAdminCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -16,16 +16,16 @@ import org.springframework.stereotype.Component;
 public class ApplicationInitConfig implements ApplicationRunner{
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final UserService userService;
+    private final CreateAdminCommand createAdminCommand;
 
     ApplicationInitConfig(
             UserRepository userRepository,
             RoleRepository roleRepository,
-            UserService userService
+            CreateAdminCommand createAdminCommand
     ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.userService = userService;
+        this.createAdminCommand = createAdminCommand;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ApplicationInitConfig implements ApplicationRunner{
                     .lastName("Admin")
                     .gender(true)
                     .build();
-            var result = userService.createAdmin(request);
+            var result = createAdminCommand.createAdmin(request);
             if (result != null) {
                 log.info("Admin account created with: username=admin@gmail.com, password=Hello@123");
             } else {

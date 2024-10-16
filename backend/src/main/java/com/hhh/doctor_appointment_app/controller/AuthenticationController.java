@@ -7,7 +7,10 @@ import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.RefreshT
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.AuthenticationResponse;
 import com.hhh.doctor_appointment_app.dto.response.IntrospectResponse;
-import com.hhh.doctor_appointment_app.service.AuthenticationService;
+import com.hhh.doctor_appointment_app.service.AuthenticationService.Command.Authenticate.AuthenticateCommand;
+import com.hhh.doctor_appointment_app.service.AuthenticationService.Command.Logout.LogoutCommand;
+import com.hhh.doctor_appointment_app.service.AuthenticationService.Command.RefreshToken.RefreshTokenCommand;
+import com.hhh.doctor_appointment_app.service.AuthenticationService.Query.Introspect.IntrospectQuery;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +21,21 @@ import java.text.ParseException;
 @RequestMapping("/auth")
 public class AuthenticationController {
     @Autowired
-    private AuthenticationService authenticationService;
+    private AuthenticateCommand authenticateCommand;
+
+    @Autowired
+    private IntrospectQuery introspectQuery;
+
+    @Autowired
+    private LogoutCommand logoutCommand;
+
+    @Autowired
+    private RefreshTokenCommand refreshTokenCommand;
+
     @CrossOrigin()
     @PostMapping("/login")
     public ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        var result = authenticationService.authenticate(request);
+        var result = authenticateCommand.authenticate(request);
         return (ApiResponse.<AuthenticationResponse>builder()
                 .data(result)
                 .build());
@@ -31,7 +44,7 @@ public class AuthenticationController {
     @PostMapping("/introspect")
     public ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request)
             throws ParseException, JOSEException {
-        var result = authenticationService.introspect(request);
+        var result = introspectQuery.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
                 .data(result)
                 .build();
@@ -40,7 +53,7 @@ public class AuthenticationController {
     @PostMapping("/logout")
     public ApiResponse<Void> logout(@RequestBody LogoutRequest request)
             throws ParseException, JOSEException {
-        authenticationService.logout(request);
+        logoutCommand.logout(request);
         return ApiResponse.<Void>builder()
                 .build();
     }
@@ -48,7 +61,7 @@ public class AuthenticationController {
     @PostMapping("/refreshToken")
     public ApiResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest request)
             throws ParseException, JOSEException {
-        var result = authenticationService.refreshToken(request);
+        var result = refreshTokenCommand.refreshToken(request);
         return ApiResponse.<AuthenticationResponse>builder()
                 .data(result)
                 .build();

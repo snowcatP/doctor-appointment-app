@@ -7,8 +7,12 @@ import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.entity.Admin;
 import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Patient;
-import com.hhh.doctor_appointment_app.entity.User;
-import com.hhh.doctor_appointment_app.service.UserService;
+import com.hhh.doctor_appointment_app.service.UserService.Command.CreateAdmin.CreateAdminCommand;
+import com.hhh.doctor_appointment_app.service.UserService.Command.CreateDoctor.CreateDoctorCommand;
+import com.hhh.doctor_appointment_app.service.UserService.Command.CreatePatient.CreatePatientCommand;
+import com.hhh.doctor_appointment_app.service.UserService.Command.ForgotPassword.ForgotPasswordCommand;
+import com.hhh.doctor_appointment_app.service.UserService.Command.ResetUserPassword.ResetUserPasswordCommand;
+import com.hhh.doctor_appointment_app.service.UserService.Command.UserSignup.UserSignupCommand;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,12 +26,27 @@ import java.text.ParseException;
 public class AccountController {
 
     @Autowired
-    private UserService userService;
+    private ForgotPasswordCommand forgotPasswordCommand;
+
+    @Autowired
+    private ResetUserPasswordCommand resetUserPasswordCommand;
+
+    @Autowired
+    private UserSignupCommand userSignupCommand;
+
+    @Autowired
+    private CreateAdminCommand createAdminCommand;
+
+    @Autowired
+    private CreatePatientCommand createPatientCommand;
+
+    @Autowired
+    private CreateDoctorCommand createDoctorCommand;
 
     @PostMapping("/forgot-password")
     public ApiResponse<String> forgotPassword(@RequestBody UserForgotPasswordRequest request) {
         return ApiResponse.<String>builder()
-                .data(userService.forgotPassword(request))
+                .data(forgotPasswordCommand.forgotPassword(request))
                 .statusCode(HttpStatus.OK.value())
                 .build();
     }
@@ -38,14 +57,15 @@ public class AccountController {
             @RequestBody UserChangePasswordRequest request)
             throws ParseException, JOSEException {
         return ApiResponse.<String>builder()
-                .data(userService.resetUserPassword(token, request))
+                .data(resetUserPasswordCommand.resetUserPassword(token, request))
                 .statusCode(HttpStatus.OK.value())
                 .build();
     }
 
     @PostMapping("/signup")
+    @CrossOrigin()
     public ApiResponse<String> userSignup(@RequestBody UserCreateRequest request) {
-        var result = userService.userSignup(request);
+        var result = userSignupCommand.userSignup(request);
         String message = result != null ? "Sign up successfully!" : "Sign up failed!";
         return ApiResponse.<String>builder()
                 .data(message)
@@ -56,7 +76,7 @@ public class AccountController {
     @PostMapping("/register/admin")
     public ApiResponse<Admin> addAdmin(@RequestBody UserCreateRequest request) {
         return ApiResponse.<Admin>builder()
-                .data(userService.createAdmin(request))
+                .data(createAdminCommand.createAdmin(request))
                 .statusCode(HttpStatus.OK.value())
                 .build();
     }
@@ -65,7 +85,7 @@ public class AccountController {
     @CrossOrigin()
     public ApiResponse<Patient> addPatient(@RequestBody UserCreateRequest request) {
         return ApiResponse.<Patient>builder()
-                .data(userService.createPatient(request))
+                .data(createPatientCommand.createPatient(request))
                 .statusCode(HttpStatus.OK.value())
                 .build();
     }
@@ -73,7 +93,7 @@ public class AccountController {
     @PostMapping("/register/doctor")
     public ApiResponse<Doctor> addDoctor(@RequestBody UserCreateRequest request) {
         return ApiResponse.<Doctor>builder()
-                .data(userService.createDoctor(request))
+                .data(createDoctorCommand.createDoctor(request))
                 .statusCode(HttpStatus.OK.value())
                 .build();
     }
