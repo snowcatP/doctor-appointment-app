@@ -7,7 +7,7 @@ import { RegisterComponent } from './client/master-layout/register/register.comp
 import { FooterComponent } from './component/footer/footer.component';
 import { HeaderComponent } from './component/header/header.component';
 import { ForgotPasswordComponent } from './client/master-layout/forgot-password/forgot-password.component';
-import { HomeComponent } from './component/home/home.component';
+import { HomeComponent } from './client/master-layout/home/home.component';
 import { RouterLink, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
