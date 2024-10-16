@@ -3,12 +3,11 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './component/login/login.component';
-import { RegisterComponent } from './component/register/register.component';
-import { FooterComponent } from './client/master-layout/footer/footer.component';
-import { HeaderComponent } from './client/master-layout/header/header.component';
+import { RegisterComponent } from './client/master-layout/register/register.component';
+import { FooterComponent } from './component/footer/footer.component';
+import { HeaderComponent } from './component/header/header.component';
 import { ForgotPasswordComponent } from './client/master-layout/forgot-password/forgot-password.component';
-import { HomeComponent } from './client/master-layout/home/home.component';
+import { HomeComponent } from './component/home/home.component';
 import { RouterLink, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
@@ -24,6 +23,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
 import { RoleProviderService } from './services/role-provider.service';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
+import { LoginComponent } from './client/master-layout/login/login.component';
 
 @NgModule({
   declarations: [

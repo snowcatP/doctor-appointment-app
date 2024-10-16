@@ -10,11 +10,12 @@ import {
   RxReactiveFormsModule,
   RxwebValidators,
 } from '@rxweb/reactive-form-validators';
-import { AccountService } from '../../services/account.service';
+
 import { Router, RouterLink } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { CarouselModule } from 'primeng/carousel';
+import { AccountService } from '../../../services/account.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
