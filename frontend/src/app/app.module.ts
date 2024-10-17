@@ -24,6 +24,13 @@ import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
 import { RoleProviderService } from './services/role-provider.service';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { LoginComponent } from './client/master-layout/login/login.component';
+import { SearchDoctorComponent } from './client/master-layout/search-doctor/search-doctor.component';
+import { SearchDoctorFilterComponent } from './client/master-layout/search-doctor/search-doctor-filter/search-doctor-filter.component';
+import { SearchDoctorBreadCrumbComponent } from './client/master-layout/search-doctor/search-doctor-bread-crumb/search-doctor-bread-crumb.component';
+import { DoctorProfileComponent } from './client/master-layout/doctor-profile/doctor-profile.component';
+import { DoctorProfileBreadCrumbComponent } from './client/master-layout/doctor-profile/doctor-profile-bread-crumb/doctor-profile-bread-crumb.component';
+import { PatientComponent } from './client/patient/patient.component';
+import { PatientModule } from './client/patient/patient.module';
 
 @NgModule({
   declarations: [
@@ -34,6 +41,12 @@ import { LoginComponent } from './client/master-layout/login/login.component';
     HeaderComponent,
     ForgotPasswordComponent,
     HomeComponent,
+    SearchDoctorComponent,
+    SearchDoctorFilterComponent,
+    SearchDoctorBreadCrumbComponent,
+    DoctorProfileComponent,
+    DoctorProfileBreadCrumbComponent,
+    PatientComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +63,7 @@ import { LoginComponent } from './client/master-layout/login/login.component';
     MatFormFieldModule,
     MatInputModule,
     MatRadioModule,
+    PatientModule
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },

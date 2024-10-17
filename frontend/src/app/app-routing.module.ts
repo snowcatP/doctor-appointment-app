@@ -4,31 +4,45 @@ import { authGuard } from './guard/auth.guard';
 import { HomeComponent } from './client/master-layout/home/home.component';
 import { RegisterComponent } from './client/master-layout/register/register.component';
 import { LoginComponent } from './client/master-layout/login/login.component';
+import { SearchDoctorComponent } from './client/master-layout/search-doctor/search-doctor.component';
+import { DoctorProfileComponent } from './client/master-layout/doctor-profile/doctor-profile.component';
 
 const routes: Routes = [
   {
     path: '',
-    // loadComponent: () => import("./client/master-layout/home/home.component").then(m => m.HomeComponent),
     component: HomeComponent,
-    title: 'Online Doctor Booking - Schedule Medical Appointments in Minutes'
-},
-{
+    title: 'Online Doctor Booking - Schedule Medical Appointments in Minutes',
+  },
+  {
     path: 'login',
-    // loadChildren: () => import("./component/login/login.component").then(m => m.LoginComponent),
     component: LoginComponent,
     title: 'Login',
-},
-{
+  },
+  {
     path: 'register',
-    // loadChildren: () => import("./component/register/register.component").then(m => m.RegisterComponent),
     component: RegisterComponent,
     title: 'Register',
     // canActivate: [authGuard]
-},
+  },
+  {
+    path: 'search-doctor',
+    component: SearchDoctorComponent,
+    title: 'Search Doctor',
+  },
+  {
+    path: 'doctor-profile',
+    component: DoctorProfileComponent,
+    title: 'Doctor Profile',
+  },
+  {
+    path: 'patient',
+    loadChildren: () =>
+      import('./client/patient/patient.module').then((m) => m.PatientModule),
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
