@@ -5,7 +5,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
-import { AccountService } from '../../services/account.service';
+import { AccountService } from '../../../services/account.service';
 import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-register',
