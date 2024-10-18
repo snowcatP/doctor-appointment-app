@@ -32,7 +32,6 @@ public class AuthenticationController {
     @Autowired
     private RefreshTokenCommand refreshTokenCommand;
 
-    @CrossOrigin()
     @PostMapping("/login")
     public ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         var result = authenticateCommand.authenticate(request);

@@ -13,7 +13,7 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
 import { ToastModule } from 'primeng/toast';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -24,6 +24,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
 import { RoleProviderService } from './services/role-provider.service';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
+import { authInterceptor } from './auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    { provide: HTTP_INTERCEPTORS, useValue: authInterceptor, multi: true},
     provideHttpClient(),
     JwtHelperService,
     MessageService,
