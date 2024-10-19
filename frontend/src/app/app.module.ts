@@ -30,7 +30,8 @@ import { SearchDoctorFilterComponent } from './client/master-layout/search-docto
 import { SearchDoctorBreadCrumbComponent } from './client/master-layout/search-doctor/search-doctor-bread-crumb/search-doctor-bread-crumb.component';
 import { DoctorProfileComponent } from './client/master-layout/doctor-profile/doctor-profile.component';
 import { DoctorProfileBreadCrumbComponent } from './client/master-layout/doctor-profile/doctor-profile-bread-crumb/doctor-profile-bread-crumb.component';
-
+import { DoctorModule } from './client/doctor/doctor.module';
+import { Page404Component } from './component/page-404/page-404.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { DoctorProfileBreadCrumbComponent } from './client/master-layout/doctor-
     SearchDoctorBreadCrumbComponent,
     DoctorProfileComponent,
     DoctorProfileBreadCrumbComponent,
+    Page404Component,
   ],
   imports: [
     BrowserModule,
@@ -62,6 +64,7 @@ import { DoctorProfileBreadCrumbComponent } from './client/master-layout/doctor-
     MatRadioModule,
     PatientModule,
     RouterModule,
+    DoctorModule,
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },
