@@ -3,12 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { RegisterComponent } from './client/master-layout/register/register.component';
-import { FooterComponent } from './component/footer/footer.component';
-import { HeaderComponent } from './component/header/header.component';
-import { ForgotPasswordComponent } from './client/master-layout/forgot-password/forgot-password.component';
-import { HomeComponent } from './client/master-layout/home/home.component';
-import { RouterLink, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
 import { ToastModule } from 'primeng/toast';
@@ -23,14 +18,19 @@ import { MatRadioModule } from '@angular/material/radio';
 import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
 import { RoleProviderService } from './services/role-provider.service';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
+import { PatientModule } from './client/patient/patient.module';
 import { LoginComponent } from './client/master-layout/login/login.component';
+import { RegisterComponent } from './client/master-layout/register/register.component';
+import { FooterComponent } from './component/footer/footer.component';
+import { HeaderComponent } from './component/header/header.component';
+import { ForgotPasswordComponent } from './client/master-layout/forgot-password/forgot-password.component';
+import { HomeComponent } from './client/master-layout/home/home.component';
 import { SearchDoctorComponent } from './client/master-layout/search-doctor/search-doctor.component';
 import { SearchDoctorFilterComponent } from './client/master-layout/search-doctor/search-doctor-filter/search-doctor-filter.component';
 import { SearchDoctorBreadCrumbComponent } from './client/master-layout/search-doctor/search-doctor-bread-crumb/search-doctor-bread-crumb.component';
 import { DoctorProfileComponent } from './client/master-layout/doctor-profile/doctor-profile.component';
 import { DoctorProfileBreadCrumbComponent } from './client/master-layout/doctor-profile/doctor-profile-bread-crumb/doctor-profile-bread-crumb.component';
-import { PatientComponent } from './client/patient/patient.component';
-import { PatientModule } from './client/patient/patient.module';
+
 
 @NgModule({
   declarations: [
@@ -46,13 +46,10 @@ import { PatientModule } from './client/patient/patient.module';
     SearchDoctorBreadCrumbComponent,
     DoctorProfileComponent,
     DoctorProfileBreadCrumbComponent,
-    PatientComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    RouterModule,
-    RouterLink,
     CommonModule,
     CarouselModule,
     ToastModule,
@@ -63,7 +60,8 @@ import { PatientModule } from './client/patient/patient.module';
     MatFormFieldModule,
     MatInputModule,
     MatRadioModule,
-    PatientModule
+    PatientModule,
+    RouterModule,
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },
