@@ -7,6 +7,7 @@ import { PatientChangePasswordComponent } from './patient-change-password/patien
 
 const routes: Routes = [
   {
+    // patient
     path: '',
     component: PatientComponent,
     children: [

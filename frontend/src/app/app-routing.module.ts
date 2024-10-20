@@ -6,6 +6,7 @@ import { RegisterComponent } from './client/master-layout/register/register.comp
 import { LoginComponent } from './client/master-layout/login/login.component';
 import { SearchDoctorComponent } from './client/master-layout/search-doctor/search-doctor.component';
 import { DoctorProfileComponent } from './client/master-layout/doctor-profile/doctor-profile.component';
+import { Page404Component } from './component/page-404/page-404.component';
 
 const routes: Routes = [
   {
@@ -39,6 +40,16 @@ const routes: Routes = [
     loadChildren: () =>
       import('./client/patient/patient.module').then((m) => m.PatientModule),
   },
+  {
+    path: 'doctor',
+    loadChildren: () =>
+      import('./client/doctor/doctor.module').then((m) => m.DoctorModule),
+  },
+  {
+    path: '**',
+    component: Page404Component,
+    title: 'Page 404 - Not Found'
+  }
 ];
 
 @NgModule({
