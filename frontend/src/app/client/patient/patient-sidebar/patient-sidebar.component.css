@@ -1,0 +1,4 @@
+:host {
+    display: block;
+    width: 100%; /* Ensure it only takes up the width defined by the parent (col-md-3) */
+  }
