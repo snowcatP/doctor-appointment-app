@@ -47,9 +47,9 @@
           <ul class="submenu">
             <li><a [routerLink]="['/search-doctor']">Search Doctor</a></li>
             <li><a [routerLink]="['/doctor-profile']">Doctor Profile</a></li>
-            <li><a href="booking.html">Booking</a></li>
-            <li><a href="checkout.html">Checkout</a></li>
-            <li><a href="booking-success.html">Booking Success</a></li>
+            <li><a [routerLink]="['/booking']">Booking</a></li>
+            <li><a [routerLink]="['/booking/checkout']">Checkout</a></li>
+            <li><a [routerLink]="['/booking/success']">Booking Success</a></li>
             <li><a [routerLink]="['/patient']">Patient Dashboard</a></li>
             <li><a [routerLink]="['/patient/profile']">Profile Settings</a></li>
             <li>
@@ -73,16 +73,16 @@
               </ul>
             </li>
             <li><a href="blank-page.html">Starter Page</a></li>
-            <li><a routerLink="/login" routerLinkActive="active">Login</a></li>
-            <li><a href="register.html">Register</a></li>
-            <li><a href="forgot-password.html">Forgot Password</a></li>
+            <li><a routerLink="/auth/login" routerLinkActive="active">Login</a></li>
+            <li><a routerLink="/auth/register">Register</a></li>
+            <li><a routerLink="/auth/forgot-password">Forgot Password</a></li>
           </ul>
         </li>
         <li>
           <a href="admin/index.html" target="_blank">Admin</a>
         </li>
         <li class="login-link">
-          <a routerLink="/login" routerLinkActive="active">Login/Sign up</a>
+          <a routerLink="/auth/login" routerLinkActive="active">Login/Sign up</a>
         </li>
       </ul>
     </div>
@@ -99,7 +99,7 @@
       <li class="nav-item">
         <a
           class="nav-link header-login"
-          routerLink="/login"
+          routerLink="/auth/login"
           routerLinkActive="active"
           >Login / Signup
         </a>

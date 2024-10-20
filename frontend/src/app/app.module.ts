@@ -19,11 +19,8 @@ import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
 import { RoleProviderService } from './services/role-provider.service';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { PatientModule } from './client/patient/patient.module';
-import { LoginComponent } from './client/master-layout/login/login.component';
-import { RegisterComponent } from './client/master-layout/register/register.component';
 import { FooterComponent } from './component/footer/footer.component';
 import { HeaderComponent } from './component/header/header.component';
-import { ForgotPasswordComponent } from './client/master-layout/forgot-password/forgot-password.component';
 import { HomeComponent } from './client/master-layout/home/home.component';
 import { SearchDoctorComponent } from './client/master-layout/search-doctor/search-doctor.component';
 import { SearchDoctorFilterComponent } from './client/master-layout/search-doctor/search-doctor-filter/search-doctor-filter.component';
@@ -32,15 +29,16 @@ import { DoctorProfileComponent } from './client/master-layout/doctor-profile/do
 import { DoctorProfileBreadCrumbComponent } from './client/master-layout/doctor-profile/doctor-profile-bread-crumb/doctor-profile-bread-crumb.component';
 import { DoctorModule } from './client/doctor/doctor.module';
 import { Page404Component } from './component/page-404/page-404.component';
+import { BookingAppointmentModule } from './client/master-layout/booking-appointment/booking-appointment.module';
+import { AuthenticationComponent } from './client/authentication/authentication.component';
+import { AuthenticationModule } from './client/authentication/authentication.module';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    RegisterComponent,
     FooterComponent,
     HeaderComponent,
-    ForgotPasswordComponent,
     HomeComponent,
     SearchDoctorComponent,
     SearchDoctorFilterComponent,
@@ -65,6 +63,8 @@ import { Page404Component } from './component/page-404/page-404.component';
     PatientModule,
     RouterModule,
     DoctorModule,
+    BookingAppointmentModule,
+    AuthenticationModule
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },
