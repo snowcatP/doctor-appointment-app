@@ -1,19 +1,11 @@
-import { CommonModule, NgIf } from '@angular/common';
-import { Component, importProvidersFrom, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import {
-  RxReactiveFormsModule,
-  RxwebValidators,
-} from '@rxweb/reactive-form-validators';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { RxwebValidators } from '@rxweb/reactive-form-validators';
 
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AccountService } from '../../../services/account.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

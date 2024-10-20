@@ -1,16 +1,13 @@
 import { Component } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-} from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
-import { AccountService } from '../../../services/account.service';
 import { MessageService } from 'primeng/api';
+import { AccountService } from '../../../services/account.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrl: './register.component.css',
 })
 export class RegisterComponent {
   formSignup: FormGroup;
@@ -100,7 +97,9 @@ export class RegisterComponent {
         summary: 'Success',
         detail: 'Signup successfully',
       });
-      setTimeout(() => {this.route.navigateByUrl('/login')}, 3500);
+      setTimeout(() => {
+        this.route.navigateByUrl('/login');
+      }, 3500);
     });
   }
 }
