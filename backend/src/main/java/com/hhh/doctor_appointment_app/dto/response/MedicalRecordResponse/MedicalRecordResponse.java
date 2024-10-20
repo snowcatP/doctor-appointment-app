@@ -13,6 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class MedicalRecordResponse {
     private Long id;
+    private String emailPatient;
     private String description;
     private String filePath;
     private LocalDateTime dateCreated;

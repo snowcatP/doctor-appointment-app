@@ -17,6 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 @Service
 public class CreateAppointmentByPatientCommand {
     @Autowired
@@ -39,6 +43,23 @@ public class CreateAppointmentByPatientCommand {
 
             Doctor doctor = doctorRepository.findById(appointmentByPatientRequest.getDoctor_ID())
                     .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
+
+            // Convert the dateBooking from Date to LocalDateTime
+            LocalDateTime dateBooking = appointmentByPatientRequest.getDateBooking()
+                    .toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+
+            // Get the current date and time
+            LocalDateTime currentDateTime = LocalDateTime.now();
+
+            // Check if the dateBooking is after the current date and time
+            if (dateBooking.isBefore(currentDateTime)) {
+                return ApiResponse.builder()
+                        .statusCode(HttpStatus.BAD_REQUEST.value())
+                        .message("The booking date and time must be in the future.")
+                        .build();
+            }
 
             Appointment appointment = Appointment.builder()
                     .fullname(appointmentByPatientRequest.getFullname())

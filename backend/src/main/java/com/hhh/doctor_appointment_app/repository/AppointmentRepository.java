@@ -12,4 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
     @Query("SELECT a FROM Appointment a")
     Page<Appointment> getAppointmentsWithPage(Pageable pageable);
+
+    Page<Appointment> findByDoctor_Id(Long doctorId, Pageable pageable);
 }
