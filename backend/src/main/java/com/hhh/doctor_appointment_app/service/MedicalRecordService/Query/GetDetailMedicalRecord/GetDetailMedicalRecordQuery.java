@@ -11,6 +11,7 @@ import com.hhh.doctor_appointment_app.repository.MedicalRecordRepository;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,6 +30,7 @@ public class GetDetailMedicalRecordQuery {
 
     @Autowired
     private MedicalRecordMapper medicalRecordMapper;
+
     public ApiResponse<?> getMedicalRecordDetail(Long id){
         ApiResponse<MedicalRecordResponse> apiResponse = new ApiResponse<>();
         try {

@@ -11,7 +11,8 @@ public interface MedicalRecordMapper {
     @Mappings({
             @Mapping(source = "medicalRecord.doctorModified", target = "doctorResponse"),
             @Mapping(source = "medicalRecord.dateCreated", target = "dateCreated"),
-            @Mapping(source = "medicalRecord.lastModified", target = "lastModified")
+            @Mapping(source = "medicalRecord.lastModified", target = "lastModified"),
+            @Mapping(source = "medicalRecord.patient.profile.email", target = "emailPatient")
     })
     MedicalRecordResponse toResponse(MedicalRecord medicalRecord);
 }

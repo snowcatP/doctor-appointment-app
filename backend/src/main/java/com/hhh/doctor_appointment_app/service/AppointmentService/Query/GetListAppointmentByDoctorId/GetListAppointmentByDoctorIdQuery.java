@@ -1,11 +1,9 @@
-package com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetAppointmentWithPage;
+package com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentByDoctorId;
 
 import com.hhh.doctor_appointment_app.dto.mapper.AppointmentMapper;
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentResponse;
-import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.entity.Appointment;
-import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,17 +16,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class GetAppointmentWithPageQuery {
+public class GetListAppointmentByDoctorIdQuery {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
     @Autowired
     private AppointmentMapper appointmentMapper;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    public PageResponse<List<AppointmentResponse>> getAppointmentsWithPage(int page, int size) {
+    @PreAuthorize("hasRole('DOCTOR')")
+    public PageResponse<List<AppointmentResponse>> getAppointmentsWithPageByDoctorId(int page, int size, Long id) {
         Pageable pageable = PageRequest.of(page-1, size);
-        Page<Appointment> appointmentPage = appointmentRepository.getAppointmentsWithPage(pageable);
+        Page<Appointment> appointmentPage = appointmentRepository.findByDoctor_Id(id,pageable);
 
         //Convert entities to responses
         List<AppointmentResponse> appointmentResponses = appointmentPage.getContent().stream()

@@ -12,4 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, Long> {
     @Query("SELECT m FROM MedicalRecord m")
     Page<MedicalRecord> getMedicalRecordsWithPage(Pageable pageable);
+
+    Page<MedicalRecord> findMedicalRecordByPatient_Id(Long patientId, Pageable pageable);
 }

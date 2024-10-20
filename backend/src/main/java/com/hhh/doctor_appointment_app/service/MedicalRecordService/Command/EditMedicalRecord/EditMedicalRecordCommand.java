@@ -14,6 +14,7 @@ import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.MedicalRecordRepository;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,6 +33,8 @@ public class EditMedicalRecordCommand {
 
     @Autowired
     private MedicalRecordMapper medicalRecordMapper;
+
+    @PreAuthorize("hasRole('DOCTOR')")
     public ApiResponse<Object> editMedicalRecordByDoctor(Long id, EditMedicalRecordRequest editMedicalRecordRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{

@@ -12,6 +12,7 @@ import com.hhh.doctor_appointment_app.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,8 @@ public class CreateDoctorCommand {
     private boolean checkUsernameExists(String email) {
         return userRepository.existsByEmail(email);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     public Doctor createDoctor(UserCreateRequest request) {
         if (checkUsernameExists(request.getEmail())) {
             throw new UserException("User already exists");

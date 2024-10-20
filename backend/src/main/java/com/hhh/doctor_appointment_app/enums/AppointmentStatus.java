@@ -1,7 +1,7 @@
 package com.hhh.doctor_appointment_app.enums;
 
 public enum AppointmentStatus {
-    SCHEDULED,   // Cuộc hẹn đã được lên lịch
+    ACCEPT,   // Cuộc hẹn đã được chấp nhận và lên lịch
     COMPLETED,   // Cuộc hẹn đã hoàn thành
     CANCELLED,   // Cuộc hẹn đã bị hủy
     PENDING,     // Cuộc hẹn đang chờ xử lý
