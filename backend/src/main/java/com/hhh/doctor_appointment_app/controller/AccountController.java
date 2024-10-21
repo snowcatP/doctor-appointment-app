@@ -22,7 +22,7 @@ import java.text.ParseException;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/auth")
+@RequestMapping("api/auth")
 public class AccountController {
 
     @Autowired

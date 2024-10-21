@@ -6,11 +6,7 @@
         <div class="account-content">
           <div class="row align-items-center justify-content-center">
             <div class="col-md-7 col-lg-6 login-left">
-              <img
-                src="assets/images/login-banner.png"
-                class="img-fluid"
-                alt="Doccure Register"
-              />
+              <img src="assets/images/login-banner.png" class="img-fluid" alt="Doccure Register" />
             </div>
             <div class="col-md-12 col-lg-6 login-right">
               <div class="login-header">
@@ -21,278 +17,161 @@
               </div>
 
               <!-- Register Form -->
-              <form
-                [formGroup]="formSignup"
-                (ngSubmit)="onClickSignUpPatient(formSignup.value)"
-              >
+              <form [formGroup]="formSignup" (ngSubmit)="onClickSignUpPatient(formSignup.value)">
                 <div class="name">
                   <div class="form-group form-focus fname">
-                    <input
-                      type="text"
-                      formControlName="firstName"
-                      class="form-control floating"
-                    />
+                    <input type="text" formControlName="firstName" class="form-control floating" />
                     <label class="focus-label">First Name</label>
-                    <small
-                      class="form-text text-danger"
-                      *ngIf="
+                    <small class="form-text text-danger" *ngIf="
                         (formSignup.controls['firstName'].dirty ||
                           formSignup.controls['firstName'].touched) &&
-                        formSignup.controls['firstName'].errors
-                      "
-                    >
-                      <ng-container
-                        *ngIf="formSignup.controls['firstName'].errors?.['required']"
-                      >
-                        {{formSignup.controls['firstName'].errors?.['required'].message}}
-                      </ng-container>
-                      <ng-container
-                        *ngIf="formSignup.controls['firstName'].errors?.['alpha']"
-                      >
-                        {{formSignup.controls['firstName'].errors?.['alpha'].message}}
-                      </ng-container>
+                        formSignup.controls['firstName'].errors">
+                        <ng-container *ngIf="formSignup.controls['firstName'].errors?.['required']">
+                          {{formSignup.controls['firstName'].errors?.['required'].message}}
+                        </ng-container>
+                        <ng-container *ngIf="formSignup.controls['firstName'].errors?.['alpha']">
+                          {{formSignup.controls['firstName'].errors?.['alpha'].message}}
+                        </ng-container>
                     </small>
                   </div>
                   <div class="form-group form-focus lname">
-                    <input
-                      type="text"
-                      class="form-control floating"
-                      formControlName="lastName"
-                    />
+                    <input type="text" class="form-control floating" formControlName="lastName" />
                     <label class="focus-label">Last Name</label>
-                    <small
-                      class="form-text text-danger"
-                      *ngIf="
+                    <small class="form-text text-danger" *ngIf="
                         (formSignup.controls['lastName'].dirty ||
                           formSignup.controls['lastName'].touched) &&
                         formSignup.controls['lastName'].errors
-                      "
-                    >
-                      <ng-container
-                        *ngIf="formSignup.controls['lastName'].errors?.['required']"
-                      >
+                      ">
+                      <ng-container *ngIf="formSignup.controls['lastName'].errors?.['required']">
                         {{formSignup.controls['lastName'].errors?.['required'].message}}
                       </ng-container>
-                      <ng-container
-                        *ngIf="formSignup.controls['lastName'].errors?.['alpha']"
-                      >
+                      <ng-container *ngIf="formSignup.controls['lastName'].errors?.['alpha']">
                         {{formSignup.controls['lastName'].errors?.['alpha'].message}}
                       </ng-container>
                     </small>
                   </div>
                 </div>
                 <div class="form-group form-focus email">
-                  <input
-                    type="text"
-                    class="form-control floating"
-                    formControlName="email"
-                  />
+                  <input type="text" class="form-control floating" formControlName="email" />
                   <label class="focus-label">Email</label>
-                  <small
-                    class="form-text text-danger"
-                    *ngIf="
+                  <small class="form-text text-danger" *ngIf="
                       (formSignup.controls['email'].dirty ||
                         formSignup.controls['email'].touched) &&
                       formSignup.controls['email'].errors
-                    "
-                  >
-                    <ng-container
-                      *ngIf="formSignup.controls['email'].errors?.['required']"
-                    >
+                    ">
+                    <ng-container *ngIf="formSignup.controls['email'].errors?.['required']">
                       {{formSignup.controls['email'].errors?.['required'].message}}
                     </ng-container>
-                    <ng-container
-                      *ngIf="formSignup.controls['email'].errors?.['email']"
-                    >
+                    <ng-container *ngIf="formSignup.controls['email'].errors?.['email']">
                       {{formSignup.controls['email'].errors?.['email'].message}}
                     </ng-container>
                   </small>
                 </div>
                 <div class="form-group form-focus password-wrapper">
-                  <input
-                    type="password"
-                    class="form-control password"
-                    formControlName="password"
-                    [type]="showPass ? 'text' : 'password'"
-                  />
+                  <input type="password" class="form-control password" formControlName="password"
+                    [type]="showPass ? 'text' : 'password'" />
                   <label class="focus-label">Password</label>
-                  <small
-                    (click)="showPassword()"
-                    [ngClass]="showPass ? 'fa fa-eye-slash' : 'fa fa-eye'"
-                    class="password-icon"
-                  ></small>
-                  <small
-                    class="form-text text-danger"
-                    *ngIf="
+                  <small (click)="showPassword()" [ngClass]="showPass ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                    class="password-icon"></small>
+                  <small class="form-text text-danger" *ngIf="
                       (formSignup.controls['password'].dirty ||
                         formSignup.controls['password'].touched) &&
                       formSignup.controls['password'].errors
-                    "
-                  >
-                    <ng-container
-                      *ngIf="formSignup.controls['password'].errors?.['required']"
-                    >
+                    ">
+                    <ng-container *ngIf="formSignup.controls['password'].errors?.['required']">
                       {{formSignup.controls['password'].errors?.['required'].message}}
                     </ng-container>
-                    <ng-container
-                      *ngIf="formSignup.controls['password'].errors?.['password']"
-                    >
+                    <ng-container *ngIf="formSignup.controls['password'].errors?.['password']">
                       {{formSignup.controls['password'].errors?.['password'].message}}
                     </ng-container>
                   </small>
                 </div>
                 <div class="form-group form-focus password-wrapper">
-                  <input
-                    type="password"
-                    class="form-control repeat-password"
-                    formControlName="repeatPassword"
-                    [type]="showRepeatPass ? 'text' : 'password'"
-                  />
+                  <input type="password" class="form-control repeat-password" formControlName="repeatPassword"
+                    [type]="showRepeatPass ? 'text' : 'password'" />
                   <label class="focus-label">Repeat Password</label>
-                  <small
-                    (click)="showRepeatPassword()"
-                    [ngClass]="showRepeatPass ? 'fa fa-eye-slash' : 'fa fa-eye'"
-                    class="password-icon"
-                  ></small>
-                  <small
-                    class="form-text text-danger"
-                    *ngIf="
+                  <small (click)="showRepeatPassword()" [ngClass]="showRepeatPass ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                    class="password-icon"></small>
+                  <small class="form-text text-danger" *ngIf="
                       (formSignup.controls['repeatPassword'].dirty ||
                         formSignup.controls['repeatPassword'].touched) &&
                       formSignup.controls['repeatPassword'].errors
-                    "
-                  >
-                    <ng-container
-                      *ngIf="formSignup.controls['repeatPassword'].errors?.['required']"
-                    >
+                    ">
+                    <ng-container *ngIf="formSignup.controls['repeatPassword'].errors?.['required']">
                       {{formSignup.controls['repeatPassword'].errors?.['required'].message}}
                     </ng-container>
-                    <ng-container
-                      *ngIf="formSignup.controls['repeatPassword'].errors?.['password']"
-                    >
+                    <ng-container *ngIf="formSignup.controls['repeatPassword'].errors?.['password']">
                       {{formSignup.controls['repeatPassword'].errors?.['password'].message}}
                     </ng-container>
                   </small>
                 </div>
                 <div class="form-group form-focus phone">
-                  <input
-                    type="text"
-                    class="form-control floating"
-                    formControlName="phone"
-                  />
+                  <input type="text" class="form-control floating" formControlName="phone" />
                   <label class="focus-label">Phone</label>
-                  <small
-                    class="form-text text-danger"
-                    *ngIf="
+                  <small class="form-text text-danger" *ngIf="
                       (formSignup.controls['phone'].dirty ||
                         formSignup.controls['phone'].touched) &&
                       formSignup.controls['phone'].errors
-                    "
-                  >
-                    <ng-container
-                      *ngIf="formSignup.controls['phone'].errors?.['alpha'].Numeric"
-                    >
+                    ">
+                    <ng-container *ngIf="formSignup.controls['phone'].errors?.['alpha'].Numeric">
                       {{formSignup.controls['phone'].errors?.['alpha'].Numeric.message}}
                     </ng-container>
                   </small>
                 </div>
                 <div class="form-group form-focus address">
-                  <input
-                    type="text"
-                    class="form-control floating"
-                    formControlName="address"
-                  />
+                  <input type="text" class="form-control floating" formControlName="address" />
                   <label class="focus-label">Address</label>
-                  <small
-                    class="form-text text-danger"
-                    *ngIf="
+                  <small class="form-text text-danger" *ngIf="
                       (formSignup.controls['address'].dirty ||
                         formSignup.controls['address'].touched) &&
                       formSignup.controls['address'].errors
-                    "
-                  >
-                    <ng-container
-                      *ngIf="formSignup.controls['address'].errors?.['alpha']Numeric"
-                    >
+                    ">
+                    <ng-container *ngIf="formSignup.controls['address'].errors?.['alpha']Numeric">
                       {{formSignup.controls['address'].errors?.['alpha'].Numeric.message}}
                     </ng-container>
                   </small>
                 </div>
                 <div class="form-group form-focus">
-                  <mat-form-field
-                    id="mat-form-field-birthday"
-                    appearance="fill"
-                  >
+                  <mat-form-field id="mat-form-field-birthday" appearance="fill">
                     <mat-label>Birth Day</mat-label>
-                    <input
-                      matInput
-                      [min]="minDate"
-                      [max]="maxDate"
-                      [matDatepicker]="picker"
-                      formControlName="dateOfBirth"
-                    />
-                    <mat-datepicker-toggle
-                      matSuffix
-                      [for]="picker"
-                    ></mat-datepicker-toggle>
+                    <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker"
+                      formControlName="dateOfBirth" />
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>
-                  <small
-                    class="form-text text-danger"
-                    *ngIf="
+                  <small class="form-text text-danger" *ngIf="
                       (formSignup.controls['dateOfBirth'].dirty ||
                         formSignup.controls['dateOfBirth'].touched) &&
                       formSignup.controls['dateOfBirth'].errors
-                    "
-                  >
-                    <ng-container
-                      *ngIf="formSignup.controls['dateOfBirth'].errors?.['required']"
-                    >
+                    ">
+                    <ng-container *ngIf="formSignup.controls['dateOfBirth'].errors?.['required']">
                       {{formSignup.controls['dateOfBirth'].errors?.['required'].message}}
                     </ng-container>
                   </small>
                 </div>
-                <div
-                  class="form-group form-focus"
-                  style="padding: 30px 0; margin-bottom: 30px"
-                >
+                <div class="form-group form-focus" style="padding: 30px 0; margin-bottom: 30px">
                   <label id="example-radio-group-label">Gender: </label>
-                  <mat-radio-group
-                    aria-labelledby="gender-radio-group-label"
-                    class="gender-radio-group"
-                    formControlName="gender"
-                  >
-                    <mat-radio-button value="true" [checked]="true"
-                      >Male</mat-radio-button
-                    >
+                  <mat-radio-group aria-labelledby="gender-radio-group-label" class="gender-radio-group"
+                    formControlName="gender">
+                    <mat-radio-button value="true" [checked]="true">Male</mat-radio-button>
                     <mat-radio-button value="false">Female</mat-radio-button>
                   </mat-radio-group>
-                  <small
-                    class="form-text text-danger"
-                    *ngIf="
+                  <small class="form-text text-danger" *ngIf="
                       (formSignup.controls['gender'].dirty ||
                         formSignup.controls['gender'].touched) &&
                       formSignup.controls['gender'].errors
-                    "
-                  >
-                    <ng-container
-                      *ngIf="formSignup.controls['gender'].errors?.['required']"
-                    >
+                    ">
+                    <ng-container *ngIf="formSignup.controls['gender'].errors?.['required']">
                       {{formSignup.controls['gender'].errors?.['required'].message}}
                     </ng-container>
                   </small>
                 </div>
 
                 <div class="text-right">
-                  <a class="forgot-link" routerLink="/login"
-                    >Already have an account?</a
-                  >
+                  <a class="forgot-link" routerLink="/login">Already have an account?</a>
                 </div>
-                <button
-                  class="btn btn-primary btn-block btn-lg login-btn"
-                  type="submit"
-                  [disabled]="formSignup.invalid"
-                >
+                <button class="btn btn-primary btn-block btn-lg login-btn" type="submit"
+                  [disabled]="formSignup.invalid">
                   Signup
                 </button>
                 <div class="login-or">
@@ -301,14 +180,10 @@
                 </div>
                 <div class="row form-row social-login">
                   <div class="col-6">
-                    <a href="#" class="btn btn-facebook btn-block"
-                      ><i class="fab fa-facebook-f mr-1"></i> Login</a
-                    >
+                    <a href="#" class="btn btn-facebook btn-block"><i class="fab fa-facebook-f mr-1"></i> Login</a>
                   </div>
                   <div class="col-6">
-                    <a href="#" class="btn btn-google btn-block"
-                      ><i class="fab fa-google mr-1"></i> Login</a
-                    >
+                    <a href="#" class="btn btn-google btn-block"><i class="fab fa-google mr-1"></i> Login</a>
                   </div>
                 </div>
               </form>

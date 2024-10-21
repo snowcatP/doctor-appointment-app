@@ -21,13 +21,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_POST = {
-            "/auth/login",
-            "/auth/introspect",
-            "/auth/logout",
-            "/auth/forgot-password",
-            "/auth/reset-password",
-            "/auth/refreshToken",
-            "/register/user",
+            "api/auth/login",
+            "api/auth/introspect",
+            "api/auth/logout",
+            "api/auth/forgot-password",
+            "api/auth/reset-password",
+            "api/auth/refreshToken",
+            "api/auth//register/user",
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {

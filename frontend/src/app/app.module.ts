@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './client/master-layout/register/register.component';
@@ -12,7 +11,7 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
 import { ToastModule } from 'primeng/toast';
-import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -31,7 +30,9 @@ import { DoctorProfileComponent } from './client/master-layout/doctor-profile/do
 import { DoctorProfileBreadCrumbComponent } from './client/master-layout/doctor-profile/doctor-profile-bread-crumb/doctor-profile-bread-crumb.component';
 import { PatientComponent } from './client/patient/patient.component';
 import { PatientModule } from './client/patient/patient.module';
-import { authInterceptor } from './auth.interceptor';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { httpErrorInterceptor } from './interceptors/http-error.interceptor';
+import { appInterceptorInterceptor } from './interceptors/authenticate.interceptor';
 
 @NgModule({
   declarations: [
@@ -65,12 +66,12 @@ import { authInterceptor } from './auth.interceptor';
     MatInputModule,
     MatRadioModule,
     PatientModule
+    
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-    { provide: HTTP_INTERCEPTORS, useValue: authInterceptor, multi: true},
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([appInterceptorInterceptor, httpErrorInterceptor])),
     JwtHelperService,
     MessageService,
     NbSecurityModule.forRoot({
@@ -94,6 +95,8 @@ import { authInterceptor } from './auth.interceptor';
         }
       },
     }).providers,
+    provideAnimations(),
+
   ],
   bootstrap: [AppComponent],
 })

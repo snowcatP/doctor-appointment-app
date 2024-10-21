@@ -3,8 +3,6 @@ import { Component, importProvidersFrom, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
 } from '@angular/forms';
 import {
   RxReactiveFormsModule,
