@@ -10,6 +10,7 @@ import com.hhh.doctor_appointment_app.service.MedicalRecordService.Command.Delet
 import com.hhh.doctor_appointment_app.service.MedicalRecordService.Command.EditMedicalRecord.EditMedicalRecordCommand;
 import com.hhh.doctor_appointment_app.service.MedicalRecordService.Query.GetDetailMedicalRecord.GetDetailMedicalRecordQuery;
 import com.hhh.doctor_appointment_app.service.MedicalRecordService.Query.GetMedicalRecordWithPage.GetMedicalRecordWithPageQuery;
+import com.hhh.doctor_appointment_app.service.MedicalRecordService.Query.GetMedicalRecordWithPageByPatient.GetMedicalRecordWithPageByPatientQuery;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,9 @@ public class MedicalRecordController {
 
     @Autowired
     private GetMedicalRecordWithPageQuery getMedicalRecordsWithPage;
+
+    @Autowired
+    private GetMedicalRecordWithPageByPatientQuery getMedicalRecordWithPageByPatientQuery;
 
     @GetMapping("/list")
     public ResponseEntity<?> getMedicalRecords(@RequestParam(defaultValue = "1") int page,
@@ -137,6 +141,19 @@ public class MedicalRecordController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (Exception ex) {
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+    }
+
+    @GetMapping("/list/patient/{patientId}")
+    public ResponseEntity<?> getMedicalRecords(@RequestParam(defaultValue = "1") int page,
+                                               @RequestParam(defaultValue = "10") int size, @PathVariable Long patientId){
+        try{
+            return new ResponseEntity<>(getMedicalRecordWithPageByPatientQuery.getMedicalRecordsWithPageByPatientId(page, size, patientId), HttpStatus.OK);
+        }catch (Exception ex){
+            ApiResponse<Object> apiResponse = new ApiResponse<>();
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
