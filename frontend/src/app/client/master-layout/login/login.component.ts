@@ -45,9 +45,7 @@ export class LoginComponent {
         summary: 'Success',
         detail: 'Login successfully',
       });
-      setTimeout(() => {
         this.route.navigateByUrl('/');
-      }, 3500);
     });
   }
 }

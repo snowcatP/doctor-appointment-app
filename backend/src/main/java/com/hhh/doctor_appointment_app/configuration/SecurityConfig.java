@@ -27,7 +27,7 @@ public class SecurityConfig {
             "api/auth/forgot-password",
             "api/auth/reset-password",
             "api/auth/refreshToken",
-            "api/auth//register/user",
+            "api/auth/register/user",
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {

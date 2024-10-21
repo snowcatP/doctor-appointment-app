@@ -69,7 +69,7 @@ public class AccountController {
         String message = result != null ? "Sign up successfully!" : "Sign up failed!";
         return ApiResponse.<String>builder()
                 .data(message)
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(HttpStatus.BAD_REQUEST.value())
                 .build();
     }
 

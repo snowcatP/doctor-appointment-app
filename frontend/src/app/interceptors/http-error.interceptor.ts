@@ -2,33 +2,18 @@ import { HttpErrorResponse, HttpEvent, HttpInterceptorFn, HttpResponse, HttpStat
 import { inject } from '@angular/core';
 import { error, isPlainObject } from 'jquery';
 import { MessageService } from 'primeng/api';
-import { catchError, tap } from 'rxjs';
-class HttpResponseBodyFormatError extends Error {
-  constructor() {
-    super('Invalid response body format')
-  }
-}
-const MESSAGES = {
-  INTERNAL_ERROR: 'An internal error has occurred. Please try again later.',
-  NO_CONNECTION: 'No network connection. Please try again later.'
-}
+import { catchError, tap, throwError } from 'rxjs';
+
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const messageService = inject(MessageService);
 
   return next(req).pipe(
-    tap((httpEvent)=>{
-      if (!checkInvalid200Response(httpEvent)) {
-        messageService.add({ severity: 'error',summary:'Error', detail: 'An internal error has occurred. Please try again later.' })
-      }
-    }),
     catchError(error =>{
-      if(checkNoNetworkConnection(error)){
-          setTimeout(() => {
-            messageService.add({ severity: 'error',summary:'Error', detail: 'An internal error has occurred. Please try again later.' })
-          }, 1000);
-           throw(error.statusText);
+      console.log(error)
+      if(error.status != 200){
+          messageService.add({key:'messageToast' ,severity: 'error',summary:'Error', detail: `${error.error.message}` })
       }
-      throw error;
+      return throwError(error)
     })
   );
 };
