@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
 import { ToastModule } from 'primeng/toast';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -32,6 +31,10 @@ import { Page404Component } from './component/page-404/page-404.component';
 import { BookingAppointmentModule } from './client/master-layout/booking-appointment/booking-appointment.module';
 import { AuthenticationComponent } from './client/authentication/authentication.component';
 import { AuthenticationModule } from './client/authentication/authentication.module';
+import { httpErrorInterceptor } from './interceptors/http-error.interceptor';
+import { appInterceptorInterceptor } from './interceptors/authenticate.interceptor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 
 @NgModule({
@@ -64,12 +67,13 @@ import { AuthenticationModule } from './client/authentication/authentication.mod
     RouterModule,
     DoctorModule,
     BookingAppointmentModule,
-    AuthenticationModule
+    AuthenticationModule,
+    BrowserAnimationsModule
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([appInterceptorInterceptor, httpErrorInterceptor])),
     JwtHelperService,
     MessageService,
     NbSecurityModule.forRoot({
@@ -93,6 +97,8 @@ import { AuthenticationModule } from './client/authentication/authentication.mod
         }
       },
     }).providers,
+   
+
   ],
   bootstrap: [AppComponent],
 })

@@ -8,9 +8,9 @@ import { Observable } from 'rxjs';
 export class AccountService {
   constructor(private http: HttpClient) {}
   onLogin(obj: any): Observable<any> {
-    return this.http.post('http://localhost:8080/auth/login', obj);
+    return this.http.post('api/auth/login', obj);
   }
   onSignupPatient(obj: any): Observable<any> {
-    return this.http.post('http://localhost:8080/auth/signup', obj);
+    return this.http.post('api/auth/signup', obj);
   }
 }

@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/appointment")
+@RequestMapping("api/appointment")
 @CrossOrigin
 public class AppointmentController {
     @Autowired

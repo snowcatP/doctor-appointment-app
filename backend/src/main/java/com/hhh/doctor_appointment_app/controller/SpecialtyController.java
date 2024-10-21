@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/specialty")
+@RequestMapping("api/specialty")
 @CrossOrigin
 public class SpecialtyController {
 
