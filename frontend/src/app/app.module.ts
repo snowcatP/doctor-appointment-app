@@ -33,6 +33,8 @@ import { AuthenticationComponent } from './client/authentication/authentication.
 import { AuthenticationModule } from './client/authentication/authentication.module';
 import { httpErrorInterceptor } from './interceptors/http-error.interceptor';
 import { appInterceptorInterceptor } from './interceptors/authenticate.interceptor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 
 @NgModule({
@@ -65,7 +67,8 @@ import { appInterceptorInterceptor } from './interceptors/authenticate.intercept
     RouterModule,
     DoctorModule,
     BookingAppointmentModule,
-    AuthenticationModule
+    AuthenticationModule,
+    BrowserAnimationsModule
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },
@@ -94,7 +97,7 @@ import { appInterceptorInterceptor } from './interceptors/authenticate.intercept
         }
       },
     }).providers,
-    provideAnimations(),
+   
 
   ],
   bootstrap: [AppComponent],
