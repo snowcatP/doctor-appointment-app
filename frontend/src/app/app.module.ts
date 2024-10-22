@@ -78,7 +78,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     { provide: NbRoleProvider, useClass: RoleProviderService },
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
-    provideHttpClient(withInterceptors([appInterceptorInterceptor, httpErrorInterceptor])),
+    // provideHttpClient(withInterceptors([appInterceptorInterceptor, httpErrorInterceptor])),
+    provideHttpClient(),
     JwtHelperService,
     MessageService,
     provideAnimations(),
@@ -102,8 +103,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         },
       },
     }).providers,
-   
-
   ],
   bootstrap: [AppComponent],
 })

@@ -22,7 +22,7 @@
                   <div class="full-width">
                     <mat-form-field appearance="outline">
                       <mat-label>Email</mat-label>
-                      <input matInput placeholder="Email" />
+                      <input matInput placeholder="Email" formControlName="email"/>
                     </mat-form-field>
                     <small
                       class="form-text text-danger"
@@ -53,6 +53,7 @@
                         matInput
                         placeholder="Password"
                         [type]="showPass ? 'text' : 'password'"
+                        formControlName="password"
                       />
                       <mat-icon matSuffix (click)="showPassword()">{{
                         showPass ? "visibility" : "visibility_off"

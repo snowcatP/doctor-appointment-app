@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { host } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,7 @@ import { Observable } from 'rxjs';
 export class AccountService {
   constructor(private http: HttpClient) {}
   onLogin(obj: any): Observable<any> {
-    return this.http.post('api/auth/login', obj);
+    return this.http.post(host + '/api/auth/login', obj);
   }
   onSignupPatient(obj: any): Observable<any> {
     return this.http.post('api/auth/signup', obj);
