@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
 import { ToastModule } from 'primeng/toast';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -35,8 +34,13 @@ import { DoctorModule } from './client/doctor/doctor.module';
 import { Page404Component } from './component/page-404/page-404.component';
 import { BookingAppointmentModule } from './client/master-layout/booking-appointment/booking-appointment.module';
 import { AuthenticationModule } from './client/authentication/authentication.module';
-import { NbThemeModule } from '@nebular/theme';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { httpErrorInterceptor } from './interceptors/http-error.interceptor';
+import { appInterceptorInterceptor } from './interceptors/authenticate.interceptor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -68,12 +72,13 @@ import { provideAnimations } from '@angular/platform-browser/animations';
     DoctorModule,
     BookingAppointmentModule,
     AuthenticationModule,
+    BrowserAnimationsModule
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([appInterceptorInterceptor, httpErrorInterceptor])),
     JwtHelperService,
     MessageService,
     provideAnimations(),
@@ -97,6 +102,8 @@ import { provideAnimations } from '@angular/platform-browser/animations';
         },
       },
     }).providers,
+   
+
   ],
   bootstrap: [AppComponent],
 })

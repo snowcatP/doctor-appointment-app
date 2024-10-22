@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/identity")
+@RequestMapping("api/identity")
 @CrossOrigin
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);

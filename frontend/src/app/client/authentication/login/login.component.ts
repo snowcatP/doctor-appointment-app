@@ -1,6 +1,13 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { RxwebValidators } from '@rxweb/reactive-form-validators';
+import { CommonModule, NgIf } from '@angular/common';
+import { Component, importProvidersFrom, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
+import {
+  RxReactiveFormsModule,
+  RxwebValidators,
+} from '@rxweb/reactive-form-validators';
 
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -39,9 +46,7 @@ export class LoginComponent {
         summary: 'Success',
         detail: 'Login successfully',
       });
-      setTimeout(() => {
         this.route.navigateByUrl('/');
-      }, 3500);
     });
   }
 }
