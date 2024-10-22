@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("api/auth")
 public class AuthenticationController {
     @Autowired
     private AuthenticateCommand authenticateCommand;
@@ -32,7 +32,6 @@ public class AuthenticationController {
     @Autowired
     private RefreshTokenCommand refreshTokenCommand;
 
-    @CrossOrigin()
     @PostMapping("/login")
     public ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         var result = authenticateCommand.authenticate(request);

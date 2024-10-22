@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/doctor")
+@RequestMapping("api/doctor")
 @CrossOrigin
 public class DoctorController {
     @Autowired

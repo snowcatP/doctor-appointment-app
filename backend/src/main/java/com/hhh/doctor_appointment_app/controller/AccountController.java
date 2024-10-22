@@ -31,7 +31,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/auth")
+@RequestMapping("api/auth")
 public class AccountController {
 
     @Autowired
@@ -84,7 +84,7 @@ public class AccountController {
         String message = result != null ? "Sign up successfully!" : "Sign up failed!";
         return ApiResponse.<String>builder()
                 .data(message)
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(HttpStatus.BAD_REQUEST.value())
                 .build();
     }
 

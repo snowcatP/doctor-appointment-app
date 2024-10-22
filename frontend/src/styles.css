@@ -6741,3 +6741,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .form-text.text-danger{
     margin: 0 10px;
 }
+.form-focus .focus-label{
+	margin-top: -7px;
+}
