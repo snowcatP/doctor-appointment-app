@@ -7,11 +7,15 @@ import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse
 import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Specialty;
 import com.hhh.doctor_appointment_app.entity.User;
+import com.hhh.doctor_appointment_app.enums.UserRole;
 import com.hhh.doctor_appointment_app.exception.ApplicationException;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
+import com.hhh.doctor_appointment_app.repository.RoleRepository;
 import com.hhh.doctor_appointment_app.repository.SpecialtyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,6 +27,14 @@ public class CreateDoctorByAdminCommand {
     private DoctorMapper doctorMapper;
     @Autowired
     private SpecialtyRepository specialtyRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<Object> addDoctor(AddDoctorRequest addDoctorRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
@@ -40,6 +52,13 @@ public class CreateDoctorByAdminCommand {
             Doctor newDoctor = new Doctor();
             newDoctor.setProfile(user);
             newDoctor.setSpecialty(specialty);
+            newDoctor.setAvatarFilePath(addDoctorRequest.getAvatarFilePath());
+
+            newDoctor.getProfile().setPassword(passwordEncoder.encode(addDoctorRequest.getPassword()));
+            newDoctor.getProfile().setActive(true);
+
+            var role = roleRepository.findByRoleName(UserRole.DOCTOR);
+            newDoctor.getProfile().setRole(role);
 
             boolean isDuplicate = doctorRepository.existsByProfile_Email(newDoctor.getProfile().getEmail());
             if(isDuplicate){

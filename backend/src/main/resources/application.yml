@@ -12,6 +12,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB  # Kích thước tối đa của file
+      max-request-size: 10MB  # Kích thước tối đa của request
   jwt:
     signerKey: "LD4WdV1y2aghWc5XIjI/aLryDMurH2A3Mj/WRFYYTBdIE1t0CR3l4yytQupbEA4G"
     valid-duration: 3600

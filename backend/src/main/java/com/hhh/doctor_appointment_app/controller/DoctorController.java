@@ -1,7 +1,9 @@
 package com.hhh.doctor_appointment_app.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.AddDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.EditDoctorRequest;
+import com.hhh.doctor_appointment_app.dto.request.MedicalRecordRequest.AddMedicalRecordRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.service.DoctorService.Command.CreateDoctor.CreateDoctorByAdminCommand;
@@ -9,13 +11,16 @@ import com.hhh.doctor_appointment_app.service.DoctorService.Command.DeleteDoctor
 import com.hhh.doctor_appointment_app.service.DoctorService.Command.EditDoctor.EditDoctorCommand;
 import com.hhh.doctor_appointment_app.service.DoctorService.Query.GetDetailDoctor.GetDetailDoctorQuery;
 import com.hhh.doctor_appointment_app.service.DoctorService.Query.GetDoctorWithPage.GetDoctorWithPageQuery;
+import com.hhh.doctor_appointment_app.service.FirebaseStorageService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +43,9 @@ public class DoctorController {
     @Autowired
     private GetDetailDoctorQuery getDoctorDetail;
 
+    @Autowired
+    private FirebaseStorageService firebaseStorageService;
+
     @GetMapping("/list-doctor")
     public ResponseEntity<?> getDoctors(@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "10") int size){
@@ -52,37 +60,51 @@ public class DoctorController {
     }
 
     @PostMapping("/add-doctor")
-    public ResponseEntity<?> addDoctor(@Valid @RequestBody AddDoctorRequest addDoctorRequest,
-                                       BindingResult bindingResult){
+    public ResponseEntity<?> createAndUploadFileDoctorByAdmin(
+            @RequestParam("file") MultipartFile file,
+            @ModelAttribute @Valid AddDoctorRequest addDoctorRequest, // sử dụng ModelAttribute để bind dữ liệu
+            BindingResult bindingResult) {
+
         ApiResponse<Object> apiResponse = new ApiResponse<>();
+
+        // Kiểm tra lỗi validation
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
-            apiResponse.setMessage("An unexpected error occurred: " + errors);
-            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+            apiResponse.setMessage("Validation errors: " + errors);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse); // Trả về lỗi 400 cho validation
         }
+
         try {
+            // Upload file lên Firebase Storage
+            String fileUrl = firebaseStorageService.uploadFile(file);
+            addDoctorRequest.setAvatarFilePath(fileUrl);
+
+            // Lưu hồ sơ
             apiResponse = createDoctorCommand.addDoctor(addDoctorRequest);
 
-            // Check if the status code is 500 for duplicated code
+            // Kiểm tra xem email đã tồn tại trong hệ thống hay chưa
             if (HttpStatus.INTERNAL_SERVER_ERROR.value() == apiResponse.getStatusCode()) {
-                apiResponse.setMessage("Doctor's Email already exist in the system");
-                return ResponseEntity.status(HttpStatus.OK).body(apiResponse); // Conflict for duplicated code
+                apiResponse.setMessage("Doctor's Email already exists in the system");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponse); // Trả về lỗi 409 cho email bị trùng
             }
-            return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
-        }
-        catch (Exception ex) {
 
-            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setStatusCode(HttpStatus.OK.value());
+            apiResponse.setMessage("Doctor added successfully");
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            apiResponse.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
-            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResponse);
         }
     }
 
     @PutMapping("/edit-doctor/{id}")
     public ResponseEntity<?> editDoctor(@PathVariable Long id,
-                                        @Valid @RequestBody EditDoctorRequest editDoctorRequest,
+                                        @RequestParam("file") MultipartFile file,
+                                        @ModelAttribute @Valid EditDoctorRequest editDoctorRequest, // sử dụng ModelAttribute để bind dữ liệu
                                         BindingResult bindingResult){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
@@ -93,6 +115,10 @@ public class DoctorController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
+            // Upload file lên Firebase Storage
+            String fileUrl = firebaseStorageService.uploadFile(file);
+            editDoctorRequest.setAvatarFilePath(fileUrl);
+
             apiResponse = editDoctorCommand.editDoctor(id,editDoctorRequest);
             // Check if the status code is 500 for duplicated code
             if (HttpStatus.INTERNAL_SERVER_ERROR.equals(apiResponse.getStatusCode())) {
