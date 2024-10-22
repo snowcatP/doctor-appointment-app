@@ -10,7 +10,11 @@ import { ToastModule } from 'primeng/toast';
 import { provideHttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ErrorStateMatcher, MatNativeDateModule, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import {
+  ErrorStateMatcher,
+  MatNativeDateModule,
+  ShowOnDirtyErrorStateMatcher,
+} from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -30,9 +34,8 @@ import { DoctorProfileBreadCrumbComponent } from './client/master-layout/doctor-
 import { DoctorModule } from './client/doctor/doctor.module';
 import { Page404Component } from './component/page-404/page-404.component';
 import { BookingAppointmentModule } from './client/master-layout/booking-appointment/booking-appointment.module';
-import { AuthenticationComponent } from './client/authentication/authentication.component';
 import { AuthenticationModule } from './client/authentication/authentication.module';
-import { NbLayoutModule, NbThemeModule } from '@nebular/theme';
+import { NbThemeModule } from '@nebular/theme';
 import { provideAnimations } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
@@ -48,7 +51,6 @@ import { provideAnimations } from '@angular/platform-browser/animations';
     Page404Component,
   ],
   imports: [
-    NbThemeModule.forRoot(),
     BrowserModule,
     AppRoutingModule,
     CommonModule,
@@ -66,12 +68,11 @@ import { provideAnimations } from '@angular/platform-browser/animations';
     DoctorModule,
     BookingAppointmentModule,
     AuthenticationModule,
-    NbLayoutModule,
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-    {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher},
+    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
     provideHttpClient(),
     JwtHelperService,
     MessageService,
@@ -87,14 +88,13 @@ import { provideAnimations } from '@angular/platform-browser/animations';
           edit: '*',
           remove: '*',
         },
-        DOCTOR:{
+        DOCTOR: {
           parent: 'guest',
           create: '*',
           edit: '*',
           remove: '*',
           doctor: '*',
-
-        }
+        },
       },
     }).providers,
   ],

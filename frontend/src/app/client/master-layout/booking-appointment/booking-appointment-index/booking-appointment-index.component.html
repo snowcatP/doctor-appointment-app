@@ -26,7 +26,7 @@
           </div>
         </div>
         <div class="pt-2">
-          <form formGroupName="formBooking">
+          <form [formGroup]="formBooking">
             <h5>Doctor</h5>
             <div class="row tight-line">
               <mat-form-field
@@ -34,11 +34,16 @@
                 class="col-sm-12 col-md-12 col-lg-6 col-xl-6"
               >
                 <mat-label>Specialty</mat-label>
-                <input
+                <input type="text"
+                  placeholder="Pick one"
                   matInput
-                  placeholder="Ex. Oral"
                   formControlName="specialty"
-                />
+                  [matAutocomplete]="auto"/>
+                <mat-autocomplete #auto="matAutocomplete">
+                  @for (option of filteredOptions | async; track option) {
+                    <mat-option [value]="option">{{option}}</mat-option>
+                  }
+                </mat-autocomplete>
               </mat-form-field>
               <mat-form-field
                 appearance="outline"
@@ -52,19 +57,37 @@
             <div class="full-width">
               <div class="row">
                 <mat-form-field appearance="outline" class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                  <mat-label>Full Name</mat-label>
+                  <mat-label>First Name</mat-label>
                   <input
                     matInput
-                    placeholder="Ex. Oral"
-                    formControlName="fullName"
+                    placeholder="Ex. Justin"
+                    formControlName="firstName"
                   />
                 </mat-form-field>
+                <mat-form-field appearance="outline" class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                  <mat-label>Last Name</mat-label>
+                  <input
+                    matInput
+                    placeholder="Ex. Timberlake"
+                    formControlName="lastName"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="row">
                 <mat-form-field appearance="outline" class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
                   <mat-label>Phone</mat-label>
                   <input
                     matInput
-                    placeholder="Ex. Oral"
+                    placeholder="Ex. 0900101010"
                     formControlName="phone"
+                  />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                  <mat-label>Email</mat-label>
+                  <input
+                    matInput
+                    placeholder="Ex. example@gmail.com"
+                    formControlName="email"
                   />
                 </mat-form-field>
               </div>
@@ -72,7 +95,7 @@
                 <mat-label>Reason</mat-label>
                 <textarea
                   matInput
-                  placeholder="Ex. Oral"
+                  placeholder="Ex. Oral..."
                   formControlName="reason"
                 ></textarea>
               </mat-form-field>
@@ -233,6 +256,6 @@
 </div>
 <!-- Submit Section -->
 <div class="submit-section proceed-btn text-right">
-  <a href="checkout.html" class="btn btn-primary submit-btn">Proceed to Pay</a>
+  <a [routerLink]="['/booking/checkout']" class="btn btn-primary submit-btn">Proceed to Pay</a>
 </div>
 <!-- /Submit Section -->

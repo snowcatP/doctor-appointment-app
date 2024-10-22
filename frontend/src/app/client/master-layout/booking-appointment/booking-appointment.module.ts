@@ -8,21 +8,23 @@ import { BookingAppointmentIndexComponent } from './booking-appointment-index/bo
 import { BookingAppointmentComponent } from './booking-appointment.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
-
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 @NgModule({
   declarations: [
     BookingAppointmentComponent,
     BookingAppointmentCheckoutComponent,
     BookingAppointmentSuccessComponent,
-    BookingAppointmentIndexComponent
+    BookingAppointmentIndexComponent,
   ],
   imports: [
     CommonModule,
     BookingAppointmentRoutingModule,
     MatFormFieldModule,
     MatInputModule,
-  ]
+    MatAutocompleteModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
 })
-export class BookingAppointmentModule { }
+export class BookingAppointmentModule {}
