@@ -1,5 +1,6 @@
 package com.hhh.doctor_appointment_app.controller;
 
+import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.AddDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserChangePasswordRequest;
 import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserCreateRequest;
 import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserForgotPasswordRequest;
@@ -7,6 +8,8 @@ import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.entity.Admin;
 import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Patient;
+import com.hhh.doctor_appointment_app.service.DoctorService.Command.CreateDoctor.CreateDoctorByAdminCommand;
+import com.hhh.doctor_appointment_app.service.FirebaseStorageService;
 import com.hhh.doctor_appointment_app.service.UserService.Command.CreateAdmin.CreateAdminCommand;
 import com.hhh.doctor_appointment_app.service.UserService.Command.CreateDoctor.CreateDoctorCommand;
 import com.hhh.doctor_appointment_app.service.UserService.Command.CreatePatient.CreatePatientCommand;
@@ -14,11 +17,17 @@ import com.hhh.doctor_appointment_app.service.UserService.Command.ForgotPassword
 import com.hhh.doctor_appointment_app.service.UserService.Command.ResetUserPassword.ResetUserPasswordCommand;
 import com.hhh.doctor_appointment_app.service.UserService.Command.UserSignup.UserSignupCommand;
 import com.nimbusds.jose.JOSEException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -42,6 +51,12 @@ public class AccountController {
 
     @Autowired
     private CreateDoctorCommand createDoctorCommand;
+
+    @Autowired
+    private CreateDoctorByAdminCommand createDoctorByAdminCommand;
+
+    @Autowired
+    private FirebaseStorageService firebaseStorageService;
 
     @PostMapping("/forgot-password")
     public ApiResponse<String> forgotPassword(@RequestBody UserForgotPasswordRequest request) {
@@ -91,10 +106,45 @@ public class AccountController {
     }
 
     @PostMapping("/register/doctor")
-    public ApiResponse<Doctor> addDoctor(@RequestBody UserCreateRequest request) {
-        return ApiResponse.<Doctor>builder()
-                .data(createDoctorCommand.createDoctor(request))
-                .statusCode(HttpStatus.OK.value())
-                .build();
+    @CrossOrigin()
+    public ResponseEntity<?> registerAndUploadFileDoctorByAdmin(
+            @RequestParam("file") MultipartFile file,
+            @ModelAttribute @Valid AddDoctorRequest addDoctorRequest, // sử dụng ModelAttribute để bind dữ liệu
+            BindingResult bindingResult) {
+
+        ApiResponse<Object> apiResponse = new ApiResponse<>();
+
+        // Kiểm tra lỗi validation
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage("Validation errors: " + errors);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse); // Trả về lỗi 400 cho validation
+        }
+
+        try {
+            // Upload file lên Firebase Storage
+            String fileUrl = firebaseStorageService.uploadFile(file);
+            addDoctorRequest.setAvatarFilePath(fileUrl);
+
+            // Lưu hồ sơ
+            apiResponse = createDoctorByAdminCommand.addDoctor(addDoctorRequest);
+
+            // Kiểm tra xem email đã tồn tại trong hệ thống hay chưa
+            if (HttpStatus.INTERNAL_SERVER_ERROR.value() == apiResponse.getStatusCode()) {
+                apiResponse.setMessage("Doctor's Email already exists in the system");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponse); // Trả về lỗi 409 cho email bị trùng
+            }
+
+            apiResponse.setStatusCode(HttpStatus.OK.value());
+            apiResponse.setMessage("Doctor added successfully");
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            apiResponse.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResponse);
+        }
     }
 }
