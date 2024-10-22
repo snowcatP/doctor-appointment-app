@@ -36,7 +36,7 @@ public class AuthenticateCommand {
     private GenerateTokenCommand generateTokenCommand;
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        User user = findUserByUsernameQuery.findUserByUsername(request.getUsername())
+        User user = findUserByUsernameQuery.findUserByUsername(request.getEmail())
                 .orElseThrow(() -> new UnauthenticatedException("User not found"));
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new UnauthenticatedException("Invalid username or password");

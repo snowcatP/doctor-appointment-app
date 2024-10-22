@@ -1,1 +1,261 @@
-<p>booking-appointment-index works!</p>
+<div class="row">
+  <div class="col-md-12 col-lg-6 col-xl-6">
+    <div class="card">
+      <div class="card-body">
+        <h4>Booking Information</h4>
+        <div class="booking-doc-info tight-line">
+          <a href="doctor-profile.html" class="booking-doc-img">
+            <img
+              src="assets/images/doctors/doctor-thumb-02.jpg"
+              alt="User Image"
+            />
+          </a>
+          <div class="booking-info">
+            <h5><a href="doctor-profile.html">Dr. Darren Elder</a></h5>
+            <div class="rating">
+              <i class="fas fa-star filled"></i>
+              <i class="fas fa-star filled"></i>
+              <i class="fas fa-star filled"></i>
+              <i class="fas fa-star filled"></i>
+              <i class="fas fa-star"></i>
+              <span class="d-inline-block average-rating">35</span>
+            </div>
+            <p class="text-muted mb-0">
+              <i class="fas fa-map-marker-alt"></i> Newyork, USA
+            </p>
+          </div>
+        </div>
+        <div class="pt-2">
+          <form [formGroup]="formBooking">
+            <h5>Doctor</h5>
+            <div class="row tight-line">
+              <mat-form-field
+                appearance="outline"
+                class="col-sm-12 col-md-12 col-lg-6 col-xl-6"
+              >
+                <mat-label>Specialty</mat-label>
+                <input type="text"
+                  placeholder="Pick one"
+                  matInput
+                  formControlName="specialty"
+                  [matAutocomplete]="auto"/>
+                <mat-autocomplete #auto="matAutocomplete">
+                  @for (option of filteredOptions | async; track option) {
+                    <mat-option [value]="option">{{option}}</mat-option>
+                  }
+                </mat-autocomplete>
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                class="col-sm-12 col-md-12 col-lg-6 col-xl-6"
+              >
+                <mat-label>Doctor</mat-label>
+                <input matInput placeholder="Name" formControlName="doctor" />
+              </mat-form-field>
+            </div>
+            <h5>Patient</h5>
+            <div class="full-width">
+              <div class="row">
+                <mat-form-field appearance="outline" class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                  <mat-label>First Name</mat-label>
+                  <input
+                    matInput
+                    placeholder="Ex. Justin"
+                    formControlName="firstName"
+                  />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                  <mat-label>Last Name</mat-label>
+                  <input
+                    matInput
+                    placeholder="Ex. Timberlake"
+                    formControlName="lastName"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field appearance="outline" class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                  <mat-label>Phone</mat-label>
+                  <input
+                    matInput
+                    placeholder="Ex. 0900101010"
+                    formControlName="phone"
+                  />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                  <mat-label>Email</mat-label>
+                  <input
+                    matInput
+                    placeholder="Ex. example@gmail.com"
+                    formControlName="email"
+                  />
+                </mat-form-field>
+              </div>
+              <mat-form-field appearance="outline">
+                <mat-label>Reason</mat-label>
+                <textarea
+                  matInput
+                  placeholder="Ex. Oral..."
+                  formControlName="reason"
+                ></textarea>
+              </mat-form-field>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Schedule Widget -->
+  <div class="col-md-12 col-lg-6 col-xl-6">
+    <div class="card">
+      <!-- Schedule Header -->
+      <div class="schedule-header">
+        <div class="row">
+          <div class="col-md-12">
+            <!-- Day Slot -->
+            <div class="day-slot">
+              <ul>
+                <li class="left-arrow">
+                  <a href="#">
+                    <i class="fa fa-chevron-left"></i>
+                  </a>
+                </li>
+                <li>
+                  <span>Mon</span>
+                  <span class="slot-date"
+                    >11 Nov <small class="slot-year">2019</small></span
+                  >
+                </li>
+                <li>
+                  <span>Tue</span>
+                  <span class="slot-date"
+                    >12 Nov <small class="slot-year">2019</small></span
+                  >
+                </li>
+                <li>
+                  <span>Wed</span>
+                  <span class="slot-date"
+                    >13 Nov <small class="slot-year">2019</small></span
+                  >
+                </li>
+                <li>
+                  <span>Thu</span>
+                  <span class="slot-date"
+                    >14 Nov <small class="slot-year">2019</small></span
+                  >
+                </li>
+                <li>
+                  <span>Fri</span>
+                  <span class="slot-date"
+                    >15 Nov <small class="slot-year">2019</small></span
+                  >
+                </li>
+                <li>
+                  <span>Sat</span>
+                  <span class="slot-date"
+                    >16 Nov <small class="slot-year">2019</small></span
+                  >
+                </li>
+                <li class="right-arrow">
+                  <a href="#">
+                    <i class="fa fa-chevron-right"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- /Day Slot -->
+          </div>
+        </div>
+      </div>
+      <!-- /Schedule Header -->
+
+      <!-- Schedule Content -->
+      <div class="schedule-cont">
+        <div class="row">
+          <div class="col-md-12">
+            <!-- Time Slot -->
+            <div class="time-slot">
+              <ul class="clearfix">
+                <li>
+                  <a class="timing" href="#">
+                    <span>9:00</span> <span>AM</span>
+                  </a>
+                  <a class="timing" href="#">
+                    <span>10:00</span> <span>AM</span>
+                  </a>
+                  <a class="timing" href="#">
+                    <span>11:00</span> <span>AM</span>
+                  </a>
+                </li>
+                <li>
+                  <a class="timing" href="#">
+                    <span>9:00</span> <span>AM</span>
+                  </a>
+                  <a class="timing" href="#">
+                    <span>10:00</span> <span>AM</span>
+                  </a>
+                  <a class="timing" href="#">
+                    <span>11:00</span> <span>AM</span>
+                  </a>
+                </li>
+                <li>
+                  <a class="timing" href="#">
+                    <span>9:00</span> <span>AM</span>
+                  </a>
+                  <a class="timing" href="#">
+                    <span>10:00</span> <span>AM</span>
+                  </a>
+                  <a class="timing" href="#">
+                    <span>11:00</span> <span>AM</span>
+                  </a>
+                </li>
+                <li>
+                  <a class="timing" href="#">
+                    <span>9:00</span> <span>AM</span>
+                  </a>
+                  <a class="timing" href="#">
+                    <span>10:00</span> <span>AM</span>
+                  </a>
+                  <a class="timing" href="#">
+                    <span>11:00</span> <span>AM</span>
+                  </a>
+                </li>
+                <li>
+                  <a class="timing" href="#">
+                    <span>9:00</span> <span>AM</span>
+                  </a>
+                  <a class="timing selected" href="#">
+                    <span>10:00</span> <span>AM</span>
+                  </a>
+                  <a class="timing" href="#">
+                    <span>11:00</span> <span>AM</span>
+                  </a>
+                </li>
+                <li>
+                  <a class="timing" href="#">
+                    <span>9:00</span> <span>AM</span>
+                  </a>
+                  <a class="timing" href="#">
+                    <span>10:00</span> <span>AM</span>
+                  </a>
+                  <a class="timing" href="#">
+                    <span>11:00</span> <span>AM</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- /Time Slot -->
+          </div>
+        </div>
+      </div>
+      <!-- /Schedule Content -->
+    </div>
+    <!-- /Schedule Widget -->
+  </div>
+</div>
+<!-- Submit Section -->
+<div class="submit-section proceed-btn text-right">
+  <a [routerLink]="['/booking/checkout']" class="btn btn-primary submit-btn">Proceed to Pay</a>
+</div>
+<!-- /Submit Section -->

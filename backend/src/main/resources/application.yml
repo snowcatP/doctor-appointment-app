@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/doc_appointment_app
     username: root
-    password: hiepbui32
+    password: sesame
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -38,3 +38,6 @@ application:
 
 email:
   sender: ok.byethibye2@gmail.com
+
+origins:
+  host: http://localhost:4200

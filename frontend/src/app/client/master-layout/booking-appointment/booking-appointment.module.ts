@@ -6,18 +6,25 @@ import { BookingAppointmentCheckoutComponent } from './booking-appointment-check
 import { BookingAppointmentSuccessComponent } from './booking-appointment-success/booking-appointment-success.component';
 import { BookingAppointmentIndexComponent } from './booking-appointment-index/booking-appointment-index.component';
 import { BookingAppointmentComponent } from './booking-appointment.component';
-
-
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 @NgModule({
   declarations: [
     BookingAppointmentComponent,
     BookingAppointmentCheckoutComponent,
     BookingAppointmentSuccessComponent,
-    BookingAppointmentIndexComponent
+    BookingAppointmentIndexComponent,
   ],
   imports: [
     CommonModule,
-    BookingAppointmentRoutingModule
-  ]
+    BookingAppointmentRoutingModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
 })
-export class BookingAppointmentModule { }
+export class BookingAppointmentModule {}
