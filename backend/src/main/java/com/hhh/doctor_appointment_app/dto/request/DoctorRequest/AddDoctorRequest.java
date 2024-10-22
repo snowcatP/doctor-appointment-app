@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -23,9 +24,16 @@ public class AddDoctorRequest {
     @Email(message = "Invalid Email")
     private String email;
 
+    private String password;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // Định dạng ngày yyyy-MM-dd
     private Date dateOfBirth;
 
     private String address;
 
     private Long specialtyID;
+
+    private String avatarFilePath;
+
+    private String role;
 }

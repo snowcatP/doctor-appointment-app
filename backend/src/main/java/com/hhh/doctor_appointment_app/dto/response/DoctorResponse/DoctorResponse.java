@@ -30,4 +30,6 @@ public class DoctorResponse {
 
     private Specialty specialty;
 
+    private String avatarFilePath;
+
 }

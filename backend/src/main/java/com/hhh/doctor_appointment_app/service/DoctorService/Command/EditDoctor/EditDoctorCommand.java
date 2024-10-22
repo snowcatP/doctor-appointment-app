@@ -12,6 +12,7 @@ import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.SpecialtyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,6 +25,7 @@ public class EditDoctorCommand {
     @Autowired
     private SpecialtyRepository specialtyRepository;
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR')")
     public ApiResponse<Object> editDoctor(Long id, EditDoctorRequest editDoctorRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try {
@@ -52,6 +54,7 @@ public class EditDoctorCommand {
             existingDoctor.getProfile().setDateOfBirth(editDoctorRequest.getDateOfBirth());
             existingDoctor.getProfile().setAddress(editDoctorRequest.getAddress());
             existingDoctor.setSpecialty(specialty);
+            existingDoctor.setAvatarFilePath(editDoctorRequest.getAvatarFilePath());
 
             doctorRepository.saveAndFlush(existingDoctor);
 

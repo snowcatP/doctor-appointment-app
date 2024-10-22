@@ -1,10 +1,12 @@
 package com.hhh.doctor_appointment_app.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.AddDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.request.MedicalRecordRequest.AddMedicalRecordRequest;
 import com.hhh.doctor_appointment_app.dto.request.MedicalRecordRequest.EditMedicalRecordRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
-import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
+import com.hhh.doctor_appointment_app.service.FirebaseStorageService;
 import com.hhh.doctor_appointment_app.service.MedicalRecordService.Command.CreateMedicalRecord.CreateMedicalRecordCommand;
 import com.hhh.doctor_appointment_app.service.MedicalRecordService.Command.DeleteMedicalRecord.DeleteMedicalRecordCommand;
 import com.hhh.doctor_appointment_app.service.MedicalRecordService.Command.EditMedicalRecord.EditMedicalRecordCommand;
@@ -17,7 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +47,9 @@ public class MedicalRecordController {
     @Autowired
     private GetMedicalRecordWithPageByPatientQuery getMedicalRecordWithPageByPatientQuery;
 
+    @Autowired
+    private FirebaseStorageService firebaseStorageService;
+
     @GetMapping("/list")
     public ResponseEntity<?> getMedicalRecords(@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "10") int size){
@@ -57,23 +64,30 @@ public class MedicalRecordController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addMedicalRecordByDoctor(@Valid @RequestBody AddMedicalRecordRequest addMedicalRecordRequest,
-                                       BindingResult bindingResult){
+    public ResponseEntity<?> addMedicalRecordAndUploadImageByDoctor(
+            @RequestParam("file") MultipartFile file,
+            @ModelAttribute @Valid AddMedicalRecordRequest addMedicalRecordRequest, // sử dụng ModelAttribute để bind dữ liệu
+            BindingResult bindingResult) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
+        // Kiểm tra lỗi validation
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
-            apiResponse.setMessage("An unexpected error occurred: " + errors);
-            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+            apiResponse.setMessage("Validation errors: " + errors);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse); // Trả về lỗi 400 cho validation
         }
         try {
+            // Upload file lên Firebase Storage
+            String fileUrl = firebaseStorageService.uploadFile(file);
+            addMedicalRecordRequest.setFilePath(fileUrl);
+
+            // Lưu hồ sơ
             apiResponse = createMedicalRecordCommand.addMedicalRecordByDoctor(addMedicalRecordRequest);
             apiResponse.setStatusCode(HttpStatus.OK.value());
             apiResponse.setMessage("Add Successfully");
-            return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
-        }
-        catch (Exception ex) {
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (Exception ex) {
 
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
@@ -82,7 +96,10 @@ public class MedicalRecordController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<?> editMedicalRecordByDoctor(@PathVariable Long id, @Valid @RequestBody EditMedicalRecordRequest editMedicalRecordRequest, BindingResult bindingResult){
+    public ResponseEntity<?> editMedicalRecordAndUploadImageByDoctor(@PathVariable Long id,
+                                                                     @RequestParam("file") MultipartFile file,
+                                                                     @ModelAttribute @Valid EditMedicalRecordRequest editMedicalRecordRequest, // sử dụng ModelAttribute để bind dữ liệu
+                                                                     BindingResult bindingResult){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -92,6 +109,10 @@ public class MedicalRecordController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
+            // Upload file lên Firebase Storage
+            String fileUrl = firebaseStorageService.uploadFile(file);
+            editMedicalRecordRequest.setFilePath(fileUrl);
+
             apiResponse = editMedicalRecordCommand.editMedicalRecordByDoctor(id,editMedicalRecordRequest);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         }
@@ -159,4 +180,8 @@ public class MedicalRecordController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
     }
+
+
+
+
 }
