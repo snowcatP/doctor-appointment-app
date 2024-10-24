@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrl: './booking-appointment-checkout.component.css'
 })
 export class BookingAppointmentCheckoutComponent {
-
+  
 }

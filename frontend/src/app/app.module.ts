@@ -40,7 +40,6 @@ import { appInterceptorInterceptor } from './interceptors/authenticate.intercept
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -72,7 +71,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     DoctorModule,
     BookingAppointmentModule,
     AuthenticationModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },
