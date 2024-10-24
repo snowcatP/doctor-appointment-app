@@ -18,47 +18,47 @@
                 <h3>Login <span>Doccure</span></h3>
               </div>
               <form [formGroup]="formLogin">
-                <div class="form-group form-focus">
-                  <input
-                    type="text"
-                    formControlName="username"
-                    class="form-control floating"
-                  />
-                  <label class="focus-label">Email</label>
-                  <small
-                    class="form-text text-danger"
-                    *ngIf="
-                      (formLogin.controls['username'].touched ||
-                        formLogin.controls['username'].dirty) &&
-                      formLogin.controls['username'].errors
-                    "
-                  >
-                    <ng-container
-                      *ngIf="formLogin.controls['username'].errors?.['required']"
-                    >
-                      {{formLogin.controls['username'].errors?.['required'].message}}
-                    </ng-container>
-                    <ng-container
-                      *ngIf="formLogin.controls['username'].errors?.['email']"
-                    >
-                      {{formLogin.controls['username'].errors?.['email'].message}}
-                    </ng-container>
-                  </small>
-                </div>
-                <div class="form-group form-focus">
-                  <div class="password-wrapper">
-                    <input
-                      type="password"
-                      formControlName="password"
-                      class="form-control floating"
-                      [type]="showPass ? 'text' : 'password'"
-                    />
-                    <label class="focus-label">Password</label>
+                <div>
+                  <div class="full-width">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Email</mat-label>
+                      <input matInput placeholder="Email" formControlName="email"/>
+                    </mat-form-field>
                     <small
-                      (click)="showPassword()"
-                      [ngClass]="showPass ? 'fa fa-eye-slash' : 'fa fa-eye'"
-                      class="password-icon"
-                    ></small>
+                      class="form-text text-danger"
+                      *ngIf="
+                        (formLogin.controls['email'].touched ||
+                          formLogin.controls['email'].dirty) &&
+                        formLogin.controls['email'].errors
+                      "
+                    >
+                      <ng-container
+                        *ngIf="formLogin.controls['email'].errors?.['required']"
+                      >
+                        {{formLogin.controls['email'].errors?.['required'].message}}
+                      </ng-container>
+                      <ng-container
+                        *ngIf="formLogin.controls['email'].errors?.['email']"
+                      >
+                        {{formLogin.controls['email'].errors?.['email'].message}}
+                      </ng-container>
+                    </small>
+                  </div>
+                </div>
+                <div>
+                  <div class="full-width">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Password</mat-label>
+                      <input
+                        matInput
+                        placeholder="Password"
+                        [type]="showPass ? 'text' : 'password'"
+                        formControlName="password"
+                      />
+                      <mat-icon matSuffix (click)="showPassword()">{{
+                        showPass ? "visibility" : "visibility_off"
+                      }}</mat-icon>
+                    </mat-form-field>
                   </div>
                   <small
                     class="form-text text-danger"
@@ -103,7 +103,8 @@
                   </div>
                 </div>
                 <div class="text-center dont-have">
-                  Don’t have an account? <a routerLink="/register">Register</a>
+                  Don't have an account?
+                  <a routerLink="/auth/register">Register</a>
                 </div>
               </form>
             </div>

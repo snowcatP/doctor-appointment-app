@@ -9,7 +9,11 @@ import { ToastModule } from 'primeng/toast';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatNativeDateModule } from '@angular/material/core';
+import {
+  ErrorStateMatcher,
+  MatNativeDateModule,
+  ShowOnDirtyErrorStateMatcher,
+} from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -29,8 +33,8 @@ import { DoctorProfileBreadCrumbComponent } from './client/master-layout/doctor-
 import { DoctorModule } from './client/doctor/doctor.module';
 import { Page404Component } from './component/page-404/page-404.component';
 import { BookingAppointmentModule } from './client/master-layout/booking-appointment/booking-appointment.module';
-import { AuthenticationComponent } from './client/authentication/authentication.component';
 import { AuthenticationModule } from './client/authentication/authentication.module';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { httpErrorInterceptor } from './interceptors/http-error.interceptor';
 import { appInterceptorInterceptor } from './interceptors/authenticate.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -77,9 +81,12 @@ import {MatPaginatorModule} from '@angular/material/paginator';
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-    provideHttpClient(withInterceptors([appInterceptorInterceptor, httpErrorInterceptor])),
+    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
+    // provideHttpClient(withInterceptors([appInterceptorInterceptor, httpErrorInterceptor])),
+    provideHttpClient(),
     JwtHelperService,
     MessageService,
+    provideAnimations(),
     NbSecurityModule.forRoot({
       accessControl: {
         guest: {
@@ -91,18 +98,15 @@ import {MatPaginatorModule} from '@angular/material/paginator';
           edit: '*',
           remove: '*',
         },
-        DOCTOR:{
+        DOCTOR: {
           parent: 'guest',
           create: '*',
           edit: '*',
           remove: '*',
           doctor: '*',
-
-        }
+        },
       },
     }).providers,
-   
-
   ],
   bootstrap: [AppComponent],
 })

@@ -38,3 +38,6 @@ application:
 
 email:
   sender: ok.byethibye2@gmail.com
+
+origins:
+  host: http://localhost:4200
