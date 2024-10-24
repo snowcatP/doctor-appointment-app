@@ -8,6 +8,7 @@ import com.hhh.doctor_appointment_app.service.SpecialtyService.Command.CreateSpe
 import com.hhh.doctor_appointment_app.service.SpecialtyService.Command.DeleteSpecialty.DeleteSpecialtyCommand;
 import com.hhh.doctor_appointment_app.service.SpecialtyService.Command.EditSpecialty.EditSpecialtyCommand;
 import com.hhh.doctor_appointment_app.service.SpecialtyService.Query.GetDetailSpecialty.GetDetailSpecialtyQuery;
+import com.hhh.doctor_appointment_app.service.SpecialtyService.Query.GetListSpecialty.GetListSpecialtyQuery;
 import com.hhh.doctor_appointment_app.service.SpecialtyService.Query.GetSpecialtyWithPage.GetSpecialtyWithPageQuery;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +41,26 @@ public class SpecialtyController {
     @Autowired
     private GetDetailSpecialtyQuery getDetailSpecialtyQuery;
 
+    @Autowired
+    private GetListSpecialtyQuery getListSpecialtyQuery;
+
     @GetMapping("/list-specialty")
-    public ResponseEntity<?> getDoctors(@RequestParam(defaultValue = "1") int page,
+    public ResponseEntity<?> getSpecialtyWithPage(@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "10") int size){
         try{
             return new ResponseEntity<>(getSpecialtiesWithPage.getSpecialtiesWithPage(page, size), HttpStatus.OK);
+        }catch (Exception ex){
+            ApiResponse<Object> apiResponse = new ApiResponse<>();
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getListSpecialty(){
+        try{
+            return new ResponseEntity<>(getListSpecialtyQuery.getListSpecialty(), HttpStatus.OK);
         }catch (Exception ex){
             ApiResponse<Object> apiResponse = new ApiResponse<>();
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());

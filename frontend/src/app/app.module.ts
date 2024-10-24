@@ -34,8 +34,9 @@ import { AuthenticationModule } from './client/authentication/authentication.mod
 import { httpErrorInterceptor } from './interceptors/http-error.interceptor';
 import { appInterceptorInterceptor } from './interceptors/authenticate.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-
+import {MatSelectModule} from '@angular/material/select';
+import { HttpClientModule } from '@angular/common/http';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -63,12 +64,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatFormFieldModule,
     MatInputModule,
     MatRadioModule,
+    MatSelectModule,
     PatientModule,
     RouterModule,
     DoctorModule,
     BookingAppointmentModule,
     AuthenticationModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule,
+    MatPaginatorModule
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },

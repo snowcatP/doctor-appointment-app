@@ -28,6 +28,7 @@ public class SecurityConfig {
             "api/auth/reset-password",
             "api/auth/refreshToken",
             "api/auth/register/user",
+
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
@@ -44,13 +45,14 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity
+                .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
                         request
                                 //.anyRequest().authenticated()
                                 .requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS_POST).permitAll()
                                 .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 );
 
         httpSecurity
