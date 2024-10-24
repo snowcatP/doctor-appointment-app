@@ -18,7 +18,7 @@ const routes: Routes = [
     title: 'Search Doctor',
   },
   {
-    path: 'doctor-profile',
+    path: 'doctor-profile/:id',
     component: DoctorProfileComponent,
     title: 'Doctor Profile',
   },

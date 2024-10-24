@@ -3,6 +3,7 @@ package com.hhh.doctor_appointment_app.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.AddDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.EditDoctorRequest;
+import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.SearchDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.request.MedicalRecordRequest.AddMedicalRecordRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
@@ -11,6 +12,7 @@ import com.hhh.doctor_appointment_app.service.DoctorService.Command.DeleteDoctor
 import com.hhh.doctor_appointment_app.service.DoctorService.Command.EditDoctor.EditDoctorCommand;
 import com.hhh.doctor_appointment_app.service.DoctorService.Query.GetDetailDoctor.GetDetailDoctorQuery;
 import com.hhh.doctor_appointment_app.service.DoctorService.Query.GetDoctorWithPage.GetDoctorWithPageQuery;
+import com.hhh.doctor_appointment_app.service.DoctorService.Query.SearchDoctors.SearchDoctorsQuery;
 import com.hhh.doctor_appointment_app.service.FirebaseStorageService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +48,27 @@ public class DoctorController {
     @Autowired
     private FirebaseStorageService firebaseStorageService;
 
+    @Autowired
+    private SearchDoctorsQuery searchDoctorsQuery;
+
     @GetMapping("/list-doctor")
     public ResponseEntity<?> getDoctors(@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "10") int size){
         try{
             return new ResponseEntity<>(getDoctorsWithPage.getDoctorsWithPage(page, size), HttpStatus.OK);
+        }catch (Exception ex){
+            ApiResponse<Object> apiResponse = new ApiResponse<>();
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<?> searchDoctors(@RequestBody SearchDoctorRequest searchDoctorRequest, @RequestParam(defaultValue = "1") int page,
+                                           @RequestParam(defaultValue = "10") int size){
+        try{
+            return new ResponseEntity<>(searchDoctorsQuery.searchDoctorsAndPagination(searchDoctorRequest,page, size), HttpStatus.OK);
         }catch (Exception ex){
             ApiResponse<Object> apiResponse = new ApiResponse<>();
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());

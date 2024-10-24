@@ -10,13 +10,13 @@
           <div class="doc-info-left">
             <div class="doctor-img">
               <img
-                src="assets\images\doctors\doctor-thumb-02.jpg"
+              [src]="doctorDetails?.avatarFilePath || 'assets/images/doctors/doctor-thumb-02.jpg'"
                 class="img-fluid"
                 alt="User Image"
               />
             </div>
             <div class="doc-info-cont">
-              <h4 class="doc-name">Dr. Darren Elder</h4>
+              <h4 class="doc-name">Dr. {{ doctorDetails.firstName }} {{ doctorDetails.lastName }}</h4>
               <p class="doc-speciality">
                 BDS, MDS - Oral & Maxillofacial Surgery
               </p>
@@ -25,7 +25,7 @@
                   src="assets\images\specialities\specialities-05.png"
                   class="img-fluid"
                   alt="Speciality"
-                />Dentist
+                />{{ doctorDetails.specialty.specialtyName }}
               </p>
               <div class="rating">
                 <i class="fas fa-star filled"></i>
@@ -37,7 +37,7 @@
               </div>
               <div class="clinic-details">
                 <p class="doc-location">
-                  <i class="fas fa-map-marker-alt"></i> Newyork, USA -
+                  <i class="fas fa-map-marker-alt"></i> {{ doctorDetails.address }}
                   <a href="javascript:void(0);">Get Directions</a>
                 </p>
                 <ul class="clinic-gallery">
