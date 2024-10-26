@@ -1,10 +1,38 @@
 import { Component } from '@angular/core';
-
+import { ActivatedRoute } from '@angular/router'; // Import ActivatedRoute để lấy thông tin từ URL
+import { DoctorService } from '../../../services/doctor.service';
 @Component({
   selector: 'app-doctor-profile',
   templateUrl: './doctor-profile.component.html',
   styleUrl: './doctor-profile.component.css'
 })
 export class DoctorProfileComponent {
+  doctorId!: number;  // ID của bác sĩ
+  doctorDetails: any; // Thông tin chi tiết của bác sĩ
 
+  constructor(private route: ActivatedRoute, private doctorService: DoctorService) {}
+
+  ngOnInit(): void {
+    // Lấy id từ URL
+    this.route.paramMap.subscribe(params => {
+      this.doctorId = +params.get('id')!; // Lấy id của bác sĩ từ route parameter
+
+      // Gọi API để lấy thông tin chi tiết của bác sĩ
+      this.fetchDoctorDetails(this.doctorId);
+    });
+  }
+
+  fetchDoctorDetails(id: number): void {
+    this.doctorService.getDoctorDetail(id).subscribe(
+      (response) => {
+        if (response.statusCode === 200) {
+          this.doctorDetails = response.data;
+          console.log(this.doctorDetails)
+        }
+      },
+      (error) => {
+        console.error('Error fetching doctor details', error);
+      }
+    );
+  }
 }

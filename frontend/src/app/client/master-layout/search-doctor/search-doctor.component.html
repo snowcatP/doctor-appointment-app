@@ -1,42 +1,28 @@
 <app-search-doctor-bread-crumb></app-search-doctor-bread-crumb>
 
-<!-- Page Content -->
 <div class="content">
   <div class="container-fluid">
     <div class="row">
-      <app-search-doctor-filter 
-        class="col-md-12 col-lg-4 col-xl-3">
+      <app-search-doctor-filter class="col-md-12 col-lg-4 col-xl-3" (doctorsFound)="onDoctorsFound($event)"></app-search-doctor-filter>
 
-      </app-search-doctor-filter>
-
-      <div class="col-md-12 col-lg-8 col-xl-9">
-        <!-- Doctor Widget -->
-        <div class="card">
+      <div class="col-md-12 col-lg-8 col-xl-9" *ngIf="doctors.length > 0; else noDoctors">
+        <div class="card" *ngFor="let doctor of doctors">
           <div class="card-body">
             <div class="doctor-widget">
               <div class="doc-info-left">
                 <div class="doctor-img">
-                  <a href="doctor-profile.html">
-                    <img
-                      src="assets\images\doctors\doctor-thumb-01.jpg"
-                      class="img-fluid"
-                      alt="User Image"
-                    />
+                  <a (click)="viewDoctorProfile(doctor.id)">
+                    <img [src]="doctor?.avatarFilePath || 'assets/images/doctors/doctor-thumb-01.jpg'" class="img-fluid" alt="Doctor Image" />
                   </a>
                 </div>
                 <div class="doc-info-cont">
                   <h4 class="doc-name">
-                    <a href="doctor-profile.html">Dr. Ruby Perrin</a>
+                    <a (click)="viewDoctorProfile(doctor.id)">{{ doctor.firstName || 'Dr.' }} {{ doctor.lastName || 'Unknown' }}</a>
                   </h4>
-                  <p class="doc-speciality">
-                    MDS - Periodontology and Oral Implantology, BDS
-                  </p>
+                  <p class="doc-speciality">{{ doctor.specialty?.specialtyName }}</p>
                   <h6 class="doc-department">
-                    <img
-                      src="assets\images\specialities\specialities-05.png"
-                      class="img-fluid"
-                      alt="Speciality"
-                    />Dentist
+                    <img src="assets/images/specialities/specialities-05.png" class="img-fluid" alt="Specialty" />
+                    {{ doctor.specialty?.specialtyName }}
                   </h6>
                   <div class="rating">
                     <i class="fas fa-star filled"></i>
@@ -48,89 +34,28 @@
                   </div>
                   <div class="clinic-details">
                     <p class="doc-location">
-                      <i class="fas fa-map-marker-alt"></i> Florida, USA
+                      <i class="fas fa-map-marker-alt"></i> {{ doctor.address }}
                     </p>
-                    <ul class="clinic-gallery">
-                      <li>
-                        <a
-                          href="assets\images\features\feature-01.jpg"
-                          data-fancybox="gallery"
-                        >
-                          <img
-                            src="assets\images\features\feature-01.jpg"
-                            alt="Feature"
-                          />
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="assets\images\features\feature-02.jpg"
-                          data-fancybox="gallery"
-                        >
-                          <img
-                            src="assets\images\features\feature-02.jpg"
-                            alt="Feature"
-                          />
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="assets\images\features\feature-03.jpg"
-                          data-fancybox="gallery"
-                        >
-                          <img
-                            src="assets\images\features\feature-03.jpg"
-                            alt="Feature"
-                          />
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="assets\images\features\feature-04.jpg"
-                          data-fancybox="gallery"
-                        >
-                          <img
-                            src="assets\images\features\feature-04.jpg"
-                            alt="Feature"
-                          />
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="clinic-services">
-                    <span>Dental Fillings</span>
-                    <span> Whitening</span>
                   </div>
                 </div>
               </div>
               <div class="doc-info-right">
-                <div class="clini-infos">
-                  <ul>
-                    <li><i class="far fa-thumbs-up"></i> 98%</li>
-                    <li><i class="far fa-comment"></i> 17 Feedback</li>
-                    <li><i class="fas fa-map-marker-alt"></i> Florida, USA</li>
-                    <li>
-                      <i class="far fa-money-bill-alt"></i> $300 - $1000
-                      <i
-                        class="fas fa-info-circle"
-                        data-toggle="tooltip"
-                        title="Lorem Ipsum"
-                      ></i>
-                    </li>
-                  </ul>
-                </div>
                 <div class="clinic-booking">
-                  <a class="view-pro-btn" [routerLink]="['/doctor-profile']"
-                    >View Profile</a
-                  >
+                  <a class="view-pro-btn" (click)="viewDoctorProfile(doctor.id)">View Profile</a>
                   <a class="apt-btn" href="booking.html">Book Appointment</a>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- /Doctor Widget -->
+        <!-- Pagination Controls -->
+        <mat-paginator [length]="totalDoctors" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]"
+          (page)="handlePageEvent($event)">
+        </mat-paginator>
       </div>
+      <ng-template #noDoctors>
+        <p>No doctors available</p>
+      </ng-template>
     </div>
   </div>
 </div>

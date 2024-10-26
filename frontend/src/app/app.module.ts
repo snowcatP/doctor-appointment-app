@@ -42,7 +42,9 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { httpErrorInterceptor } from './interceptors/http-error.interceptor';
 import { appInterceptorInterceptor } from './interceptors/authenticate.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSelectModule } from '@angular/material/select';
+import {MatSelectModule} from '@angular/material/select';
+import { HttpClientModule } from '@angular/common/http';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -70,6 +72,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatFormFieldModule,
     MatInputModule,
     MatRadioModule,
+    MatSelectModule,
     PatientModule,
     RouterModule,
     DoctorModule,
@@ -78,6 +81,8 @@ import { MatSelectModule } from '@angular/material/select';
     BrowserAnimationsModule,
     MatInputModule,
     MatSelectModule,
+    HttpClientModule,
+    MatPaginatorModule
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },

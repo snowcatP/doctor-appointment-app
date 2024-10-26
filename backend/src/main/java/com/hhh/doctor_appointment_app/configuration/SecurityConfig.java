@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -19,13 +21,14 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_POST = {
-            "/api/auth/login",
-            "/api/auth/introspect",
-            "/api/auth/logout",
-            "/api/auth/forgot-password",
-            "/api/auth/reset-password",
-            "/api/auth/refreshToken",
-            "/api/auth/register/user",
+            "api/auth/login",
+            "api/auth/introspect",
+            "api/auth/logout",
+            "api/auth/forgot-password",
+            "api/auth/reset-password",
+            "api/auth/refreshToken",
+            "api/auth/register/user",
+
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
@@ -46,9 +49,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
                         request
-                                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST).permitAll()
+                                //.anyRequest().authenticated()
+                                .requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS_POST).permitAll()
                                 .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 );
 
         httpSecurity
