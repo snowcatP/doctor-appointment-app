@@ -6,7 +6,11 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
 import { ToastModule } from 'primeng/toast';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -38,7 +42,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { httpErrorInterceptor } from './interceptors/http-error.interceptor';
 import { appInterceptorInterceptor } from './interceptors/authenticate.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -72,6 +76,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BookingAppointmentModule,
     AuthenticationModule,
     BrowserAnimationsModule,
+    MatInputModule,
+    MatSelectModule,
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },

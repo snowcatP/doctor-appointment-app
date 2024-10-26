@@ -82,15 +82,11 @@ export class RegisterComponent {
         ],
       ],
       phone: ['', [RxwebValidators.alphaNumeric()]],
-      address: ['', [RxwebValidators.alphaNumeric({ allowWhiteSpace: true })]],
-      dateOfBirth: ['', [RxwebValidators.date(), RxwebValidators.required()]],
       gender: ['', [RxwebValidators.required()]],
     });
   }
   onClickSignUpPatient(data: any) {
     this.accountService.onSignupPatient(data).subscribe((res: any) => {
-      console.log(res);
-
       this.messageService.add({
         key: 'messageToast',
         severity: 'success',
@@ -98,7 +94,7 @@ export class RegisterComponent {
         detail: 'Signup successfully',
       });
       setTimeout(() => {
-        this.route.navigateByUrl('/login');
+        this.route.navigateByUrl('/auth/login');
       }, 3500);
     });
   }

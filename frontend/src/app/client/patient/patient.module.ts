@@ -9,7 +9,8 @@ import { PatientBreadCrumbComponent } from './patient-bread-crumb/patient-bread-
 import { RouterModule } from '@angular/router';
 import { PatientComponent } from './patient.component';
 import { PatientSidebarComponent } from './patient-sidebar/patient-sidebar.component';
-
+import { MatTabsModule } from '@angular/material/tabs';
+import { ImageModule } from 'primeng/image';
 
 @NgModule({
   declarations: [
@@ -18,11 +19,14 @@ import { PatientSidebarComponent } from './patient-sidebar/patient-sidebar.compo
     PatientProfileComponent,
     PatientChangePasswordComponent,
     PatientBreadCrumbComponent,
-    PatientSidebarComponent
+    PatientSidebarComponent,
   ],
   imports: [
     CommonModule,
     PatientRoutingModule,
-  ]
+    RouterModule,
+    MatTabsModule,
+    ImageModule,
+  ],
 })
-export class PatientModule { }
+export class PatientModule {}
