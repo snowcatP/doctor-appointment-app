@@ -6,7 +6,11 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
 import { ToastModule } from 'primeng/toast';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -75,6 +79,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     BookingAppointmentModule,
     AuthenticationModule,
     BrowserAnimationsModule,
+    MatInputModule,
+    MatSelectModule,
     HttpClientModule,
     MatPaginatorModule
   ],

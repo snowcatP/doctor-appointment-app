@@ -15,6 +15,7 @@ import { ToastModule } from 'primeng/toast';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
+
 @NgModule({
   declarations: [
     AuthenticationComponent,
@@ -35,7 +36,7 @@ import {MatInputModule} from '@angular/material/input';
     MatDatepickerModule,
     ToastModule,
     MatIconModule,
-    MatInputModule
+    MatInputModule,
   ]
 })
 export class AuthenticationModule { }
