@@ -45,7 +45,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSelectModule} from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
 import {MatPaginatorModule} from '@angular/material/paginator';
-
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+import { PaginatorModule } from 'primeng/paginator';
 @NgModule({
   declarations: [
     AppComponent,
@@ -82,7 +85,11 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatInputModule,
     MatSelectModule,
     HttpClientModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule,
+    PaginatorModule
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },
