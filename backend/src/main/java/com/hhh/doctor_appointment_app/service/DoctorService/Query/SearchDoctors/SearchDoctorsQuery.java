@@ -4,10 +4,13 @@ import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.SearchDoctorRequ
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.entity.Doctor;
+import com.hhh.doctor_appointment_app.entity.Feedback;
 import com.hhh.doctor_appointment_app.entity.Specialty;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
+import com.hhh.doctor_appointment_app.repository.FeedbackRepository;
 import com.hhh.doctor_appointment_app.repository.SpecialtyRepository;
+import com.hhh.doctor_appointment_app.service.DoctorService.Query.CalculateAverageRatingDoctor.CalculateAverageRatingDoctorQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +27,12 @@ public class SearchDoctorsQuery {
 
     @Autowired
     private SpecialtyRepository specialtyRepository;
+
+    @Autowired
+    private FeedbackRepository feedbackRepository;
+
+    @Autowired
+    private CalculateAverageRatingDoctorQuery calculateAverageRatingDoctorQuery;
     public PageResponse<List<DoctorResponse>> searchDoctorsAndPagination(SearchDoctorRequest searchDoctorRequest, int page, int size) {
         Pageable pageable = PageRequest.of(page-1, size);
 
@@ -36,7 +45,6 @@ public class SearchDoctorsQuery {
                     .collect(Collectors.toList());
         }
 
-        System.out.println(searchDoctorRequest.getGender());
         // Tìm kiếm với nhiều tham số
         Page<Doctor> doctorPage = doctorRepository.searchDoctors(
                 searchDoctorRequest.getKeyword(),
@@ -48,6 +56,8 @@ public class SearchDoctorsQuery {
         //Convert entities to responses
         List<DoctorResponse> doctorResponses = doctorPage.getContent().stream()
                 .map(doctor -> {
+                    double ratingOfDoctor = calculateAverageRatingDoctorQuery.calculateAverageRating(doctor.getId());
+                    List<Feedback> feedbacks = feedbackRepository.findAllByDoctor_Id(doctor.getId());
                     DoctorResponse response = new DoctorResponse();
                     response.setId(doctor.getId());
                     response.setFirstName(doctor.getProfile().getFirstName());
@@ -59,6 +69,8 @@ public class SearchDoctorsQuery {
                     response.setAddress(doctor.getProfile().getAddress());
                     response.setSpecialty(doctor.getSpecialty());
                     response.setAvatarFilePath(doctor.getAvatarFilePath());
+                    response.setAverageRating(ratingOfDoctor);
+                    response.setNumberOfFeedbacks(feedbacks.size());
                     return response;
                 })
                 .collect(Collectors.toList());

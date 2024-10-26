@@ -2,19 +2,19 @@ package com.hhh.doctor_appointment_app.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Feedback {
+public class ReplyFeedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,8 +22,6 @@ public class Feedback {
     private String comment;
 
     private Date dateComment;
-
-    private double rating;
 
     @ManyToOne()
     @JsonIgnore
@@ -35,6 +33,8 @@ public class Feedback {
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
-    @OneToMany(mappedBy = "feedback",cascade = CascadeType.ALL)
-    private List<ReplyFeedback> replyFeedbackList = new ArrayList<>();
+    @ManyToOne()
+    @JsonIgnore
+    @JoinColumn(name = "feedback_id")
+    private Feedback feedback;
 }

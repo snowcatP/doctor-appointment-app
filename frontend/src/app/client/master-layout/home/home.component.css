@@ -1,0 +1,5 @@
+.fixed-img {
+    width: 100%;            /* Đảm bảo chiều rộng đầy đủ */
+    height: 256px;           /* Đặt chiều cao cố định */
+    object-fit: cover;       /* Cắt hình ảnh để khớp chiều cao cố định */
+}

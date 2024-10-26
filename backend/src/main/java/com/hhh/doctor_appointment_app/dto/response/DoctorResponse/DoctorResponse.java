@@ -32,4 +32,8 @@ public class DoctorResponse {
 
     private String avatarFilePath;
 
+    private double averageRating;
+
+    private Integer numberOfFeedbacks;
+
 }

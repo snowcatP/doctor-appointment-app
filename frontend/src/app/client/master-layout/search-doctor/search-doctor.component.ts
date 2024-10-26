@@ -11,7 +11,13 @@ export class SearchDoctorComponent implements OnInit {
   doctors: any[] = [];
   totalDoctors: number = 0; // Tổng số lượng bác sĩ
   pageSize: number = 10; // Số lượng item mỗi trang
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  currentPage: number = 1; // Trang hiện tại
+  pageSizeOptions = [
+    { label: '5', value: 5 },
+    { label: '10', value: 10 },
+    { label: '20', value: 20 }
+  ];
+
   constructor(private doctorService: DoctorService, private router: Router) {}
 
   ngOnInit(): void {
@@ -38,9 +44,15 @@ export class SearchDoctorComponent implements OnInit {
   }
   
 
-   // Khi paginator thay đổi trang
    handlePageEvent(event: any): void {
-    this.fetchDoctors(event.pageIndex + 1, event.pageSize);
+    this.currentPage = (event.page + 1);
+    this.pageSize = event.rows;
+    this.fetchDoctors(this.currentPage, this.pageSize);
+  }
+
+  onPageSizeChange(): void {
+    this.currentPage = 1;
+    this.fetchDoctors(this.currentPage, this.pageSize);
   }
 
   viewDoctorProfile(doctorId: number): void {
