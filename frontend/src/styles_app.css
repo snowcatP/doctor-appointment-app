@@ -4,10 +4,18 @@
 	margin-bottom: 0.5rem;
 }
 
+.tight-line-top {
+	border-top: 1px solid #f0f0f0;
+	padding-top: 0.5rem;
+	margin-top: 0.5rem;
+}
+
 .full-width,
 .full-width mat-form-field {
 	width: 100%;
 }
-::ng-deep .mat-select-panel{
-	background: #f0f0f0 !important;
-} 
+
+mat-form-field {
+	--mat-form-field-container-height: 46px;
+	--mat-form-field-container-vertical-padding: 12px;
+}

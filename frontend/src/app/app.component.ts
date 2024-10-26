@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PrimeNGConfig } from 'primeng/api';
 import { ReactiveFormConfig } from '@rxweb/reactive-form-validators';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,14 +7,15 @@ import { ReactiveFormConfig } from '@rxweb/reactive-form-validators';
 })
 export class AppComponent implements OnInit{
   title = 'frontend';
+
   ngOnInit(): void {
+
     ReactiveFormConfig.set({
       internationalization: {
         dateFormat: 'dmy',
         seperator: '/'
       },
       validationMessage: {
-        
         alpha: 'Only alphabelts are allowed.',
         alphaNumeric: 'Only alphabet and numbers are allowed.',
         compare: 'Input are not matched',

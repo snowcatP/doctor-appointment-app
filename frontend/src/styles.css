@@ -122,6 +122,7 @@ a {
 	-o-transition: all 0.4s ease;
 	-ms-transition: all 0.4s ease;
 	-webkit-transition: all 0.4s ease;
+	text-decoration: none;
 }
 button:focus {
 	outline: 0;
@@ -325,20 +326,20 @@ table.table td h2 span {
 }
 a.bg-primary:focus, 
 a.bg-primary:hover, 
-button.bg-primary:focus, 
+/* button.bg-primary:focus, 
 button.bg-primary:hover {
     background-color: #09dca4 !important;
-}
+} */
 .bg-success,
 .badge-success {
 	background-color: #00e65b !important;
 }
 a.bg-success:focus, 
 a.bg-success:hover, 
-button.bg-success:focus, 
+/* button.bg-success:focus, 
 button.bg-success:hover {
     background-color: #00cc52 !important;
-}
+} */
 .bg-info,
 .badge-info {
 	background-color: #009efb !important;
@@ -2151,11 +2152,11 @@ html.menu-opened body {
 .login-header p {
 	margin-bottom: 0;
 }
-.login-header h3 {
+.login-header {
     font-size: 15px;
     margin-bottom: 3px;
 }
-.login-header h3 a {
+.login-header a {
     color: #0de0fe;
     float: right;
     font-size: 15px;

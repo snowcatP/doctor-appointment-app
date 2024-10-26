@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { map, Observable, startWith } from 'rxjs';
 
 @Component({
@@ -11,7 +11,10 @@ export class BookingAppointmentIndexComponent implements OnInit {
   formBooking: FormGroup;
   options: string[] = ['One', 'Two', 'Three'];
   filteredOptions: Observable<string[]>;
-
+  isLinear = false;
+  
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -32,6 +35,14 @@ export class BookingAppointmentIndexComponent implements OnInit {
       email: [''],
       phone: [''],
       reason: [''],
+    });
+
+
+    this.firstFormGroup = this.fb.group({
+      firstCtrl: ['', Validators.required],
+    });
+    this.secondFormGroup = this.fb.group({
+      secondCtrl: ['', Validators.required],
     });
   }
 
