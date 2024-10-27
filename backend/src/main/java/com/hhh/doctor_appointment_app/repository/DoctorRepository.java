@@ -28,8 +28,8 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
                                @Param("gender") Boolean gender,
                                Pageable pageable);
 
-
-
+    @Query("SELECT d FROM Doctor d ORDER BY (SELECT AVG(f.rating) FROM Feedback f WHERE f.doctor.id = d.id) DESC")
+    List<Doctor> findTop10ByRating(Pageable pageable);
 
 
 

@@ -1,4 +1,4 @@
-package com.hhh.doctor_appointment_app.service.DoctorService.Query.GetDoctorWithPage;
+package com.hhh.doctor_appointment_app.service.DoctorService.Query.GetTopTenRatingDoctor;
 
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class GetDoctorWithPageQuery {
+public class GetTopTenRatingDoctorQuery {
     @Autowired
     private DoctorRepository doctorRepository;
 
@@ -27,12 +27,15 @@ public class GetDoctorWithPageQuery {
     @Autowired
     private CalculateAverageRatingDoctorQuery calculateAverageRatingDoctorQuery;
 
-    public PageResponse<List<DoctorResponse>> getDoctorsWithPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
-        Page<Doctor> doctorPage = doctorRepository.getDoctorsWithPage(pageable);
+    public PageResponse<List<DoctorResponse>> getTop10RatingDoctor() {
+        // Pageable object to limit results to 10
+        Pageable pageable = PageRequest.of(0, 10);
+
+        // Get top 10 doctors by rating
+        List<Doctor> topDoctors = doctorRepository.findTop10ByRating(pageable);
 
         //Convert entities to responses
-        List<DoctorResponse> doctorResponses = doctorPage.getContent().stream()
+        List<DoctorResponse> doctorResponses = topDoctors.stream()
                 .map(doctor -> {
                     double ratingOfDoctor = calculateAverageRatingDoctorQuery.calculateAverageRating(doctor.getId());
                     List<Feedback> feedbacks = feedbackRepository.findAllByDoctor_Id(doctor.getId());
@@ -56,8 +59,6 @@ public class GetDoctorWithPageQuery {
         //Create PageResponse Object
         PageResponse<List<DoctorResponse>> pageResponse = new PageResponse<>();
         pageResponse.ok(doctorResponses);
-        double total = Math.ceil((double) doctorPage.getTotalElements() / size);
-        pageResponse.setTotalPage((int) total);
 
         return pageResponse;
     }

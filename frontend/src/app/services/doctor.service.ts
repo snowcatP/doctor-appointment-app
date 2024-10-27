@@ -24,5 +24,11 @@ export class DoctorService {
     const url = `${this.baseUrl}/search?page=${page}&size=${size}`;
     return this.http.post(url, searchDoctorRequest);
   }
+
+  getTopRatingDoctors(): Observable<any> {
+    const url = `${this.baseUrl}/top-rating`;
+    return this.http.get<any>(url);
+  }
+
   
 }

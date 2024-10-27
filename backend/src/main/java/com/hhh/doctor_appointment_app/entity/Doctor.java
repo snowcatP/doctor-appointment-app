@@ -22,6 +22,8 @@ public class Doctor{
 
     private String avatarFilePath;
 
+    private double averageRating;
+
     private String schedule;    // MONDAY,TUESDAY
 
     @ManyToOne
