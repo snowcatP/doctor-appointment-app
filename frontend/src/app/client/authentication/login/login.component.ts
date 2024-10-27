@@ -1,17 +1,11 @@
-import { CommonModule, NgIf } from '@angular/common';
-import { Component, importProvidersFrom, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-} from '@angular/forms';
-import {
-  RxReactiveFormsModule,
-  RxwebValidators,
-} from '@rxweb/reactive-form-validators';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { RxwebValidators } from '@rxweb/reactive-form-validators';
 
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AccountService } from '../../../services/account.service';
+import { LoginRequest } from '../../../models/authentication.model';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +15,8 @@ import { AccountService } from '../../../services/account.service';
 export class LoginComponent {
   formLogin: FormGroup;
   showPass: boolean = false;
+  errorMessage: string = "";
+  @ViewChild('email') emailInput: ElementRef;
 
   constructor(
     private fb: FormBuilder,
@@ -38,7 +34,13 @@ export class LoginComponent {
     this.showPass = !this.showPass;
   }
   onLogin() {
-    this.accountService.onLogin(this.formLogin.value).subscribe((res: any) => {
+    let loginRequest: LoginRequest = {
+      email: this.formLogin.controls['email'].value,
+      password: this.formLogin.controls['password'].value
+    };
+
+    this.accountService.onLogin(loginRequest).subscribe({
+      next: (res: any) => {
       localStorage.setItem('token', res.data.token);
       this.messageService.add({
         key: 'messageToast',
@@ -46,7 +48,20 @@ export class LoginComponent {
         summary: 'Success',
         detail: 'Login successfully',
       });
+      setTimeout(() => {
         this.route.navigateByUrl('/');
+      }, 1500);
+    },
+    error: () => {
+      this.errorMessage = "Wrong email or password."
+      setTimeout(() => {
+        this.emailInput.nativeElement.focus();
+      }, 0);
+    }
     });
+  }
+
+  checkError(control: FormControl) {
+    
   }
 }

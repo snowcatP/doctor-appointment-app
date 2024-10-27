@@ -19,27 +19,72 @@
                   <h2>Login Doccure</h2>
                 </div>
                 <form [formGroup]="formLogin">
-                  <div class="full-width">
-                    <mat-form-field appearance="outline">
-                      <mat-label>Email</mat-label>
-                      <input
-                        matInput
-                        placeholder="Email"
-                        formControlName="email"
-                      />
-                    </mat-form-field>
-                  </div>
+                  <mat-error *ngIf="errorMessage" class="pt-0 pb-1">{{
+                    errorMessage
+                  }}</mat-error>
+                  <mat-form-field appearance="outline" class="full-width pb-2">
+                    <mat-label>Email</mat-label>
+                    <mat-icon
+                      matPrefix
+                      [ngClass]="{
+                        'icon-red':
+                          formLogin.controls['email'].invalid &&
+                          formLogin.controls['email'].dirty
+                      }"
+                      >person</mat-icon
+                    >
+                    <input
+                      matInput
+                      placeholder="Email"
+                      formControlName="email"
+                      required
+                      #email
+                      tabindex="1"
+                    />
+                    <mat-error
+                      *ngIf="formLogin.controls['email'].hasError('email')"
+                      >Email is invalid.</mat-error
+                    >
+                    <mat-error
+                      *ngIf="formLogin.controls['email'].hasError('required')"
+                      >Email is required.</mat-error
+                    >
+                  </mat-form-field>
                   <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Password</mat-label>
+                    <mat-icon
+                      matPrefix
+                      [ngClass]="{
+                        'icon-red':
+                          formLogin.controls['password'].invalid &&
+                          formLogin.controls['password'].dirty
+                      }"
+                      >lock</mat-icon
+                    >
                     <input
                       matInput
                       placeholder="Password"
                       [type]="showPass ? 'text' : 'password'"
                       formControlName="password"
+                      required
+                      tabindex="2"
                     />
-                    <mat-icon matSuffix (click)="showPassword()">{{
-                      showPass ? "visibility" : "visibility_off"
-                    }}</mat-icon>
+                    <button
+                      mat-icon-button
+                      matSuffix
+                      (click)="showPassword()"
+                      type="button"
+                    >
+                      <mat-icon>{{
+                        showPass ? "visibility" : "visibility_off"
+                      }}</mat-icon>
+                    </button>
+                    <mat-error
+                      *ngIf="
+                        formLogin.controls['password'].hasError('required')
+                      "
+                      >Password is required.</mat-error
+                    >
                   </mat-form-field>
                   <div class="text-right d-flex justify-content-end">
                     <a class="forgot-link" routerLink="/auth/forgot-password"

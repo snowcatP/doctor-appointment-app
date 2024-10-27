@@ -4,6 +4,7 @@ import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.AddDoctorRequest
 import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserChangePasswordRequest;
 import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserCreateRequest;
 import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserForgotPasswordRequest;
+import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserSignupRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.entity.Admin;
 import com.hhh.doctor_appointment_app.entity.Doctor;
@@ -79,12 +80,12 @@ public class AccountController {
 
     @PostMapping("/signup")
     @CrossOrigin()
-    public ApiResponse<String> userSignup(@RequestBody UserCreateRequest request) {
+    public ApiResponse<String> userSignup(@RequestBody UserSignupRequest request) {
         var result = userSignupCommand.userSignup(request);
         String message = result != null ? "Sign up successfully!" : "Sign up failed!";
         return ApiResponse.<String>builder()
                 .data(message)
-                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .statusCode(HttpStatus.OK.value())
                 .build();
     }
 

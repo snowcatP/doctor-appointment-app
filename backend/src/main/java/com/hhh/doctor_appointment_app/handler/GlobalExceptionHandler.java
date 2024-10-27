@@ -3,6 +3,7 @@ package com.hhh.doctor_appointment_app.handler;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.exception.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,15 +42,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserException.class)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ApiResponse<?> handleUserException(UserException ex) {
-        return createApiResponse(HttpStatus.CREATED.value(), "CREATED_ERROR: " + ex.getMessage());
+    public ResponseEntity<?> handleUserException(UserException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UnauthenticatedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     public ApiResponse<?> handleUserException(UnauthenticatedException ex) {
-        return createApiResponse(HttpStatus.UNAUTHORIZED.value(), "UNAUTHORIZED: " + ex.getMessage());
+        return createApiResponse(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
     }
 
     private ApiResponse<?> createApiResponse(int statusCode, String message) {

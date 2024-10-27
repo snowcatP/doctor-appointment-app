@@ -26,10 +26,10 @@
         <li class="active">
           <a routerLink="/" routerLinkActive="active">Home</a>
         </li>
-        <!-- <li
+        <li
           class="has-submenu"
           *ngIf="accessChecker.isGranted('doctor', 'header') | async"
-        > -->
+        ></li>
         <li class="has-submenu">
           <a href="#">Doctors <i class="fas fa-chevron-down"></i></a>
           <ul class="submenu">
@@ -41,7 +41,10 @@
             <li><a href="reviews.html">Reviews</a></li>
           </ul>
         </li>
-        <!-- <li class="has-submenu" *ngIf="accessChecker.isGranted('create', 'header') | async"></li> -->
+        <li
+          class="has-submenu"
+          *ngIf="accessChecker.isGranted('create', 'header') | async"
+        ></li>
         <li class="has-submenu">
           <a href="#">Patients <i class="fas fa-chevron-down"></i></a>
           <ul class="submenu">
@@ -72,7 +75,9 @@
               </ul>
             </li>
             <li><a href="blank-page.html">Starter Page</a></li>
-            <li><a routerLink="/auth/login" routerLinkActive="active">Login</a></li>
+            <li>
+              <a routerLink="/auth/login" routerLinkActive="active">Login</a>
+            </li>
             <li><a routerLink="/auth/register">Register</a></li>
             <li><a routerLink="/auth/forgot-password">Forgot Password</a></li>
           </ul>
@@ -81,7 +86,9 @@
           <a href="admin/index.html" target="_blank">Admin</a>
         </li>
         <li class="login-link">
-          <a routerLink="/auth/login" routerLinkActive="active">Login/Sign up</a>
+          <a routerLink="/auth/login" routerLinkActive="active"
+            >Login/Sign up</a
+          >
         </li>
       </ul>
     </div>
