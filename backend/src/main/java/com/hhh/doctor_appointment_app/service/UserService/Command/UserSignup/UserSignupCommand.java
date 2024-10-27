@@ -2,6 +2,7 @@ package com.hhh.doctor_appointment_app.service.UserService.Command.UserSignup;
 
 import com.hhh.doctor_appointment_app.dto.mapper.UserMapper;
 import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserCreateRequest;
+import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserSignupRequest;
 import com.hhh.doctor_appointment_app.entity.Patient;
 import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.enums.UserRole;
@@ -35,10 +36,15 @@ public class UserSignupCommand {
     @Autowired
     private CheckUsernameExistsQuery checkUsernameExistsQuery;
 
-    public Patient userSignup(UserCreateRequest request) {
+    public Patient userSignup(UserSignupRequest request) {
         if (checkUsernameExistsQuery.checkUsernameExists(request.getEmail())) {
-            throw new UserException("User already exists");
+            throw new UserException("Email is already used");
         }
+
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
+            throw new UserException("Passwords do not match");
+        }
+
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 

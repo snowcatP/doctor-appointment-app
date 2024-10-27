@@ -5,14 +5,14 @@
         <!-- Register Content -->
         <div class="account-content">
           <div class="row align-items-center justify-content-center">
-            <div class="col-md-7 col-lg-6 login-left">
+            <div class="col-md-7 col-lg-6 col-xl-6 login-left">
               <img
                 src="assets/images/login-banner.png"
                 class="img-fluid"
                 alt="Doccure Register"
               />
             </div>
-            <div class="col-md-12 col-lg-6">
+            <div class="col-md-12 col-lg-6 col-xl-6">
               <div class="card">
                 <div class="card-body">
                   <div class="login-header">
@@ -25,50 +25,282 @@
                   <!-- Register Form -->
                   <form
                     [formGroup]="formSignup"
-                    (ngSubmit)="onClickSignUpPatient(formSignup.value)"
+                    (ngSubmit)="onSubmitRegister()"
                   >
                     <div class="row">
+                      <mat-error *ngIf="errorMessage" class="pt-0 pb-1">{{errorMessage}}</mat-error>
                       <mat-form-field
                         appearance="outline"
-                        class="col-md-12 col-lg-6 col-xl-6"
+                        class="col-md-12 col-lg-6 col-xl-6 pb-2"
+                        [ngClass]="{
+                          'pb-4':
+                            formSignup.controls['firstName'].hasError(
+                              'alpha'
+                            ) ||
+                            formSignup.controls['lastName'].hasError('alpha')
+                        }"
                       >
                         <mat-label>First Name</mat-label>
-                        <input type="text" matInput placeholder="" />
+                        <mat-icon
+                          matPrefix
+                          [ngClass]="{
+                            'icon-red':
+                              formSignup.controls['firstName'].invalid &&
+                              formSignup.controls['firstName'].dirty
+                          }"
+                          >edit_note</mat-icon
+                        >
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="firstName"
+                          required
+                          tabindex="1"
+                        />
+                        <mat-error
+                          *ngIf="
+                            formSignup.controls['firstName'].hasError(
+                              'required'
+                            )
+                          "
+                          >First Name is required.</mat-error
+                        >
+                        <mat-error
+                          *ngIf="
+                            formSignup.controls['firstName'].hasError('alpha')
+                          "
+                          class="pb-1"
+                          >First Name is only contains alphabet
+                          characters.</mat-error
+                        >
                       </mat-form-field>
                       <mat-form-field
                         appearance="outline"
-                        class="col-md-12 col-lg-6 col-xl-6"
+                        class="col-md-12 col-lg-6 col-xl-6 pb-2"
+                        [ngClass]="{
+                          'pb-4':
+                            formSignup.controls['firstName'].hasError(
+                              'alpha'
+                            ) ||
+                            formSignup.controls['lastName'].hasError('alpha')
+                        }"
                       >
                         <mat-label>Last Name</mat-label>
-                        <input type="text" matInput placeholder="" />
+                        <mat-icon
+                          matPrefix
+                          [ngClass]="{
+                            'icon-red':
+                              formSignup.controls['lastName'].invalid &&
+                              formSignup.controls['lastName'].dirty
+                          }"
+                          >edit_note</mat-icon
+                        >
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="lastName"
+                          required
+                          tabindex="2"
+                        />
+                        <mat-error
+                          *ngIf="
+                            formSignup.controls['lastName'].hasError('required')
+                          "
+                          >Last Name is required.</mat-error
+                        >
+                        <mat-error
+                          *ngIf="
+                            formSignup.controls['lastName'].hasError('alpha')
+                          "
+                          >Last Name is only contains alphabet
+                          characters.</mat-error
+                        >
                       </mat-form-field>
                     </div>
-                    <mat-form-field appearance="outline" class="full-width">
+                    <mat-form-field
+                      appearance="outline"
+                      class="full-width pb-2"
+                    >
                       <mat-label>Email</mat-label>
-                      <input type="email" matInput placeholder="" />
+                      <mat-icon
+                        matPrefix
+                        [ngClass]="{
+                          'icon-red':
+                            formSignup.controls['email'].invalid &&
+                            formSignup.controls['email'].dirty
+                        }"
+                        >person</mat-icon
+                      >
+                      <input
+                        matInput
+                        placeholder="Email"
+                        formControlName="email"
+                        required
+                        #emailInput
+                        tabindex="3"
+                      />
+                      <mat-error
+                        *ngIf="formSignup.controls['email'].hasError('email')"
+                        >Email is invalid.</mat-error
+                      >
+                      <mat-error
+                        *ngIf="
+                          formSignup.controls['email'].hasError('required')
+                        "
+                        >Email is required.</mat-error
+                      >
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="full-width">
+                    <mat-form-field
+                      appearance="outline"
+                      class="full-width pb-2"
+                    >
                       <mat-label>Phone</mat-label>
-                      <input type="text" matInput placeholder="" />
+                      <mat-icon
+                        matPrefix
+                        [ngClass]="{
+                          'icon-red':
+                            formSignup.controls['phone'].invalid &&
+                            formSignup.controls['phone'].dirty
+                        }"
+                        >phone</mat-icon
+                      >
+                      <input
+                        type="tel"
+                        matInput
+                        placeholder="090 000 0000"
+                        formControlName="phone"
+                        required
+                        tabindex="4"
+                      />
+                      <mat-error
+                        *ngIf="
+                          formSignup.controls['phone'].hasError('required')
+                        "
+                        >Phone is required.</mat-error
+                      >
+                      <mat-error
+                        *ngIf="formSignup.controls['phone'].hasError('digit')"
+                        >Phone is contain digits only.</mat-error
+                      >
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="full-width">
+                    <mat-form-field
+                      appearance="outline"
+                      class="full-width pb-2"
+                      [ngClass]="{
+                        'pb-4':
+                          formSignup.controls['password'].hasError(
+                            'password'
+                          ) &&
+                          formSignup.controls['password'].hasError('minLength')
+                      }"
+                    >
                       <mat-label>Password</mat-label>
+                      <mat-icon
+                        matPrefix
+                        [ngClass]="{
+                          'icon-red':
+                            formSignup.controls['password'].invalid &&
+                            formSignup.controls['password'].dirty
+                        }"
+                        >lock</mat-icon
+                      >
                       <input
                         matInput
                         placeholder="Password"
                         [type]="showPass ? 'text' : 'password'"
                         formControlName="password"
+                        required
+                        tabindex="5"
                       />
-                      <mat-icon matSuffix (click)="showPassword()">{{
-                        showPass ? "visibility" : "visibility_off"
-                      }}</mat-icon>
+                      <button
+                        mat-icon-button
+                        matSuffix
+                        (click)="showPassword()"
+                        type="button"
+                      >
+                        <mat-icon>{{
+                          showPass ? "visibility" : "visibility_off"
+                        }}</mat-icon>
+                      </button>
+                      <mat-error
+                        *ngIf="
+                          formSignup.controls['password'].hasError('required')
+                        "
+                        >Password is required.</mat-error
+                      >
+                      <mat-error
+                        *ngIf="
+                          formSignup.controls['password'].hasError('password')
+                        "
+                        >Password should contain at least 1 digit and 1 special
+                        character.</mat-error
+                      >
+                      <mat-error
+                        *ngIf="
+                          formSignup.controls['password'].hasError('minLength')
+                        "
+                        >Minimum length is 5.</mat-error
+                      >
                     </mat-form-field>
-
-                    <mat-radio-group aria-label="Gender">
-                      <mat-radio-button value="0">Male</mat-radio-button>
-                      <mat-radio-button value="1">Female</mat-radio-button>
-                    </mat-radio-group>
-
+                    <mat-form-field
+                      appearance="outline"
+                      class="full-width pb-2"
+                    >
+                      <mat-label>Confirm Password</mat-label>
+                      <mat-icon
+                        matPrefix
+                        [ngClass]="{
+                          'icon-red':
+                            formSignup.controls['confirmPassword'].invalid &&
+                            formSignup.controls['confirmPassword'].dirty
+                        }"
+                        >lock</mat-icon
+                      >
+                      <input
+                        matInput
+                        placeholder="Confirm Password"
+                        [type]="showConfirmPass ? 'text' : 'password'"
+                        formControlName="confirmPassword"
+                        required
+                        tabindex="6"
+                      />
+                      <button
+                        mat-icon-button
+                        matSuffix
+                        (click)="showConfirmPassword()"
+                        type="button"
+                      >
+                        <mat-icon>{{
+                          showPass ? "visibility" : "visibility_off"
+                        }}</mat-icon>
+                      </button>
+                      <mat-error
+                        *ngIf="
+                          formSignup.controls['confirmPassword'].hasError(
+                            'required'
+                          )
+                        "
+                        >Confirm password is required.</mat-error
+                      >
+                      <mat-error
+                        *ngIf="
+                          formSignup.controls['confirmPassword'].hasError(
+                            'compare'
+                          )
+                        "
+                        >Not match with password.</mat-error
+                      >
+                    </mat-form-field>
+                    <div class="pt-1">
+                      <mat-radio-group
+                        aria-label="Gender"
+                        formControlName="gender"
+                      >
+                        <mat-label class="pe-2">Gender:</mat-label>
+                        <mat-radio-button value="0" tabIndex="7">Male</mat-radio-button>
+                        <mat-radio-button value="1" tabIndex="8">Female</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
                     <div class="pt-2">
                       <button
                         class="btn btn-primary btn-block btn-lg login-btn full-width"
@@ -82,7 +314,7 @@
                       <span class="or-line"></span>
                       <span class="span-or">or</span>
                     </div>
-                    <div class="text-center">
+                    <div class="text-center dont-have">
                       Already have an account?
                       <a routerLink="/auth/login">Login</a>
                     </div>

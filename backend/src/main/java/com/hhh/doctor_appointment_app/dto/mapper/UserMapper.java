@@ -1,6 +1,7 @@
 package com.hhh.doctor_appointment_app.dto.mapper;
 
 import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserCreateRequest;
+import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserSignupRequest;
 import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserUpdateProfileRequest;
 import com.hhh.doctor_appointment_app.dto.response.UserResponse;
 import com.hhh.doctor_appointment_app.entity.Admin;
@@ -16,6 +17,9 @@ public interface UserMapper {
 
     @Mapping(target = "role", ignore = true)
     User toUser(UserCreateRequest request);
+
+    @Mapping(target = "role", ignore = true)
+    User toUser(UserSignupRequest request);
 
     @Mappings({
         @Mapping(source = "firstName", target = "profile.firstName"),

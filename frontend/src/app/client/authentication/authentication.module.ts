@@ -13,8 +13,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ToastModule } from 'primeng/toast';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import {MatIconModule} from '@angular/material/icon';
-import {MatInputModule} from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,7 @@ import {MatInputModule} from '@angular/material/input';
     RegisterComponent,
     LoginComponent,
     ForgotPasswordComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
   ],
   imports: [
     CommonModule,
@@ -37,6 +38,7 @@ import {MatInputModule} from '@angular/material/input';
     ToastModule,
     MatIconModule,
     MatInputModule,
-  ]
+    MatButtonModule
+  ],
 })
-export class AuthenticationModule { }
+export class AuthenticationModule {}

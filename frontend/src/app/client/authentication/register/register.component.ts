@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { MessageService } from 'primeng/api';
 import { AccountService } from '../../../services/account.service';
+import { RegisterRequest } from '../../../models/authentication.model';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -12,10 +13,11 @@ import { AccountService } from '../../../services/account.service';
 export class RegisterComponent {
   formSignup: FormGroup;
   showPass: boolean = false;
-  showRepeatPass: boolean = false;
+  showConfirmPass: boolean = false;
   maxDate: Date;
   minDate: Date;
-  genders: string[] = ['Male', 'Female'];
+  errorMessage: string = '';
+  @ViewChild('emailInput') emailInput: ElementRef;
   constructor(
     private fb: FormBuilder,
     private accountService: AccountService,
@@ -29,73 +31,70 @@ export class RegisterComponent {
   showPassword() {
     this.showPass = !this.showPass;
   }
-  showRepeatPassword() {
-    this.showRepeatPass = !this.showRepeatPass;
+  showConfirmPassword() {
+    this.showConfirmPass = !this.showConfirmPass;
   }
   ngOnInit() {
     this.formSignup = this.fb.group({
       firstName: ['', [RxwebValidators.alpha(), RxwebValidators.required()]],
       lastName: ['', [RxwebValidators.alpha(), RxwebValidators.required()]],
-      email: ['', [RxwebValidators.email(), , RxwebValidators.required()]],
+      email: ['', [RxwebValidators.email(), RxwebValidators.required()]],
       password: [
         '',
         [
           RxwebValidators.required(),
           RxwebValidators.password({
             validation: {
-              maxLength: 10,
+              maxLength: 15,
               minLength: 5,
               digit: true,
               specialCharacter: true,
             },
-            message: {
-              minLength: 'Minimum Character length should be 5.',
-              maxLength: 'MaxLength allowed is 10',
-              digit:
-                'Password should contains digit and special charaters(Ex: @, #, &,...)',
-              specialCharacter:
-                'Password should contains digit and special charaters(Ex: @, #, &,...)',
-            },
           }),
+          RxwebValidators.minLength({ value: 5 }),
         ],
       ],
-      repeatPassword: [
+      confirmPassword: [
         '',
         [
           RxwebValidators.required(),
-          RxwebValidators.password({
-            validation: {
-              maxLength: 10,
-              minLength: 5,
-              digit: true,
-              specialCharacter: true,
-            },
-            message: {
-              minLength: 'Minimum Character length should be 5.',
-              maxLength: 'MaxLength allowed is 10',
-              digit:
-                'Password should contains digit and special charaters(Ex: @, #, &,...)',
-              specialCharacter:
-                'Password should contains digit and special charaters(Ex: @, #, &,...)',
-            },
-          }),
+          RxwebValidators.compare({ fieldName: 'password' }),
         ],
       ],
-      phone: ['', [RxwebValidators.alphaNumeric()]],
-      gender: ['', [RxwebValidators.required()]],
+      phone: ['', [RxwebValidators.digit(), RxwebValidators.required()]],
+      gender: ['0', [RxwebValidators.required()]],
     });
   }
-  onClickSignUpPatient(data: any) {
-    this.accountService.onSignupPatient(data).subscribe((res: any) => {
-      this.messageService.add({
-        key: 'messageToast',
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Signup successfully',
-      });
-      setTimeout(() => {
-        this.route.navigateByUrl('/auth/login');
-      }, 3500);
+  onSubmitRegister() {
+    let registerData: RegisterRequest = {
+      firstName: this.formSignup.controls['firstName'].value,
+      lastName: this.formSignup.controls['lastName'].value,
+      email: this.formSignup.controls['email'].value,
+      phone: this.formSignup.controls['phone'].value,
+      gender: this.formSignup.controls['gender'].value === 0 ? true : false,
+      password: this.formSignup.controls['password'].value,
+      confirmPassword: this.formSignup.controls['confirmPassword'].value,
+    };
+
+
+    this.accountService.onSignupPatient(registerData).subscribe({
+      next: (res) => {
+        this.messageService.add({
+          key: 'messageToast',
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Signup successfully',
+        });
+        setTimeout(() => {
+          this.route.navigateByUrl('/auth/login');
+        }, 1500);
+      },
+      error: (err) => {
+        this.errorMessage = err.error;
+        setTimeout(() => {
+          this.emailInput.nativeElement.focus();
+        }, 0);
+      }
     });
   }
 }
