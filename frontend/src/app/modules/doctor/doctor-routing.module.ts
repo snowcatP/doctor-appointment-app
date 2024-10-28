@@ -15,6 +15,11 @@ const routes: Routes = [
     children: [
       {
         path: '',
+        redirectTo: '/doctor/dashboard',
+        pathMatch: 'full'
+      },
+      {
+        path: 'dashboard',
         component: DoctorDashboardComponent,
         title: 'Doctor Dashboard',
       },

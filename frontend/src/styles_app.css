@@ -43,3 +43,8 @@ mat-form-field {
 .icon-red {
 	color: #BA1A1A;
 }
+
+.rounded-circle {
+	border: 1px solid #000;
+	border-radius: 50%;
+}

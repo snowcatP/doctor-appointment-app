@@ -14,7 +14,7 @@ import { RouterModule } from '@angular/router';
 import { BookingAppointmentComponent } from './booking-appointment.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-
+import { DividerModule } from 'primeng/divider';
 
 @NgModule({
   declarations: [
@@ -34,7 +34,8 @@ import { MatInputModule } from '@angular/material/input';
     MatIconModule,
     MatButtonModule,
     ImageModule,
-    RouterModule
+    RouterModule,
+    DividerModule
   ]
 })
 export class BookingAppointmentModule { }
