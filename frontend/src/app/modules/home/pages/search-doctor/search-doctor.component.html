@@ -1,0 +1,68 @@
+<app-search-doctor-bread-crumb></app-search-doctor-bread-crumb>
+
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <app-search-doctor-filter class="col-md-12 col-lg-4 col-xl-3"
+        (doctorsFound)="onDoctorsFound($event)"></app-search-doctor-filter>
+
+      <div class="col-md-12 col-lg-8 col-xl-9" *ngIf="doctors.length > 0; else noDoctors">
+        <div class="card" *ngFor="let doctor of doctors">
+          <div class="card-body">
+            <div class="doctor-widget">
+              <div class="doc-info-left">
+                <div class="doctor-img">
+                  <a (click)="viewDoctorProfile(doctor.id)">
+                    <img [src]="doctor?.avatarFilePath || 'assets/images/doctors/doctor-thumb-01.jpg'" class="img-fluid"
+                      alt="Doctor Image" />
+                  </a>
+                </div>
+                <div class="doc-info-cont">
+                  <h4 class="doc-name">
+                    <a (click)="viewDoctorProfile(doctor.id)">{{ doctor.firstName || 'Dr.' }} {{ doctor.lastName ||
+                      'Unknown' }}</a>
+                  </h4>
+                  <p class="doc-speciality">{{ doctor.specialty?.specialtyName }}</p>
+                  <h6 class="doc-department">
+                    <img src="assets/images/specialities/specialities-05.png" class="img-fluid" alt="Specialty" />
+                    {{ doctor.specialty?.specialtyName }}
+                  </h6>
+                  <div class="rating">
+                    <i class="fas fa-star" *ngFor="let star of [1,2,3,4,5]; let i = index"
+                      [ngClass]="{'filled': doctor.averageRating >= i + 1}"></i>
+                    <span class="d-inline-block average-rating">({{doctor.numberOfFeedbacks}})</span>
+                  </div>
+                  <div class="clinic-details">
+                    <p class="doc-location">
+                      <i class="fas fa-map-marker-alt"></i> {{ doctor.address }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="doc-info-right">
+                <div class="clinic-booking">
+                  <a class="view-pro-btn" (click)="viewDoctorProfile(doctor.id)">View Profile</a>
+                  <a class="apt-btn" href="booking.html">Book Appointment</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex align-items-center justify-content-end">
+          <span class="mx-1 text-color">Items per page: </span>
+          <p-dropdown [options]="pageSizeOptions" optionLabel="label" optionValue="value" [(ngModel)]="pageSize"
+            (ngModelChange)="onPageSizeChange()" placeholder="Items per page"></p-dropdown>
+          <p-paginator [first]="(currentPage - 1) * pageSize" [rows]="pageSize" [totalRecords]="totalDoctors"
+            (onPageChange)="handlePageEvent($event)" [showCurrentPageReport]="true"
+            currentPageReportTemplate="{first} - {last} of {totalRecords}" [showPageLinks]="true"
+            [showFirstLastIcon]="true">
+          </p-paginator>
+        </div>
+
+      </div>
+      <ng-template #noDoctors>
+        <p>No doctors available</p>
+      </ng-template>
+    </div>
+  </div>
+</div>
