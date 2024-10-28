@@ -11,14 +11,18 @@ import { DropdownModule } from 'primeng/dropdown';
 import { PaginatorModule } from 'primeng/paginator';
 import { DoctorProfileComponent } from './pages/doctor-profile/doctor-profile.component';
 import { DoctorProfileBreadCrumbComponent } from './pages/doctor-profile/doctor-profile-bread-crumb/doctor-profile-bread-crumb.component';
-import { BookingAppointmentComponent } from './pages/booking-appointment/booking-appointment.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home.component';
-
-
+import { HomeIndexComponent } from './pages/home-index/home-index.component';
 @NgModule({
   declarations: [
-    HomeComponent
+    HomeComponent,
+    HomeIndexComponent,
+    SearchDoctorComponent,
+    SearchDoctorBreadCrumbComponent,
+    SearchDoctorFilterComponent,
+    DoctorProfileComponent,
+    DoctorProfileBreadCrumbComponent
   ],
   imports: [
     CommonModule,
