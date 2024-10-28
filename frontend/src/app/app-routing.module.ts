@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { authGuard } from './guard/auth.guard';
-import { HomeComponent } from './client/master-layout/home/home.component';
-import { SearchDoctorComponent } from './client/master-layout/search-doctor/search-doctor.component';
-import { DoctorProfileComponent } from './client/master-layout/doctor-profile/doctor-profile.component';
-import { Page404Component } from './component/page-404/page-404.component';
+import { authGuard } from './core/guard/auth.guard';
+import { Page404Component } from './core/components/page-404/page-404.component';
+import { SearchDoctorComponent } from './modules/home/pages/search-doctor/search-doctor.component';
+import { DoctorProfileComponent } from './modules/home/pages/doctor-profile/doctor-profile.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
-    title: 'Online Doctor Booking - Schedule Medical Appointments in Minutes',
+    loadChildren: () =>
+      import('./modules/home/home.module')
+    .then(m => m.HomeModule)
   },
   {
     path: 'search-doctor',
@@ -25,26 +25,26 @@ const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () =>
-      import(
-        ('./client/authentication/authentication.module')
-      ).then((m) => m.AuthenticationModule),
+      import
+        ('./modules/auth/auth.module')
+      .then((m) => m.AuthModule),
   },
   {
     path: 'booking',
     loadChildren: () =>
       import(
-        './client/master-layout/booking-appointment/booking-appointment.module'
+        './modules/home/pages/booking-appointment/booking-appointment.module'
       ).then((m) => m.BookingAppointmentModule),
   },
   {
     path: 'patient',
     loadChildren: () =>
-      import('./client/patient/patient.module').then((m) => m.PatientModule),
+      import('./modules/patient/patient.module').then((m) => m.PatientModule),
   },
   {
     path: 'doctor',
     loadChildren: () =>
-      import('./client/doctor/doctor.module').then((m) => m.DoctorModule),
+      import('./modules/doctor/doctor.module').then((m) => m.DoctorModule),
   },
   {
     path: '**',

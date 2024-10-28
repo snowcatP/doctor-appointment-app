@@ -23,50 +23,50 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
-import { RoleProviderService } from './services/role-provider.service';
+import { RoleProviderService } from './core/services/role-provider.service';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
-import { PatientModule } from './client/patient/patient.module';
-import { FooterComponent } from './component/footer/footer.component';
-import { HeaderComponent } from './component/header/header.component';
-import { HomeComponent } from './client/master-layout/home/home.component';
-import { SearchDoctorComponent } from './client/master-layout/search-doctor/search-doctor.component';
-import { SearchDoctorFilterComponent } from './client/master-layout/search-doctor/search-doctor-filter/search-doctor-filter.component';
-import { SearchDoctorBreadCrumbComponent } from './client/master-layout/search-doctor/search-doctor-bread-crumb/search-doctor-bread-crumb.component';
-import { DoctorProfileComponent } from './client/master-layout/doctor-profile/doctor-profile.component';
-import { DoctorProfileBreadCrumbComponent } from './client/master-layout/doctor-profile/doctor-profile-bread-crumb/doctor-profile-bread-crumb.component';
-import { DoctorModule } from './client/doctor/doctor.module';
-import { Page404Component } from './component/page-404/page-404.component';
-import { BookingAppointmentModule } from './client/master-layout/booking-appointment/booking-appointment.module';
-import { AuthenticationModule } from './client/authentication/authentication.module';
+import { FooterComponent } from './core/components/footer/footer.component';
+import { HeaderComponent } from './core/components/header/header.component';
+import { Page404Component } from './core/components/page-404/page-404.component';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { httpErrorInterceptor } from './interceptors/http-error.interceptor';
-import { appInterceptorInterceptor } from './interceptors/authenticate.interceptor';
+import { httpErrorInterceptor } from './core/interceptors/http-error.interceptor';
+import { appInterceptorInterceptor } from './core/interceptors/authenticate.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatSelectModule} from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { AuthModule } from './modules/auth/auth.module';
+import { HomeModule } from './modules/home/home.module';
+import { SearchDoctorBreadCrumbComponent } from './modules/home/pages/search-doctor/search-doctor-bread-crumb/search-doctor-bread-crumb.component';
+import { SearchDoctorFilterComponent } from './modules/home/pages/search-doctor/search-doctor-filter/search-doctor-filter.component';
+import { SearchDoctorComponent } from './modules/home/pages/search-doctor/search-doctor.component';
 import { PaginatorModule } from 'primeng/paginator';
+import { DoctorProfileBreadCrumbComponent } from './modules/home/pages/doctor-profile/doctor-profile-bread-crumb/doctor-profile-bread-crumb.component';
+import { DoctorProfileComponent } from './modules/home/pages/doctor-profile/doctor-profile.component';
+import { PatientModule } from './modules/patient/patient.module';
+import { BookingAppointmentModule } from './modules/home/pages/booking-appointment/booking-appointment.module';
 @NgModule({
   declarations: [
     AppComponent,
     FooterComponent,
     HeaderComponent,
-    HomeComponent,
-    SearchDoctorComponent,
-    SearchDoctorFilterComponent,
+    Page404Component,
     SearchDoctorBreadCrumbComponent,
+    SearchDoctorFilterComponent,
+    SearchDoctorComponent,
     DoctorProfileComponent,
     DoctorProfileBreadCrumbComponent,
-    Page404Component,
+
+    ///
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     CommonModule,
-    CarouselModule,
     ToastModule,
     FormsModule,
     ReactiveFormsModule,
@@ -78,9 +78,7 @@ import { PaginatorModule } from 'primeng/paginator';
     MatSelectModule,
     PatientModule,
     RouterModule,
-    DoctorModule,
-    BookingAppointmentModule,
-    AuthenticationModule,
+    AuthModule,
     BrowserAnimationsModule,
     MatInputModule,
     MatSelectModule,
@@ -89,7 +87,9 @@ import { PaginatorModule } from 'primeng/paginator';
     IconFieldModule,
     InputIconModule,
     InputTextModule,
-    PaginatorModule
+    HomeModule,
+    PaginatorModule,
+    BookingAppointmentModule
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },

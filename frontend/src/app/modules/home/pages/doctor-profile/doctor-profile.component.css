@@ -1,0 +1,17 @@
+.comment {
+    display: flex;
+    align-items: flex-start;
+    /* Đặt các phần tử theo cùng một dòng */
+}
+
+.avatar {
+    flex-shrink: 0;
+    /* Giữ kích thước avatar không thay đổi */
+    margin-right: 10px;
+    /* Khoảng cách giữa avatar và nội dung */
+}
+
+.comment-body {
+    flex-grow: 1;
+    /* Để phần nội dung mở rộng theo chiều rộng có sẵn */
+}
