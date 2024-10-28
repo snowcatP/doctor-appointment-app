@@ -19,7 +19,7 @@
                     <h4 class="card-title">Booking Information</h4>
                   </div>
                   <div class="card-body">
-                    <div class="booking-doc-info tight-line">
+                    <div class="booking-doc-info">
                       <p-image
                         src="assets/images/doctors/doctor-thumb-02.jpg"
                         alt="Image"
@@ -44,10 +44,11 @@
                         </p>
                       </div>
                     </div>
+                    <p-divider/>
                     <div class="pt-2">
                       <form [formGroup]="formBooking">
                         <h5>Doctor</h5>
-                        <div class="row tight-line">
+                        <div class="row">
                           <mat-form-field
                             appearance="outline"
                             class="col-sm-12 col-md-6 col-lg-6 col-xl-6"
@@ -242,7 +243,7 @@
                   <!-- Schedule Content -->
                   <div class="schedule-cont">
                     <div class="row">
-                      <div class="col-md-12 tight-line">
+                      <div class="col-md-12">
                         <!-- Time Slot -->
                         <h6>Morning</h6>
                         <div class="time-slot">
@@ -317,7 +318,7 @@
                         </div>
                         <!-- /Time Slot -->
                       </div>
-  
+                      <p-divider/>
                       <div class="col-md-12">
                         <!-- Time Slot -->
                         <h6>Afternoon</h6>
@@ -447,8 +448,8 @@
                     </div>
                   </div>
                   <!-- Booking Doctor Info -->
-  
-                  <div class="booking-summary tight-line-top">
+                  <p-divider/>
+                  <div class="booking-summary">
                     <div class="booking-item-wrap">
                       <ul class="booking-date">
                         <li>Date <span>16 Nov 2019</span></li>

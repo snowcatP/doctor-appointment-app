@@ -30,6 +30,9 @@ import { AuthModule } from './modules/auth/auth.module';
 import { HomeModule } from './modules/home/home.module';
 import { PatientModule } from './modules/patient/patient.module';
 import { BookingAppointmentModule } from './modules/home/pages/booking-appointment/booking-appointment.module';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,7 +51,9 @@ import { BookingAppointmentModule } from './modules/home/pages/booking-appointme
     BrowserAnimationsModule,
     HttpClientModule,
     HomeModule,
-    BookingAppointmentModule
+    BookingAppointmentModule,
+    MatMenuModule,
+    MatIconModule,
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },
