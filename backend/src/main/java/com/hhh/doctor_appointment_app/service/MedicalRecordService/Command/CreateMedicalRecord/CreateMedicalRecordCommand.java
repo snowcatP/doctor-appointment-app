@@ -13,6 +13,7 @@ import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.MedicalRecordRepository;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
+import com.hhh.doctor_appointment_app.service.FirebaseStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,10 +43,20 @@ public class CreateMedicalRecordCommand {
     @Autowired
     private MedicalRecordMapper medicalRecordMapper;
 
+    @Autowired
+    private FirebaseStorageService firebaseStorageService;
+
     @PreAuthorize("hasRole('DOCTOR')")
-    public ApiResponse<Object> addMedicalRecordByDoctor(AddMedicalRecordRequest addRequest){
+    public ApiResponse<Object> addMedicalRecordByDoctor(MultipartFile file, AddMedicalRecordRequest addRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
+            //Check file has null ?
+            if (!file.isEmpty()) {
+                // Upload file to Firebase Storage if file not null
+                String fileUrl = firebaseStorageService.uploadFile(file);
+                addRequest.setFilePath(fileUrl);
+            }
+
             Patient patient = patientRepository.findById(addRequest.getPatient_id())
                     .orElseThrow(() -> new NotFoundException("Patient Not Found"));
 

@@ -13,9 +13,11 @@ import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.MedicalRecordRepository;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
+import com.hhh.doctor_appointment_app.service.FirebaseStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class EditMedicalRecordCommand {
@@ -34,10 +36,20 @@ public class EditMedicalRecordCommand {
     @Autowired
     private MedicalRecordMapper medicalRecordMapper;
 
+    @Autowired
+    private FirebaseStorageService firebaseStorageService;
+
     @PreAuthorize("hasRole('DOCTOR')")
-    public ApiResponse<Object> editMedicalRecordByDoctor(Long id, EditMedicalRecordRequest editMedicalRecordRequest){
+    public ApiResponse<Object> editMedicalRecordByDoctor(Long id, MultipartFile file,EditMedicalRecordRequest editMedicalRecordRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
+            //Check file has null ?
+            if (!file.isEmpty()) {
+                // Upload file to Firebase Storage if file not null
+                String fileUrl = firebaseStorageService.uploadFile(file);
+                editMedicalRecordRequest.setFilePath(fileUrl);
+            }
+
             MedicalRecord existingMedicalRecord = medicalRecordRepository.findById(id).
                     orElseThrow(() -> new NotFoundException("Medical Record Not Found"));
 

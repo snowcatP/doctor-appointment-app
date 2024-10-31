@@ -9,14 +9,8 @@
         <div class="doctor-widget">
           <div class="doc-info-left">
             <div class="doctor-img">
-              <img
-                [src]="
-                  doctorDetails?.avatarFilePath ||
-                  'assets/images/doctors/doctor-thumb-02.jpg'
-                "
-                class="img-fluid"
-                alt="User Image"
-              />
+              <p-image [src]="doctorDetails?.avatarFilePath || 'assets/images/doctors/doctor-thumb-02.jpg'"
+                    class="img-fluid" alt="Doctor Image" width="150" [preview]="true" />
             </div>
             <div class="doc-info-cont">
               <h4 class="doc-name">

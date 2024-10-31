@@ -111,17 +111,15 @@
                   style="width: 100%"
                 >
                   <div class="doc-img mb-3">
-                    <a (click)="viewDoctorProfile(doctor.id)">
                       <img
                         class="img-fluid w-full border-round fixed-img"
                         [alt]="doctor.firstName + ' ' + doctor.lastName"
                         [src]="
                           doctor.avatarFilePath
                             ? doctor.avatarFilePath
-                            : 'assets/images/doctors/doctor-02.jpg'
+                            : 'assets/images/doctors/doctor-thumb-02.jpg'
                         "
                       />
-                    </a>
                   </div>
   
                   <div class="pro-content">
