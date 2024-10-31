@@ -56,8 +56,7 @@ public class AccountController {
     @Autowired
     private CreateDoctorByAdminCommand createDoctorByAdminCommand;
 
-    @Autowired
-    private FirebaseStorageService firebaseStorageService;
+
 
     @PostMapping("/forgot-password")
     public ApiResponse<String> forgotPassword(@RequestBody UserForgotPasswordRequest request) {
@@ -110,32 +109,28 @@ public class AccountController {
     @CrossOrigin()
     public ResponseEntity<?> registerAndUploadFileDoctorByAdmin(
             @RequestParam("file") MultipartFile file,
-            @ModelAttribute @Valid AddDoctorRequest addDoctorRequest, // sử dụng ModelAttribute để bind dữ liệu
+            @ModelAttribute @Valid AddDoctorRequest addDoctorRequest, // use ModelAttribute to bind data
             BindingResult bindingResult) {
 
         ApiResponse<Object> apiResponse = new ApiResponse<>();
 
-        // Kiểm tra lỗi validation
+        // Check validation
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("Validation errors: " + errors);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse); // Trả về lỗi 400 cho validation
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse); // Return 400 to validation
         }
 
         try {
-            // Upload file lên Firebase Storage
-            String fileUrl = firebaseStorageService.uploadFile(file);
-            addDoctorRequest.setAvatarFilePath(fileUrl);
+            // Save
+            apiResponse = createDoctorByAdminCommand.addDoctor(file,addDoctorRequest);
 
-            // Lưu hồ sơ
-            apiResponse = createDoctorByAdminCommand.addDoctor(addDoctorRequest);
-
-            // Kiểm tra xem email đã tồn tại trong hệ thống hay chưa
+            //Check email existed in the system
             if (HttpStatus.INTERNAL_SERVER_ERROR.value() == apiResponse.getStatusCode()) {
                 apiResponse.setMessage("Doctor's Email already exists in the system");
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponse); // Trả về lỗi 409 cho email bị trùng
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponse); // Return 409 if email conflict
             }
 
             apiResponse.setStatusCode(HttpStatus.OK.value());

@@ -13,10 +13,13 @@ import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.RoleRepository;
 import com.hhh.doctor_appointment_app.repository.SpecialtyRepository;
+import com.hhh.doctor_appointment_app.service.FirebaseStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class CreateDoctorByAdminCommand {
@@ -34,10 +37,21 @@ public class CreateDoctorByAdminCommand {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private FirebaseStorageService firebaseStorageService;
+
     @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<Object> addDoctor(AddDoctorRequest addDoctorRequest){
+    @Transactional
+    public ApiResponse<Object> addDoctor(MultipartFile file,AddDoctorRequest addDoctorRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
+            //Check file has null ?
+            if (!file.isEmpty()) {
+                // Upload file to Firebase Storage if file not null
+                String fileUrl = firebaseStorageService.uploadFile(file);
+                addDoctorRequest.setAvatarFilePath(fileUrl);
+            }
+
             Specialty specialty = specialtyRepository.findById(addDoctorRequest.getSpecialtyID())
                     .orElseThrow(() -> new NotFoundException("Not found specialty"));
             User user = new User();

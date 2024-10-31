@@ -99,12 +99,9 @@ public class DoctorController {
         }
 
         try {
-            // Upload file lên Firebase Storage
-            String fileUrl = firebaseStorageService.uploadFile(file);
-            addDoctorRequest.setAvatarFilePath(fileUrl);
 
             // Lưu hồ sơ
-            apiResponse = createDoctorCommand.addDoctor(addDoctorRequest);
+            apiResponse = createDoctorCommand.addDoctor(file,addDoctorRequest);
 
             // Kiểm tra xem email đã tồn tại trong hệ thống hay chưa
             if (HttpStatus.INTERNAL_SERVER_ERROR.value() == apiResponse.getStatusCode()) {

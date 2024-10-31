@@ -78,12 +78,8 @@ public class MedicalRecordController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse); // Trả về lỗi 400 cho validation
         }
         try {
-            // Upload file lên Firebase Storage
-            String fileUrl = firebaseStorageService.uploadFile(file);
-            addMedicalRecordRequest.setFilePath(fileUrl);
-
             // Lưu hồ sơ
-            apiResponse = createMedicalRecordCommand.addMedicalRecordByDoctor(addMedicalRecordRequest);
+            apiResponse = createMedicalRecordCommand.addMedicalRecordByDoctor(file,addMedicalRecordRequest);
             apiResponse.setStatusCode(HttpStatus.OK.value());
             apiResponse.setMessage("Add Successfully");
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
@@ -109,11 +105,8 @@ public class MedicalRecordController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
-            // Upload file lên Firebase Storage
-            String fileUrl = firebaseStorageService.uploadFile(file);
-            editMedicalRecordRequest.setFilePath(fileUrl);
 
-            apiResponse = editMedicalRecordCommand.editMedicalRecordByDoctor(id,editMedicalRecordRequest);
+            apiResponse = editMedicalRecordCommand.editMedicalRecordByDoctor(id,file,editMedicalRecordRequest);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         }
         catch (NotFoundException ex){

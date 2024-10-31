@@ -14,6 +14,7 @@ import { DoctorProfileBreadCrumbComponent } from './pages/doctor-profile/doctor-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home.component';
 import { HomeIndexComponent } from './pages/home-index/home-index.component';
+import { ImageModule } from 'primeng/image';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -32,7 +33,8 @@ import { HomeIndexComponent } from './pages/home-index/home-index.component';
     DropdownModule,
     PaginatorModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ImageModule
   ]
 })
 export class HomeModule { }
