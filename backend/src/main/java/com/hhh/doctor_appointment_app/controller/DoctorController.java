@@ -217,4 +217,9 @@ public class DoctorController {
         var result = getAllDoctorsForBookingQuery.getAllDoctorsForBookingQuery();
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+    @GetMapping("/get-doctor-schedule")
+    public ResponseEntity<?> getDoctorSchedule(){
+        
+    }
 }

@@ -24,6 +24,8 @@ export class BookingAppointmentIndexComponent implements OnInit {
   listSpecialties: Specialty[] = [];
   doctorSelected: DoctorBooking;
   bookingData: BookingData = new BookingData();
+  schedules: any[];
+  dateToday: Date = new Date();
   constructor(
     private fb: FormBuilder,
     private bookingService: BookingService,
@@ -33,6 +35,61 @@ export class BookingAppointmentIndexComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
     this.getData();
+
+    this.schedules = [
+      [
+        {
+          dayWeek: 'Sun',
+          date: '2/11'
+        },
+        {
+          dayWeek: 'Mon',
+          date: '3/11'
+        },
+        {
+          dayWeek: 'Tue',
+          date: '4/11'
+        },
+        {
+          dayWeek: 'Wed',
+          date: '5/11'
+        },
+        {
+          dayWeek: 'Thu',
+          date: '6/11'
+        },
+        {
+          dayWeek: 'Fri',
+          date: '7/11'
+        },
+      ],
+      [
+        {
+          dayWeek: 'Sat',
+          date: '8/11'
+        },
+        {
+          dayWeek: 'Sun',
+          date: '9/11'
+        },
+        {
+          dayWeek: 'Mon',
+          date: '10/11'
+        },
+        {
+          dayWeek: 'Tue',
+          date: '11/11'
+        },
+        {
+          dayWeek: 'Wed',
+          date: '12/11'
+        },
+        {
+          dayWeek: 'Fri',
+          date: '13/11'
+        },
+      ]
+    ]
   }
 
   getData() {
