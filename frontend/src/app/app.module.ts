@@ -66,21 +66,29 @@ import { MatIconModule } from '@angular/material/icon';
     provideAnimations(),
     NbSecurityModule.forRoot({
       accessControl: {
-        guest: {
-          view: '*',
+        GUEST: {
+          view: ['', 'booking'],
         },
         PATIENT: {
-          parent: 'guest',
+          parent: 'GUEST',
+          view: ['', 'booking', 'patient'],
           create: '*',
           edit: '*',
           remove: '*',
         },
         DOCTOR: {
-          parent: 'guest',
+          parent: 'PATIENT',
+          view: ['', 'doctor'],
           create: '*',
           edit: '*',
           remove: '*',
-          doctor: '*',
+        },
+        ADMIN: {
+          parent: 'DOCTOR',
+          view: '*',
+          create: '*',
+          edit: '*',
+          remove: '*',
         },
       },
     }).providers,

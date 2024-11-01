@@ -1,416 +1,466 @@
 <div class="row">
-    <div class="col-sm-0 col-md-0 col-lg-1 col-xl-2"></div>
-    <div class="col-sm-12 col-md-12 col-lg-10 col-xl-8">
-      <div class="card">
-        <div class="card-body p-0">
-          <mat-stepper
-            [linear]="isLinear"
-            #stepper
-            class="p-2"
-            style="background-color: #ffffff"
-          >
-            <mat-step
-              [stepControl]="firstFormGroup"
-              label="Fill Booking Information"
-            >
-              <form [formGroup]="firstFormGroup">
-                <div class="card mt-2">
-                  <div class="card-header">
-                    <h4 class="card-title">Booking Information</h4>
-                  </div>
-                  <div class="card-body">
-                    <div class="booking-doc-info">
-                      <p-image
-                        src="assets/images/doctors/doctor-thumb-02.jpg"
-                        alt="Image"
-                        width="150"
-                        [preview]="true"
-                        class="pe-3"
-                      />
-                      <div class="booking-info">
-                        <h5>
-                          <a href="doctor-profile.html">Dr. Darren Elder</a>
-                        </h5>
-                        <div class="rating">
-                          <i class="fas fa-star filled"></i>
-                          <i class="fas fa-star filled"></i>
-                          <i class="fas fa-star filled"></i>
-                          <i class="fas fa-star filled"></i>
-                          <i class="fas fa-star"></i>
-                          <span class="d-inline-block average-rating">35</span>
-                        </div>
-                        <p class="text-muted mb-0">
-                          <i class="fas fa-map-marker-alt"></i> Newyork, USA
-                        </p>
+  <div class="col-sm-0 col-md-0 col-lg-1 col-xl-2"></div>
+  <div class="col-sm-12 col-md-12 col-lg-10 col-xl-8">
+    <div class="card">
+      <div class="card-body p-0">
+        <mat-stepper
+          [linear]="true"
+          #stepper
+          class="p-2"
+          style="background-color: #ffffff"
+        >
+          <form [formGroup]="formBooking">
+            <mat-step label="Fill Booking Information" [stepControl]="formBooking">
+              <div class="card mt-2">
+                <div class="card-header">
+                  <h4 class="card-title">Booking Information</h4>
+                </div>
+                <div class="card-body">
+                  <div class="booking-doc-info">
+                    <p-image
+                      [src]="doctorSelected != undefined ? doctorSelected.avatarFilePath : '/assets/images/user.png'"
+                      alt="Image"
+                      width="150"
+                      [preview]="true"
+                      class="pe-3"
+                    />
+                    <div class="booking-info">
+                      <h5>
+                        <a [routerLink]="">{{doctorSelected != undefined ? doctorSelected.fullName : "Unknow Doctor"}}</a>
+                      </h5>
+                      <div class="rating">
+                        <i class="fas fa-star filled"></i>
+                        <i class="fas fa-star filled"></i>
+                        <i class="fas fa-star filled"></i>
+                        <i class="fas fa-star filled"></i>
+                        <i class="fas fa-star"></i>
+                        <span class="d-inline-block average-rating">35</span>
                       </div>
+                      <p class="text-muted mb-0">
+                        <i class="fas fa-map-marker-alt"></i> Newyork, USA
+                      </p>
                     </div>
-                    <p-divider/>
-                    <div class="pt-2">
-                      <form [formGroup]="formBooking">
-                        <h5>Doctor</h5>
-                        <div class="row">
-                          <mat-form-field
-                            appearance="outline"
-                            class="col-sm-12 col-md-6 col-lg-6 col-xl-6"
-                          >
-                            <mat-label>Specialty</mat-label>
-                            <input
-                              type="text"
-                              placeholder="Pick one"
-                              matInput
-                              formControlName="specialty"
-                              [matAutocomplete]="auto"
-                            />
-                            <mat-autocomplete #auto="matAutocomplete">
-                              @for (option of filteredOptions | async; track
-                              option) {
-                              <mat-option [value]="option">{{
-                                option
-                              }}</mat-option>
-                              }
-                            </mat-autocomplete>
-                          </mat-form-field>
-                          <mat-form-field
-                            appearance="outline"
-                            class="col-sm-12 col-md-6 col-lg-6 col-xl-6"
-                          >
-                            <mat-label>Doctor</mat-label>
-                            <input
-                              type="text"
-                              placeholder="Choose one"
-                              matInput
-                              formControlName="doctor"
-                              [matAutocomplete]="auto"
-                            />
-                            <mat-autocomplete #auto="matAutocomplete">
-                              @for (option of filteredOptions | async; track
-                              option) {
-                              <mat-option [value]="option">{{
-                                option
-                              }}</mat-option>
-                              }
-                            </mat-autocomplete>
-                          </mat-form-field>
-                        </div>
-                        <h5>Patient</h5>
-                        <div>
-                          <div class="row">
-                            <mat-form-field
-                              appearance="outline"
-                              class="col-sm-12 col-md-6 col-lg-6 col-xl-6"
-                            >
-                              <mat-label>First Name</mat-label>
-                              <input
-                                matInput
-                                placeholder="Ex. Justin"
-                                formControlName="firstName"
-                              />
-                            </mat-form-field>
-                            <mat-form-field
-                              appearance="outline"
-                              class="col-sm-12 col-md-6 col-lg-6 col-xl-6"
-                            >
-                              <mat-label>Last Name</mat-label>
-                              <input
-                                matInput
-                                placeholder="Ex. Timberlake"
-                                formControlName="lastName"
-                              />
-                            </mat-form-field>
-                          </div>
-                          <div class="row">
-                            <mat-form-field
-                              appearance="outline"
-                              class="col-sm-12 col-md-6 col-lg-6 col-xl-6"
-                            >
-                              <mat-label>Phone</mat-label>
-                              <input
-                                matInput
-                                placeholder="Ex. 0900101010"
-                                formControlName="phone"
-                              />
-                            </mat-form-field>
-                            <mat-form-field
-                              appearance="outline"
-                              class="col-sm-12 col-md-6 col-lg-6 col-xl-6"
-                            >
-                              <mat-label>Email</mat-label>
-                              <input
-                                matInput
-                                placeholder="Ex. example@gmail.com"
-                                formControlName="email"
-                              />
-                            </mat-form-field>
-                          </div>
-                          <mat-form-field appearance="outline" class="full-width">
-                            <mat-label>Reason</mat-label>
-                            <textarea
-                              matInput
-                              placeholder="Ex. Oral..."
-                              formControlName="reason"
-                            ></textarea>
-                          </mat-form-field>
-                        </div>
-                      </form>
+                  </div>
+                  <p-divider />
+                  <div class="pt-2">
+                    <h5>Doctor&nbsp;<mat-icon matTooltip="Choose specialty first then choose doctor" style="font-size: 15px; padding-top: 0.5rem;">help_outlined</mat-icon></h5>
+                    <div class="row">
+                      <mat-form-field
+                        appearance="outline"
+                        class="col-sm-12 col-md-6 col-lg-6 col-xl-6"
+                      >
+                        <mat-label>Specialty</mat-label>
+                        <input
+                          type="text"
+                          placeholder="Pick one"
+                          matInput
+                          formControlName="specialty"
+                          [matAutocomplete]="autoSpecialty"
+                          (blur)="specialtyChange()"
+                          required
+                          tabindex="1"
+                        />
+                        <mat-autocomplete #autoSpecialty="matAutocomplete">
+                          @for (specialty of filteredSpecialties | async; track specialty) {
+                          <mat-option [value]="specialty.specialtyName">{{
+                            specialty.specialtyName
+                          }}</mat-option>
+                          }
+                        </mat-autocomplete>
+                        <mat-error *ngIf="formBooking.controls['specialty'].getError('required')">
+                          Specialty is required.
+                        </mat-error>
+                      </mat-form-field>
+                      <mat-form-field
+                        appearance="outline"
+                        class="col-sm-12 col-md-6 col-lg-6 col-xl-6"
+                      >
+                        <mat-label>Doctor</mat-label>
+                        <input
+                          [ngClass]="{
+                            'input-disabled':
+                              formBooking.get('specialty').getRawValue() == null
+                          }"
+                          type="text"
+                          placeholder="Choose doctor"
+                          matInput
+                          formControlName="doctor"
+                          [matAutocomplete]="autoDoctor"
+                          [readonly]="
+                            formBooking.get('specialty').getRawValue() == null
+                              ? true
+                              : false
+                          "
+                          (blur)="selectDoctor()"
+                          required
+                          tabindex="2"
+                        />
+                        <mat-autocomplete #autoDoctor="matAutocomplete">
+                          @for (doctor of filteredDoctors | async; track doctor)
+                          {
+                            <mat-option [value]="doctor.fullName">{{
+                              doctor.fullName
+                            }}</mat-option>
+                          }
+                        </mat-autocomplete>
+                        <mat-error *ngIf="formBooking.controls['doctor'].getError('required')">
+                          Doctor is required.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <h5>Patient</h5>
+                    <div>
+                      <div class="row">
+                        <mat-form-field
+                          appearance="outline"
+                          class="col-sm-12 col-md-6 col-lg-6 col-xl-6 pb-1"
+                        >
+                          <mat-label>First Name</mat-label>
+                          <input
+                            matInput
+                            placeholder="Ex. Justin"
+                            formControlName="firstName"
+                            required
+                            tabindex="3"
+                          />
+                          <mat-error *ngIf="formBooking.controls['firstName'].getError('required')">
+                            First name is required.
+                          </mat-error>
+                          <mat-error *ngIf="formBooking.controls['firstName'].getError('alpha')">
+                            First name is invalid.
+                          </mat-error>
+                        </mat-form-field>
+                        <mat-form-field
+                          appearance="outline"
+                          class="col-sm-12 col-md-6 col-lg-6 col-xl-6 pb-1"
+                        >
+                          <mat-label>Last Name</mat-label>
+                          <input
+                            matInput
+                            placeholder="Ex. Timberlake"
+                            formControlName="lastName"
+                            required
+                            tabindex="4"
+                          />
+                          <mat-error *ngIf="formBooking.controls['lastName'].getError('required')">
+                            Last name is required.
+                          </mat-error>
+                          <mat-error *ngIf="formBooking.controls['lastName'].getError('alpha')">
+                            Last name is invalid.
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="row">
+                        <mat-form-field
+                          appearance="outline"
+                          class="col-sm-12 col-md-6 col-lg-6 col-xl-6 pb-1"
+                        >
+                          <mat-label>Phone</mat-label>
+                          <input
+                            matInput
+                            placeholder="Ex. 0900101010"
+                            formControlName="phone"
+                            required
+                            tabindex="5"
+                          />
+                          <mat-error *ngIf="formBooking.controls['phone'].getError('required')">
+                            Phone is required.
+                          </mat-error>
+                          <mat-error *ngIf="formBooking.controls['phone'].getError('numeric')">
+                            Phone must contains numbers.
+                          </mat-error>
+                        </mat-form-field>
+                        <mat-form-field
+                          appearance="outline"
+                          class="col-sm-12 col-md-6 col-lg-6 col-xl-6 pb-1"
+                        >
+                          <mat-label>Email</mat-label>
+                          <input
+                            matInput
+                            placeholder="Ex. example@gmail.com"
+                            formControlName="email"
+                            required
+                            tabindex="6"
+                          />
+                          <mat-error *ngIf="formBooking.controls['email'].getError('required')">
+                            Email is required.
+                          </mat-error>
+                          <mat-error *ngIf="formBooking.controls['email'].getError('email')">
+                            Email is invalid.
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <mat-form-field appearance="outline" class="full-width pb-1">
+                        <mat-label>Reason</mat-label>
+                        <textarea
+                          matInput
+                          placeholder="Ex. Oral..."
+                          formControlName="reason"
+                          required
+                          tabindex="7"
+                        ></textarea>
+                        <mat-error *ngIf="formBooking.controls['reason'].getError('required')">
+                          Reason is required.
+                        </mat-error>
+                      </mat-form-field>
                     </div>
                   </div>
                 </div>
-                <div class="d-flex justify-content-between mx-2">
-                  <button mat-raised-button extended matStepperNext>
-                    <mat-icon>close</mat-icon>
-                    Cancel
-                  </button>
-                  <button mat-flat-button extended matStepperNext>
-                    <mat-icon iconPositionEnd>chevron_right</mat-icon>
-                    Next
-                  </button>
-                </div>
-              </form>
+              </div>
+              <div class="d-flex justify-content-between mx-2">
+                <button mat-raised-button extended matStepperNext>
+                  <mat-icon>close</mat-icon>
+                  Cancel
+                </button>
+                <button mat-flat-button extended matStepperNext [disabled]="formBooking.invalid">
+                  <mat-icon iconPositionEnd>chevron_right</mat-icon>
+                  Next
+                </button>
+              </div>
             </mat-step>
-            <mat-step [stepControl]="secondFormGroup" label="Choose Booking Date">
-              <form [formGroup]="secondFormGroup">
-                <div class="card mt-2">
-                  <div class="card-header">
-                    <h4 class="card-title">Booking Date</h4>
-                  </div>
-                  <!-- Schedule Header -->
-                  <div class="schedule-header">
-                    <div class="row">
-                      <div class="col-md-12">
-                        <!-- Day Slot -->
-                        <div class="day-slot">
-                          <ul>
-                            <li class="left-arrow">
-                              <a href="#">
-                                <i class="fa fa-chevron-left"></i>
-                              </a>
-                            </li>
-                            <li>
-                              <span>Mon</span>
-                              <span class="slot-date"
-                                >11 Nov
-                                <small class="slot-year">2019</small></span
-                              >
-                            </li>
-                            <li>
-                              <span>Tue</span>
-                              <span class="slot-date"
-                                >12 Nov
-                                <small class="slot-year">2019</small></span
-                              >
-                            </li>
-                            <li>
-                              <span>Wed</span>
-                              <span class="slot-date"
-                                >13 Nov
-                                <small class="slot-year">2019</small></span
-                              >
-                            </li>
-                            <li>
-                              <span>Thu</span>
-                              <span class="slot-date"
-                                >14 Nov
-                                <small class="slot-year">2019</small></span
-                              >
-                            </li>
-                            <li>
-                              <span>Fri</span>
-                              <span class="slot-date"
-                                >15 Nov
-                                <small class="slot-year">2019</small></span
-                              >
-                            </li>
-                            <li>
-                              <span>Sat</span>
-                              <span class="slot-date"
-                                >16 Nov
-                                <small class="slot-year">2019</small></span
-                              >
-                            </li>
-                            <li class="right-arrow">
-                              <a href="#">
-                                <i class="fa fa-chevron-right"></i>
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        <!-- /Day Slot -->
+            </form>
+            <mat-step label="Choose Booking Date" [stepControl]="formBookingDate">
+              <div class="card mt-2">
+                <div class="card-header">
+                  <h4 class="card-title">Booking Date</h4>
+                </div>
+                <!-- Schedule Header -->
+                <div class="schedule-header">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <!-- Day Slot -->
+                      <div class="day-slot">
+                        <ul>
+                          <li class="left-arrow">
+                            <a href="#">
+                              <i class="fa fa-chevron-left"></i>
+                            </a>
+                          </li>
+                          <li>
+                            <span>Mon</span>
+                            <span class="slot-date"
+                              >11 Nov
+                              <small class="slot-year">2019</small></span
+                            >
+                          </li>
+                          <li>
+                            <span>Tue</span>
+                            <span class="slot-date"
+                              >12 Nov
+                              <small class="slot-year">2019</small></span
+                            >
+                          </li>
+                          <li>
+                            <span>Wed</span>
+                            <span class="slot-date"
+                              >13 Nov
+                              <small class="slot-year">2019</small></span
+                            >
+                          </li>
+                          <li>
+                            <span>Thu</span>
+                            <span class="slot-date"
+                              >14 Nov
+                              <small class="slot-year">2019</small></span
+                            >
+                          </li>
+                          <li>
+                            <span>Fri</span>
+                            <span class="slot-date"
+                              >15 Nov
+                              <small class="slot-year">2019</small></span
+                            >
+                          </li>
+                          <li>
+                            <span>Sat</span>
+                            <span class="slot-date"
+                              >16 Nov
+                              <small class="slot-year">2019</small></span
+                            >
+                          </li>
+                          <li class="right-arrow">
+                            <a href="#">
+                              <i class="fa fa-chevron-right"></i>
+                            </a>
+                          </li>
+                        </ul>
                       </div>
+                      <!-- /Day Slot -->
                     </div>
                   </div>
-                  <!-- /Schedule Header -->
-  
-                  <!-- Schedule Content -->
-                  <div class="schedule-cont">
-                    <div class="row">
-                      <div class="col-md-12">
-                        <!-- Time Slot -->
-                        <h6>Morning</h6>
-                        <div class="time-slot">
-                          <ul class="clearfix">
-                            <li>
-                              <a class="timing" href="#">
-                                <span>9:00</span> <span>AM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>10:00</span> <span>AM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>11:00</span> <span>AM</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>9:00</span> <span>AM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>10:00</span> <span>AM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>11:00</span> <span>AM</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>9:00</span> <span>AM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>10:00</span> <span>AM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>11:00</span> <span>AM</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>9:00</span> <span>AM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>10:00</span> <span>AM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>11:00</span> <span>AM</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>9:00</span> <span>AM</span>
-                              </a>
-                              <a class="timing selected" href="#">
-                                <span>10:00</span> <span>AM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>11:00</span> <span>AM</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>9:00</span> <span>AM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>10:00</span> <span>AM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>11:00</span> <span>AM</span>
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        <!-- /Time Slot -->
+                </div>
+                <!-- /Schedule Header -->
+
+                <!-- Schedule Content -->
+                <div class="schedule-cont">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <!-- Time Slot -->
+                      <h6>Morning</h6>
+                      <div class="time-slot">
+                        <ul class="clearfix">
+                          <li>
+                            <a class="timing" href="#">
+                              <span>9:00</span> <span>AM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>10:00</span> <span>AM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>11:00</span> <span>AM</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a class="timing" href="#">
+                              <span>9:00</span> <span>AM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>10:00</span> <span>AM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>11:00</span> <span>AM</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a class="timing" href="#">
+                              <span>9:00</span> <span>AM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>10:00</span> <span>AM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>11:00</span> <span>AM</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a class="timing" href="#">
+                              <span>9:00</span> <span>AM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>10:00</span> <span>AM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>11:00</span> <span>AM</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a class="timing" href="#">
+                              <span>9:00</span> <span>AM</span>
+                            </a>
+                            <a class="timing selected" href="#">
+                              <span>10:00</span> <span>AM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>11:00</span> <span>AM</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a class="timing" href="#">
+                              <span>9:00</span> <span>AM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>10:00</span> <span>AM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>11:00</span> <span>AM</span>
+                            </a>
+                          </li>
+                        </ul>
                       </div>
-                      <p-divider/>
-                      <div class="col-md-12">
-                        <!-- Time Slot -->
-                        <h6>Afternoon</h6>
-                        <div class="time-slot">
-                          <ul class="clearfix">
-                            <li>
-                              <a class="timing" href="#">
-                                <span>14:00</span> <span>PM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>15:00</span> <span>PM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>16:00</span> <span>PM</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>14:00</span> <span>PM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>15:00</span> <span>PM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>16:00</span> <span>PM</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>14:00</span> <span>PM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>15:00</span> <span>PM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>16:00</span> <span>PM</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>14:00</span> <span>PM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>15:00</span> <span>PM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>16:00</span> <span>PM</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>14:00</span> <span>PM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>15:00</span> <span>PM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>16:00</span> <span>PM</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>14:00</span> <span>PM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>15:00</span> <span>PM</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>16:00</span> <span>PM</span>
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        <!-- /Time Slot -->
+                      <!-- /Time Slot -->
+                    </div>
+                    <p-divider />
+                    <div class="col-md-12">
+                      <!-- Time Slot -->
+                      <h6>Afternoon</h6>
+                      <div class="time-slot">
+                        <ul class="clearfix">
+                          <li>
+                            <a class="timing" href="#">
+                              <span>14:00</span> <span>PM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>15:00</span> <span>PM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>16:00</span> <span>PM</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a class="timing" href="#">
+                              <span>14:00</span> <span>PM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>15:00</span> <span>PM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>16:00</span> <span>PM</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a class="timing" href="#">
+                              <span>14:00</span> <span>PM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>15:00</span> <span>PM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>16:00</span> <span>PM</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a class="timing" href="#">
+                              <span>14:00</span> <span>PM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>15:00</span> <span>PM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>16:00</span> <span>PM</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a class="timing" href="#">
+                              <span>14:00</span> <span>PM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>15:00</span> <span>PM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>16:00</span> <span>PM</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a class="timing" href="#">
+                              <span>14:00</span> <span>PM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>15:00</span> <span>PM</span>
+                            </a>
+                            <a class="timing" href="#">
+                              <span>16:00</span> <span>PM</span>
+                            </a>
+                          </li>
+                        </ul>
                       </div>
+                      <!-- /Time Slot -->
                     </div>
                   </div>
-                  <!-- /Schedule Content -->
                 </div>
-                <!-- /Schedule Widget -->
-  
-                <div class="d-flex justify-content-between mx-2">
-                  <button mat-raised-button extended matStepperPrevious>
-                    <mat-icon>chevron_left</mat-icon>
-                    Back
-                  </button>
-                  <button mat-flat-button extended matStepperNext>
-                    <mat-icon iconPositionEnd>chevron_right</mat-icon>
-                    Next
-                  </button>
-                </div>
-              </form>
+                <!-- /Schedule Content -->
+              </div>
+              <!-- /Schedule Widget -->
+
+              <div class="d-flex justify-content-between mx-2">
+                <button mat-raised-button extended matStepperPrevious>
+                  <mat-icon>chevron_left</mat-icon>
+                  Back
+                </button>
+                <button mat-flat-button extended matStepperNext>
+                  <mat-icon iconPositionEnd>chevron_right</mat-icon>
+                  Next
+                </button>
+              </div>
             </mat-step>
             <mat-step label="Confirm and Done">
               <!-- Booking Summary -->
@@ -421,13 +471,13 @@
                 <div class="card-body">
                   <!-- Booking Doctor Info -->
                   <div class="booking-doc-info">
-                      <p-image
+                    <p-image
                       src="assets/images/doctors/doctor-thumb-02.jpg"
                       alt="Image"
                       width="150"
                       [preview]="true"
                       class="pe-3"
-                      />
+                    />
                     <div class="booking-info">
                       <h4>
                         <a href="doctor-profile.html">Dr. Darren Elder</a>
@@ -448,7 +498,7 @@
                     </div>
                   </div>
                   <!-- Booking Doctor Info -->
-                  <p-divider/>
+                  <p-divider />
                   <div class="booking-summary">
                     <div class="booking-item-wrap">
                       <ul class="booking-date">
@@ -478,17 +528,20 @@
                   <mat-icon>chevron_left</mat-icon>
                   Back
                 </button>
-                <button mat-flat-button extended matStepperNext routerLink="/booking/success">
+                <button
+                  mat-flat-button
+                  extended
+                  matStepperNext
+                  routerLink="/booking/success"
+                >
                   <mat-icon iconPositionEnd>check</mat-icon>
                   Done
                 </button>
               </div>
             </mat-step>
-          </mat-stepper>
-        </div>
+        </mat-stepper>
       </div>
     </div>
-    <div class="col-sm-0 col-md-0 col-lg-1 col-xl-2"></div>
   </div>
-  
-  
+  <div class="col-sm-0 col-md-0 col-lg-1 col-xl-2"></div>
+</div>

@@ -2,6 +2,7 @@ package com.hhh.doctor_appointment_app.configuration;
 
 import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserCreateRequest;
 import com.hhh.doctor_appointment_app.entity.Role;
+import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.enums.UserRole;
 import com.hhh.doctor_appointment_app.repository.RoleRepository;
 import com.hhh.doctor_appointment_app.repository.UserRepository;
@@ -54,6 +55,15 @@ public class ApplicationInitConfig implements ApplicationRunner{
                 log.info("Can't create admin account");
             }
 
+        }
+        var users = userRepository.findAll();
+        if (!users.isEmpty()) {
+            for (User user : users) {
+                if (user.getFullName() == null || user.getFullName().isEmpty()) {
+                    user.setFullName(user.getFirstName() + " " + user.getLastName());
+                }
+            }
+            userRepository.saveAll(users);
         }
     }
 }

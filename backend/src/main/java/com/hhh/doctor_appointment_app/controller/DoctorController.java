@@ -1,15 +1,15 @@
 package com.hhh.doctor_appointment_app.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.AddDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.EditDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.SearchDoctorRequest;
-import com.hhh.doctor_appointment_app.dto.request.MedicalRecordRequest.AddMedicalRecordRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
+import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorBookingResponse;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.service.DoctorService.Command.CreateDoctor.CreateDoctorByAdminCommand;
 import com.hhh.doctor_appointment_app.service.DoctorService.Command.DeleteDoctor.DeleteDoctorCommand;
 import com.hhh.doctor_appointment_app.service.DoctorService.Command.EditDoctor.EditDoctorCommand;
+import com.hhh.doctor_appointment_app.service.DoctorService.Query.GetAllDoctorsForBooking.GetAllDoctorsForBookingQuery;
 import com.hhh.doctor_appointment_app.service.DoctorService.Query.GetDetailDoctor.GetDetailDoctorQuery;
 import com.hhh.doctor_appointment_app.service.DoctorService.Query.GetDoctorWithPage.GetDoctorWithPageQuery;
 import com.hhh.doctor_appointment_app.service.DoctorService.Query.GetTopTenRatingDoctor.GetTopTenRatingDoctorQuery;
@@ -23,8 +23,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -54,6 +54,8 @@ public class DoctorController {
 
     @Autowired
     private GetTopTenRatingDoctorQuery getTopTenRatingDoctorQuery;
+    @Autowired
+    private GetAllDoctorsForBookingQuery getAllDoctorsForBookingQuery;
 
     @GetMapping("/list-doctor")
     public ResponseEntity<?> getDoctors(@RequestParam(defaultValue = "1") int page,
@@ -210,5 +212,9 @@ public class DoctorController {
         }
     }
 
-
+    @GetMapping("/get-doctors-for-booking")
+    public ResponseEntity<List<DoctorBookingResponse>> getAllDoctorsForBooking(){
+        var result = getAllDoctorsForBookingQuery.getAllDoctorsForBookingQuery();
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 }
