@@ -34,6 +34,8 @@ public class SecurityConfig {
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
+            "api/doctor/get-doctors-for-booking",
+            "api/specialty/all",
             "api/doctor/list-doctor",
             "api/doctor/top-rating"
     };
@@ -52,10 +54,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
                         request
-                                //.anyRequest().authenticated()
                                 .requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS_POST).permitAll()
                                 .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()
-                                .anyRequest().permitAll()
+//                                .anyRequest().permitAll()
+                                .anyRequest().authenticated()
                 );
 
         httpSecurity
