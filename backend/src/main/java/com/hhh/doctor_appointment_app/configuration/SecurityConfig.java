@@ -32,6 +32,7 @@ public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
             "api/doctor/get-doctors-for-booking",
+            "api/specialty/all"
     };
 
     @Value("${spring.jwt.signerKey}")
@@ -50,8 +51,8 @@ public class SecurityConfig {
                         request
                                 .requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS_POST).permitAll()
                                 .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()
-                                .anyRequest().permitAll()
-                                //.anyRequest().authenticated()
+//                                .anyRequest().permitAll()
+                                .anyRequest().authenticated()
                 );
 
         httpSecurity
