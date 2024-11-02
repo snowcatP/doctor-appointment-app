@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import {
-  HTTP_INTERCEPTORS,
   provideHttpClient,
   withInterceptors,
 } from '@angular/common/http';
@@ -59,28 +58,36 @@ import { MatIconModule } from '@angular/material/icon';
     { provide: NbRoleProvider, useClass: RoleProviderService },
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
-    // provideHttpClient(withInterceptors([appInterceptorInterceptor, httpErrorInterceptor])),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([appInterceptorInterceptor, httpErrorInterceptor])),
+    // provideHttpClient(),
     JwtHelperService,
     MessageService,
     provideAnimations(),
     NbSecurityModule.forRoot({
       accessControl: {
-        guest: {
-          view: '*',
+        GUEST: {
+          view: ['', 'booking'],
         },
         PATIENT: {
-          parent: 'guest',
+          parent: 'GUEST',
+          view: ['', 'booking', 'patient'],
           create: '*',
           edit: '*',
           remove: '*',
         },
         DOCTOR: {
-          parent: 'guest',
+          parent: 'PATIENT',
+          view: ['', 'doctor'],
           create: '*',
           edit: '*',
           remove: '*',
-          doctor: '*',
+        },
+        ADMIN: {
+          parent: 'DOCTOR',
+          view: '*',
+          create: '*',
+          edit: '*',
+          remove: '*',
         },
       },
     }).providers,
