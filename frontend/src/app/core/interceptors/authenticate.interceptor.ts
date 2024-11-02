@@ -27,7 +27,6 @@ export const appInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
       localStorage.removeItem('token');
     }
   }
-
   return next(req);
 };
 
