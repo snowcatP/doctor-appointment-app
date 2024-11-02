@@ -19,30 +19,3 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
     })
   );
 };
-function checkInvalid200Response(httpEvent: HttpEvent<any>): boolean {
-  return (
-    httpEvent instanceof HttpResponse
-    // Must have a successful status code (200 OK)
-    && httpEvent.status === HttpStatusCode.Ok
-    // But the body format must be invalid
-    && !check200ResponseBodyFormat(httpEvent)
-  )
-}
-function check200ResponseBodyFormat(response: HttpResponse<any>): boolean {
-  return isPlainObject(response.body)
-    && response.body.status === 'ok'
-    && response.body.data !== undefined
-}
-function checkNoNetworkConnection(error: any): boolean {
-  return(
-    error instanceof HttpErrorResponse
-    && !error.headers.keys().length
-    && !error.ok
-    && !error.status
-    && !error.error.loaded
-    && !error.error.total
-  )
-}
-function isResponseError(error: any) {
-  return (error instanceof HttpErrorResponse && error.status !== HttpStatusCode.Ok);
-}
