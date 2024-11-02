@@ -19,7 +19,7 @@ import java.text.ParseException;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/auth")
+@RequestMapping("api/auth")
 public class AuthenticationController {
     @Autowired
     private AuthenticateCommand authenticateCommand;

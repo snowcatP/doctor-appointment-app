@@ -28,11 +28,21 @@ const routes: Routes = [
     path: 'patient',
     loadChildren: () =>
       import('./modules/patient/patient.module').then((m) => m.PatientModule),
+    // canActivate: [authGuard],
+    // data: {
+    //   permission: 'patient',
+    //   redirectTo: '/error-404'
+    // }
   },
   {
     path: 'doctor',
     loadChildren: () =>
       import('./modules/doctor/doctor.module').then((m) => m.DoctorModule),
+    // canActivate: [authGuard],
+    // data: {
+    //   permission: 'doctor',
+    //   redirectTo: '/error-404'
+    // }
   },
   {
     path: '**',

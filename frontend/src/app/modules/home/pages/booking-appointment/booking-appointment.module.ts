@@ -15,12 +15,16 @@ import { BookingAppointmentComponent } from './booking-appointment.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { DividerModule } from 'primeng/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTabsModule } from '@angular/material/tabs';
+import { CarouselModule } from 'primeng/carousel';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   declarations: [
     BookingAppointmentIndexComponent,
     BookingAppointmentSuccessComponent,
-    BookingAppointmentComponent
+    BookingAppointmentComponent,
   ],
   imports: [
     CommonModule,
@@ -35,7 +39,11 @@ import { DividerModule } from 'primeng/divider';
     MatButtonModule,
     ImageModule,
     RouterModule,
-    DividerModule
-  ]
+    DividerModule,
+    MatTooltipModule,
+    MatTabsModule,
+    CarouselModule,
+    CalendarModule,
+  ],
 })
-export class BookingAppointmentModule { }
+export class BookingAppointmentModule {}

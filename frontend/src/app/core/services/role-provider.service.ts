@@ -17,7 +17,7 @@ export class RoleProviderService {
       map(() => localStorage.getItem('token')),
       map(token => this.authService.isAuthenticated() 
         ? this.jwtHelperService.decodeToken(token)['scope'] 
-        : 'guest'
+        : 'GUEST'
       )
     );
   }
