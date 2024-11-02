@@ -29,7 +29,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/doctor")
-@CrossOrigin
+@CrossOrigin("*")
 public class DoctorController {
     @Autowired
     private GetDoctorWithPageQuery getDoctorsWithPage;
@@ -218,8 +218,8 @@ public class DoctorController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/get-doctor-schedule")
-    public ResponseEntity<?> getDoctorSchedule(){
-        
-    }
+//    @GetMapping("/get-doctor-schedule")
+//    public ResponseEntity<?> getDoctorSchedule(){
+//
+//    }
 }

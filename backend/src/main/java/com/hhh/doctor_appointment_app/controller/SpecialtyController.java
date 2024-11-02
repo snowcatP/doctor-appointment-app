@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("api/specialty")
-@CrossOrigin
 public class SpecialtyController {
 
     @Autowired
