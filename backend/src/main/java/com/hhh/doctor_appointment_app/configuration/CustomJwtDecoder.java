@@ -49,4 +49,10 @@ public class CustomJwtDecoder implements JwtDecoder {
         return nimbusJwtDecoder.decode(token);
     }
 
+    //Method to get email from token
+    public String getEmailFromToken(String token) {
+        Jwt jwt = decode(token); // Decode token
+        return jwt.getClaim("sub"); // Get email from payload.sub
+    }
+
 }

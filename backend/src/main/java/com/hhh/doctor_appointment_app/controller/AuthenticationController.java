@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 
 @RestController
-@CrossOrigin
-@RequestMapping("api/auth")
+@CrossOrigin("*")
+@RequestMapping("/api/auth")
 public class AuthenticationController {
     @Autowired
     private AuthenticateCommand authenticateCommand;

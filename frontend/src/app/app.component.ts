@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , Input} from '@angular/core';
 import { ReactiveFormConfig } from '@rxweb/reactive-form-validators';
+import { AuthService } from './core/services/auth.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,9 +8,16 @@ import { ReactiveFormConfig } from '@rxweb/reactive-form-validators';
 })
 export class AppComponent implements OnInit{
   title = 'frontend';
+  isLoggedIn: boolean = false;
+
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
 
+    this.authService.currentLoginStatus.subscribe(status => {
+      this.isLoggedIn = status;
+    });
+    
     ReactiveFormConfig.set({
       internationalization: {
         dateFormat: 'dmy',
@@ -47,4 +55,7 @@ export class AppComponent implements OnInit{
       }
     });
   }
+
+
+  
 }

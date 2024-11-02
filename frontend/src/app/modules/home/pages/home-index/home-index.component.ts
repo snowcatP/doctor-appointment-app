@@ -50,7 +50,6 @@ export class HomeIndexComponent {
       (response) => {
         if (response.statusCode === 200) {
           this.topRatingDoctors = response.data;
-          console.log(this.topRatingDoctors);
         }
       },
       (error) => {

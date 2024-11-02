@@ -11,8 +11,7 @@ import { PatientProfileComponent } from './pages/patient-profile/patient-profile
 import { PatientDashboardComponent } from './pages/patient-dashboard/patient-dashboard.component';
 import { PatientBreadCrumbComponent } from './pages/patient-bread-crumb/patient-bread-crumb.component';
 import { PatientChangePasswordComponent } from './pages/patient-change-password/patient-change-password.component';
-
-
+import { DateFormatPipeModule } from '../../core/pipes/date-format.module';
 @NgModule({
   declarations: [
     PatientComponent,
@@ -28,6 +27,7 @@ import { PatientChangePasswordComponent } from './pages/patient-change-password/
     RouterModule,
     MatTabsModule,
     ImageModule,
+    DateFormatPipeModule
   ]
 })
 export class PatientModule { }

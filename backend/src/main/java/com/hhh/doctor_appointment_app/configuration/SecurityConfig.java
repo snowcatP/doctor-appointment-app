@@ -28,10 +28,14 @@ public class SecurityConfig {
             "api/auth/reset-password",
             "api/auth/refreshToken",
             "api/auth/register/user",
+            "api/doctor/search",
+            "api/doctor/detail/"
+
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
-            "api/doctor/get-doctors-for-booking",
+            "api/doctor/list-doctor",
+            "api/doctor/top-rating"
     };
 
     @Value("${spring.jwt.signerKey}")
@@ -48,10 +52,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
                         request
+                                //.anyRequest().authenticated()
                                 .requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS_POST).permitAll()
                                 .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()
                                 .anyRequest().permitAll()
-                                //.anyRequest().authenticated()
                 );
 
         httpSecurity

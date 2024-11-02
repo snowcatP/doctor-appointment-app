@@ -31,7 +31,6 @@ import { PatientModule } from './modules/patient/patient.module';
 import { BookingAppointmentModule } from './modules/home/pages/booking-appointment/booking-appointment.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,7 +51,7 @@ import { MatIconModule } from '@angular/material/icon';
     HomeModule,
     BookingAppointmentModule,
     MatMenuModule,
-    MatIconModule,
+    MatIconModule
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },

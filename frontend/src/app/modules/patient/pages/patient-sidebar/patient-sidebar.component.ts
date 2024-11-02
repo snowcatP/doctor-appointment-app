@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-patient-sidebar',
@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   styleUrl: './patient-sidebar.component.css'
 })
 export class PatientSidebarComponent {
+  @Input() patientProfile: any; // Input to receive patient profile data
   logout() {
     
   }

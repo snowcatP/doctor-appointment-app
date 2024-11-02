@@ -15,7 +15,8 @@ public interface PatientMapper {
             @Mapping(source = "patient.profile.phone", target = "phone"),
             @Mapping(source = "patient.profile.email", target = "email"),
             @Mapping(source = "patient.profile.dateOfBirth", target = "dateOfBirth"),
-            @Mapping(source = "patient.profile.address", target = "address")
+            @Mapping(source = "patient.profile.address", target = "address"),
+            @Mapping(source = "patient.profile.role", target = "role")
     })
     PatientResponse toResponse(Patient patient);
 }
