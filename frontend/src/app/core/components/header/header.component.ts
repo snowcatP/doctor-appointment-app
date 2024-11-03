@@ -9,17 +9,21 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent implements OnInit {
-  @Input() isLoggedIn: boolean = false; // Receive isLoggedIn from login component
+  isLoggedIn: boolean = false;
   patientProfile: any; // Variable to store patient profile data
 
   constructor(
-    public accessChecker: NbAccessChecker,
-    private patientService: PatientService,
-    private authService: AuthService // Inject AuthService
+    private authService: AuthService,
+    private patientService: PatientService
   ) {}
 
   ngOnInit(): void {
+    this.authService.currentLoginStatus.subscribe((status) => {
+      this.isLoggedIn = status;
+    });
+    if (this.isLoggedIn) {
       this.fetchPatientProfile();
+    }
   }
 
   fetchPatientProfile(): void {

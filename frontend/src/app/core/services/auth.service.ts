@@ -7,6 +7,10 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AuthService {
   constructor(private jwtHelper: JwtHelperService) {}
+
+  private loginStatus = new BehaviorSubject<boolean>(this.isAuthenticated());
+  currentLoginStatus = this.loginStatus.asObservable();
+
   public isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
     // Check whether the token is expired and return
@@ -17,9 +21,6 @@ export class AuthService {
 
     return !this.jwtHelper.isTokenExpired(token);
   }
-
-  private loginStatus = new BehaviorSubject<boolean>(false);
-  currentLoginStatus = this.loginStatus.asObservable();
 
   updateLoginStatus(status: boolean) {
     this.loginStatus.next(status);
