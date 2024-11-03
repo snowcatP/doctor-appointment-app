@@ -27,7 +27,6 @@
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
-    "@nebular/eva-icons": "14.0.0",
     "@nebular/security": "^14.0.0",
     "@nebular/theme": "^13.0.0",
     "@rxweb/reactive-form-validators": "^13.0.1",
