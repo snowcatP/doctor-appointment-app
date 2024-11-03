@@ -26,8 +26,10 @@ public class AppointmentByPatientRequest {
 
     private Date dateBooking;
 
-    private Long patient_ID;
+    private String bookingHour;
 
-    private Long doctor_ID;
+    private Long patientId;
+
+    private Long doctorId;
 
 }

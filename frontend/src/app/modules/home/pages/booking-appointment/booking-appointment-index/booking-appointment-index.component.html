@@ -288,7 +288,7 @@
                   matStepperNext
                   [disabled]="formBooking.invalid"
                 >
-                  <mat-icon iconPositionEnd>chevron_right</mat-icon>
+                  <mat-icon iconPositionEnd (click)="getDoctorAppointmentSchedule()">chevron_right</mat-icon>
                   Next
                 </button>
               </div>
@@ -342,17 +342,6 @@
                               <a class="timing" href="#">
                                 <span>10:00 - 10:30</span>
                               </a>
-                              <a class="timing" href="#">
-                                <span>11:00 - 11:30</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>9:00 - 9:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>10:00 - 10:30</span>
-                              </a>
                               <a class="timing booked" href="#">
                                 <span>11:00 - 11:30</span>
                               </a>
@@ -381,6 +370,17 @@
                             </li>
                             <li>
                               <a class="timing" href="#">
+                                <span>9:00 - 9:30</span>
+                              </a>
+                              <a class="timing" href="#">
+                                <span>10:00 - 10:30</span>
+                              </a>
+                              <a class="timing" href="#">
+                                <span>11:00 - 11:30</span>
+                              </a>
+                            </li>
+                            <li>
+                              <a class="timing selected" href="#">
                                 <span>9:00 - 9:30</span>
                               </a>
                               <a class="timing" href="#">

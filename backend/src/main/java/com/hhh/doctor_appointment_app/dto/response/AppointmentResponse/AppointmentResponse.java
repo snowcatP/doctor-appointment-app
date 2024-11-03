@@ -1,8 +1,5 @@
 package com.hhh.doctor_appointment_app.dto.response.AppointmentResponse;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hhh.doctor_appointment_app.entity.Doctor;
-import com.hhh.doctor_appointment_app.entity.Patient;
 import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.enums.AppointmentStatus;
 import jakarta.persistence.*;
@@ -29,6 +26,8 @@ public class AppointmentResponse {
     private String reason;
 
     private Date dateBooking;
+
+    private String bookingHour;
 
     @Enumerated(EnumType.STRING)
     private AppointmentStatus appointmentStatus;

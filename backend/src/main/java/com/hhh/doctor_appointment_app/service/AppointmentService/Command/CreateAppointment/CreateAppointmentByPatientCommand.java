@@ -1,7 +1,6 @@
 package com.hhh.doctor_appointment_app.service.AppointmentService.Command.CreateAppointment;
 
 import com.hhh.doctor_appointment_app.dto.mapper.AppointmentMapper;
-import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.AppointmentByGuestRequest;
 import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.AppointmentByPatientRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentResponse;
@@ -17,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -38,10 +36,10 @@ public class CreateAppointmentByPatientCommand {
     public ApiResponse<Object> createAppointmentByPatient(AppointmentByPatientRequest appointmentByPatientRequest) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try {
-            Patient patient = patientRepository.findById(appointmentByPatientRequest.getPatient_ID())
+            Patient patient = patientRepository.findById(appointmentByPatientRequest.getPatientId())
                     .orElseThrow(() -> new NotFoundException("Patient Not Found"));
 
-            Doctor doctor = doctorRepository.findById(appointmentByPatientRequest.getDoctor_ID())
+            Doctor doctor = doctorRepository.findById(appointmentByPatientRequest.getDoctorId())
                     .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
 
             // Convert the dateBooking from Date to LocalDateTime
@@ -68,6 +66,7 @@ public class CreateAppointmentByPatientCommand {
                     .email(appointmentByPatientRequest.getEmail())
                     .dateOfBirth(appointmentByPatientRequest.getDateOfBirth())
                     .dateBooking(appointmentByPatientRequest.getDateBooking())
+                    .bookingHour(appointmentByPatientRequest.getBookingHour())
                     .reason(appointmentByPatientRequest.getReason())
                     .patient(patient)
                     .doctor(doctor)

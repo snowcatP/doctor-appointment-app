@@ -5,10 +5,7 @@ import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
-import {
-  provideHttpClient,
-  withInterceptors,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import {
   ErrorStateMatcher,
@@ -57,7 +54,9 @@ import { MatIconModule } from '@angular/material/icon';
     { provide: NbRoleProvider, useClass: RoleProviderService },
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
-    provideHttpClient(withInterceptors([appInterceptorInterceptor, httpErrorInterceptor])),
+    provideHttpClient(
+      withInterceptors([appInterceptorInterceptor, httpErrorInterceptor])
+    ),
     // provideHttpClient(),
     JwtHelperService,
     MessageService,

@@ -4,6 +4,7 @@ import { map, Observable, startWith } from 'rxjs';
 import { BookingService } from '../../../../../core/services/booking.service';
 import {
   BookingData,
+  DateSchedule,
   DoctorBooking,
   Specialty,
 } from '../../../../../core/models/booking.model';
@@ -35,61 +36,28 @@ export class BookingAppointmentIndexComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
     this.getData();
+    this.schedules = [this.generateSchedule(0), this.generateSchedule(7)];
+  }
 
-    this.schedules = [
-      [
-        {
-          dayWeek: 'Sun',
-          date: '2/11'
-        },
-        {
-          dayWeek: 'Mon',
-          date: '3/11'
-        },
-        {
-          dayWeek: 'Tue',
-          date: '4/11'
-        },
-        {
-          dayWeek: 'Wed',
-          date: '5/11'
-        },
-        {
-          dayWeek: 'Thu',
-          date: '6/11'
-        },
-        {
-          dayWeek: 'Fri',
-          date: '7/11'
-        },
-      ],
-      [
-        {
-          dayWeek: 'Sat',
-          date: '8/11'
-        },
-        {
-          dayWeek: 'Sun',
-          date: '9/11'
-        },
-        {
-          dayWeek: 'Mon',
-          date: '10/11'
-        },
-        {
-          dayWeek: 'Tue',
-          date: '11/11'
-        },
-        {
-          dayWeek: 'Wed',
-          date: '12/11'
-        },
-        {
-          dayWeek: 'Fri',
-          date: '13/11'
-        },
-      ]
-    ]
+  getDoctorAppointmentSchedule() {}
+
+  generateSchedule(dateStart: number): DateSchedule[] {
+    dateStart += 3;
+    const schedule = [];
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDay() + dateStart);
+
+    while (schedule.length < 6) {
+      const dayWeek = currentDate.toLocaleDateString('en-US', { weekday: 'short' });
+
+      // Skip Sunday
+      if (dayWeek !== 'Sun') {
+        const date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}`;
+        schedule.push({ dayWeek, date });
+      }
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return schedule;
   }
 
   getData() {
@@ -140,21 +108,6 @@ export class BookingAppointmentIndexComponent implements OnInit {
     }
   }
 
-  checkValidInformationForm() {
-    // if (
-    //   (this.formBooking.controls['specialty'].invalid || this.formBooking.controls['specialty'].getRawValue() == '') ||
-    //   (this.formBooking.controls['doctor'].invalid || this.formBooking.controls['doctor'].getRawValue() == '') ||
-    //   (this.formBooking.controls['firstName'].invalid || this.formBooking.controls['firstName'].getRawValue() == '') ||
-    //   (this.formBooking.controls['lastName'].invalid || this.formBooking.controls['lastName'].getRawValue() == '') ||
-    //   (this.formBooking.controls['email'].invalid || this.formBooking.controls['email'].getRawValue() == '') ||
-    //   (this.formBooking.controls['phone'].invalid || this.formBooking.controls['phone'].getRawValue() == '') ||
-    //   (this.formBooking.controls['reason'].invalid || this.formBooking.controls['reason'].getRawValue() == '')
-    // ) {
-    //   return false;
-    // }
-    return true;
-  }
-
   createForm() {
     this.formBooking = this.fb.group({
       specialty: ['', [RxwebValidators.required()]],
@@ -169,7 +122,7 @@ export class BookingAppointmentIndexComponent implements OnInit {
     this.formBookingDate = this.fb.group({
       bookingDate: ['', [RxwebValidators.required()]],
       bookingHour: ['', [RxwebValidators.required()]],
-    })
+    });
   }
 
   private _filterSpecialty(value: string): Specialty[] {

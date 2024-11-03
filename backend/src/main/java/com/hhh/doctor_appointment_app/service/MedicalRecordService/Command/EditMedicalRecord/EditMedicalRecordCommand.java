@@ -53,10 +53,10 @@ public class EditMedicalRecordCommand {
             MedicalRecord existingMedicalRecord = medicalRecordRepository.findById(id).
                     orElseThrow(() -> new NotFoundException("Medical Record Not Found"));
 
-            Patient patient = patientRepository.findById(editMedicalRecordRequest.getPatient_id())
+            Patient patient = patientRepository.findById(editMedicalRecordRequest.getPatientId())
                     .orElseThrow(() -> new NotFoundException("Patient Not Found"));
 
-            Doctor doctor = doctorRepository.findById(editMedicalRecordRequest.getDoctor_id())
+            Doctor doctor = doctorRepository.findById(editMedicalRecordRequest.getDoctorId())
                     .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
 
             existingMedicalRecord.setDescription(editMedicalRecordRequest.getDescription());
