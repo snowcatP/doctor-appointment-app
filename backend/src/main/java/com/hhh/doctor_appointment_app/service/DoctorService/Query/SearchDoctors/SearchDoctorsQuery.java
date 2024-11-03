@@ -6,7 +6,6 @@ import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Feedback;
 import com.hhh.doctor_appointment_app.entity.Specialty;
-import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.FeedbackRepository;
 import com.hhh.doctor_appointment_app.repository.SpecialtyRepository;
@@ -36,16 +35,15 @@ public class SearchDoctorsQuery {
     public PageResponse<List<DoctorResponse>> searchDoctorsAndPagination(SearchDoctorRequest searchDoctorRequest, int page, int size) {
         Pageable pageable = PageRequest.of(page-1, size);
 
-        // Lấy danh sách chuyên ngành nếu có
+
         List<String> specialties = null;
-        if (searchDoctorRequest.getSpecialty_Id() != null && !searchDoctorRequest.getSpecialty_Id().isEmpty()) {
-            specialties = specialtyRepository.findAllById(searchDoctorRequest.getSpecialty_Id())
+        if (searchDoctorRequest.getSpecialtyId() != null && !searchDoctorRequest.getSpecialtyId().isEmpty()) {
+            specialties = specialtyRepository.findAllById(searchDoctorRequest.getSpecialtyId())
                     .stream()
                     .map(Specialty::getSpecialtyName)
                     .collect(Collectors.toList());
         }
 
-        // Tìm kiếm với nhiều tham số
         Page<Doctor> doctorPage = doctorRepository.searchDoctors(
                 searchDoctorRequest.getKeyword(),
                 specialties,

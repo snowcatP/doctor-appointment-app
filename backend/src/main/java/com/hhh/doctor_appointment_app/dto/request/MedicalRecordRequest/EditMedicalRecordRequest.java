@@ -9,6 +9,6 @@ public class EditMedicalRecordRequest {
     private String description;
     private String filePath;
 
-    private Long patient_id;
-    private Long doctor_id;
+    private Long patientId;
+    private Long doctorId;
 }

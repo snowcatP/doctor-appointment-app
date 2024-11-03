@@ -14,7 +14,7 @@ public class CreateFeedbackByPatientRequest {
 
     private double rating;
 
-    private Long doctor_Id;
+    private Long doctorId;
 
-    private Long patient_Id;
+    private Long patientId;
 }

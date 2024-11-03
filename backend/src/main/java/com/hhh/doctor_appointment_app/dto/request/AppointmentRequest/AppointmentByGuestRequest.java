@@ -30,6 +30,7 @@ public class AppointmentByGuestRequest {
 
     private Date dateBooking;
 
-    private Long doctor_ID;
+    private String bookingHour;
 
+    private Long doctorId;
 }

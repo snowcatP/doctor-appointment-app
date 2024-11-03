@@ -10,12 +10,10 @@ import com.hhh.doctor_appointment_app.enums.AppointmentStatus;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
-import com.hhh.doctor_appointment_app.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -33,7 +31,7 @@ public class CreateAppointmentByGuestCommand {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
 
-            Doctor doctor = doctorRepository.findById(appointmentByGuestRequest.getDoctor_ID())
+            Doctor doctor = doctorRepository.findById(appointmentByGuestRequest.getDoctorId())
                     .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
 
             // Convert the dateBooking from Date to LocalDateTime
@@ -59,6 +57,7 @@ public class CreateAppointmentByGuestCommand {
                     .email(appointmentByGuestRequest.getEmail())
                     .dateOfBirth(appointmentByGuestRequest.getDateOfBirth())
                     .dateBooking(appointmentByGuestRequest.getDateBooking())
+                    .bookingHour(appointmentByGuestRequest.getBookingHour())
                     .reason(appointmentByGuestRequest.getReason())
                     .doctor(doctor)
                     .appointmentStatus(AppointmentStatus.PENDING)

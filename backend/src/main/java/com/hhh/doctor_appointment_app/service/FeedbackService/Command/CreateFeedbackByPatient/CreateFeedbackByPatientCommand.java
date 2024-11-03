@@ -43,10 +43,10 @@ public class CreateFeedbackByPatientCommand
     public ApiResponse<Object> createFeedbackByPatient(CreateFeedbackByPatientRequest createFeedbackByPatientRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
-            Patient patient = patientRepository.findById(createFeedbackByPatientRequest.getPatient_Id())
+            Patient patient = patientRepository.findById(createFeedbackByPatientRequest.getPatientId())
                     .orElseThrow(() -> new NotFoundException("Not found patient"));
 
-            Doctor doctor = doctorRepository.findById(createFeedbackByPatientRequest.getDoctor_Id())
+            Doctor doctor = doctorRepository.findById(createFeedbackByPatientRequest.getDoctorId())
                     .orElseThrow(() -> new NotFoundException("Not found doctor"));
 
             Feedback newFeedback = new Feedback();
