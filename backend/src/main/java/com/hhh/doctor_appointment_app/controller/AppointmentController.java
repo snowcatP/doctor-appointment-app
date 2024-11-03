@@ -4,6 +4,7 @@ import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.Appointment
 import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.AppointmentByPatientRequest;
 import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.RescheduleWithDateRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
+import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentBookedResponse;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Command.CancelAppointment.CancelAppointmentCommand;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Command.ChangeStatusAppointment.ChangeStatusAppointmentCommand;
@@ -13,6 +14,7 @@ import com.hhh.doctor_appointment_app.service.AppointmentService.Command.Reshedu
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetAppointmentWithPage.GetAppointmentWithPageQuery;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetDetailAppointment.GetDetailAppointmentByPatientQuery;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentByDoctorId.GetListAppointmentByDoctorIdQuery;
+import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentsForBooking.GetListAppointmentsForBookingQuery;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -51,6 +54,9 @@ public class AppointmentController {
     @Autowired
     private GetListAppointmentByDoctorIdQuery getListAppointmentByDoctorIdQuery;
 
+    @Autowired
+    private GetListAppointmentsForBookingQuery getListAppointmentsForBookingQuery;
+
     @GetMapping("/list")
     public ResponseEntity<?> getAppointments(@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "10") int size){
@@ -64,8 +70,10 @@ public class AppointmentController {
         }
     }
 
-    @PostMapping("/patient/create-appoinment")
-    public ResponseEntity<?> createAppointmentByPatient(@Valid @RequestBody AppointmentByPatientRequest appointmentByPatientRequest, BindingResult bindingResult){
+    @PostMapping("/patient/create-appointment")
+    public ResponseEntity<?> createAppointmentByPatient(
+            @Valid @RequestBody AppointmentByPatientRequest appointmentByPatientRequest,
+            BindingResult bindingResult){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -85,7 +93,7 @@ public class AppointmentController {
         }
     }
 
-    @PostMapping("/guest/create-appoinment")
+    @PostMapping("/guest/create-appointment")
     public ResponseEntity<?> createAppointmentByGuest(@Valid @RequestBody AppointmentByGuestRequest appointmentByGuestRequest, BindingResult bindingResult){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
@@ -181,4 +189,12 @@ public class AppointmentController {
         }
     }
 
+    @GetMapping("/get-appointments-for-booking/{doctorId}")
+    public ResponseEntity<List<AppointmentBookedResponse>> getAppointmentsForBooking(@PathVariable Long doctorId) {
+        try {
+            return new ResponseEntity<>(getListAppointmentsForBookingQuery.getListAppointmentsForBooking(doctorId), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

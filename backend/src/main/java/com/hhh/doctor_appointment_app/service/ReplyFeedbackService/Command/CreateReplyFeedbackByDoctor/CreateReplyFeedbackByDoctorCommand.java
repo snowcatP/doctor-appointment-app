@@ -4,7 +4,6 @@ import com.hhh.doctor_appointment_app.dto.mapper.DoctorMapper;
 import com.hhh.doctor_appointment_app.dto.mapper.FeedbackMapper;
 import com.hhh.doctor_appointment_app.dto.mapper.PatientMapper;
 import com.hhh.doctor_appointment_app.dto.mapper.ReplyFeedbackMapper;
-import com.hhh.doctor_appointment_app.dto.request.FeedbackRequest.CreateFeedbackByPatientRequest;
 import com.hhh.doctor_appointment_app.dto.request.ReplyFeedbackRequest.ReplyFeedbackByDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
@@ -58,10 +57,10 @@ public class CreateReplyFeedbackByDoctorCommand {
             Feedback feedback = feedbackRepository.findById(replyFeedbackByDoctorRequest.getReplyCommentID())
                     .orElseThrow(() -> new NotFoundException("Not found Feedback"));
 
-            Patient patient = patientRepository.findById(replyFeedbackByDoctorRequest.getPatient_Id())
+            Patient patient = patientRepository.findById(replyFeedbackByDoctorRequest.getPatientId())
                     .orElseThrow(() -> new NotFoundException("Not found patient"));
 
-            Doctor doctor = doctorRepository.findById(replyFeedbackByDoctorRequest.getDoctor_Id())
+            Doctor doctor = doctorRepository.findById(replyFeedbackByDoctorRequest.getDoctorId())
                     .orElseThrow(() -> new NotFoundException("Not found doctor"));
 
             ReplyFeedback replyFeedback = new ReplyFeedback();

@@ -1,7 +1,5 @@
 package com.hhh.doctor_appointment_app.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.AddDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.request.MedicalRecordRequest.AddMedicalRecordRequest;
 import com.hhh.doctor_appointment_app.dto.request.MedicalRecordRequest.EditMedicalRecordRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
@@ -21,7 +19,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
