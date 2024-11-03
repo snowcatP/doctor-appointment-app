@@ -49,6 +49,9 @@ public class SecurityConfig {
     @Value("${origins.host}")
     private String originHost;
 
+    @Value("${origins.admin}")
+    private String originAdmin;
+
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
 
@@ -89,7 +92,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(originHost)); // Replace with the actual origin of your Angular app
+        configuration.setAllowedOrigins(Arrays.asList(originHost, originAdmin)); // Replace with the actual origin of your Angular app
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
