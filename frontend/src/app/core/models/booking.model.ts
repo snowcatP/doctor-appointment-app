@@ -1,35 +1,104 @@
 export class DoctorBooking {
+  id: number;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  schedule: string;
+  avatarFilePath: string;
+  specialty: Specialty;
+  constructor() {}
+}
+
+export class AppointmentSlot {
+  dayWeek: string;
+  date: string;
+  timeSlotsMorning: TimeSlot[];
+  timeSlotsAfternoon: TimeSlot[];
+  constructor(dayWeek: string, date: string, timeSlotsMorning: TimeSlot[], timeSlotsAfternoon: TimeSlot[]) {
+    this.dayWeek = dayWeek;
+    this.date = date;
+    this.timeSlotsMorning = timeSlotsMorning;
+    this.timeSlotsAfternoon = timeSlotsAfternoon;
+  }
+}
+
+export class AppointmentsBooked {
     id: number;
-    firstName: string;
-    lastName: string;
-    fullName: string;
-    schedule: string;
-    avatarFilePath: string;
-    specialty: Specialty;
+    dateBooking: Date;
+    bookingHour: string;
     constructor() {}
 }
 
 export class Specialty {
-    id: number;
-    specialtyName: string;
-    constructor() {}
+  id: number;
+  specialtyName: string;
+  constructor() {}
 }
 
-export class BookingData {
-    constructor() {}
-    specialty: string;
-    doctor: string;
-    patientfirstName: string;
-    patientlastName: string;
-    patientEmail: string;
-    patientPhone: string;
-    reason: string;
-    bookingDate: Date;
-    bookingHour: string;
+interface IBookingDataGuest {
+  doctorId: number;
+  doctorName: string
+  fullName: string;
+  phone: string;
+  email: string;
+  reason: string;
+  dateBooking: Date;
+  bookingHour: string;
 }
 
-export class DateSchedule {
-    constructor() {}
-    dayWeek: string;
-    date: string;
+interface IBookingDataPatient {
+  doctorId: number;
+  doctorName: string
+  patientId: number;
+  reason: string;
+  dateBooking: Date;
+  bookingHour: string;
+}
+export class BookingDataPatient {
+  constructor(bookingData?: IBookingDataPatient) {
+    this.doctorId = bookingData?.doctorId;
+    this.doctorName = bookingData?.doctorName;
+    this.patientId = bookingData?.patientId;
+    this.reason = bookingData?.reason;
+    this.dateBooking = bookingData?.dateBooking;
+    this.bookingHour = bookingData?.bookingHour;
+  }
+  doctorId: number;
+  doctorName: string
+  patientId: number;
+  reason: string;
+  dateBooking: Date;
+  bookingHour: string;
+}
+
+export class BookingDataGuest {
+  constructor(bookingData?: IBookingDataGuest) {
+    this.doctorId = bookingData?.doctorId;
+    this.doctorName = bookingData?.doctorName;
+    this.reason = bookingData?.reason;
+    this.fullName = bookingData?.fullName;
+    this.email = bookingData?.email;
+    this.phone = bookingData?.phone;
+    this.dateBooking = bookingData?.dateBooking;
+    this.bookingHour = bookingData?.bookingHour;
+  }
+  doctorId: number;
+  doctorName: string
+  reason: string;
+  fullName: string;
+  phone: string;
+  email: string;
+  dateBooking: Date;
+  bookingHour: string;
+}
+
+export class TimeSlot {
+  time: string;
+  date: Date;
+  isBooked: boolean;
+  constructor(time: string, date: Date) {
+    this.time = time;
+    this.date = date;
+    this.isBooked = false;
+  }
 }

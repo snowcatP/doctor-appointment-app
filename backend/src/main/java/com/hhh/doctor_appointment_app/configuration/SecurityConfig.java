@@ -34,6 +34,7 @@ public class SecurityConfig {
             "api/auth/reset-password",
             "api/auth/refreshToken",
             "api/auth/register/user",
+            "api/appointment/guest/create-appointment",
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {

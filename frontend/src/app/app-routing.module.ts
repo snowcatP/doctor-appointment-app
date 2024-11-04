@@ -45,6 +45,11 @@ const routes: Routes = [
     // }
   },
   {
+    path: 'error404',
+    component: Page404Component,
+    title: 'Page 404 - Not Found',
+  },
+  {
     path: '**',
     component: Page404Component,
     title: 'Page 404 - Not Found',
