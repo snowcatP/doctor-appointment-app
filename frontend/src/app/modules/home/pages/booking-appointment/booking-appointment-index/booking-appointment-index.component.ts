@@ -1,15 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { map, Observable, startWith } from 'rxjs';
-import { BookingService } from '../../../../../core/services/booking.service';
 import {
-  BookingData,
-  DateSchedule,
+  AppointmentsBooked,
+  AppointmentSlot,
+  BookingDataGuest,
+  BookingDataPatient,
   DoctorBooking,
   Specialty,
+  TimeSlot,
 } from '../../../../../core/models/booking.model';
-import { SpecialtyService } from '../../../../../core/services/specialty.service';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
+import { SpecialtyService } from '../../../../../core/services/specialty.service';
+import { AppointmentService } from '../../../../../core/services/appointment.service';
+import { DoctorService } from '../../../../../core/services/doctor.service';
+import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-booking-appointment-index',
@@ -17,6 +23,7 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
   styleUrl: './booking-appointment-index.component.css',
 })
 export class BookingAppointmentIndexComponent implements OnInit {
+  isLoading: boolean = false;
   formBooking: FormGroup;
   formBookingDate: FormGroup;
   filteredSpecialties: Observable<Specialty[]>;
@@ -24,44 +31,182 @@ export class BookingAppointmentIndexComponent implements OnInit {
   listDoctors: DoctorBooking[] = [];
   listSpecialties: Specialty[] = [];
   doctorSelected: DoctorBooking;
-  bookingData: BookingData = new BookingData();
-  schedules: any[];
+  bookingDataGuest: BookingDataGuest = new BookingDataGuest();
   dateToday: Date = new Date();
+  schedules: any[] = [];
+  daySlots: any[] = new Array(6);
+  appointmentsBooked: AppointmentsBooked[] = [];
+  timeSlotSelected: TimeSlot;
+  timeSchedulesMorning: any[] = [
+    { time: '09:00 - 09:30' },
+    { time: '10:00 - 10:30' },
+    { time: '11:00 - 11:30' },
+  ];
+  timeSchedulesAfternoon: any[] = [
+    { time: '14:00 - 14:30' },
+    { time: '15:00 - 15:30' },
+    { time: '16:00 - 16:30' },
+  ];
+
   constructor(
     private fb: FormBuilder,
-    private bookingService: BookingService,
-    private specialtyService: SpecialtyService
+    private doctorService: DoctorService,
+    private specialtyService: SpecialtyService,
+    private appointmentService: AppointmentService,
+    private messageService: MessageService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.createForm();
+    this.generateAppointmentSlots();
     this.getData();
+  }
+
+  selectBookingDate(slot: TimeSlot) {
+    this.timeSlotSelected = slot;
+    this.formBookingDate.controls['bookingDate'].setValue(
+      this.timeSlotSelected.date
+    );
+    this.formBookingDate.controls['bookingHour'].setValue(
+      this.timeSlotSelected.time
+    );
+  }
+
+  getAppointmentsBooked() {
+    if (this.doctorSelected) {
+      this.isLoading = true;
+      this.appointmentService
+        .getAppointmentsForBooking(this.doctorSelected.id)
+        .subscribe({
+          next: (res) => {
+            this.appointmentsBooked = res;
+            this.handleAppointmentsBooked();
+            this.isLoading = false;
+          },
+          error: (err) => {
+            console.log(err);
+            this.isLoading = false;
+          },
+        });
+    }
+  }
+
+  submitAppointment() {
+    const bookingAppointmentData: BookingDataGuest = {
+      doctorId: this.doctorSelected.id,
+      doctorName: this.doctorSelected.fullName,
+      fullName:
+        this.formBooking.get('firstName').value +
+        this.formBooking.get('lastName').value,
+      phone: this.formBooking.get('phone').value,
+      email: this.formBooking.get('email').value,
+      reason: this.formBooking.get('reason').value,
+      dateBooking: this.timeSlotSelected.date,
+      bookingHour: this.timeSlotSelected.time,
+    };
+    this.appointmentService
+      .createAppointmentByGuest(bookingAppointmentData)
+      .subscribe({
+        next: (res) => {
+          if (res.statusCode == 200) {
+            this.setAppointmentForSuccess(res?.data);
+            this.showToast(true, 'Booked appointment successfully!');
+            setTimeout(() => {
+              this.router.navigate([
+                '/booking/success',
+                { bookingSuccess: true },
+              ]);
+            }, 2000);
+          }
+        },
+        error: (err) => {
+          this.showToast(false, 'Booked appointment unsuccessfully!');
+          console.log(err);
+        },
+      });
+  }
+
+  setAppointmentForSuccess(
+    guest?: BookingDataGuest,
+    patient?: BookingDataPatient
+  ) {
+    if (guest) {
+      this.appointmentService.setAppointmentBookedGuest(guest);
+    }
+    if (patient) {
+      this.appointmentService.setAppointmentBookedPatient(patient);
+    }
+  }
+
+  handleAppointmentsBooked() {
+    this.schedules.forEach((week: AppointmentSlot[]) => {
+      week.forEach((day: AppointmentSlot) => {
+        this.appointmentsBooked.forEach((appBooked) => {
+          day.timeSlotsMorning.forEach((timeSlot: TimeSlot) => {
+            const tsDate = this.formatDate(timeSlot.date);
+            const appDate = this.formatDate(appBooked.dateBooking);
+            if (tsDate == appDate && timeSlot.time == appBooked.bookingHour) {
+              timeSlot.isBooked = true;
+            }
+          });
+          day.timeSlotsAfternoon.forEach((timeSlot: TimeSlot) => {
+            const tsDate = this.formatDate(timeSlot.date);
+            const appDate = this.formatDate(appBooked.dateBooking);
+            if (tsDate == appDate && timeSlot.time == appBooked.bookingHour) {
+              timeSlot.isBooked = true;
+            }
+          });
+        });
+      });
+    });
+  }
+
+  generateAppointmentSlots() {
     this.schedules = [this.generateSchedule(0), this.generateSchedule(7)];
   }
 
-  getDoctorAppointmentSchedule() {}
+  generateSchedule(dateStart: number): AppointmentSlot[] {
+    const schedule: AppointmentSlot[] = [];
+    let currentDate: Date = new Date(
+      Date.now() + dateStart * 24 * 60 * 60 * 1000
+    );
 
-  generateSchedule(dateStart: number): DateSchedule[] {
-    dateStart += 3;
-    const schedule = [];
-    const currentDate = new Date();
-    currentDate.setDate(currentDate.getDay() + dateStart);
-
+    let dayLoop = dateStart;
     while (schedule.length < 6) {
-      const dayWeek = currentDate.toLocaleDateString('en-US', { weekday: 'short' });
+      const dayWeek = this.mapDayWeek(
+        currentDate.toLocaleDateString('vi-VN', {
+          weekday: 'short',
+        })
+      );
 
       // Skip Sunday
       if (dayWeek !== 'Sun') {
         const date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}`;
-        schedule.push({ dayWeek, date });
+        const slotsMorning: TimeSlot[] = [];
+        const slotsAfternoon: TimeSlot[] = [];
+
+        // gen timeslots for morning
+        this.timeSchedulesMorning.forEach((time) => {
+          slotsMorning.push(new TimeSlot(time.time, currentDate));
+        });
+
+        // gen timeslots for afternoon
+        this.timeSchedulesAfternoon.forEach((time) => {
+          slotsAfternoon.push(new TimeSlot(time.time, currentDate));
+        });
+        schedule.push(
+          new AppointmentSlot(dayWeek, date, slotsMorning, slotsAfternoon)
+        );
       }
-      currentDate.setDate(currentDate.getDate() + 1);
+      dayLoop++;
+      currentDate = new Date(Date.now() + dayLoop * 24 * 60 * 60 * 1000);
     }
     return schedule;
   }
 
   getData() {
-    this.bookingService.getDoctors().subscribe({
+    this.doctorService.getDoctorsForBooking().subscribe({
       next: (res) => {
         this.listDoctors = res;
       },
@@ -88,6 +233,7 @@ export class BookingAppointmentIndexComponent implements OnInit {
         console.log(err);
       },
     });
+    this.getAppointmentsBooked();
   }
 
   specialtyChange() {
@@ -112,10 +258,30 @@ export class BookingAppointmentIndexComponent implements OnInit {
     this.formBooking = this.fb.group({
       specialty: ['', [RxwebValidators.required()]],
       doctor: ['', [RxwebValidators.required()]],
-      firstName: ['', [RxwebValidators.required(), RxwebValidators.alpha()]],
-      lastName: ['', [RxwebValidators.required(), RxwebValidators.alpha()]],
+      firstName: [
+        '',
+        [
+          RxwebValidators.required(),
+          RxwebValidators.pattern({
+            expression: {
+              name: /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{1,}$/,
+            },
+          }),
+        ],
+      ],
+      lastName: [
+        '',
+        [
+          RxwebValidators.required(),
+          RxwebValidators.pattern({
+            expression: {
+              name: /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{1,}$/,
+            },
+          }),
+        ],
+      ],
       email: ['', [RxwebValidators.required(), RxwebValidators.email()]],
-      phone: ['', [RxwebValidators.required(), RxwebValidators.numeric()]],
+      phone: ['', [RxwebValidators.required(), RxwebValidators.digit()]],
       reason: ['', [RxwebValidators.required()]],
     });
 
@@ -137,5 +303,42 @@ export class BookingAppointmentIndexComponent implements OnInit {
     return this.listDoctors.filter((doctor) =>
       doctor.fullName.toLowerCase().includes(filterValue)
     );
+  }
+
+  formatDate(date: Date): string {
+    return new Date(date).toISOString().split('T')[0];
+  }
+
+  mapDayWeek(dayWeek: string) {
+    const dayMap = new Map<string, string>([
+      ['CN', 'Sun'],
+      ['Th 2', 'Mon'],
+      ['Th 3', 'Tue'],
+      ['Th 4', 'Wed'],
+      ['Th 5', 'Thu'],
+      ['Th 6', 'Fri'],
+      ['Th 7', 'Sat'],
+    ]);
+    return dayMap.get(dayWeek) || dayWeek;
+  }
+
+  testToast() {
+    this.showToast(true, "yes");
+  }
+
+  showToast(status: boolean, message: string) {
+    if (status) {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: message
+      });
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: message
+      });
+    }
   }
 }

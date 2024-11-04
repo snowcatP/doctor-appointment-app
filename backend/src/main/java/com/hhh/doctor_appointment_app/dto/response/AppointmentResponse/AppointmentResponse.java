@@ -13,15 +13,11 @@ import java.util.Date;
 public class AppointmentResponse {
     private Long id;
 
-    private String fullname;
-
-    private boolean gender;
+    private String fullName;
 
     private String phone;
 
     private String email;
-
-    private Date dateOfBirth;
 
     private String reason;
 
@@ -32,6 +28,5 @@ public class AppointmentResponse {
     @Enumerated(EnumType.STRING)
     private AppointmentStatus appointmentStatus;
 
-    //tra ve thong tin cua bac si
     private User doctor;
 }

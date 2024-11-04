@@ -19,6 +19,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CarouselModule } from 'primeng/carousel';
 import { CalendarModule } from 'primeng/calendar';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,8 @@ import { CalendarModule } from 'primeng/calendar';
     MatTabsModule,
     CarouselModule,
     CalendarModule,
+    ProgressSpinnerModule,
+    ToastModule
   ],
 })
 export class BookingAppointmentModule {}

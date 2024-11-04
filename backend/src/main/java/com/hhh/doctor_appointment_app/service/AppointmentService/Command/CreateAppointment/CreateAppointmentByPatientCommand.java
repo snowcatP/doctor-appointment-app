@@ -60,11 +60,9 @@ public class CreateAppointmentByPatientCommand {
             }
 
             Appointment appointment = Appointment.builder()
-                    .fullname(appointmentByPatientRequest.getFullname())
-                    .gender(appointmentByPatientRequest.isGender())
+                    .fullName(appointmentByPatientRequest.getFullName())
                     .phone(appointmentByPatientRequest.getPhone())
                     .email(appointmentByPatientRequest.getEmail())
-                    .dateOfBirth(appointmentByPatientRequest.getDateOfBirth())
                     .dateBooking(appointmentByPatientRequest.getDateBooking())
                     .bookingHour(appointmentByPatientRequest.getBookingHour())
                     .reason(appointmentByPatientRequest.getReason())
