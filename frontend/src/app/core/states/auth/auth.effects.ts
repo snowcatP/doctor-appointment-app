@@ -36,9 +36,9 @@ export class AuthEffect {
             summary: 'Success',
             detail: 'Login successfully',
           });
-          setTimeout(() => {
-            this.router.navigateByUrl('/');
-          }, 1500);
+          // setTimeout(() => {
+          //   this.router.navigateByUrl('/');
+          // }, 1500);
         })
       ),
     { dispatch: false }

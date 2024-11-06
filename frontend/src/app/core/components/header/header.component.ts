@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NbAccessChecker } from '@nebular/security';
 import { Store } from '@ngrx/store';
 import * as fromAuth from '../../states/auth/auth.reducer';
-import { map, Observable } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { User } from '../../models/authentication.model';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';

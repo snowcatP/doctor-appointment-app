@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PatientService } from '../../../../core/services/patient.service';
-
+import { AuthService } from '../../../../core/services/auth.service';
 @Component({
   selector: 'app-patient-sidebar',
   templateUrl: './patient-sidebar.component.html',
@@ -9,11 +9,19 @@ import { PatientService } from '../../../../core/services/patient.service';
 export class PatientSidebarComponent implements OnInit {
   patientProfile: any = {};
 
-  constructor(private patientService: PatientService) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    this.patientService.getPatientProfile().subscribe(profile => {
-      this.patientProfile = profile;
+    this.authService.getUserData().subscribe(profile => {
+      console.log(profile);
+        this.patientProfile = profile;
+      
+    });
+
+    this.authService.userData$.subscribe(profile => {
+      if (profile) {
+        this.patientProfile = profile;
+      }
     });
   }
 

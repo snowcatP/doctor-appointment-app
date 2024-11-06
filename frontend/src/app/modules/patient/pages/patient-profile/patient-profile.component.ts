@@ -3,7 +3,8 @@ import { PatientService } from '../../../../core/services/patient.service';
 import { UpdateProfileRequest } from '../../../../core/models/patient.model';
 import { MessageService } from 'primeng/api';
 import { ApiResponse } from '../../../../core/models/patient.model';
-
+import { AuthService } from '../../../../core/services/auth.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-patient-profile',
   templateUrl: './patient-profile.component.html',
@@ -15,11 +16,14 @@ export class PatientProfileComponent implements OnInit {
 
   constructor(
     private patientService: PatientService,
-    private messageService: MessageService    
+    private messageService: MessageService,
+    private authService: AuthService,
+    private route: Router,
   ) {}
 
   ngOnInit() {
-    this.patientService.getPatientProfile().subscribe(profile => {
+
+    this.authService.getUserData().subscribe(profile => {
       this.originalProfile = { ...profile }; // Store original profile
       profile.dateOfBirth = new Date(profile.dateOfBirth);
       this.updateProfile = { ...profile }; // Create a copy for editing
@@ -40,8 +44,11 @@ export class PatientProfileComponent implements OnInit {
             summary: 'Success',
             detail: response.message || 'Profile updated successfully',
           });
-          // Update the original profile after successful update
-          this.originalProfile = { ...this.updateProfile };
+          //Send update user data event
+          this.authService.setUserData(this.updateProfile);
+          setTimeout(() => {
+                this.route.navigateByUrl('/patient/dashboard');
+              }, 1000);
         } else {
           this.messageService.add({
             key: 'messageToast',
