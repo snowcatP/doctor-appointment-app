@@ -20,8 +20,9 @@ public class GetListAppointmentsForBookingQuery {
     private AppointmentMapper appointmentMapper;
 
     public List<AppointmentBookedResponse> getListAppointmentsForBooking(Long doctorId) {
-        Date currentDate = new Date();
+        LocalDateTime currentDateTime = LocalDateTime.now().plusDays(-1);
         LocalDateTime endDateTime = LocalDateTime.now().plusDays(14);
+        Date currentDate = Date.from(currentDateTime.atZone(ZoneId.systemDefault()).toInstant());
         Date endDate = Date.from(endDateTime.atZone(ZoneId.systemDefault()).toInstant());
 
         List<Appointment> result = appointmentRepository.getAppointmentsForBooking(doctorId, currentDate, endDate);

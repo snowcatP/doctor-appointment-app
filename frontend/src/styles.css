@@ -3500,12 +3500,13 @@ html.menu-opened body {
     display: block;
     font-size: 14px;
     margin-bottom: 10px;
-    padding: 5px 5px;
+    padding: 10px 10px;
     text-align: center;
 	position: relative;
 }
 .time-slot li .timing:hover {
     background-color: #e9e9e9;
+	cursor: pointer;
 }
 .time-slot li .timing:last-child {
 	margin-bottom: 0;

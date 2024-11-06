@@ -1,32 +1,52 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NbAccessChecker } from '@nebular/security';
-import { MenuItem } from 'primeng/api';
-import { PatientService } from '../../services/patient.service';
+import { Store } from '@ngrx/store';
+import * as fromAuth from '../../states/auth/auth.reducer';
+import { map, Observable } from 'rxjs';
+import { User } from '../../models/authentication.model';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import * as AuthActions from '../../states/auth/auth.actions';
+import { MessageService } from 'primeng/api';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
 export class HeaderComponent implements OnInit {
-  isLoggedIn: boolean = false;
-  patientProfile: any;
+  token$: Observable<string>;
+  user$: Observable<User>;
 
-  constructor(private authService: AuthService,private patientService: PatientService) {}
+  constructor(
+    public accessChecker: NbAccessChecker,
+    private store: Store<fromAuth.State>,
+    private router: Router,
+    private authService: AuthService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
-    this.authService.currentLoginStatus.subscribe((status) => {
-      this.isLoggedIn = status;
-    });
+    this.token$ = this.store.select(fromAuth.selectToken);
+    this.user$ = this.store.select(fromAuth.selectUser);
+  }
 
-    // Lấy thông tin bệnh nhân từ API và thiết lập
-    this.patientService.fetchMyInfo().subscribe(profile => {
-      this.patientService.setPatientProfile(profile);
-    });
-
-    // Đăng ký để nhận patientProfile
-    this.patientService.getPatientProfile().subscribe(profile => {
-      this.patientProfile = profile;
+  logout() {
+    this.authService.logout().subscribe({
+      next: (res) => {
+        console.log(res);
+        this.store.dispatch(
+          AuthActions.logout({ logoutSuccess: 'Logout Success' })
+        );
+      },
+      error: (err) => {
+        this.messageService.add({
+          key: 'messageToast',
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Fail to logout',
+        });
+      },
     });
   }
 }

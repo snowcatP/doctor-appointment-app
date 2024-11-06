@@ -4,6 +4,7 @@ import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.Introspe
 import com.hhh.doctor_appointment_app.exception.UnauthenticatedException;
 import com.hhh.doctor_appointment_app.service.AuthenticationService.Query.Introspect.IntrospectQuery;
 import com.nimbusds.jose.JOSEException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;

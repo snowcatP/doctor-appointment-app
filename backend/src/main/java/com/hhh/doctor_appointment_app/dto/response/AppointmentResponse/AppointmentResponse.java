@@ -15,9 +15,7 @@ import java.util.Date;
 public class AppointmentResponse {
     private Long id;
 
-    private String fullname;
-
-    private boolean gender;
+    private String fullName;
 
     private String phone;
 

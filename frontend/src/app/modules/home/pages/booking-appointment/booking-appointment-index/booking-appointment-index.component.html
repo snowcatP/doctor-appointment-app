@@ -32,7 +32,7 @@
                       <h5>
                         <a [routerLink]="">{{
                           doctorSelected != undefined
-                            ? doctorSelected.fullName
+                            ? "Dr. " + doctorSelected.fullName
                             : "Unknow Doctor"
                         }}</a>
                       </h5>
@@ -160,7 +160,7 @@
                           <mat-error
                             *ngIf="
                               formBooking.controls['firstName'].getError(
-                                'alpha'
+                                'name'
                               )
                             "
                           >
@@ -190,7 +190,7 @@
                           </mat-error>
                           <mat-error
                             *ngIf="
-                              formBooking.controls['lastName'].getError('alpha')
+                              formBooking.controls['lastName'].getError('name')
                             "
                           >
                             Last name is invalid.
@@ -219,7 +219,7 @@
                           </mat-error>
                           <mat-error
                             *ngIf="
-                              formBooking.controls['phone'].getError('numeric')
+                              formBooking.controls['phone'].getError('digit')
                             "
                           >
                             Phone must contains numbers.
@@ -287,206 +287,119 @@
                   extended
                   matStepperNext
                   [disabled]="formBooking.invalid"
+                  (click)="getAppointmentsBooked()"
                 >
-                  <mat-icon iconPositionEnd (click)="getDoctorAppointmentSchedule()">chevron_right</mat-icon>
+                  <mat-icon iconPositionEnd>chevron_right</mat-icon>
                   Next
                 </button>
               </div>
             </mat-step>
           </form>
-          <mat-step label="Choose Booking Date">
-            <div class="card mt-2">
+          <mat-step [stepControl]="formBookingDate">
+            <ng-template matStepLabel><div (click)="getAppointmentsBooked()">Choose Booking Date</div></ng-template>
+            <div class="card d-flex justify-content-center align-items-center" *ngIf="isLoading" style="min-height: 70vh;">
+              <p-progressSpinner
+                styleClass="w-4rem h-4rem" 
+                strokeWidth="8" 
+                fill="var(--surface-ground)" 
+                animationDuration=".5s" />
+            </div>
+            <div class="card mt-2" *ngIf="!isLoading">
               <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
                   <h4 class="card-title col">Booking Date</h4>
-                  <p-calendar 
+                  <p-calendar
                     [(ngModel)]="dateToday"
                     [disabled]="true"
                     class="d-flex flex-row-reverse"
                     dateFormat="dd/mm/yy"
-                    />
+                  />
                 </div>
               </div>
-              <p-carousel [value]="schedules" [numVisible]="1" [numScroll]="1">
-                <ng-template pTemplate="item" let-schedule>
-                  <!-- Schedule Header -->
-                  <div class="schedule-header px-0">
-                    <div class="row">
-                      <div class="col-md-12">
-                        <!-- Day Slot -->
-                        <div class="day-slot">
-                          <ul>
-                            <li *ngFor="let date of schedule">
-                              <span>{{ date.dayWeek }}</span>
-                              <span class="slot-date">{{ date.date }}</span>
-                            </li>
-                          </ul>
+                <p-carousel
+                  [value]="schedules"
+                  [numVisible]="1"
+                  [numScroll]="1"
+                >
+                  <ng-template pTemplate="item" let-schedule>
+                    <!-- Schedule Header -->
+                    <div class="schedule-header px-0">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <!-- Day Slot -->
+                          <div class="day-slot">
+                            <ul>
+                              <li *ngFor="let day of schedule">
+                                <span>{{ day.dayWeek }}</span>
+                                <span class="slot-date">{{ day.date }}</span>
+                              </li>
+                            </ul>
+                          </div>
+                          <!-- /Day Slot -->
                         </div>
-                        <!-- /Day Slot -->
                       </div>
                     </div>
-                  </div>
-                  <!-- /Schedule Header -->
-                  <!-- Schedule Content -->
-                  <div class="schedule-cont px-0">
-                    <div class="row">
-                      <div class="col-md-12">
-                        <!-- Time Slot -->
-                        <h6>Morning</h6>
-                        <div class="time-slot">
-                          <ul class="clearfix">
-                            <li>
-                              <a class="timing" href="#">
-                                <span>9:00 - 9:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>10:00 - 10:30</span>
-                              </a>
-                              <a class="timing booked" href="#">
-                                <span>11:00 - 11:30</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>9:00 - 9:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>10:00 - 10:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>11:00 - 11:30</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>9:00 - 9:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>10:00 - 10:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>11:00 - 11:30</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>9:00 - 9:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>10:00 - 10:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>11:00 - 11:30</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing selected" href="#">
-                                <span>9:00 - 9:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>10:00 - 10:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>11:00 - 11:30</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing selected" href="#">
-                                <span>9:00 - 9:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>10:00 - 10:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>11:00 - 11:30</span>
-                              </a>
-                            </li>
-                          </ul>
+                    <!-- /Schedule Header -->
+                    <!-- Schedule Content -->
+                    <div class="schedule-cont px-0">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <!-- Time Slot -->
+                          <h6>Morning</h6>
+                          <div class="time-slot">
+                            <ul class="clearfix">
+                              <li *ngFor="let day of schedule">
+                                <button
+                                  class="timing"
+                                  *ngFor="let slot of day.timeSlotsMorning"
+                                  [ngClass]="{
+                                    selected: slot === timeSlotSelected,
+                                    booked: slot.isBooked
+                                  }"
+                                  (click)="selectBookingDate(slot)"
+                                  matTooltip="Booked"
+                                  [matTooltipDisabled]="!slot.isBooked"
+                                  [disabled]="slot.isBooked"
+                                >
+                                  <span>{{ slot.time }}</span>
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                          <!-- /Time Slot -->
                         </div>
-                        <!-- /Time Slot -->
-                      </div>
-                      <p-divider />
-                      <div class="col-md-12">
-                        <!-- Time Slot -->
-                        <h6>Afternoon</h6>
-                        <div class="time-slot">
-                          <ul class="clearfix">
-                            <li>
-                              <a class="timing" href="#">
-                                <span>14:00 - 14:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>15:00 - 15:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>16:00 - 15:30</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>14:00 - 14:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>15:00 - 15:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>16:00 - 15:30</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>14:00 - 14:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>15:00 - 15:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>16:00 - 15:30</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>14:00 - 14:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>15:00 - 15:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>16:00 - 15:30</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>14:00 - 14:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>15:00 - 15:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>16:00 - 15:30</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="timing" href="#">
-                                <span>14:00 - 14:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>15:00 - 15:30</span>
-                              </a>
-                              <a class="timing" href="#">
-                                <span>16:00 - 15:30</span>
-                              </a>
-                            </li>
-                          </ul>
+                        <p-divider />
+                        <div class="col-md-12">
+                          <!-- Time Slot -->
+                          <h6>Afternoon</h6>
+                          <div class="time-slot">
+                            <ul class="clearfix">
+                              <li *ngFor="let day of schedule">
+                                <button
+                                  class="timing"
+                                  *ngFor="let slot of day.timeSlotsAfternoon"
+                                  [ngClass]="{
+                                    selected: slot === timeSlotSelected,
+                                    booked: slot.isBooked === true
+                                  }"
+                                  (click)="selectBookingDate(slot)"
+                                  matTooltip="Booked"
+                                  [matTooltipDisabled]="!slot.isBooked"
+                                  [disabled]="slot.isBooked"
+                                >
+                                  <span>{{ slot.time }}</span>
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                          <!-- /Time Slot -->
                         </div>
-                        <!-- /Time Slot -->
                       </div>
                     </div>
-                  </div>
-                  <!-- /Schedule Content -->
-                </ng-template>
-              </p-carousel>
-            </div>
+                    <!-- /Schedule Content -->
+                  </ng-template>
+                </p-carousel>
+              </div>
             <!-- /Schedule Widget -->
             <div class="d-flex justify-content-between mx-2">
               <button mat-raised-button extended matStepperPrevious>
@@ -497,7 +410,7 @@
                 mat-flat-button
                 extended
                 matStepperNext
-                [disabled]="formBookingDate.invalid"
+                [disabled]="formBookingDate.invalid || !timeSlotSelected"
               >
                 <mat-icon iconPositionEnd>chevron_right</mat-icon>
                 Next
@@ -514,7 +427,11 @@
                 <!-- Booking Doctor Info -->
                 <div class="booking-doc-info">
                   <p-image
-                    src="assets/images/doctors/doctor-thumb-02.jpg"
+                    [src]="
+                      doctorSelected != undefined
+                        ? doctorSelected.avatarFilePath
+                        : '/assets/images/user.png'
+                    "
                     alt="Image"
                     width="150"
                     [preview]="true"
@@ -522,7 +439,11 @@
                   />
                   <div class="booking-info">
                     <h4>
-                      <a href="doctor-profile.html">Dr. Darren Elder</a>
+                      <a href="">{{
+                        doctorSelected != undefined
+                          ? "Dr. " + doctorSelected.fullName
+                          : "Unknow Doctor"
+                      }}</a>
                     </h4>
                     <div class="rating">
                       <i class="fas fa-star filled"></i>
@@ -543,23 +464,39 @@
                 <p-divider />
                 <div class="booking-summary">
                   <div class="booking-item-wrap">
-                    <ul class="booking-date">
-                      <li>Date <span>16 Nov 2019</span></li>
-                      <li>Time <span>10:00 AM</span></li>
-                    </ul>
                     <ul class="booking-fee">
-                      <li>Consulting Fee <span>$100</span></li>
-                      <li>Booking Fee <span>$10</span></li>
-                      <li>Video Call <span>$50</span></li>
+                      <li>Specialty<span>{{formBooking.get('specialty').value}}</span></li>
+                      <li>
+                        Doctor Name<span>Dr. {{ doctorSelected?.fullName }}</span>
+                      </li>
+                      <li>
+                        Patient Name<span>{{
+                          formBooking.get("firstName")?.value +
+                            " " +
+                            formBooking.get("lastName")?.value
+                        }}</span>
+                      </li>
+                      <li>
+                        Phone<span>{{
+                          formBooking.get("phone")?.value
+                        }}</span>
+                      </li>
+                      <li>
+                        Email<span>{{
+                          formBooking.get("email")?.value
+                        }}</span>
+                      </li>
                     </ul>
-                    <div class="booking-total">
-                      <ul class="booking-total-list">
-                        <li>
-                          <span>Total</span>
-                          <span class="total-cost">$160</span>
-                        </li>
-                      </ul>
-                    </div>
+                    <ul class="booking-date">
+                      <li>
+                        Date Booking<span>{{
+                          timeSlotSelected?.date | date
+                        }}</span>
+                      </li>
+                      <li>
+                        Time Booking<span>{{ timeSlotSelected?.time }}</span>
+                      </li>
+                    </ul>
                   </div>
                 </div>
                 <!-- /Booking Summary -->
@@ -574,7 +511,7 @@
                 mat-flat-button
                 extended
                 matStepperNext
-                routerLink="/booking/success"
+                (click)="submitAppointment()"
               >
                 <mat-icon iconPositionEnd>check</mat-icon>
                 Done

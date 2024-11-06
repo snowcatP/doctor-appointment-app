@@ -30,18 +30,16 @@ public class GetListAppointmentByDoctorIdQuery {
     @PreAuthorize("hasRole('DOCTOR')")
     public PageResponse<List<AppointmentResponse>> getAppointmentsWithPageByDoctorId(int page, int size, Long id) {
         Pageable pageable = PageRequest.of(page-1, size);
-        Page<Appointment> appointmentPage = appointmentRepository.findByDoctor_Id(id,pageable);
+        Page<Appointment> appointmentPage = appointmentRepository.findByDoctorId(id,pageable);
 
         //Convert entities to responses
         List<AppointmentResponse> appointmentResponses = appointmentPage.getContent().stream()
                 .map(appointment -> {
                     AppointmentResponse response = new AppointmentResponse();
                     response.setId(appointment.getId());
-                    response.setFullname(appointment.getFullname());
-                    response.setGender(appointment.isGender());
+                    response.setFullName(appointment.getFullName());
                     response.setPhone(appointment.getPhone());
                     response.setEmail(appointment.getEmail());
-                    response.setDateOfBirth(appointment.getDateOfBirth());
                     response.setReason(appointment.getReason());
                     response.setDateBooking(appointment.getDateBooking());
                     response.setAppointmentStatus(appointment.getAppointmentStatus());

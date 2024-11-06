@@ -4,10 +4,11 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
 
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { AccountService } from '../../../../core/services/account.service';
 import { LoginRequest } from '../../../../core/models/authentication.model';
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../../../core/states/auth/auth.actions';
 import { AuthService } from '../../../../core/services/auth.service';
-import { PatientService } from '../../../../core/services/patient.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -17,17 +18,14 @@ export class LoginComponent {
   formLogin: FormGroup;
   showPass: boolean = false;
   errorMessage: string = "";
-  isLoggedIn: boolean = false;
-  patientProfile: any; // Variable to store patient profile data
   @ViewChild('email') emailInput: ElementRef;
 
   constructor(
     private fb: FormBuilder,
-    private accountService: AccountService,
+    private authService: AuthService,
     private messageService: MessageService,
     private route: Router,
-    private authService: AuthService,
-    private patientService: PatientService
+    private store: Store
   ) {}
   ngOnInit(): void {
     this.formLogin = this.fb.group({
@@ -44,44 +42,27 @@ export class LoginComponent {
       password: this.formLogin.controls['password'].value
     };
 
-    this.accountService.onLogin(loginRequest).subscribe({
-      next: (res: any) => {
-      localStorage.setItem('token', res.data.token);
-      this.authService.updateLoginStatus(true); // Update login status
-      this.messageService.add({
-        key: 'messageToast',
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Login successfully',
-      });
-      this.fetchPatientProfile();
-      setTimeout(() => {
-        this.route.navigateByUrl('/');
-      }, 1500);
-    },
-    error: () => {
-      this.errorMessage = "Wrong email or password."
-      setTimeout(() => {
-        this.emailInput.nativeElement.focus();
-      }, 0);
-    }
-    });
-  }
+    this.store.dispatch(AuthActions.loginRequest({credential: loginRequest}))
 
-  checkError(control: FormControl) {
-    
-  }
-
-  fetchPatientProfile(): void {
-    this.patientService.fetchMyInfo().subscribe(
-      (response) => {
-        if (response != null) {
-          this.patientService.setPatientProfile(response);
-        }
-      },
-      (error) => {
-        console.error('Error fetching patient profile:', error);
-      }
-    );
+    // this.accountService.onLogin(loginRequest).subscribe({
+    //   next: (res: any) => {
+    //   localStorage.setItem('token', res.data.token);
+    //   this.messageService.add({
+    //     key: 'messageToast',
+    //     severity: 'success',
+    //     summary: 'Success',
+    //     detail: 'Login successfully',
+    //   });
+    //   setTimeout(() => {
+    //     this.route.navigateByUrl('/');
+    //   }, 1500);
+    // },
+    // error: () => {
+    //   this.errorMessage = "Wrong email or password."
+    //   setTimeout(() => {
+    //     this.emailInput.nativeElement.focus();
+    //   }, 0);
+    // }
+    // });
   }
 }

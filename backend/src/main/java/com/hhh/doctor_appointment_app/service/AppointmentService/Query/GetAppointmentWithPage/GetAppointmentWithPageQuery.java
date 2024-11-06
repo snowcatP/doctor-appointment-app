@@ -39,11 +39,9 @@ public class GetAppointmentWithPageQuery {
                 .map(appointment -> {
                     AppointmentResponse response = new AppointmentResponse();
                     response.setId(appointment.getId());
-                    response.setFullname(appointment.getFullname());
-                    response.setGender(appointment.isGender());
+                    response.setFullName(appointment.getFullName());
                     response.setPhone(appointment.getPhone());
                     response.setEmail(appointment.getEmail());
-                    response.setDateOfBirth(appointment.getDateOfBirth());
                     response.setReason(appointment.getReason());
                     response.setDateBooking(appointment.getDateBooking());
                     response.setBookingHour(appointment.getBookingHour());
