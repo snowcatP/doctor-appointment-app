@@ -1,7 +1,8 @@
 package com.hhh.doctor_appointment_app.service.AuthenticationService.Command.RefreshToken;
 
+import com.hhh.doctor_appointment_app.dto.mapper.UserMapper;
 import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.RefreshTokenRequest;
-import com.hhh.doctor_appointment_app.dto.response.AuthenticationResponse;
+import com.hhh.doctor_appointment_app.dto.response.AuthResponse.AuthenticationResponse;
 import com.hhh.doctor_appointment_app.entity.InvalidatedToken;
 import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.exception.UnauthenticatedException;
@@ -52,6 +53,9 @@ public class RefreshTokenCommand {
     @Autowired
     private GenerateTokenCommand generateTokenCommand;
 
+    @Autowired
+    private UserMapper userMapper;
+
     public AuthenticationResponse refreshToken(RefreshTokenRequest request)
             throws ParseException, JOSEException {
         var signJwt = verifyTokenCommand.verifyToken(request.getToken(), true);
@@ -73,6 +77,7 @@ public class RefreshTokenCommand {
         var token = generateTokenCommand.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(token)
+                .user(userMapper.toUserResponse(user))
                 .isAuthenticated(true)
                 .build();
     }

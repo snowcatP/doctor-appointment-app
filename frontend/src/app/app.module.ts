@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import {
   ErrorStateMatcher,
@@ -28,6 +28,10 @@ import { PatientModule } from './modules/patient/patient.module';
 import { BookingAppointmentModule } from './modules/home/pages/booking-appointment/booking-appointment.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { authReducer } from './core/states/auth/auth.reducer';
+import { AuthEffect } from './core/states/auth/auth.effects';
 
 @NgModule({
   declarations: [
@@ -50,13 +54,15 @@ import { MatIconModule } from '@angular/material/icon';
     BookingAppointmentModule,
     MatMenuModule,
     MatIconModule,
+    StoreModule.forRoot({ auth: authReducer }, {}),
+    EffectsModule.forRoot([AuthEffect]),
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
     provideHttpClient(
-      withInterceptors([appInterceptorInterceptor, httpErrorInterceptor])
+      withInterceptors([appInterceptorInterceptor])
     ),
     // provideHttpClient(),
     JwtHelperService,

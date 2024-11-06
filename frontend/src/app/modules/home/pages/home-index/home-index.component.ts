@@ -53,7 +53,7 @@ export class HomeIndexComponent {
         }
       },
       (error) => {
-        console.error('Error fetching doctors', error);
+        console.error('Error fetching doctors');
       }
     );
   }

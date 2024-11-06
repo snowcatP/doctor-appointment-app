@@ -16,6 +16,7 @@ import { AppointmentService } from '../../../../../core/services/appointment.ser
 import { DoctorService } from '../../../../../core/services/doctor.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-booking-appointment-index',
@@ -50,11 +51,12 @@ export class BookingAppointmentIndexComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private router: Router,
     private doctorService: DoctorService,
     private specialtyService: SpecialtyService,
     private appointmentService: AppointmentService,
     private messageService: MessageService,
-    private router: Router
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
