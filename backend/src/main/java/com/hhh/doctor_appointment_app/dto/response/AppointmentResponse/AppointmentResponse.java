@@ -25,6 +25,8 @@ public class AppointmentResponse {
 
     private String bookingHour;
 
+    private String cusType;
+
     @Enumerated(EnumType.STRING)
     private AppointmentStatus appointmentStatus;
 

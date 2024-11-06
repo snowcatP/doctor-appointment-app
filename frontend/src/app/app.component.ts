@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
       this.authService.getUserData().subscribe({
         next: (res) => {
           this.store.dispatch(
-            AuthActions.loginSuccess({
+            AuthActions.loadProfile({
               loginSuccessResponse: {
                 user: res,
                 token: localStorage.getItem('token'),

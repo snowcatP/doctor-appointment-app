@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import * as AuthActions from './auth.actions';
 import { catchError, exhaustMap, map, of, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { LoginSucessResponse } from '../../models/authentication.model';
 
 @Injectable()
 export class AuthEffect {
@@ -22,6 +23,16 @@ export class AuthEffect {
     )
   );
 
+  loadProfile$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.loadProfile),
+        tap(({ loginSuccessResponse }) => {
+          AuthActions.loadProfile({ loginSuccessResponse });
+        })
+      ),
+    { dispatch: false }
+  );
   loginSuccess$ = createEffect(
     () =>
       this.actions$.pipe(

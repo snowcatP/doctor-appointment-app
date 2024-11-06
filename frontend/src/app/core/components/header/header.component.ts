@@ -34,7 +34,6 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.authService.logout().subscribe({
       next: (res) => {
-        console.log(res);
         this.store.dispatch(
           AuthActions.logout({ logoutSuccess: 'Logout Success' })
         );
