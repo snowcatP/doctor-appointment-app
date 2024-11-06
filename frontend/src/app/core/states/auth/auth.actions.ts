@@ -19,6 +19,11 @@ export const loginFailure = createAction(
   props<{ error: string }>()
 );
 
+export const loadProfile = createAction(
+  '[Auth] Load Profile',
+  props<{ loginSuccessResponse: LoginSucessResponse }>()
+)
+
 export const refreshToken = createAction(
   '[Auth] Refresh Token',
   props<{ refreshTokenResponse: LoginSucessResponse }>()

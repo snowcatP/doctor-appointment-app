@@ -28,6 +28,8 @@ public class Appointment {
 
     private String bookingHour;
 
+    private String cusType;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private AppointmentStatus appointmentStatus;

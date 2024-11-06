@@ -5,6 +5,7 @@ export class User {
   fullName: string;
   email: string;
   gender: boolean;
+  email: string;
   phone: string;
   dateOfBirth: Date;
   address: string;
@@ -35,4 +36,8 @@ export class LoginSucessResponse {
   isAuthenticated: boolean;
   token: string;
   user: User;
+  constructor(token: string, user: User) {
+    this.token = token;
+    this.user = user;
+  }
 }

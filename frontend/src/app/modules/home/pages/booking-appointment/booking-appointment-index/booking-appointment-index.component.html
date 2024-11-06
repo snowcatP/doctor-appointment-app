@@ -10,10 +10,18 @@
           style="background-color: #ffffff"
         >
           <form [formGroup]="formBooking">
-            <mat-step label="Fill Booking Information">
+            <mat-step label="Fill Booking Information" [stepControl]="formBooking">
               <div class="card mt-2">
                 <div class="card-header">
-                  <h4 class="card-title">Booking Information</h4>
+                  <div class="row d-flex justify-content-between">
+                    <h4 class="card-title col">Booking Information</h4>
+                    <a
+                      class="col d-flex justify-content-end"
+                      routerLink="/auth/login"
+                      *ngIf="!(isLogged$ | async)"
+                      >Login as patient</a
+                    >
+                  </div>
                 </div>
                 <div class="card-body">
                   <div class="booking-doc-info">
@@ -98,20 +106,11 @@
                       >
                         <mat-label>Doctor</mat-label>
                         <input
-                          [ngClass]="{
-                            'input-disabled':
-                              formBooking.get('specialty').getRawValue() == null
-                          }"
                           type="text"
                           placeholder="Choose doctor"
                           matInput
                           formControlName="doctor"
                           [matAutocomplete]="autoDoctor"
-                          [readonly]="
-                            formBooking.get('specialty').getRawValue() == null
-                              ? true
-                              : false
-                          "
                           (blur)="selectDoctor()"
                           required
                           tabindex="2"
@@ -147,6 +146,7 @@
                             formControlName="firstName"
                             required
                             tabindex="3"
+                            [readonly]="isLogged$ | async"
                           />
                           <mat-error
                             *ngIf="
@@ -159,9 +159,7 @@
                           </mat-error>
                           <mat-error
                             *ngIf="
-                              formBooking.controls['firstName'].getError(
-                                'name'
-                              )
+                              formBooking.controls['firstName'].getError('name')
                             "
                           >
                             First name is invalid.
@@ -178,6 +176,7 @@
                             formControlName="lastName"
                             required
                             tabindex="4"
+                            [readonly]="isLogged$ | async"
                           />
                           <mat-error
                             *ngIf="
@@ -209,6 +208,7 @@
                             formControlName="phone"
                             required
                             tabindex="5"
+                            [readonly]="isLogged$ | async"
                           />
                           <mat-error
                             *ngIf="
@@ -236,6 +236,7 @@
                             formControlName="email"
                             required
                             tabindex="6"
+                            [readonly]="isLogged$ | async"
                           />
                           <mat-error
                             *ngIf="
@@ -296,13 +297,22 @@
             </mat-step>
           </form>
           <mat-step [stepControl]="formBookingDate">
-            <ng-template matStepLabel><div (click)="getAppointmentsBooked()">Choose Booking Date</div></ng-template>
-            <div class="card d-flex justify-content-center align-items-center" *ngIf="isLoading" style="min-height: 70vh;">
+            <ng-template matStepLabel
+              ><div (click)="getAppointmentsBooked()">
+                Choose Booking Date
+              </div></ng-template
+            >
+            <div
+              class="card d-flex justify-content-center align-items-center"
+              *ngIf="isLoading"
+              style="min-height: 70vh"
+            >
               <p-progressSpinner
-                styleClass="w-4rem h-4rem" 
-                strokeWidth="8" 
-                fill="var(--surface-ground)" 
-                animationDuration=".5s" />
+                styleClass="w-4rem h-4rem"
+                strokeWidth="8"
+                fill="var(--surface-ground)"
+                animationDuration=".5s"
+              />
             </div>
             <div class="card mt-2" *ngIf="!isLoading">
               <div class="card-header">
@@ -315,91 +325,93 @@
                     dateFormat="dd/mm/yy"
                   />
                 </div>
-              </div>
-                <p-carousel
-                  [value]="schedules"
-                  [numVisible]="1"
-                  [numScroll]="1"
+                <a
+                  class="col d-flex justify-content-end p-0 pt-1"
+                  routerLink="/auth/login"
+                  *ngIf="!(isLogged$ | async)"
+                  >Login as patient</a
                 >
-                  <ng-template pTemplate="item" let-schedule>
-                    <!-- Schedule Header -->
-                    <div class="schedule-header px-0">
-                      <div class="row">
-                        <div class="col-md-12">
-                          <!-- Day Slot -->
-                          <div class="day-slot">
-                            <ul>
-                              <li *ngFor="let day of schedule">
-                                <span>{{ day.dayWeek }}</span>
-                                <span class="slot-date">{{ day.date }}</span>
-                              </li>
-                            </ul>
-                          </div>
-                          <!-- /Day Slot -->
-                        </div>
-                      </div>
-                    </div>
-                    <!-- /Schedule Header -->
-                    <!-- Schedule Content -->
-                    <div class="schedule-cont px-0">
-                      <div class="row">
-                        <div class="col-md-12">
-                          <!-- Time Slot -->
-                          <h6>Morning</h6>
-                          <div class="time-slot">
-                            <ul class="clearfix">
-                              <li *ngFor="let day of schedule">
-                                <button
-                                  class="timing"
-                                  *ngFor="let slot of day.timeSlotsMorning"
-                                  [ngClass]="{
-                                    selected: slot === timeSlotSelected,
-                                    booked: slot.isBooked
-                                  }"
-                                  (click)="selectBookingDate(slot)"
-                                  matTooltip="Booked"
-                                  [matTooltipDisabled]="!slot.isBooked"
-                                  [disabled]="slot.isBooked"
-                                >
-                                  <span>{{ slot.time }}</span>
-                                </button>
-                              </li>
-                            </ul>
-                          </div>
-                          <!-- /Time Slot -->
-                        </div>
-                        <p-divider />
-                        <div class="col-md-12">
-                          <!-- Time Slot -->
-                          <h6>Afternoon</h6>
-                          <div class="time-slot">
-                            <ul class="clearfix">
-                              <li *ngFor="let day of schedule">
-                                <button
-                                  class="timing"
-                                  *ngFor="let slot of day.timeSlotsAfternoon"
-                                  [ngClass]="{
-                                    selected: slot === timeSlotSelected,
-                                    booked: slot.isBooked === true
-                                  }"
-                                  (click)="selectBookingDate(slot)"
-                                  matTooltip="Booked"
-                                  [matTooltipDisabled]="!slot.isBooked"
-                                  [disabled]="slot.isBooked"
-                                >
-                                  <span>{{ slot.time }}</span>
-                                </button>
-                              </li>
-                            </ul>
-                          </div>
-                          <!-- /Time Slot -->
-                        </div>
-                      </div>
-                    </div>
-                    <!-- /Schedule Content -->
-                  </ng-template>
-                </p-carousel>
               </div>
+              <p-carousel [value]="schedules" [numVisible]="1" [numScroll]="1">
+                <ng-template pTemplate="item" let-schedule>
+                  <!-- Schedule Header -->
+                  <div class="schedule-header px-0">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <!-- Day Slot -->
+                        <div class="day-slot">
+                          <ul>
+                            <li *ngFor="let day of schedule">
+                              <span>{{ day.dayWeek }}</span>
+                              <span class="slot-date">{{ day.date }}</span>
+                            </li>
+                          </ul>
+                        </div>
+                        <!-- /Day Slot -->
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /Schedule Header -->
+                  <!-- Schedule Content -->
+                  <div class="schedule-cont px-0">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <!-- Time Slot -->
+                        <h6>Morning</h6>
+                        <div class="time-slot">
+                          <ul class="clearfix">
+                            <li *ngFor="let day of schedule">
+                              <button
+                                class="timing"
+                                *ngFor="let slot of day.timeSlotsMorning"
+                                [ngClass]="{
+                                  selected: slot === timeSlotSelected,
+                                  booked: slot.isBooked
+                                }"
+                                (click)="selectBookingDate(slot)"
+                                matTooltip="Booked"
+                                [matTooltipDisabled]="!slot.isBooked"
+                                [disabled]="slot.isBooked"
+                              >
+                                <span>{{ slot.time }}</span>
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                        <!-- /Time Slot -->
+                      </div>
+                      <p-divider />
+                      <div class="col-md-12">
+                        <!-- Time Slot -->
+                        <h6>Afternoon</h6>
+                        <div class="time-slot">
+                          <ul class="clearfix">
+                            <li *ngFor="let day of schedule">
+                              <button
+                                class="timing"
+                                *ngFor="let slot of day.timeSlotsAfternoon"
+                                [ngClass]="{
+                                  selected: slot === timeSlotSelected,
+                                  booked: slot.isBooked === true
+                                }"
+                                (click)="selectBookingDate(slot)"
+                                matTooltip="Booked"
+                                [matTooltipDisabled]="!slot.isBooked"
+                                [disabled]="slot.isBooked"
+                              >
+                                <span>{{ slot.time }}</span>
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                        <!-- /Time Slot -->
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /Schedule Content -->
+                </ng-template>
+              </p-carousel>
+            </div>
             <!-- /Schedule Widget -->
             <div class="d-flex justify-content-between mx-2">
               <button mat-raised-button extended matStepperPrevious>
@@ -420,8 +432,14 @@
           <mat-step label="Confirm and Done">
             <!-- Booking Summary -->
             <div class="card booking-card mt-2">
-              <div class="card-header">
-                <h4 class="card-title">Booking Summary</h4>
+              <div class="card-header row">
+                <h4 class="card-title col">Booking Summary</h4>
+                <a
+                  class="col d-flex justify-content-end"
+                  routerLink="/auth/login"
+                  *ngIf="!(isLogged$ | async)"
+                  >Login as patient</a
+                >
               </div>
               <div class="card-body">
                 <!-- Booking Doctor Info -->
@@ -465,9 +483,15 @@
                 <div class="booking-summary">
                   <div class="booking-item-wrap">
                     <ul class="booking-fee">
-                      <li>Specialty<span>{{formBooking.get('specialty').value}}</span></li>
                       <li>
-                        Doctor Name<span>Dr. {{ doctorSelected?.fullName }}</span>
+                        Specialty<span>{{
+                          formBooking.get("specialty").value
+                        }}</span>
+                      </li>
+                      <li>
+                        Doctor Name<span
+                          >Dr. {{ doctorSelected?.fullName }}</span
+                        >
                       </li>
                       <li>
                         Patient Name<span>{{
@@ -477,14 +501,10 @@
                         }}</span>
                       </li>
                       <li>
-                        Phone<span>{{
-                          formBooking.get("phone")?.value
-                        }}</span>
+                        Phone<span>{{ formBooking.get("phone")?.value }}</span>
                       </li>
                       <li>
-                        Email<span>{{
-                          formBooking.get("email")?.value
-                        }}</span>
+                        Email<span>{{ formBooking.get("email")?.value }}</span>
                       </li>
                     </ul>
                     <ul class="booking-date">

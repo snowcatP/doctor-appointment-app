@@ -45,6 +45,7 @@ public class GetAppointmentWithPageQuery {
                     response.setReason(appointment.getReason());
                     response.setDateBooking(appointment.getDateBooking());
                     response.setBookingHour(appointment.getBookingHour());
+                    response.setCusType(appointment.getCusType());
                     response.setAppointmentStatus(appointment.getAppointmentStatus());
                     response.setDoctor(doctorMapper.toResponse(appointment.getDoctor()));
                     return response;

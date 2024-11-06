@@ -31,6 +31,14 @@ export class AppointmentService {
     );
   }
 
+  createAppointmentByPatient(bookingData: BookingDataPatient): Observable<any> {
+    return this.http.post<any>(
+      `${host}/api/appointment/patient/create-appointment`,
+      bookingData
+    );
+  }
+
+
   setAppointmentBookedGuest(appointment: BookingDataGuest) {
     this.appointmentDataGuest.next(appointment);
   }

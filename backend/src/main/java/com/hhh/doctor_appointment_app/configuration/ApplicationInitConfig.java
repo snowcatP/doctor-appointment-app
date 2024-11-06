@@ -1,9 +1,11 @@
 package com.hhh.doctor_appointment_app.configuration;
 
 import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserCreateRequest;
+import com.hhh.doctor_appointment_app.entity.Appointment;
 import com.hhh.doctor_appointment_app.entity.Role;
 import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.enums.UserRole;
+import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
 import com.hhh.doctor_appointment_app.repository.RoleRepository;
 import com.hhh.doctor_appointment_app.repository.UserRepository;
 import com.hhh.doctor_appointment_app.service.UserService.Command.CreateAdmin.CreateAdminCommand;
@@ -18,15 +20,18 @@ public class ApplicationInitConfig implements ApplicationRunner{
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final CreateAdminCommand createAdminCommand;
+    private final AppointmentRepository appointmentRepository;
 
     ApplicationInitConfig(
             UserRepository userRepository,
             RoleRepository roleRepository,
+            AppointmentRepository appointmentRepository,
             CreateAdminCommand createAdminCommand
     ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.createAdminCommand = createAdminCommand;
+        this.appointmentRepository = appointmentRepository;
     }
 
     @Override
@@ -64,6 +69,18 @@ public class ApplicationInitConfig implements ApplicationRunner{
                 }
             }
             userRepository.saveAll(users);
+        }
+
+        var appointments = appointmentRepository.findAll();
+        if (!appointments.isEmpty()) {
+            for (Appointment appointment : appointments) {
+                if (appointment.getPatient() == null) {
+                    appointment.setCusType("GUEST");
+                } else {
+                    appointment.setCusType("PATIENT");
+                }
+            }
+            appointmentRepository.saveAll(appointments);
         }
     }
 }

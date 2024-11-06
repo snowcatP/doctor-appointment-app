@@ -1,3 +1,4 @@
+import { email } from '@rxweb/reactive-form-validators';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { map, Observable, startWith } from 'rxjs';
@@ -16,7 +17,9 @@ import { AppointmentService } from '../../../../../core/services/appointment.ser
 import { DoctorService } from '../../../../../core/services/doctor.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../../../core/services/auth.service';
+import { Store } from '@ngrx/store';
+import * as fromAuth from '../../../../../core/states/auth/auth.reducer';
+import { User } from '../../../../../core/models/authentication.model';
 
 @Component({
   selector: 'app-booking-appointment-index',
@@ -48,7 +51,10 @@ export class BookingAppointmentIndexComponent implements OnInit {
     { time: '15:00 - 15:30' },
     { time: '16:00 - 16:30' },
   ];
-
+  isLogged$: Observable<boolean>;
+  isLogged: boolean;
+  user$: Observable<User>;
+  user: User;
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -56,13 +62,30 @@ export class BookingAppointmentIndexComponent implements OnInit {
     private specialtyService: SpecialtyService,
     private appointmentService: AppointmentService,
     private messageService: MessageService,
-    private authService: AuthService
+    private store: Store<fromAuth.State>
   ) {}
 
   ngOnInit(): void {
     this.createForm();
     this.generateAppointmentSlots();
     this.getData();
+    this.getObservables();
+  }
+
+  getObservables() {
+    this.isLogged$ = this.store.select(fromAuth.selectIsLogged);
+    this.isLogged$.subscribe((res) => (this.isLogged = res as boolean));
+    this.user$ = this.store.select(fromAuth.selectUser);
+    this.user$.subscribe((res) => (this.user = res as User));
+
+    if (this.isLogged) {
+      this.formBooking.patchValue({
+        firstName: this.user.firstName,
+        lastName: this.user.lastName,
+        email: this.user.email,
+        phone: this.user.phone,
+      });
+    }
   }
 
   selectBookingDate(slot: TimeSlot) {
@@ -95,24 +118,20 @@ export class BookingAppointmentIndexComponent implements OnInit {
   }
 
   submitAppointment() {
-    const bookingAppointmentData: BookingDataGuest = {
-      doctorId: this.doctorSelected.id,
-      doctorName: this.doctorSelected.fullName,
-      fullName:
-        this.formBooking.get('firstName').value +
-        this.formBooking.get('lastName').value,
-      phone: this.formBooking.get('phone').value,
-      email: this.formBooking.get('email').value,
-      reason: this.formBooking.get('reason').value,
-      dateBooking: this.timeSlotSelected.date,
-      bookingHour: this.timeSlotSelected.time,
-    };
-    this.appointmentService
-      .createAppointmentByGuest(bookingAppointmentData)
-      .subscribe({
+    if (this.isLogged) {
+      const bookingData: BookingDataPatient = {
+        doctorId: this.doctorSelected.id,
+        patientId: this.user.id,
+        dateBooking: this.timeSlotSelected.date,
+        bookingHour: this.timeSlotSelected.time,
+        doctorName: this.doctorSelected.fullName,
+        reason: this.formBooking.get('reason').value,
+      };
+      console.log(bookingData)
+      this.appointmentService.createAppointmentByPatient(bookingData).subscribe({
         next: (res) => {
           if (res.statusCode == 200) {
-            this.setAppointmentForSuccess(res?.data);
+            this.setAppointmentForSuccess(null, res?.data);
             this.showToast(true, 'Booked appointment successfully!');
             setTimeout(() => {
               this.router.navigate([
@@ -120,13 +139,49 @@ export class BookingAppointmentIndexComponent implements OnInit {
                 { bookingSuccess: true },
               ]);
             }, 2000);
+          } else {
+            this.showToast(false, 'Booked appointment unsuccessfully!');
           }
         },
         error: (err) => {
           this.showToast(false, 'Booked appointment unsuccessfully!');
           console.log(err);
         },
-      });
+      })
+    } else {
+      const bookingData: BookingDataGuest = {
+        doctorId: this.doctorSelected.id,
+        doctorName: this.doctorSelected.fullName,
+        fullName:
+          this.formBooking.get('firstName').value +
+          this.formBooking.get('lastName').value,
+        phone: this.formBooking.get('phone').value,
+        email: this.formBooking.get('email').value,
+        reason: this.formBooking.get('reason').value,
+        dateBooking: this.timeSlotSelected.date,
+        bookingHour: this.timeSlotSelected.time,
+      };
+      this.appointmentService
+        .createAppointmentByGuest(bookingData)
+        .subscribe({
+          next: (res) => {
+            if (res.statusCode == 200) {
+              this.setAppointmentForSuccess(res?.data);
+              this.showToast(true, 'Booked appointment successfully!');
+              setTimeout(() => {
+                this.router.navigate([
+                  '/booking/success',
+                  { bookingSuccess: true },
+                ]);
+              }, 2000);
+            }
+          },
+          error: (err) => {
+            this.showToast(false, 'Booked appointment unsuccessfully!');
+            console.log(err);
+          },
+        });
+    }
   }
 
   setAppointmentForSuccess(
@@ -211,6 +266,12 @@ export class BookingAppointmentIndexComponent implements OnInit {
     this.doctorService.getDoctorsForBooking().subscribe({
       next: (res) => {
         this.listDoctors = res;
+        this.filteredDoctors = this.formBooking.controls[
+          'doctor'
+        ].valueChanges.pipe(
+          startWith(''),
+          map((value) => this._filterDoctor(value || ''))
+        );
       },
       error: (err) => {
         console.log(err);
@@ -253,6 +314,11 @@ export class BookingAppointmentIndexComponent implements OnInit {
         (doctor) =>
           doctor.fullName === this.formBooking.get('doctor').getRawValue()
       );
+      if (this.doctorSelected) {
+        this.formBooking
+          .get('specialty')
+          .setValue(this.doctorSelected.specialty.specialtyName);
+      }
     }
   }
 
@@ -325,7 +391,7 @@ export class BookingAppointmentIndexComponent implements OnInit {
   }
 
   testToast() {
-    this.showToast(true, "yes");
+    this.showToast(true, 'yes');
   }
 
   showToast(status: boolean, message: string) {
@@ -333,13 +399,13 @@ export class BookingAppointmentIndexComponent implements OnInit {
       this.messageService.add({
         severity: 'success',
         summary: 'Success',
-        detail: message
+        detail: message,
       });
     } else {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: message
+        detail: message,
       });
     }
   }

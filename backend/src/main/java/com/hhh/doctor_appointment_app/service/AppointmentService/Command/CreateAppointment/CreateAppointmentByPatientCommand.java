@@ -60,13 +60,14 @@ public class CreateAppointmentByPatientCommand {
             }
 
             Appointment appointment = Appointment.builder()
-                    .fullName(appointmentByPatientRequest.getFullName())
-                    .phone(appointmentByPatientRequest.getPhone())
-                    .email(appointmentByPatientRequest.getEmail())
+                    .fullName(patient.getProfile().getFullName())
+                    .phone(patient.getProfile().getPhone())
+                    .email(patient.getProfile().getEmail())
                     .dateBooking(appointmentByPatientRequest.getDateBooking())
                     .bookingHour(appointmentByPatientRequest.getBookingHour())
                     .reason(appointmentByPatientRequest.getReason())
                     .patient(patient)
+                    .cusType("PATIENT")
                     .doctor(doctor)
                     .appointmentStatus(AppointmentStatus.PENDING)
                     .build();
