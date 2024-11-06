@@ -39,6 +39,9 @@ public class SecurityConfig {
             "api/doctor/get-doctors-for-booking",
             "api/specialty/all",
             "api/doctor/top-rating",
+            "api/doctor/list-doctor",
+            "api/doctor/detail/**",
+            "api/feedback/list/doctor/**",
             "api/appointment/get-appointments-for-booking/*",
     };
 

@@ -1,22 +1,21 @@
 <!-- Profile Sidebar -->
-<div>
+<div >
     <div class="profile-sidebar">
       <div class="widget-profile pro-widget-content">
         <div class="profile-info-widget">
           <div class="booking-doc-img">
             <p-image
               src="assets/images/patients/patient.jpg"
-              alt="User Image"
-              width="250"
+              class="img-fluid" alt="Patient Image" width="150"
               [preview]="true"
             />
           </div>
           <div class="profile-det-info">
-            <h3>Richard Wilson</h3>
+            <h3>{{patientProfile.firstName}} {{patientProfile.lastName}}</h3>
             <div class="patient-details">
-              <h5><i class="fas fa-birthday-cake"></i> 24 Jul 1983, 38 years</h5>
+              <h5><i class="fas fa-birthday-cake"></i> {{patientProfile.dateOfBirth | dateFormat}}</h5>
               <h5 class="mb-0">
-                <i class="fas fa-map-marker-alt"></i> Newyork, USA
+                <i class="fas fa-map-marker-alt"></i> {{patientProfile.address}}
               </h5>
             </div>
           </div>
@@ -25,26 +24,26 @@
       <div class="dashboard-widget">
         <nav class="dashboard-menu">
           <ul>
-            <li class="active">
-              <a routerLink="/patient">
+            <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+              <a routerLink="/patient/dashboard">
                 <i class="fas fa-columns"></i>
                 <span>Dashboard</span>
               </a>
             </li>
-            <li>
+            <li routerLinkActive="active">
               <a routerLink="/patient/profile">
                 <i class="fas fa-user-cog"></i>
                 <span>Profile Settings</span>
               </a>
             </li>
-            <li>
+            <li routerLinkActive="active">
               <a routerLink="/patient/change-password">
                 <i class="fas fa-lock"></i>
                 <span>Change Password</span>
               </a>
             </li>
             <li style="cursor: pointer">
-              <a>
+              <a (click)="logout()">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
               </a>

@@ -7,6 +7,8 @@ import com.hhh.doctor_appointment_app.service.PatientService.Command.DeletePatie
 import com.hhh.doctor_appointment_app.service.PatientService.Command.EditPatient.EditPatientCommand;
 import com.hhh.doctor_appointment_app.service.PatientService.Query.GetDetailPatient.GetDetailPatientQuery;
 import com.hhh.doctor_appointment_app.service.PatientService.Query.GetPatientWithPage.GetPatientWithPageQuery;
+import com.hhh.doctor_appointment_app.service.PatientService.Query.GetProfilePatient.GetProfilePatientQuery;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,9 @@ public class PatientController {
 
     @Autowired
     private GetDetailPatientQuery getDetailPatientQuery;
+
+    @Autowired
+    private GetProfilePatientQuery getProfilePatientQuery;
 
     @GetMapping("/list-patient")
     public ResponseEntity<?> getPatients(@RequestParam(defaultValue = "1") int page,
@@ -105,6 +110,37 @@ public class PatientController {
         ApiResponse<?> apiResponse = new ApiResponse<>();
         try {
             apiResponse = getDetailPatientQuery.getPatientDetail(id);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+        catch (NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+        catch (Exception ex) {
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+    }
+
+    @GetMapping("/profile")
+    @CrossOrigin("*")
+    public ResponseEntity<?> getPatientProfile(HttpServletRequest request)
+    {
+        ApiResponse<?> apiResponse = new ApiResponse<>();
+        try {
+            // Get token from header
+            String token = request.getHeader("Authorization");
+            if (token == null || !token.startsWith("Bearer ")) {
+                apiResponse.setStatusCode(HttpStatus.UNAUTHORIZED.value());
+                apiResponse.setMessage("Token is missing or invalid");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiResponse);
+            }
+            // Remove "Bearer " to get token
+            token = token.substring(7);
+
+            apiResponse = getProfilePatientQuery.getPatientProfile(token);
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (NotFoundException ex){

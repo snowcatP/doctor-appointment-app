@@ -1,5 +1,6 @@
 package com.hhh.doctor_appointment_app.dto.response.PatientResponse;
 
+import com.hhh.doctor_appointment_app.entity.Role;
 import com.hhh.doctor_appointment_app.entity.Specialty;
 import lombok.*;
 
@@ -28,5 +29,7 @@ public class PatientResponse {
     private Date dateOfBirth;
 
     private String address;
+
+    private Role role;
 
 }

@@ -11,7 +11,9 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AppointmentMapper {
-    @Mapping(source = "appointment.doctor.profile", target = "doctor")
+    @Mappings({
+            @Mapping(source = "appointment.doctor.profile", target = "doctor")
+    })
     AppointmentResponse toResponse(Appointment appointment);
 
     @Mapping(source = "appointment.doctor", target = "doctor")

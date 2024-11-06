@@ -7,7 +7,7 @@ import {
   RegisterRequest,
   User,
 } from '../models/authentication.model';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, Observable, tap, throwError,BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { host } from '../../../environments/environment';
 import { Store } from '@ngrx/store';
@@ -17,11 +17,15 @@ import * as AuthActions from '../states/auth/auth.actions';
   providedIn: 'root',
 })
 export class AuthService {
+  private userDataSubject = new BehaviorSubject<User | null>(null);
+  userData$ = this.userDataSubject.asObservable();
   constructor(
     private jwtHelper: JwtHelperService,
     private http: HttpClient,
     private store: Store
-  ) {}
+  ) { 
+    }
+
 
   isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
@@ -55,6 +59,10 @@ export class AuthService {
     return this.http.post<any>(host + '/api/auth/logout', {
       token: localStorage.getItem('token'),
     });
+  }
+
+  setUserData(userData: User): void {
+    this.userDataSubject.next(userData);
   }
 
   getUserData(): Observable<User> {
