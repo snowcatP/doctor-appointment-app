@@ -56,6 +56,7 @@ public class CreateAppointmentByGuestCommand {
                     .dateBooking(appointmentByGuestRequest.getDateBooking())
                     .bookingHour(appointmentByGuestRequest.getBookingHour())
                     .reason(appointmentByGuestRequest.getReason())
+                    .cusType("GUEST")
                     .doctor(doctor)
                     .appointmentStatus(AppointmentStatus.PENDING)
                     .build();

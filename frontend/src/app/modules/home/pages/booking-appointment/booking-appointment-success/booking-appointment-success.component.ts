@@ -22,8 +22,10 @@ export class BookingAppointmentSuccessComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.appointmentService.getAppointmentBookedGuest.subscribe((res) => {
-      this.appointmentBookedGuestData = res;
-      this.isGuest = true;
+      if (!res) {
+        this.appointmentBookedGuestData = res;
+        this.isGuest = true;
+      }
     });
 
     this.appointmentService.getAppointmentBookedPatient.subscribe(

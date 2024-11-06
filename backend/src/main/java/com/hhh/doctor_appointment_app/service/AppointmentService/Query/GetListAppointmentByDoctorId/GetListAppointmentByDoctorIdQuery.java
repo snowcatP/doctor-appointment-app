@@ -39,6 +39,7 @@ public class GetListAppointmentByDoctorIdQuery {
                     response.setReason(appointment.getReason());
                     response.setDateBooking(appointment.getDateBooking());
                     response.setAppointmentStatus(appointment.getAppointmentStatus());
+                    response.setCusType(appointment.getCusType());
                     response.setDoctor(appointment.getDoctor().getProfile());
                     return response;
                 })

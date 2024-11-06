@@ -5,9 +5,10 @@ import {
   on,
 } from '@ngrx/store';
 import { User } from '../../models/authentication.model';
-import { loginFailure, loginSuccess, logout, refreshToken } from './auth.actions';
+import { loadProfile, loginFailure, loginSuccess, logout, refreshToken } from './auth.actions';
 
 export interface State {
+  isLogged: boolean;
   token: string;
   user: User;
   loginError?: string;
@@ -16,6 +17,7 @@ export interface State {
 export const initialState: State = {
   token: null,
   user: null,
+  isLogged: false
 };
 
 const _authReducer = createReducer(
@@ -25,6 +27,7 @@ const _authReducer = createReducer(
       ...state,
       token: loginSuccessResponse.token,
       user: loginSuccessResponse.user,
+      isLogged: true,
     };
   }),
   on(loginFailure, (state, { error }) => {
@@ -32,14 +35,24 @@ const _authReducer = createReducer(
       ...state,
       token: null,
       user: null,
+      isLogged: false,
       loginError: error,
+    };
+  }),
+  on(loadProfile, (state, { loginSuccessResponse }) => {
+    return {
+      ...state,
+      token: loginSuccessResponse.token,
+      user: loginSuccessResponse.user,
+      isLogged: true,
     };
   }),
   on(refreshToken, (state, {refreshTokenResponse}) => {
     return {
       ...state,
       token: refreshTokenResponse.token,
-      user: refreshTokenResponse.user
+      user: refreshTokenResponse.user,
+      isLogged: true,
     }
   }),
   on(logout, (state, {logoutSuccess}) => {
@@ -47,7 +60,8 @@ const _authReducer = createReducer(
       ...state,
       token: null,
       user: null,
-      loginError: null
+      loginError: null,
+      isLogged: false,
     }
   })
 );
@@ -68,4 +82,8 @@ export const selectUser = createSelector(
 export const selectErrorMessage = createSelector(
   selectAuthState,
   (state) => state.loginError
+);
+export const selectIsLogged = createSelector(
+  selectAuthState,
+  (state) => state.isLogged
 );
