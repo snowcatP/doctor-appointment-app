@@ -45,6 +45,7 @@ export class AuthService {
         }),
         catchError((error) => {
           console.error('Error refreshing access token:', error);
+          localStorage.removeItem('token');
           return throwError(error);
         })
       );
