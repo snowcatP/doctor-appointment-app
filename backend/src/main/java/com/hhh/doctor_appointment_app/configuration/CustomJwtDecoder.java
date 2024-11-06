@@ -26,9 +26,6 @@ public class CustomJwtDecoder implements JwtDecoder {
     @Autowired
     private IntrospectQuery introspectQuery;
 
-    @Autowired
-    private HttpServletRequest request;
-
     private NimbusJwtDecoder nimbusJwtDecoder = null;
 
     @Override
