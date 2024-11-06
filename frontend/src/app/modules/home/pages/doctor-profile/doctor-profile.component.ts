@@ -20,6 +20,7 @@ export class DoctorProfileComponent {
   ) {}
 
   ngOnInit(): void {
+    window.scrollTo(0, 0); // Đảm bảo trang được cuộn lên đầu mỗi khi vào component
     // Lấy id từ URL
     this.route.paramMap.subscribe(params => {
       this.doctorId = +params.get('id')!; // Lấy id của bác sĩ từ route parameter

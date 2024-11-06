@@ -18,10 +18,13 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
 
     Page<Appointment> findByDoctor_Id(Long doctorId, Pageable pageable);
 
+
     @Query(value = "SELECT a " +
             "FROM Appointment a " +
             "WHERE a.doctor.id = ?1 " +
             "AND a.dateBooking BETWEEN ?2 AND ?3 " +
             "AND a.appointmentStatus != 'CANCELLED'")
     List<Appointment> getAppointmentsForBooking(Long doctorId, Date currentDate, Date endDate);
+
+    Page<Appointment> findByPatient_Profile_Email(String email, Pageable pageable);
 }

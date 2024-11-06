@@ -9,6 +9,7 @@ import com.hhh.doctor_appointment_app.service.MedicalRecordService.Command.Creat
 import com.hhh.doctor_appointment_app.service.MedicalRecordService.Command.DeleteMedicalRecord.DeleteMedicalRecordCommand;
 import com.hhh.doctor_appointment_app.service.MedicalRecordService.Command.EditMedicalRecord.EditMedicalRecordCommand;
 import com.hhh.doctor_appointment_app.service.MedicalRecordService.Query.GetDetailMedicalRecord.GetDetailMedicalRecordQuery;
+import com.hhh.doctor_appointment_app.service.MedicalRecordService.Query.GetMedicalRecordOfPatient.GetMedicalRecordOfPatientQuery;
 import com.hhh.doctor_appointment_app.service.MedicalRecordService.Query.GetMedicalRecordWithPage.GetMedicalRecordWithPageQuery;
 import com.hhh.doctor_appointment_app.service.MedicalRecordService.Query.GetMedicalRecordWithPageByPatient.GetMedicalRecordWithPageByPatientQuery;
 import jakarta.validation.Valid;
@@ -45,7 +46,7 @@ public class MedicalRecordController {
     private GetMedicalRecordWithPageByPatientQuery getMedicalRecordWithPageByPatientQuery;
 
     @Autowired
-    private FirebaseStorageService firebaseStorageService;
+    private GetMedicalRecordOfPatientQuery getMedicalRecordOfPatientQuery;
 
     @GetMapping("/list")
     public ResponseEntity<?> getMedicalRecords(@RequestParam(defaultValue = "1") int page,
@@ -167,6 +168,19 @@ public class MedicalRecordController {
             ApiResponse<Object> apiResponse = new ApiResponse<>();
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+    }
+
+    @GetMapping("/list/patient")
+    public ResponseEntity<?> getMedicalRecordsOfPatient(@RequestParam(defaultValue = "1") int page,
+                                               @RequestParam(defaultValue = "10") int size){
+        try{
+            return new ResponseEntity<>(getMedicalRecordOfPatientQuery.getMedicalRecordsWithPageOfPatient(page, size), HttpStatus.OK);
+        }catch (Exception ex){
+            ApiResponse<Object> apiResponse = new ApiResponse<>();
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage(ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
     }

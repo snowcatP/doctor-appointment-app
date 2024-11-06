@@ -11,6 +11,12 @@ export class AuthService {
   private loginStatus = new BehaviorSubject<boolean>(this.isAuthenticated());
   currentLoginStatus = this.loginStatus.asObservable();
 
+
+  updateLoginStatus(status: boolean) {
+    this.loginStatus.next(status);
+  }
+
+
   public isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
     // Check whether the token is expired and return
@@ -22,7 +28,5 @@ export class AuthService {
     return !this.jwtHelper.isTokenExpired(token);
   }
 
-  updateLoginStatus(status: boolean) {
-    this.loginStatus.next(status);
-  }
+  
 }

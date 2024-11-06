@@ -1,6 +1,7 @@
 package com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentByDoctorId;
 
 import com.hhh.doctor_appointment_app.dto.mapper.AppointmentMapper;
+import com.hhh.doctor_appointment_app.dto.mapper.DoctorMapper;
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.entity.Appointment;
@@ -23,6 +24,9 @@ public class GetListAppointmentByDoctorIdQuery {
     @Autowired
     private AppointmentMapper appointmentMapper;
 
+    @Autowired
+    private DoctorMapper doctorMapper;
+
     @PreAuthorize("hasRole('DOCTOR')")
     public PageResponse<List<AppointmentResponse>> getAppointmentsWithPageByDoctorId(int page, int size, Long id) {
         Pageable pageable = PageRequest.of(page-1, size);
@@ -41,7 +45,7 @@ public class GetListAppointmentByDoctorIdQuery {
                     response.setReason(appointment.getReason());
                     response.setDateBooking(appointment.getDateBooking());
                     response.setAppointmentStatus(appointment.getAppointmentStatus());
-                    response.setDoctor(appointment.getDoctor().getProfile());
+                    response.setDoctor(doctorMapper.toResponse(appointment.getDoctor()));
                     return response;
                 })
                 .collect(Collectors.toList());

@@ -7,6 +7,7 @@ import { MessageService } from 'primeng/api';
 import { AccountService } from '../../../../core/services/account.service';
 import { LoginRequest } from '../../../../core/models/authentication.model';
 import { AuthService } from '../../../../core/services/auth.service';
+import { PatientService } from '../../../../core/services/patient.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -16,7 +17,8 @@ export class LoginComponent {
   formLogin: FormGroup;
   showPass: boolean = false;
   errorMessage: string = "";
-  isLoggedIn: boolean = false; //Check if user is logged in
+  isLoggedIn: boolean = false;
+  patientProfile: any; // Variable to store patient profile data
   @ViewChild('email') emailInput: ElementRef;
 
   constructor(
@@ -24,7 +26,8 @@ export class LoginComponent {
     private accountService: AccountService,
     private messageService: MessageService,
     private route: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private patientService: PatientService
   ) {}
   ngOnInit(): void {
     this.formLogin = this.fb.group({
@@ -51,6 +54,7 @@ export class LoginComponent {
         summary: 'Success',
         detail: 'Login successfully',
       });
+      this.fetchPatientProfile();
       setTimeout(() => {
         this.route.navigateByUrl('/');
       }, 1500);
@@ -66,5 +70,18 @@ export class LoginComponent {
 
   checkError(control: FormControl) {
     
+  }
+
+  fetchPatientProfile(): void {
+    this.patientService.fetchMyInfo().subscribe(
+      (response) => {
+        if (response != null) {
+          this.patientService.setPatientProfile(response);
+        }
+      },
+      (error) => {
+        console.error('Error fetching patient profile:', error);
+      }
+    );
   }
 }

@@ -19,8 +19,8 @@ export class PatientComponent implements OnInit{
   fetchPatientProfile(): void {
     this.patientService.getPatientProfile().subscribe(
       (response) => {
-        if (response.statusCode === 200) {
-          this.patientProfile = response.data; // Store the data part of the response
+        if (response !=null) {
+          this.patientProfile = response; // Store the data part of the response
           console.log('Patient Profile:', this.patientProfile); // Log the data
         }
       },

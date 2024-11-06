@@ -10,33 +10,23 @@ import { AuthService } from '../../services/auth.service';
 })
 export class HeaderComponent implements OnInit {
   isLoggedIn: boolean = false;
-  patientProfile: any; // Variable to store patient profile data
+  patientProfile: any;
 
-  constructor(
-    private authService: AuthService,
-    private patientService: PatientService
-  ) {}
+  constructor(private authService: AuthService,private patientService: PatientService) {}
 
   ngOnInit(): void {
     this.authService.currentLoginStatus.subscribe((status) => {
       this.isLoggedIn = status;
     });
-    if (this.isLoggedIn) {
-      this.fetchPatientProfile();
-    }
-  }
 
-  fetchPatientProfile(): void {
-    this.patientService.getPatientProfile().subscribe(
-      (response) => {
-        if (response.statusCode === 200) {
-          this.patientProfile = response; // Store the data part of the response
-          console.log(this.patientProfile);
-        }
-      },
-      (error) => {
-        console.error('Error fetching patient profile:', error);
-      }
-    );
+    // Lấy thông tin bệnh nhân từ API và thiết lập
+    this.patientService.fetchMyInfo().subscribe(profile => {
+      this.patientService.setPatientProfile(profile);
+    });
+
+    // Đăng ký để nhận patientProfile
+    this.patientService.getPatientProfile().subscribe(profile => {
+      this.patientProfile = profile;
+    });
   }
 }
