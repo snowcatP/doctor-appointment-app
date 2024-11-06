@@ -27,10 +27,6 @@ public class GenerateTokenCommand {
     @Value("${spring.jwt.valid-duration}")
     protected int VALIDATION_DURATION;
 
-    @NonFinal
-    @Value("${spring.jwt.refreshable-duration}")
-    protected int REFRESHABLE_DURATION;
-
     public String generateToken(User user) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
@@ -38,7 +34,7 @@ public class GenerateTokenCommand {
                 .issuer("docapp.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
-                        Instant.now().plus(VALIDATION_DURATION, ChronoUnit.SECONDS).toEpochMilli()
+                        Instant.now().plus(VALIDATION_DURATION, ChronoUnit.HOURS).toEpochMilli()
                 ))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", user.getRole().getRoleName().name())

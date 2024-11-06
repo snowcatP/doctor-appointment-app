@@ -5,7 +5,8 @@ import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.Introspe
 import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.LogoutRequest;
 import com.hhh.doctor_appointment_app.dto.request.AuthenticationRequest.RefreshTokenRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
-import com.hhh.doctor_appointment_app.dto.response.AuthenticationResponse;
+import com.hhh.doctor_appointment_app.dto.response.AuthResponse.AuthenticationResponse;
+import com.hhh.doctor_appointment_app.dto.response.AuthResponse.LogoutResponse;
 import com.hhh.doctor_appointment_app.dto.response.IntrospectResponse;
 import com.hhh.doctor_appointment_app.service.AuthenticationService.Command.Authenticate.AuthenticateCommand;
 import com.hhh.doctor_appointment_app.service.AuthenticationService.Command.Logout.LogoutCommand;
@@ -13,6 +14,8 @@ import com.hhh.doctor_appointment_app.service.AuthenticationService.Command.Refr
 import com.hhh.doctor_appointment_app.service.AuthenticationService.Query.Introspect.IntrospectQuery;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -34,11 +37,9 @@ public class AuthenticationController {
     private RefreshTokenCommand refreshTokenCommand;
 
     @PostMapping("/login")
-    public ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         var result = authenticateCommand.authenticate(request);
-        return (ApiResponse.<AuthenticationResponse>builder()
-                .data(result)
-                .build());
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping("/introspect")
@@ -51,19 +52,16 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    public ApiResponse<Void> logout(@RequestBody LogoutRequest request)
+    public ResponseEntity<LogoutResponse> logout(@RequestBody LogoutRequest request)
             throws ParseException, JOSEException {
         logoutCommand.logout(request);
-        return ApiResponse.<Void>builder()
-                .build();
+        return new ResponseEntity<>(LogoutResponse.builder().message("Logout Success").build(), HttpStatus.OK);
     }
 
     @PostMapping("/refreshToken")
-    public ApiResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest request)
+    public ResponseEntity<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest request)
             throws ParseException, JOSEException {
         var result = refreshTokenCommand.refreshToken(request);
-        return ApiResponse.<AuthenticationResponse>builder()
-                .data(result)
-                .build();
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
