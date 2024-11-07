@@ -26,7 +26,7 @@ public class Appointment {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "email",  nullable = false, unique = true)
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "dateOfBirth")
@@ -36,6 +36,8 @@ public class Appointment {
     private String reason;
 
     private Date dateBooking;
+
+    private String bookingHour;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

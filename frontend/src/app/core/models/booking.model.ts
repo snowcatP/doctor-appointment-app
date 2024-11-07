@@ -3,6 +3,7 @@ export class DoctorBooking {
     firstName: string;
     lastName: string;
     fullName: string;
+    schedule: string;
     avatarFilePath: string;
     specialty: Specialty;
     constructor() {}
@@ -25,4 +26,10 @@ export class BookingData {
     reason: string;
     bookingDate: Date;
     bookingHour: string;
+}
+
+export class DateSchedule {
+    constructor() {}
+    dayWeek: string;
+    date: string;
 }

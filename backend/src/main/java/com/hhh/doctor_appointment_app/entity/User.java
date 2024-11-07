@@ -1,13 +1,10 @@
 package com.hhh.doctor_appointment_app.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import lombok.*;
 
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Data
@@ -26,6 +23,8 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String email;
+
+    @JsonIgnore
     private String password;
     private Date dateOfBirth;
     private String address;

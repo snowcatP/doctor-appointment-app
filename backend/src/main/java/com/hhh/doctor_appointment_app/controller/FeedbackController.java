@@ -2,7 +2,6 @@ package com.hhh.doctor_appointment_app.controller;
 
 import com.hhh.doctor_appointment_app.dto.request.FeedbackRequest.CreateFeedbackByPatientRequest;
 import com.hhh.doctor_appointment_app.dto.request.ReplyFeedbackRequest.ReplyFeedbackByDoctorRequest;
-import com.hhh.doctor_appointment_app.dto.request.SpecialtyRequest.AddSpecialtyRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.service.FeedbackService.Command.CreateFeedbackByPatient.CreateFeedbackByPatientCommand;
 import com.hhh.doctor_appointment_app.service.FeedbackService.Query.GetFeedbackOfDoctor.GetFeedbackOfDoctorQuery;

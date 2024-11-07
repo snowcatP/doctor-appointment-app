@@ -10,5 +10,5 @@ import java.util.List;
 public class SearchDoctorRequest {
     private String keyword;
     private Boolean gender;
-    private List<Long> specialty_Id;
+    private List<Long> specialtyId;
 }
