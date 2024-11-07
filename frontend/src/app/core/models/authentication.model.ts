@@ -5,7 +5,6 @@ export class User {
   fullName: string;
   email: string;
   gender: boolean;
-  email: string;
   phone: string;
   dateOfBirth: Date;
   address: string;
