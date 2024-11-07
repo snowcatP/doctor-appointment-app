@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Input } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PatientDashboardComponent } from './pages/patient-dashboard/patient-dashboard.component';
 import { PatientProfileComponent } from './pages/patient-profile/patient-profile.component';
@@ -24,7 +24,7 @@ const routes: Routes = [
       {
         path: 'profile',
         component: PatientProfileComponent,
-        title: 'Patient Profile',
+        title: 'Patient Profile'
       },
       {
         path: 'change-password',

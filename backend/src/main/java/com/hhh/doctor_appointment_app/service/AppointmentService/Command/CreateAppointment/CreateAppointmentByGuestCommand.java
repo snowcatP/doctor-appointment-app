@@ -30,7 +30,6 @@ public class CreateAppointmentByGuestCommand {
     public ApiResponse<Object> createAppointmentByGuest(AppointmentByGuestRequest appointmentByGuestRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
-
             Doctor doctor = doctorRepository.findById(appointmentByGuestRequest.getDoctorId())
                     .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
 
@@ -51,14 +50,13 @@ public class CreateAppointmentByGuestCommand {
                         .build();
             }
             Appointment appointment = Appointment.builder()
-                    .fullname(appointmentByGuestRequest.getFullname())
-                    .gender(appointmentByGuestRequest.isGender())
+                    .fullName(appointmentByGuestRequest.getFullName())
                     .phone(appointmentByGuestRequest.getPhone())
                     .email(appointmentByGuestRequest.getEmail())
-                    .dateOfBirth(appointmentByGuestRequest.getDateOfBirth())
                     .dateBooking(appointmentByGuestRequest.getDateBooking())
                     .bookingHour(appointmentByGuestRequest.getBookingHour())
                     .reason(appointmentByGuestRequest.getReason())
+                    .cusType("GUEST")
                     .doctor(doctor)
                     .appointmentStatus(AppointmentStatus.PENDING)
                     .build();

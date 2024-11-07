@@ -10,7 +10,9 @@ import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EditPatientCommand {
@@ -19,6 +21,7 @@ public class EditPatientCommand {
 
     @Autowired
     private PatientMapper patientMapper;
+
 
     public ApiResponse<Object> editPatient(Long id, EditPatientRequest editPatientRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
@@ -40,7 +43,6 @@ public class EditPatientCommand {
             existingPatient.getProfile().setLastName(editPatientRequest.getLastName());
             existingPatient.getProfile().setGender(editPatientRequest.isGender());
             existingPatient.getProfile().setPhone(editPatientRequest.getPhone());
-            existingPatient.getProfile().setEmail(editPatientRequest.getEmail());
             existingPatient.getProfile().setDateOfBirth(editPatientRequest.getDateOfBirth());
             existingPatient.getProfile().setAddress(editPatientRequest.getAddress());
 

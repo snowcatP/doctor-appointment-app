@@ -4,8 +4,10 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
 
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { AccountService } from '../../../../core/services/account.service';
 import { LoginRequest } from '../../../../core/models/authentication.model';
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../../../core/states/auth/auth.actions';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -20,9 +22,10 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private accountService: AccountService,
+    private authService: AuthService,
     private messageService: MessageService,
-    private route: Router
+    private route: Router,
+    private store: Store
   ) {}
   ngOnInit(): void {
     this.formLogin = this.fb.group({
@@ -39,29 +42,27 @@ export class LoginComponent {
       password: this.formLogin.controls['password'].value
     };
 
-    this.accountService.onLogin(loginRequest).subscribe({
-      next: (res: any) => {
-      localStorage.setItem('token', res.data.token);
-      this.messageService.add({
-        key: 'messageToast',
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Login successfully',
-      });
-      setTimeout(() => {
-        this.route.navigateByUrl('/');
-      }, 1500);
-    },
-    error: () => {
-      this.errorMessage = "Wrong email or password."
-      setTimeout(() => {
-        this.emailInput.nativeElement.focus();
-      }, 0);
-    }
-    });
-  }
+    this.store.dispatch(AuthActions.loginRequest({credential: loginRequest}))
 
-  checkError(control: FormControl) {
-    
+    // this.accountService.onLogin(loginRequest).subscribe({
+    //   next: (res: any) => {
+    //   localStorage.setItem('token', res.data.token);
+    //   this.messageService.add({
+    //     key: 'messageToast',
+    //     severity: 'success',
+    //     summary: 'Success',
+    //     detail: 'Login successfully',
+    //   });
+    //   setTimeout(() => {
+    //     this.route.navigateByUrl('/');
+    //   }, 1500);
+    // },
+    // error: () => {
+    //   this.errorMessage = "Wrong email or password."
+    //   setTimeout(() => {
+    //     this.emailInput.nativeElement.focus();
+    //   }, 0);
+    // }
+    // });
   }
 }

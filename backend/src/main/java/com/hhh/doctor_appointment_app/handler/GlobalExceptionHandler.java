@@ -2,8 +2,10 @@ package com.hhh.doctor_appointment_app.handler;
 
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.exception.*;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -46,7 +48,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UnauthenticatedException.class)
+    @ExceptionHandler({UnauthenticatedException.class, JwtException.class, BadRequestException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     public ApiResponse<?> handleUserException(UnauthenticatedException ex) {

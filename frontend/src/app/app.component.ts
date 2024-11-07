@@ -1,19 +1,42 @@
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormConfig } from '@rxweb/reactive-form-validators';
+import { AuthService } from './core/services/auth.service';
+import { Store } from '@ngrx/store';
+import * as AuthActions from './core/states/auth/auth.actions';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'frontend';
 
-  ngOnInit(): void {
+  constructor(private authService: AuthService, private store: Store) {}
 
+  ngOnInit(): void {
+    if (this.authService.isAuthenticated()) {
+      this.authService.getUserData().subscribe({
+        next: (res) => {
+          this.store.dispatch(
+            AuthActions.loadProfile({
+              loginSuccessResponse: {
+                user: res,
+                token: localStorage.getItem('token'),
+                isAuthenticated: true,
+              },
+            })
+          );
+        },
+        error: (err) => {
+          this.store.dispatch(AuthActions.loginFailure({ error: err }));
+        },
+      });
+    }
     ReactiveFormConfig.set({
       internationalization: {
         dateFormat: 'dmy',
-        seperator: '/'
+        seperator: '/',
       },
       validationMessage: {
         alpha: 'Only alphabelts are allowed.',
@@ -23,11 +46,13 @@ export class AppComponent implements OnInit{
         creditcard: 'creditcard number is not correct',
         digit: 'Only digit are allowed',
         email: 'Email is not valid',
-        greaterThanEqualTo: 'please enter greater than or equal to the joining age',
+        greaterThanEqualTo:
+          'please enter greater than or equal to the joining age',
         greaterThan: 'please enter greater than to the joining age',
         hexColor: 'please enter hex code',
         json: 'Please enter valid json',
-        lessThanEqualTo: 'Please enter less than or equal to the current experience',
+        lessThanEqualTo:
+          'Please enter less than or equal to the current experience',
         lessThan: 'Please enter less than or equal to the current experience',
         lowerCase: 'Only lowercase is allowed',
         maxLength: 'Maximum length is {{1}} characters',
@@ -43,8 +68,8 @@ export class AppComponent implements OnInit{
         zipCode: 'Enter valid zip code',
         minLength: 'Minimum length is {{1}} characters',
         numberic: 'Only numeric is allowed',
-        date: 'Please enter valid date format'
-      }
+        date: 'Please enter valid date format',
+      },
     });
   }
 }

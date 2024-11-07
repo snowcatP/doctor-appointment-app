@@ -1,5 +1,7 @@
 package com.hhh.doctor_appointment_app.dto.response.AppointmentResponse;
 
+import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
+import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.enums.AppointmentStatus;
 import jakarta.persistence.*;
@@ -13,9 +15,7 @@ import java.util.Date;
 public class AppointmentResponse {
     private Long id;
 
-    private String fullname;
-
-    private boolean gender;
+    private String fullName;
 
     private String phone;
 
@@ -29,9 +29,13 @@ public class AppointmentResponse {
 
     private String bookingHour;
 
+    private String cusType;
+
     @Enumerated(EnumType.STRING)
     private AppointmentStatus appointmentStatus;
 
     //tra ve thong tin cua bac si
-    private User doctor;
+    private DoctorResponse doctor;
+
+
 }

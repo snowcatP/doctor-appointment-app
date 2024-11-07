@@ -1,4 +1,4 @@
-package com.hhh.doctor_appointment_app.dto.response;
+package com.hhh.doctor_appointment_app.dto.response.AuthResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AuthenticationResponse {
-    private boolean isAuthenticated;
-    private String token;
+public class LogoutResponse {
+    private String message;
 }

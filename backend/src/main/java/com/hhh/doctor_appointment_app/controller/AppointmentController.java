@@ -14,6 +14,7 @@ import com.hhh.doctor_appointment_app.service.AppointmentService.Command.Reshedu
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetAppointmentWithPage.GetAppointmentWithPageQuery;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetDetailAppointment.GetDetailAppointmentByPatientQuery;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentByDoctorId.GetListAppointmentByDoctorIdQuery;
+import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentOfPatient.GetListAppointmentOfPatientQuery;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentsForBooking.GetListAppointmentsForBookingQuery;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,9 @@ public class AppointmentController {
 
     @Autowired
     private GetListAppointmentsForBookingQuery getListAppointmentsForBookingQuery;
+
+    @Autowired
+    private GetListAppointmentOfPatientQuery getListAppointmentOfPatientQuery;
 
     @GetMapping("/list")
     public ResponseEntity<?> getAppointments(@RequestParam(defaultValue = "1") int page,
@@ -195,6 +199,19 @@ public class AppointmentController {
             return new ResponseEntity<>(getListAppointmentsForBookingQuery.getListAppointmentsForBooking(doctorId), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/list/patient")
+    public ResponseEntity<?> getAppointmentsOfPatient(@RequestParam(defaultValue = "1") int page,
+                                                       @RequestParam(defaultValue = "10") int size){
+        try{
+            return new ResponseEntity<>(getListAppointmentOfPatientQuery.getAppointmentsWithPageOfPatient(page, size), HttpStatus.OK);
+        }catch (Exception ex){
+            ApiResponse<Object> apiResponse = new ApiResponse<>();
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentByDoctorId;
 
 import com.hhh.doctor_appointment_app.dto.mapper.AppointmentMapper;
+import com.hhh.doctor_appointment_app.dto.mapper.DoctorMapper;
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.entity.Appointment;
@@ -23,25 +24,27 @@ public class GetListAppointmentByDoctorIdQuery {
     @Autowired
     private AppointmentMapper appointmentMapper;
 
+    @Autowired
+    private DoctorMapper doctorMapper;
+
     @PreAuthorize("hasRole('DOCTOR')")
     public PageResponse<List<AppointmentResponse>> getAppointmentsWithPageByDoctorId(int page, int size, Long id) {
         Pageable pageable = PageRequest.of(page-1, size);
-        Page<Appointment> appointmentPage = appointmentRepository.findByDoctor_Id(id,pageable);
+        Page<Appointment> appointmentPage = appointmentRepository.findByDoctorId(id,pageable);
 
         //Convert entities to responses
         List<AppointmentResponse> appointmentResponses = appointmentPage.getContent().stream()
                 .map(appointment -> {
                     AppointmentResponse response = new AppointmentResponse();
                     response.setId(appointment.getId());
-                    response.setFullname(appointment.getFullname());
-                    response.setGender(appointment.isGender());
+                    response.setFullName(appointment.getFullName());
                     response.setPhone(appointment.getPhone());
                     response.setEmail(appointment.getEmail());
-                    response.setDateOfBirth(appointment.getDateOfBirth());
                     response.setReason(appointment.getReason());
                     response.setDateBooking(appointment.getDateBooking());
                     response.setAppointmentStatus(appointment.getAppointmentStatus());
-                    response.setDoctor(appointment.getDoctor().getProfile());
+                    response.setCusType(appointment.getCusType());
+                    response.setDoctor(doctorMapper.toResponse(appointment.getDoctor()));
                     return response;
                 })
                 .collect(Collectors.toList());

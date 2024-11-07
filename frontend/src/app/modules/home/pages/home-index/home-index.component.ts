@@ -50,11 +50,10 @@ export class HomeIndexComponent {
       (response) => {
         if (response.statusCode === 200) {
           this.topRatingDoctors = response.data;
-          console.log(this.topRatingDoctors);
         }
       },
       (error) => {
-        console.error('Error fetching doctors', error);
+        console.error('Error fetching doctors');
       }
     );
   }

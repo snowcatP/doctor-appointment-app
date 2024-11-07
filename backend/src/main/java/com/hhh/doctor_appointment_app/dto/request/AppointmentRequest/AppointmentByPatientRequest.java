@@ -11,16 +11,12 @@ import java.util.Date;
 @Setter
 public class AppointmentByPatientRequest {
     @Size(max = 50, message = "Full name must not exceed 50 characters")
-    private String fullname;
-
-    private boolean gender;
+    private String fullName;
 
     private String phone;
 
-    @Email(message = "Email không hợp lệ")
+    @Email(message = "Email is invalid")
     private String email;
-
-    private Date dateOfBirth;
 
     private String reason;
 

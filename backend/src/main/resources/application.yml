@@ -19,7 +19,7 @@ spring:
       max-request-size: 10MB  # Kích thước tối đa của request
   jwt:
     signerKey: "LD4WdV1y2aghWc5XIjI/aLryDMurH2A3Mj/WRFYYTBdIE1t0CR3l4yytQupbEA4G"
-    valid-duration: 3600
+    valid-duration: 24
     refreshable-duration: 18000
   mail:
     host: smtp.gmail.com
@@ -41,4 +41,4 @@ email:
 
 origins:
   host: http://localhost:4200
-  admin: http://localhost:52804
+  admin: http://localhost:49489

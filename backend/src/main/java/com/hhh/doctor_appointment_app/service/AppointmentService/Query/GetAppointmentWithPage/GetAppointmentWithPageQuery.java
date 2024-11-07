@@ -1,6 +1,7 @@
 package com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetAppointmentWithPage;
 
 import com.hhh.doctor_appointment_app.dto.mapper.AppointmentMapper;
+import com.hhh.doctor_appointment_app.dto.mapper.DoctorMapper;
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentResponse;
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
@@ -25,6 +26,9 @@ public class GetAppointmentWithPageQuery {
     @Autowired
     private AppointmentMapper appointmentMapper;
 
+    @Autowired
+    private DoctorMapper doctorMapper;
+
     @PreAuthorize("hasRole('ADMIN')")
     public PageResponse<List<AppointmentResponse>> getAppointmentsWithPage(int page, int size) {
         Pageable pageable = PageRequest.of(page-1, size);
@@ -35,16 +39,15 @@ public class GetAppointmentWithPageQuery {
                 .map(appointment -> {
                     AppointmentResponse response = new AppointmentResponse();
                     response.setId(appointment.getId());
-                    response.setFullname(appointment.getFullname());
-                    response.setGender(appointment.isGender());
+                    response.setFullName(appointment.getFullName());
                     response.setPhone(appointment.getPhone());
                     response.setEmail(appointment.getEmail());
-                    response.setDateOfBirth(appointment.getDateOfBirth());
                     response.setReason(appointment.getReason());
                     response.setDateBooking(appointment.getDateBooking());
                     response.setBookingHour(appointment.getBookingHour());
+                    response.setCusType(appointment.getCusType());
                     response.setAppointmentStatus(appointment.getAppointmentStatus());
-                    response.setDoctor(appointment.getDoctor().getProfile());
+                    response.setDoctor(doctorMapper.toResponse(appointment.getDoctor()));
                     return response;
                 })
                 .collect(Collectors.toList());

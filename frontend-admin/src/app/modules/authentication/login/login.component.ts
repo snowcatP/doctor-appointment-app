@@ -29,7 +29,7 @@ export class LoginComponent {
     };
     this.accountService.onLogin(loginRequest).subscribe({
       next: (res:any) => {
-        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('token', res.token);
         this.router.navigateByUrl('')
         this.messageService.add({
           key: 'messageToast',

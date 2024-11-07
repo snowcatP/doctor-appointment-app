@@ -55,7 +55,7 @@ public class VerifyTokenCommand {
             throw new UnauthenticatedException("Token expired");
         }
         if (invalidatedRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID())) {
-            throw new UnauthenticatedException("Token expired");
+            throw new UnauthenticatedException("Token expired for logout");
         }
 
         return signedJWT;

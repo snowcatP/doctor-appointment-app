@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { MessageService } from 'primeng/api';
-import { AccountService } from '../../../../core/services/account.service';
 import { RegisterRequest } from '../../../../core/models/authentication.model';
+import { AuthService } from '../../../../core/services/auth.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -20,7 +20,7 @@ export class RegisterComponent {
   @ViewChild('emailInput') emailInput: ElementRef;
   constructor(
     private fb: FormBuilder,
-    private accountService: AccountService,
+    private authService: AuthService,
     private messageService: MessageService,
     private route: Router
   ) {
@@ -77,7 +77,7 @@ export class RegisterComponent {
     };
 
 
-    this.accountService.onSignupPatient(registerData).subscribe({
+    this.authService.onSignupPatient(registerData).subscribe({
       next: (res) => {
         this.messageService.add({
           key: 'messageToast',

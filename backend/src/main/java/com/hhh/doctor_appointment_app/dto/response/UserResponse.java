@@ -13,7 +13,8 @@ import java.util.Set;
 @Getter
 @Setter
 public class UserResponse {
-    private String fullname;
+    private Long id;
+    private String fullName;
     private String firstName;
     private String lastName;
     private String email;

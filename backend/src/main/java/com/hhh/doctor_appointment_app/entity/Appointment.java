@@ -16,28 +16,19 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "fullname")
-    private String fullname;
-
-    @Column(name = "gender")
-    private boolean gender;
-
-    @Column(name = "phone")
+    private String fullName;
     private String phone;
 
-    @Column(name = "email", nullable = false)
+    @Column(nullable = false)
     private String email;
 
-    @Column(name = "dateOfBirth")
-    private Date dateOfBirth;
-
-    @Column(name = "reason")
     private String reason;
 
     private Date dateBooking;
 
     private String bookingHour;
+
+    private String cusType;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
