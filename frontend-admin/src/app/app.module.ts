@@ -23,6 +23,10 @@ import { HttpClient, HttpClientModule, provideHttpClient, withInterceptors } fro
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { httpErrorInterceptor } from './core/interceptors/http-error.interceptor';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,6 +49,10 @@ import { authInterceptor } from './core/interceptors/auth.interceptor';
     TablerIconsModule.pick(TablerIcons),
     NgApexchartsModule,
     TranslateModule.forRoot(),
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule,
+    ReactiveFormsModule
     
 
     ],

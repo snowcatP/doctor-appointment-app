@@ -3,33 +3,78 @@
     </p-toolbar>
     <p-toolbar styleClass="mb-4 gap-2">
         <ng-template pTemplate="left">
-            <p-button severity="success" label="New" icon="pi pi-plus" class="mr-2" [style]="{'border-radius':'6px'}"/>
-            <p-dialog header="Add new doctor" [modal]="true" [(visible)]="addNewDoctorVisible" [style]="{ width: '55rem' }">
+            <p-button severity="success" label="New" icon="pi pi-plus" class="mr-2" 
+                (onClick)="showAddNewDoctorDialog()" />
+            <p-dialog header="Add new doctor" [modal]="true" [(visible)]="addNewDoctorVisible"
+                [style]="{ width: '55rem' }">
                 <span class="p-text-secondary block mb-5">Type doctor's information.</span>
-                
+                <form [formGroup]="formAddNewDoctor">
+                    <p-inputGroup>
+                        <span class="font-bold block mb-2" >First name: </span>
+                        <input pInputText placeholder="First name"  formControlName="firstName">
+                        <span class="font-bold block mb-2">Last name: </span>
+                        <input pInputText placeholder="Last name" formControlName="lastName">
+                    </p-inputGroup>
+                    <p-inputGroup>
+                        <span class="font-bold block mb-2">Gender: </span>
+                        <p-radioButton value=true formControlName="gender" inputId="male" />
+                        <label for="male" class="ml-2">
+                            Male
+                        </label>
+                        <p-radioButton value=false formControlName="gender" inputId="female" />
+                        <label for="female" class="ml-2">
+                            Female
+                        </label>
+                    </p-inputGroup>
+                    <p-inputGroup>
+                        <span class="font-bold block mb-2">Speciality: </span>
+                        <p-dropdown 
+                        formControlName="specialty"
+                        [options]="listSpecialty"
+                        optionLabel="specialtyName"
+                        [filter]="true"
+                        filterBy="specialtyName"
+                        [showClear]="true"
+                        placeholder="Select a Speciality"/>
+                    </p-inputGroup>
+                    <p-inputGroup>
+                        <span class="font-bold block mb-2">Birth Day: </span>
+                        <p-calendar formControlName="dateOfBirth" [iconDisplay]="'input'" [showIcon]="true" />
+                    </p-inputGroup>
+                    <p-inputGroup class="flex-auto">
+                        <span class="font-bold block mb-2">Phone: </span>
+                        <p-inputMask mask="(999) 999-9999" formControlName="phone" placeholder="999-99-9999" />
+                    </p-inputGroup>
+                    <p-inputGroup>
+                        <span class="font-bold block mb-2">Email: </span>
+                        <input pInputText placeholder="Email" formControlName="email" />
+                    </p-inputGroup>
+                    <p-inputGroup>
+                        <p-toast />
+                        <span class="font-bold block mb-2">Image profile: </span>
+                        <p-fileUpload mode="basic" chooseLabel="Choose" chooseIcon="pi pi-upload" name="demo[]"
+                            url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000"
+                            (onUpload)="onUpload($event)" />
+                    </p-inputGroup>
+                    <div class="save-cancel-container">
+                        <p-button class="save-btn" label="Save" icon="pi pi-check"  severity="success" />
+                        <p-button class="cancel-btn" label="Cancel" icon="pi pi-times"  severity="danger" (onClick)="addNewDoctorVisible = false"/>
+                    </div>
+                </form>
             </p-dialog>
-            <p-button severity="danger" label="Delete" icon="pi pi-trash" [style]="{'border-radius':'6px'}" />
+            <p-button severity="danger" label="Delete" icon="pi pi-trash"  />
         </ng-template>
         <ng-template pTemplate="right">
             <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import"
                 class="mr-2 inline-block" />
-            <p-button severity="help" label="Export" icon="pi pi-upload" [style]="{'border-radius':'6px'}"/>
+            <p-button severity="help" label="Export" icon="pi pi-upload"  />
         </ng-template>
     </p-toolbar>
 
 
-    <p-table 
-    #myTab 
-    [value]="doctors" 
-    styleClass="p-datatable-striped" 
-    [paginator]="true"
-    [tableStyle]="{'min-width': '75rem'}" 
-    [rowHover]="true " 
-    dataKey="id" 
-    [rows]="25"
-    [globalFilterFields]="['firstName', 'lastName']"
-        
-        >
+    <p-table #myTab [value]="doctors" styleClass="p-datatable-striped" [paginator]="true"
+        [tableStyle]="{'min-width': '75rem'}" [rowHover]="true " dataKey="id" [rows]="25"
+        [globalFilterFields]="['firstName', 'lastName']">
         <ng-template pTemplate="header">
             <tr>
                 <th style="width: 4rem">
@@ -43,7 +88,7 @@
                     </div>
                 </th>
                 <th pSortableColumn="lastName" style="min-width:15rem">
-                    
+
                     Last Name <p-sortIcon field="lastName" />
                     <p-columnFilter type="text" field="lastName" display="menu" class="ml-auto" />
 
@@ -76,7 +121,7 @@
                 </th>
 
             </tr>
-            
+
 
         </ng-template>
         <ng-template pTemplate="body" let-doctor>

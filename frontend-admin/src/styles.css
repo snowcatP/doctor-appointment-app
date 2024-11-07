@@ -1,4 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
-.p-datepicker .p-datepicker-buttonbar .p-button {
-    border-radius: 6px !important;
+
+.mat-drawer.mat-drawer-side{
+    z-index: 1 !important;
+}
+p-inputMask {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+p-dropdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.p-inputgroup input, p-button button{
+    border-radius: 6px;
+}
+.p-dropdown-filter-container{
+    display: flex;
 }
