@@ -41,4 +41,4 @@ email:
 
 origins:
   host: http://localhost:4200
-  admin: http://localhost:52804
+  admin: http://localhost:49489
