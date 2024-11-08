@@ -29,6 +29,8 @@ public class User {
     private Date dateOfBirth;
     private String address;
 
+    private String avatarFilePath;
+
     @ManyToOne()
     @JoinColumn(name = "role_id")
     private Role role;

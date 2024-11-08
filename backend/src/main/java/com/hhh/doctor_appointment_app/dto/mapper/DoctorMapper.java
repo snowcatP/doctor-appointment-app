@@ -20,7 +20,8 @@ public interface DoctorMapper {
             @Mapping(source = "doctor.profile.email", target = "email"),
             @Mapping(source = "doctor.profile.dateOfBirth", target = "dateOfBirth"),
             @Mapping(source = "doctor.profile.address", target = "address"),
-            @Mapping(source = "doctor.specialty", target = "specialty")
+            @Mapping(source = "doctor.specialty", target = "specialty"),
+            @Mapping(source = "doctor.profile.avatarFilePath", target = "avatarFilePath"),
     })
     DoctorResponse toResponse(Doctor doctor);
 

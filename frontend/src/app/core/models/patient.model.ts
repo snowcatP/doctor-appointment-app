@@ -8,6 +8,7 @@ export class UpdateProfileRequest {
     email: string;
     dateOfBirth: Date;
     address: string;
+    avatarFilePath: string;
     role: Role;
     constructor() {}
 }

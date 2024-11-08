@@ -22,5 +22,6 @@ public class UserResponse {
     private String address;
     private Date dateOfBirth;
     private Boolean gender;
+    private String avatarFilePath;
     private Role role;
 }

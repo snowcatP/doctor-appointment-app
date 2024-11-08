@@ -21,6 +21,7 @@ import com.hhh.doctor_appointment_app.repository.FeedbackRepository;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
 import com.hhh.doctor_appointment_app.repository.ReplyFeedbackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -51,6 +52,7 @@ public class CreateReplyFeedbackByDoctorCommand {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
+    @PreAuthorize("hasRole('DOCTOR') or hasRole('ADMIN')")
     public ApiResponse<Object> createReplyFeedbackByDoctor(ReplyFeedbackByDoctorRequest replyFeedbackByDoctorRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{

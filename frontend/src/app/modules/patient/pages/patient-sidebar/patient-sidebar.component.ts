@@ -13,7 +13,6 @@ export class PatientSidebarComponent implements OnInit {
 
   ngOnInit() {
     this.authService.getUserData().subscribe(profile => {
-      console.log(profile);
         this.patientProfile = profile;
       
     });
