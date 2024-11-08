@@ -49,7 +49,7 @@ public class GetTopTenRatingDoctorQuery {
                     response.setDateOfBirth(doctor.getProfile().getDateOfBirth());
                     response.setAddress(doctor.getProfile().getAddress());
                     response.setSpecialty(doctor.getSpecialty());
-                    response.setAvatarFilePath(doctor.getAvatarFilePath());
+                    response.setAvatarFilePath(doctor.getProfile().getAvatarFilePath());
                     response.setAverageRating(ratingOfDoctor);
                     response.setNumberOfFeedbacks(feedbacks.size());
                     return response;

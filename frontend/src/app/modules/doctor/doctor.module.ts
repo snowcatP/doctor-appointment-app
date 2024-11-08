@@ -11,8 +11,12 @@ import { DoctorScheduleComponent } from './pages/doctor-schedule/doctor-schedule
 import { DoctorSidebarComponent } from './pages/doctor-sidebar/doctor-sidebar.component';
 import { DoctorComponent } from './doctor.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
-
-
+import { DoctorReviewComponent } from './pages/doctor-review/doctor-review.component';
+import { ReplyDialogComponent } from './pages/doctor-review/reply-dialog/reply-dialog.component';
+import { FormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { PaginatorModule } from 'primeng/paginator';
+import { DoctorMypatientComponent } from './pages/doctor-mypatient/doctor-mypatient.component';
 @NgModule({
   declarations: [
     DoctorAppointmentComponent,
@@ -22,12 +26,18 @@ import { FullCalendarModule } from '@fullcalendar/angular';
     DoctorProfileComponent,
     DoctorScheduleComponent,
     DoctorSidebarComponent,
-    DoctorComponent
+    DoctorComponent,
+    DoctorReviewComponent,
+    ReplyDialogComponent,
+    DoctorMypatientComponent,
   ],
   imports: [
     CommonModule,
     DoctorRoutingModule,
-    FullCalendarModule
+    FullCalendarModule,
+    FormsModule,
+    MatDialogModule,
+    PaginatorModule
   ]
 })
 export class DoctorModule { }

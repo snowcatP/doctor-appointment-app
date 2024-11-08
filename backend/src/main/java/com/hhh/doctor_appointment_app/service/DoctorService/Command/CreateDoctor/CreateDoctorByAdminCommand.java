@@ -57,16 +57,17 @@ public class CreateDoctorByAdminCommand {
             User user = new User();
             user.setFirstName(addDoctorRequest.getFirstName());
             user.setLastName(addDoctorRequest.getLastName());
+            user.setFullName(user.getFullName() + " " + user.getLastName());
             user.setGender(addDoctorRequest.isGender());
             user.setPhone(addDoctorRequest.getPhone());
             user.setEmail(addDoctorRequest.getEmail());
             user.setDateOfBirth(addDoctorRequest.getDateOfBirth());
             user.setAddress(addDoctorRequest.getAddress());
+            user.setAvatarFilePath(addDoctorRequest.getAvatarFilePath());
 
             Doctor newDoctor = new Doctor();
             newDoctor.setProfile(user);
             newDoctor.setSpecialty(specialty);
-            newDoctor.setAvatarFilePath(addDoctorRequest.getAvatarFilePath());
 
             newDoctor.getProfile().setPassword(passwordEncoder.encode(addDoctorRequest.getPassword()));
             newDoctor.getProfile().setActive(true);

@@ -40,6 +40,7 @@ public interface UserMapper {
         @Mapping(source = "dateOfBirth", target = "profile.dateOfBirth"),
         @Mapping(source = "address", target = "profile.address"),
         @Mapping(source = "gender", target = "profile.gender"),
+            @Mapping(target = "profile.fullName", expression = "java(userCreateRequest.getFirstName() + \" \" + userCreateRequest.getLastName())")
     })
     Patient toPatient(UserCreateRequest request);
 

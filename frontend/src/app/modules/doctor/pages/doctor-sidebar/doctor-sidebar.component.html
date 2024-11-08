@@ -21,43 +21,43 @@
     <div class="dashboard-widget">
       <nav class="dashboard-menu">
         <ul>
-          <li class="active">
-            <a routerLink="/doctor">
+          <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <a routerLink="/doctor/dashboard">
               <i class="fas fa-columns"></i>
               <span>Dashboard</span>
             </a>
           </li>
-          <li>
+          <li routerLinkActive="active">
             <a routerLink="/doctor/appointment">
               <i class="fas fa-calendar-check"></i>
               <span>Appointments</span>
             </a>
           </li>
-          <li>
+          <li routerLinkActive="active">
             <a routerLink="/doctor/calendar">
               <i class="fa-regular fa-calendar"></i>
               <span>My Calendar</span>
             </a>
           </li>
-          <li>
-            <a routerLink="/doctor-profile">
+          <li routerLinkActive="active">
+            <a routerLink="/doctor/myPatient">
               <i class="fa-regular fa-address-card"></i>
-              <span>My Profile Page</span>
+              <span>My Patients</span>
             </a>
           </li>
-          <li>
+          <li routerLinkActive="active">
             <a routerLink="/doctor/schedule">
               <i class="fas fa-hourglass-start"></i>
               <span>Scheduling</span>
             </a>
           </li>
-          <li>
-            <a href="reviews.html">
+          <li routerLinkActive="active">
+            <a routerLink="/doctor/review">
               <i class="fas fa-star"></i>
               <span>Reviews</span>
             </a>
           </li>
-          <li>
+          <li routerLinkActive="active">
             <a routerLink="/doctor/profile">
               <i class="fas fa-user-cog"></i>
               <span>Profile Settings</span>

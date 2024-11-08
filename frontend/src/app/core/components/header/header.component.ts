@@ -31,6 +31,30 @@ export class HeaderComponent implements OnInit {
     this.user$ = this.store.select(fromAuth.selectUser);
   }
 
+  goToDashboard() {
+    this.user$.subscribe(user => {
+      if (user?.role.roleName === 'PATIENT') {
+        this.router.navigate(['/patient']);
+      } else if (user?.role.roleName === 'DOCTOR') {
+        this.router.navigate(['/doctor']);
+      } else {
+        console.warn('Unknown role, unable to redirect');
+      }
+    });
+  }
+
+  goToProfile() {
+    this.user$.subscribe(user => {
+      if (user?.role.roleName === 'PATIENT') {
+        this.router.navigate(['/patient/profile']);
+      } else if (user?.role.roleName === 'DOCTOR') {
+        this.router.navigate(['/doctor/profile']);
+      } else {
+        console.warn('Unknown role, unable to redirect');
+      }
+    });
+  }
+
   logout() {
     this.authService.logout().subscribe({
       next: (res) => {

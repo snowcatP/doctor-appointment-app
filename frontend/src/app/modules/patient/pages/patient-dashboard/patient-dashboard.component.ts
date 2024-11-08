@@ -40,7 +40,7 @@ export class PatientDashboardComponent {
       (response) => {
         if (response.statusCode === 200) {
           this.appointments = response.data;
-          this.totalAppointments = response.totalPage * pageSize; // Tính tổng số lượng bác sĩ
+          this.totalAppointments = response.totalPage * pageSize;
         }
       },
       (error) => {
@@ -81,8 +81,7 @@ export class PatientDashboardComponent {
       (response) => {
         if (response.statusCode === 200) {
           this.medicalRecords = response.data;
-          this.totalMedicalRecords = response.totalPage * pageSize; // Tính tổng số lượng bác sĩ
-          console.log(this.medicalRecords)
+          this.totalMedicalRecords = response.totalPage * pageSize;
         }
       },
       (error) => {

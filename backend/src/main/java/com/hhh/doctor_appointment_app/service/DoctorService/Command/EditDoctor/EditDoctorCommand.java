@@ -54,7 +54,7 @@ public class EditDoctorCommand {
             existingDoctor.getProfile().setDateOfBirth(editDoctorRequest.getDateOfBirth());
             existingDoctor.getProfile().setAddress(editDoctorRequest.getAddress());
             existingDoctor.setSpecialty(specialty);
-            existingDoctor.setAvatarFilePath(editDoctorRequest.getAvatarFilePath());
+            existingDoctor.getProfile().setAvatarFilePath(editDoctorRequest.getAvatarFilePath());
 
             doctorRepository.saveAndFlush(existingDoctor);
 
