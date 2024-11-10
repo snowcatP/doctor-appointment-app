@@ -10,6 +10,7 @@ import com.hhh.doctor_appointment_app.enums.AppointmentStatus;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
+import com.hhh.doctor_appointment_app.service.NotificationService.Implement.BookingNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,11 @@ public class CreateAppointmentByGuestCommand {
     private DoctorRepository doctorRepository;
 
     @Autowired
+    private BookingNotificationService bookingNotificationService;
+
+    @Autowired
     private AppointmentMapper appointmentMapper;
+
     public ApiResponse<Object> createAppointmentByGuest(AppointmentByGuestRequest appointmentByGuestRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
@@ -63,6 +68,11 @@ public class CreateAppointmentByGuestCommand {
 
             appointmentRepository.saveAndFlush(appointment);
             AppointmentResponse appointmentResponse = appointmentMapper.toResponse(appointment);
+
+            bookingNotificationService.sendBookingMessage(
+                    appointmentMapper.toBookingNotificationResponse(appointment)
+            );
+
             apiResponse.setMessage("Appointment Created Successfully !");
             apiResponse.ok(appointmentResponse);
             return apiResponse;
