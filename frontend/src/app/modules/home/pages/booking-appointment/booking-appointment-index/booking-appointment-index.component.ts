@@ -1,6 +1,21 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { LoginRequest } from './../../../../../core/models/authentication.model';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { filter, map, Observable, startWith, Subscription, take } from 'rxjs';
+import {
+  filter,
+  map,
+  Observable,
+  startWith,
+  Subject,
+  Subscription,
+  takeUntil,
+} from 'rxjs';
 import {
   AppointmentsBooked,
   AppointmentSlot,
@@ -18,9 +33,11 @@ import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromAuth from '../../../../../core/states/auth/auth.reducer';
+import * as AuthActions from '../../../../../core/states/auth/auth.actions';
 import { User } from '../../../../../core/models/authentication.model';
 import { BookingNotification } from '../../../../../core/models/notification.model';
 import { WebSocketService } from '../../../../../core/services/webSocket.service';
+import { Actions, ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'app-booking-appointment-index',
@@ -28,9 +45,11 @@ import { WebSocketService } from '../../../../../core/services/webSocket.service
   styleUrl: './booking-appointment-index.component.css',
 })
 export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
+  @ViewChild('emailInput') emailInput: ElementRef;
   isLoading: boolean = false;
   formBooking: FormGroup;
   formBookingDate: FormGroup;
+  formLogin: FormGroup;
   filteredSpecialties: Observable<Specialty[]>;
   filteredDoctors: Observable<DoctorBooking[]>;
   listDoctors: DoctorBooking[] = [];
@@ -56,8 +75,11 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
   isLogged: boolean;
   user$: Observable<User>;
   user: User;
+  modalVisible: boolean = false;
+  showPass: boolean = false;
+  loginErrorMessage: string = '';
   private bookingSubscription: Subscription;
-
+  private unsubscribe$ = new Subject<void>();
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -66,7 +88,8 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
     private appointmentService: AppointmentService,
     private messageService: MessageService,
     private store: Store<fromAuth.State>,
-    private webSocketService: WebSocketService
+    private webSocketService: WebSocketService,
+    private actions$: Actions // effects
   ) {}
 
   ngOnInit(): void {
@@ -75,6 +98,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
     this.getData();
     this.getObservables();
     this.webSocketInit();
+    this.subscribeToActions();
   }
 
   ngOnDestroy(): void {
@@ -82,6 +106,42 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
       this.bookingSubscription.unsubscribe();
     }
     this.webSocketService.disconnectSocket();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete(); // Cleanup subscription on component destroy
+  }
+
+  subscribeToActions() {
+    this.actions$
+      .pipe(ofType(AuthActions.loginSuccess), takeUntil(this.unsubscribe$))
+      .subscribe(() => {
+        this.messageService.add({
+          key: 'messageToast',
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Login successfully',
+        });
+        this.setUserInformation();
+        setTimeout(() => {
+          this.closeDialog();
+        }, 500);
+      });
+
+    this.store.select(fromAuth.selectErrorMessage).subscribe((error) => {
+      if (error) {
+        this.loginErrorMessage = 'Wrong email or password.';
+        setTimeout(() => {
+          this.emailInput.nativeElement.select();
+        }, 0);
+      }
+    });
+  }
+
+  login() {
+    const credential: LoginRequest = {
+      email: this.formLogin.controls['email'].value,
+      password: this.formLogin.controls['password'].value,
+    };
+    this.store.dispatch(AuthActions.loginRequest({ credential }));
   }
 
   webSocketInit() {
@@ -102,7 +162,10 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
     this.isLogged$.subscribe((res) => (this.isLogged = res as boolean));
     this.user$ = this.store.select(fromAuth.selectUser);
     this.user$.subscribe((res) => (this.user = res as User));
+    this.setUserInformation();
+  }
 
+  setUserInformation() {
     if (this.isLogged) {
       this.formBooking.patchValue({
         firstName: this.user.firstName,
@@ -229,6 +292,12 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
       return;
     }
     const bookingDate = this.formatDate(app.dateBooking);
+    if (
+      this.formatDate(this.timeSlotSelected.date) == bookingDate &&
+      app.bookingHour == this.timeSlotSelected.time
+    ) {
+      this.timeSlotSelected = null;
+    }
     this.schedules.forEach((week: AppointmentSlot[]) => {
       week.forEach((day: AppointmentSlot) => {
         day.timeSlotsMorning.forEach((timeSlot: TimeSlot) => {
@@ -418,6 +487,11 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
       bookingDate: ['', [RxwebValidators.required()]],
       bookingHour: ['', [RxwebValidators.required()]],
     });
+
+    this.formLogin = this.fb.group({
+      email: ['', [RxwebValidators.email(), RxwebValidators.required()]],
+      password: ['', [RxwebValidators.required()]],
+    });
   }
 
   private _filterSpecialty(value: string): Specialty[] {
@@ -465,5 +539,25 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         detail: message,
       });
     }
+  }
+
+  showDialog() {
+    this.modalVisible = true;
+  }
+
+  closeDialog() {
+    this.modalVisible = false;
+    this.formLogin.reset();
+  }
+
+  navigateToRegister() {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/auth/register'])
+    );
+    window.open(url, '_blank');
+  }
+
+  showPassword() {
+    this.showPass = !this.showPass;
   }
 }
