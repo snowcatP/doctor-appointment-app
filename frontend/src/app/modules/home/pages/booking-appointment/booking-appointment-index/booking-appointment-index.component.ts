@@ -1,7 +1,6 @@
-import { email } from '@rxweb/reactive-form-validators';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { map, Observable, startWith } from 'rxjs';
+import { filter, map, Observable, startWith, Subscription, take } from 'rxjs';
 import {
   AppointmentsBooked,
   AppointmentSlot,
@@ -20,13 +19,15 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromAuth from '../../../../../core/states/auth/auth.reducer';
 import { User } from '../../../../../core/models/authentication.model';
+import { BookingNotification } from '../../../../../core/models/notification.model';
+import { WebSocketService } from '../../../../../core/services/webSocket.service';
 
 @Component({
   selector: 'app-booking-appointment-index',
   templateUrl: './booking-appointment-index.component.html',
   styleUrl: './booking-appointment-index.component.css',
 })
-export class BookingAppointmentIndexComponent implements OnInit {
+export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
   formBooking: FormGroup;
   formBookingDate: FormGroup;
@@ -55,6 +56,8 @@ export class BookingAppointmentIndexComponent implements OnInit {
   isLogged: boolean;
   user$: Observable<User>;
   user: User;
+  private bookingSubscription: Subscription;
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -62,7 +65,8 @@ export class BookingAppointmentIndexComponent implements OnInit {
     private specialtyService: SpecialtyService,
     private appointmentService: AppointmentService,
     private messageService: MessageService,
-    private store: Store<fromAuth.State>
+    private store: Store<fromAuth.State>,
+    private webSocketService: WebSocketService
   ) {}
 
   ngOnInit(): void {
@@ -70,6 +74,27 @@ export class BookingAppointmentIndexComponent implements OnInit {
     this.generateAppointmentSlots();
     this.getData();
     this.getObservables();
+    this.webSocketInit();
+  }
+
+  ngOnDestroy(): void {
+    if (this.bookingSubscription) {
+      this.bookingSubscription.unsubscribe();
+    }
+    this.webSocketService.disconnectSocket();
+  }
+
+  webSocketInit() {
+    this.webSocketService
+      .connectSocket()
+      .pipe(filter((state) => state))
+      .subscribe(() => {
+        this.bookingSubscription = this.webSocketService
+          .on('/app-ws/booking/notifications')
+          .subscribe((notification: BookingNotification) => {
+            this.handleAppointmentSendFromWs(notification);
+          });
+      });
   }
 
   getObservables() {
@@ -127,27 +152,28 @@ export class BookingAppointmentIndexComponent implements OnInit {
         doctorName: this.doctorSelected.fullName,
         reason: this.formBooking.get('reason').value,
       };
-      console.log(bookingData)
-      this.appointmentService.createAppointmentByPatient(bookingData).subscribe({
-        next: (res) => {
-          if (res.statusCode == 200) {
-            this.setAppointmentForSuccess(null, res?.data);
-            this.showToast(true, 'Booked appointment successfully!');
-            setTimeout(() => {
-              this.router.navigate([
-                '/booking/success',
-                { bookingSuccess: true },
-              ]);
-            }, 2000);
-          } else {
+      this.appointmentService
+        .createAppointmentByPatient(bookingData)
+        .subscribe({
+          next: (res) => {
+            if (res.statusCode == 200) {
+              this.setAppointmentForSuccess(null, res?.data);
+              this.showToast(true, 'Booked appointment successfully!');
+              setTimeout(() => {
+                this.router.navigate([
+                  '/booking/success',
+                  { bookingSuccess: true },
+                ]);
+              }, 2000);
+            } else {
+              this.showToast(false, 'Booked appointment unsuccessfully!');
+            }
+          },
+          error: (err) => {
             this.showToast(false, 'Booked appointment unsuccessfully!');
-          }
-        },
-        error: (err) => {
-          this.showToast(false, 'Booked appointment unsuccessfully!');
-          console.log(err);
-        },
-      })
+            console.log(err);
+          },
+        });
     } else {
       const bookingData: BookingDataGuest = {
         doctorId: this.doctorSelected.id,
@@ -161,26 +187,24 @@ export class BookingAppointmentIndexComponent implements OnInit {
         dateBooking: this.timeSlotSelected.date,
         bookingHour: this.timeSlotSelected.time,
       };
-      this.appointmentService
-        .createAppointmentByGuest(bookingData)
-        .subscribe({
-          next: (res) => {
-            if (res.statusCode == 200) {
-              this.setAppointmentForSuccess(res?.data);
-              this.showToast(true, 'Booked appointment successfully!');
-              setTimeout(() => {
-                this.router.navigate([
-                  '/booking/success',
-                  { bookingSuccess: true },
-                ]);
-              }, 2000);
-            }
-          },
-          error: (err) => {
-            this.showToast(false, 'Booked appointment unsuccessfully!');
-            console.log(err);
-          },
-        });
+      this.appointmentService.createAppointmentByGuest(bookingData).subscribe({
+        next: (res) => {
+          if (res.statusCode == 200) {
+            this.setAppointmentForSuccess(res?.data);
+            this.showToast(true, 'Booked appointment successfully!');
+            setTimeout(() => {
+              this.router.navigate([
+                '/booking/success',
+                { bookingSuccess: true },
+              ]);
+            }, 2000);
+          }
+        },
+        error: (err) => {
+          this.showToast(false, 'Booked appointment unsuccessfully!');
+          console.log(err);
+        },
+      });
     }
   }
 
@@ -194,6 +218,35 @@ export class BookingAppointmentIndexComponent implements OnInit {
     if (patient) {
       this.appointmentService.setAppointmentBookedPatient(patient);
     }
+  }
+
+  closeBooking() {
+    this.router.navigate(['/']);
+  }
+
+  handleAppointmentSendFromWs(app: BookingNotification) {
+    if (!this.doctorSelected || app.doctor.id !== this.doctorSelected.id) {
+      return;
+    }
+    const bookingDate = this.formatDate(app.dateBooking);
+    this.schedules.forEach((week: AppointmentSlot[]) => {
+      week.forEach((day: AppointmentSlot) => {
+        day.timeSlotsMorning.forEach((timeSlot: TimeSlot) => {
+          const tsDate = this.formatDate(timeSlot.date);
+          if (tsDate == bookingDate && timeSlot.time == app.bookingHour) {
+            timeSlot.isBooked = true;
+            return;
+          }
+        });
+        day.timeSlotsAfternoon.forEach((timeSlot: TimeSlot) => {
+          const tsDate = this.formatDate(timeSlot.date);
+          if (tsDate == bookingDate && timeSlot.time == app.bookingHour) {
+            timeSlot.isBooked = true;
+            return;
+          }
+        });
+      });
+    });
   }
 
   handleAppointmentsBooked() {
@@ -388,10 +441,6 @@ export class BookingAppointmentIndexComponent implements OnInit {
       ['Th 7', 'Sat'],
     ]);
     return dayMap.get(dayWeek) || dayWeek;
-  }
-
-  testToast() {
-    this.showToast(true, 'yes');
   }
 
   showToast(status: boolean, message: string) {
