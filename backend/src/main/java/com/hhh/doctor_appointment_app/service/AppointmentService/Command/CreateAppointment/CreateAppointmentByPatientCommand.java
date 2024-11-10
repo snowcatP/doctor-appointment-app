@@ -12,6 +12,7 @@ import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
+import com.hhh.doctor_appointment_app.service.NotificationService.Implement.BookingNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,9 @@ public class CreateAppointmentByPatientCommand {
 
     @Autowired
     private AppointmentMapper appointmentMapper;
+
+    @Autowired
+    private BookingNotificationService bookingNotificationService;
 
     public ApiResponse<Object> createAppointmentByPatient(AppointmentByPatientRequest appointmentByPatientRequest) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
@@ -75,6 +79,11 @@ public class CreateAppointmentByPatientCommand {
 
             appointmentRepository.saveAndFlush(appointment);
             AppointmentResponse appointmentResponse = appointmentMapper.toResponse(appointment);
+
+            bookingNotificationService.sendBookingMessage(
+                    appointmentMapper.toBookingNotificationResponse(appointment)
+            );
+
             apiResponse.setMessage("Appointment Created Successfully !");
             apiResponse.ok(appointmentResponse);
             return apiResponse;

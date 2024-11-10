@@ -14,9 +14,8 @@ export class WebSocketService {
   constructor() {
     let ws = new SockJS(`${host}/ws`);
     this.client = Stomp.over(ws);
-
-    this.client.debug = (msg: string) => console.log(msg);
-
+    // this.client.debug = (msg: string) => console.log(msg);
+    this.client.debug = () => {};
     this.client.configure({
       onConnect: () => {
         console.log('Connected to WebSocket');
@@ -53,7 +52,6 @@ export class WebSocketService {
           observer.error(error);
         }
       });
-
       return () => {
         if (subscription) {
           subscription.unsubscribe();
