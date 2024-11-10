@@ -402,7 +402,15 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         ],
       ],
       email: ['', [RxwebValidators.required(), RxwebValidators.email()]],
-      phone: ['', [RxwebValidators.required(), RxwebValidators.digit()]],
+      phone: [
+        '',
+        [
+          RxwebValidators.required(),
+          RxwebValidators.digit(),
+          RxwebValidators.minLength({ value: 8 }),
+          RxwebValidators.maxLength({ value: 15 }),
+        ],
+      ],
       reason: ['', [RxwebValidators.required()]],
     });
 
