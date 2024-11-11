@@ -7,7 +7,7 @@
         (doctorsFound)="onDoctorsFound($event)"></app-search-doctor-filter>
 
       <div class="col-md-12 col-lg-8 col-xl-9" *ngIf="doctors.length > 0; else noDoctors">
-        <div class="card" *ngFor="let doctor of doctors" style="min-height: 55vh;">
+        <div class="card" *ngFor="let doctor of doctors">
           <div class="card-body">
             <div class="doctor-widget">
               <div class="doc-info-left">
