@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import * as AuthActions from './auth.actions';
 import { catchError, exhaustMap, map, of, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
-import { LoginSucessResponse } from '../../models/authentication.model';
 
 @Injectable()
 export class AuthEffect {
@@ -41,15 +40,6 @@ export class AuthEffect {
           if (loginSuccessResponse.token) {
             localStorage.setItem('token', loginSuccessResponse.token);
           }
-          this.messageService.add({
-            key: 'messageToast',
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Login successfully',
-          });
-          setTimeout(() => {
-            this.router.navigateByUrl('/');
-          }, 1500);
         })
       ),
     { dispatch: false }

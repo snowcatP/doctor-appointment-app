@@ -1,7 +1,21 @@
-import { email } from '@rxweb/reactive-form-validators';
-import { Component, OnInit } from '@angular/core';
+import { LoginRequest } from './../../../../../core/models/authentication.model';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { map, Observable, startWith } from 'rxjs';
+import {
+  filter,
+  map,
+  Observable,
+  startWith,
+  Subject,
+  Subscription,
+  takeUntil,
+} from 'rxjs';
 import {
   AppointmentsBooked,
   AppointmentSlot,
@@ -19,17 +33,23 @@ import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromAuth from '../../../../../core/states/auth/auth.reducer';
+import * as AuthActions from '../../../../../core/states/auth/auth.actions';
 import { User } from '../../../../../core/models/authentication.model';
+import { BookingNotification } from '../../../../../core/models/notification.model';
+import { WebSocketService } from '../../../../../core/services/webSocket.service';
+import { Actions, ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'app-booking-appointment-index',
   templateUrl: './booking-appointment-index.component.html',
   styleUrl: './booking-appointment-index.component.css',
 })
-export class BookingAppointmentIndexComponent implements OnInit {
+export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
+  @ViewChild('emailInput') emailInput: ElementRef;
   isLoading: boolean = false;
   formBooking: FormGroup;
   formBookingDate: FormGroup;
+  formLogin: FormGroup;
   filteredSpecialties: Observable<Specialty[]>;
   filteredDoctors: Observable<DoctorBooking[]>;
   listDoctors: DoctorBooking[] = [];
@@ -55,6 +75,11 @@ export class BookingAppointmentIndexComponent implements OnInit {
   isLogged: boolean;
   user$: Observable<User>;
   user: User;
+  modalVisible: boolean = false;
+  showPass: boolean = false;
+  loginErrorMessage: string = '';
+  private bookingSubscription: Subscription;
+  private unsubscribe$ = new Subject<void>();
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -62,7 +87,9 @@ export class BookingAppointmentIndexComponent implements OnInit {
     private specialtyService: SpecialtyService,
     private appointmentService: AppointmentService,
     private messageService: MessageService,
-    private store: Store<fromAuth.State>
+    private store: Store<fromAuth.State>,
+    private webSocketService: WebSocketService,
+    private actions$: Actions // effects
   ) {}
 
   ngOnInit(): void {
@@ -70,6 +97,64 @@ export class BookingAppointmentIndexComponent implements OnInit {
     this.generateAppointmentSlots();
     this.getData();
     this.getObservables();
+    this.webSocketInit();
+    this.subscribeToActions();
+  }
+
+  ngOnDestroy(): void {
+    if (this.bookingSubscription) {
+      this.bookingSubscription.unsubscribe();
+    }
+    this.webSocketService.disconnectSocket();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete(); // Cleanup subscription on component destroy
+  }
+
+  subscribeToActions() {
+    this.actions$
+      .pipe(ofType(AuthActions.loginSuccess), takeUntil(this.unsubscribe$))
+      .subscribe(() => {
+        this.messageService.add({
+          key: 'messageToast',
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Login successfully',
+        });
+        this.setUserInformation();
+        setTimeout(() => {
+          this.closeDialog();
+        }, 500);
+      });
+
+    this.store.select(fromAuth.selectErrorMessage).subscribe((error) => {
+      if (error) {
+        this.loginErrorMessage = 'Wrong email or password.';
+        setTimeout(() => {
+          this.emailInput.nativeElement.select();
+        }, 0);
+      }
+    });
+  }
+
+  login() {
+    const credential: LoginRequest = {
+      email: this.formLogin.controls['email'].value,
+      password: this.formLogin.controls['password'].value,
+    };
+    this.store.dispatch(AuthActions.loginRequest({ credential }));
+  }
+
+  webSocketInit() {
+    this.webSocketService
+      .connectSocket()
+      .pipe(filter((state) => state))
+      .subscribe(() => {
+        this.bookingSubscription = this.webSocketService
+          .on('/app-ws/booking/notifications')
+          .subscribe((notification: BookingNotification) => {
+            this.handleAppointmentSendFromWs(notification);
+          });
+      });
   }
 
   getObservables() {
@@ -77,7 +162,10 @@ export class BookingAppointmentIndexComponent implements OnInit {
     this.isLogged$.subscribe((res) => (this.isLogged = res as boolean));
     this.user$ = this.store.select(fromAuth.selectUser);
     this.user$.subscribe((res) => (this.user = res as User));
+    this.setUserInformation();
+  }
 
+  setUserInformation() {
     if (this.isLogged) {
       this.formBooking.patchValue({
         firstName: this.user.firstName,
@@ -127,7 +215,6 @@ export class BookingAppointmentIndexComponent implements OnInit {
         doctorName: this.doctorSelected.fullName,
         reason: this.formBooking.get('reason').value,
       };
-      console.log(bookingData)
       this.appointmentService.createAppointmentByPatient(bookingData).subscribe({
         next: (res) => {
           if (res.statusCode === 200) {
@@ -228,6 +315,41 @@ export class BookingAppointmentIndexComponent implements OnInit {
     }
   }
 
+  closeBooking() {
+    this.router.navigate(['/']);
+  }
+
+  handleAppointmentSendFromWs(app: BookingNotification) {
+    if (!this.doctorSelected || app.doctor.id !== this.doctorSelected.id) {
+      return;
+    }
+    const bookingDate = this.formatDate(app.dateBooking);
+    if (
+      this.formatDate(this.timeSlotSelected.date) == bookingDate &&
+      app.bookingHour == this.timeSlotSelected.time
+    ) {
+      this.timeSlotSelected = null;
+    }
+    this.schedules.forEach((week: AppointmentSlot[]) => {
+      week.forEach((day: AppointmentSlot) => {
+        day.timeSlotsMorning.forEach((timeSlot: TimeSlot) => {
+          const tsDate = this.formatDate(timeSlot.date);
+          if (tsDate == bookingDate && timeSlot.time == app.bookingHour) {
+            timeSlot.isBooked = true;
+            return;
+          }
+        });
+        day.timeSlotsAfternoon.forEach((timeSlot: TimeSlot) => {
+          const tsDate = this.formatDate(timeSlot.date);
+          if (tsDate == bookingDate && timeSlot.time == app.bookingHour) {
+            timeSlot.isBooked = true;
+            return;
+          }
+        });
+      });
+    });
+  }
+
   handleAppointmentsBooked() {
     this.schedules.forEach((week: AppointmentSlot[]) => {
       week.forEach((day: AppointmentSlot) => {
@@ -298,7 +420,6 @@ export class BookingAppointmentIndexComponent implements OnInit {
     this.doctorService.getDoctorsForBooking().subscribe({
       next: (res) => {
         this.listDoctors = res;
-        console.log(this.listDoctors)
         this.filteredDoctors = this.formBooking.controls[
           'doctor'
         ].valueChanges.pipe(
@@ -382,13 +503,26 @@ export class BookingAppointmentIndexComponent implements OnInit {
         ],
       ],
       email: ['', [RxwebValidators.required(), RxwebValidators.email()]],
-      phone: ['', [RxwebValidators.required(), RxwebValidators.digit()]],
+      phone: [
+        '',
+        [
+          RxwebValidators.required(),
+          RxwebValidators.digit(),
+          RxwebValidators.minLength({ value: 8 }),
+          RxwebValidators.maxLength({ value: 15 }),
+        ],
+      ],
       reason: ['', [RxwebValidators.required()]],
     });
 
     this.formBookingDate = this.fb.group({
       bookingDate: ['', [RxwebValidators.required()]],
       bookingHour: ['', [RxwebValidators.required()]],
+    });
+
+    this.formLogin = this.fb.group({
+      email: ['', [RxwebValidators.email(), RxwebValidators.required()]],
+      password: ['', [RxwebValidators.required()]],
     });
   }
 
@@ -434,5 +568,25 @@ export class BookingAppointmentIndexComponent implements OnInit {
       detail: message,
       life: 1500  // Thời gian hiển thị toast (ms)
     });
+  }
+
+  showDialog() {
+    this.modalVisible = true;
+  }
+
+  closeDialog() {
+    this.modalVisible = false;
+    this.formLogin.reset();
+  }
+
+  navigateToRegister() {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/auth/register'])
+    );
+    window.open(url, '_blank');
+  }
+
+  showPassword() {
+    this.showPass = !this.showPass;
   }
 }

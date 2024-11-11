@@ -21,12 +21,12 @@ export const appInterceptorInterceptor: HttpInterceptorFn = (
   const endpointsNoBearer = [
     '/api/auth/refreshToken',
     '/api/auth/logout',
-    '/api/auth/login'
+    '/api/auth/login',
   ];
 
-  if (authToken && !endpointsNoBearer.some(e => req.url.includes(e))) {
+  if (authToken && !endpointsNoBearer.some((e) => req.url.includes(e))) {
     clonedRequest = req.clone({
-      headers: req.headers.set('Authorization', `Bearer ${authToken}`),
+      headers: req.headers.set('Authorization', `Bearer ${authToken}`)
     });
   }
 
@@ -40,11 +40,10 @@ export const appInterceptorInterceptor: HttpInterceptorFn = (
               setHeaders: { Authorization: `Bearer ${refreshedToken}` },
             });
             return next(newAuthReq);
-          }),
+          })
         );
       }
       return throwError(error);
     })
   );
 };
-

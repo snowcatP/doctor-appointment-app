@@ -10,14 +10,17 @@
           style="background-color: #ffffff"
         >
           <form [formGroup]="formBooking">
-            <mat-step label="Fill Booking Information" [stepControl]="formBooking">
+            <mat-step
+              label="Fill Booking Information"
+              [stepControl]="formBooking"
+            >
               <div class="card mt-2">
                 <div class="card-header">
                   <div class="row d-flex justify-content-between">
                     <h4 class="card-title col">Booking Information</h4>
                     <a
                       class="col d-flex justify-content-end"
-                      routerLink="/auth/login"
+                      (click)="showDialog()"
                       *ngIf="!(isLogged$ | async)"
                       >Login as patient</a
                     >
@@ -57,13 +60,7 @@
                   </div>
                   <p-divider />
                   <div class="pt-2">
-                    <h5>
-                      Doctor&nbsp;<mat-icon
-                        matTooltip="Choose specialty first then choose doctor"
-                        style="font-size: 15px; padding-top: 0.5rem"
-                        >help_outlined</mat-icon
-                      >
-                    </h5>
+                    <h5>Doctor</h5>
                     <div class="row">
                       <mat-form-field
                         appearance="outline"
@@ -222,6 +219,18 @@
                           >
                             Phone must contains numbers.
                           </mat-error>
+                          <mat-error
+                            *ngIf="
+                              formBooking.controls['phone'].getError(
+                                'minLength'
+                              ) ||
+                              formBooking.controls['phone'].getError(
+                                'maxLength'
+                              )
+                            "
+                          >
+                            Phone length is from 8-15 digits.
+                          </mat-error>
                         </mat-form-field>
                         <mat-form-field
                           appearance="outline"
@@ -277,7 +286,12 @@
                 </div>
               </div>
               <div class="d-flex justify-content-between mx-2">
-                <button mat-raised-button extended matStepperNext>
+                <button
+                  mat-raised-button
+                  extended
+                  matStepperNext
+                  (click)="closeBooking()"
+                >
                   <mat-icon>close</mat-icon>
                   Cancel
                 </button>
@@ -325,7 +339,7 @@
                 </div>
                 <a
                   class="col d-flex justify-content-end p-0 pt-1"
-                  routerLink="/auth/login"
+                  (click)="showDialog()"
                   *ngIf="!(isLogged$ | async)"
                   >Login as patient</a
                 >
@@ -434,7 +448,7 @@
                 <h4 class="card-title col">Booking Summary</h4>
                 <a
                   class="col d-flex justify-content-end"
-                  routerLink="/auth/login"
+                  (click)="showDialog()"
                   *ngIf="!(isLogged$ | async)"
                   >Login as patient</a
                 >
@@ -542,3 +556,71 @@
   </div>
   <div class="col-sm-0 col-md-0 col-lg-1 col-xl-2"></div>
 </div>
+
+<p-dialog
+  header="Login"
+  [modal]="true"
+  [(visible)]="modalVisible"
+  [style]="{ width: '25rem' }"
+  (onHide)="closeDialog()"
+>
+  <form [formGroup]="formLogin">
+    <mat-error *ngIf="loginErrorMessage" class="pt-0 pb-1">{{
+      loginErrorMessage
+    }}</mat-error>
+    <div class="d-flex align-items-center mt-2 mb-3">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" required #emailInput/>
+        <mat-error *ngIf="formLogin.controls['email'].hasError('email')"
+          >Email is invalid.</mat-error
+        >
+        <mat-error *ngIf="formLogin.controls['email'].hasError('required')"
+          >Email is required.</mat-error
+        >
+      </mat-form-field>
+    </div>
+    <div class="d-flex align-items-center mb-2">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          [type]="showPass ? 'text' : 'password'"
+          required
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="showPassword()"
+          type="button"
+        >
+          <mat-icon>{{ showPass ? "visibility" : "visibility_off" }}</mat-icon>
+        </button>
+        <mat-error *ngIf="formLogin.controls['password'].hasError('required')"
+          >Password is required.</mat-error
+        >
+      </mat-form-field>
+    </div>
+    <a class="d-flex justify-content-end mb-2" (click)="navigateToRegister()"
+      >Register?</a
+    >
+    <div class="d-flex justify-content-between">
+      <button
+        mat-raised-button
+        severity="secondary"
+        type="button"
+        (click)="closeDialog()"
+      >
+        Cancel
+      </button>
+      <button
+        mat-flat-button
+        (click)="login()"
+        [disabled]="formLogin.invalid"
+      >
+        Login
+      </button>
+    </div>
+  </form>
+</p-dialog>
