@@ -9,9 +9,9 @@ import { Router } from '@angular/router';
 })
 export class SearchDoctorComponent implements OnInit {
   doctors: any[] = [];
-  totalDoctors: number = 0; // Tổng số lượng bác sĩ
-  pageSize: number = 10; // Số lượng item mỗi trang
-  currentPage: number = 1; // Trang hiện tại
+  totalDoctors: number = 0; 
+  pageSize: number = 10;
+  currentPage: number = 1;
   pageSizeOptions = [
     { label: '5', value: 5 },
     { label: '10', value: 10 },

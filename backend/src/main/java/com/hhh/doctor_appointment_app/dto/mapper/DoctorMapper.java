@@ -32,5 +32,8 @@ public interface DoctorMapper {
     })
     DoctorBookingResponse toBookingResponse(Doctor doctor);
 
+    @Mappings({
+            @Mapping(source = "profile.avatarFilePath", target = "avatarFilePath"),
+    })
     List<DoctorBookingResponse> toListDoctorBookingResponse(List<Doctor> doctors);
 }

@@ -8,7 +8,6 @@ import lombok.Setter;
 public class EditMedicalRecordRequest {
     private String description;
     private String filePath;
-
     private Long patientId;
-    private Long doctorId;
+    private Long medicalRecordId;
 }

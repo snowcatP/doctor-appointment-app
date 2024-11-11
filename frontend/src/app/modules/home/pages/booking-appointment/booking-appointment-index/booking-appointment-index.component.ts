@@ -130,9 +130,14 @@ export class BookingAppointmentIndexComponent implements OnInit {
       console.log(bookingData)
       this.appointmentService.createAppointmentByPatient(bookingData).subscribe({
         next: (res) => {
-          if (res.statusCode == 200) {
+          if (res.statusCode === 200) {
             this.setAppointmentForSuccess(null, res?.data);
-            this.showToast(true, 'Booked appointment successfully!');
+            this.messageService.add({
+              key: 'messageToast',
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Booked appointment successfully!'
+            });
             setTimeout(() => {
               this.router.navigate([
                 '/booking/success',
@@ -140,11 +145,21 @@ export class BookingAppointmentIndexComponent implements OnInit {
               ]);
             }, 2000);
           } else {
-            this.showToast(false, 'Booked appointment unsuccessfully!');
+            this.messageService.add({
+              key: 'messageToast',
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Booked appointment unsuccessfully!'
+            });
           }
         },
         error: (err) => {
-          this.showToast(false, 'Booked appointment unsuccessfully!');
+          this.messageService.add({
+            key: 'messageToast',
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Booked appointment unsuccessfully!'
+          });
           console.log(err);
         },
       })
@@ -165,19 +180,36 @@ export class BookingAppointmentIndexComponent implements OnInit {
         .createAppointmentByGuest(bookingData)
         .subscribe({
           next: (res) => {
-            if (res.statusCode == 200) {
+            if (res.statusCode === 200) {
               this.setAppointmentForSuccess(res?.data);
-              this.showToast(true, 'Booked appointment successfully!');
+              this.messageService.add({
+                key: 'messageToast',
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Booked appointment successfully!'
+              });
               setTimeout(() => {
                 this.router.navigate([
                   '/booking/success',
                   { bookingSuccess: true },
                 ]);
               }, 2000);
+            }else {
+              this.messageService.add({
+                key: 'messageToast',
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Booked appointment unsuccessfully!'
+              });
             }
           },
           error: (err) => {
-            this.showToast(false, 'Booked appointment unsuccessfully!');
+            this.messageService.add({
+              key: 'messageToast',
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Booked appointment unsuccessfully!'
+            });
             console.log(err);
           },
         });
@@ -266,6 +298,7 @@ export class BookingAppointmentIndexComponent implements OnInit {
     this.doctorService.getDoctorsForBooking().subscribe({
       next: (res) => {
         this.listDoctors = res;
+        console.log(this.listDoctors)
         this.filteredDoctors = this.formBooking.controls[
           'doctor'
         ].valueChanges.pipe(
@@ -395,18 +428,11 @@ export class BookingAppointmentIndexComponent implements OnInit {
   }
 
   showToast(status: boolean, message: string) {
-    if (status) {
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: message,
-      });
-    } else {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: message,
-      });
-    }
+    this.messageService.add({
+      severity: status ? 'success' : 'error',
+      summary: status ? 'Success' : 'Error',
+      detail: message,
+      life: 1500  // Thời gian hiển thị toast (ms)
+    });
   }
 }

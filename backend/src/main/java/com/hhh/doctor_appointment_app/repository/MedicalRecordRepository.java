@@ -16,4 +16,6 @@ public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, Lo
     Page<MedicalRecord> findMedicalRecordByPatient_Id(Long patientId, Pageable pageable);
 
     Page<MedicalRecord> findByPatient_Profile_Email(String email, Pageable pageable);
+
+    Page<MedicalRecord> findMedicalRecordsByPatient_Id(Long id, Pageable pageable);
 }

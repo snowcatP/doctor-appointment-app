@@ -12,8 +12,10 @@ import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.MedicalRecordRepository;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
 import com.hhh.doctor_appointment_app.service.FirebaseStorageService;
+import com.hhh.doctor_appointment_app.service.UserService.Query.FindUserByEmail.FindUserByEmailQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,10 +39,17 @@ public class CreateMedicalRecordCommand {
     @Autowired
     private FirebaseStorageService firebaseStorageService;
 
+    @Autowired
+    private FindUserByEmailQuery findUserByEmailQuery;
     @PreAuthorize("hasRole('DOCTOR')")
     public ApiResponse<Object> addMedicalRecordByDoctor(MultipartFile file, AddMedicalRecordRequest addRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
+            var context = SecurityContextHolder.getContext();
+            String usernameDoctor = context.getAuthentication().getName();
+            User userDoctor = findUserByEmailQuery.findUserByEmail(usernameDoctor)
+                    .orElseThrow(() -> new NotFoundException("Doctor not found"));
+
             //Check file has null ?
             if (!file.isEmpty()) {
                 // Upload file to Firebase Storage if file not null
@@ -51,7 +60,7 @@ public class CreateMedicalRecordCommand {
             Patient patient = patientRepository.findById(addRequest.getPatientId())
                     .orElseThrow(() -> new NotFoundException("Patient Not Found"));
 
-            Doctor doctor = doctorRepository.findById(addRequest.getDoctorId())
+            Doctor doctor = doctorRepository.findDoctorByProfile_Email(usernameDoctor)
                     .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
 
             MedicalRecord medicalRecord = new MedicalRecord();
