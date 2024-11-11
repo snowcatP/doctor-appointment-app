@@ -17,6 +17,16 @@ import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PaginatorModule } from 'primeng/paginator';
 import { DoctorMypatientComponent } from './pages/doctor-mypatient/doctor-mypatient.component';
+import { ImageModule } from 'primeng/image';
+import { CalendarModule } from 'primeng/calendar';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { DateFormatPipeModule } from '../../core/pipes/date-format.module';
+import { DoctorPatientProfileComponent } from './pages/doctor-patient-profile/doctor-patient-profile.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { DialogModule } from 'primeng/dialog';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
 @NgModule({
   declarations: [
     DoctorAppointmentComponent,
@@ -30,6 +40,7 @@ import { DoctorMypatientComponent } from './pages/doctor-mypatient/doctor-mypati
     DoctorReviewComponent,
     ReplyDialogComponent,
     DoctorMypatientComponent,
+    DoctorPatientProfileComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +48,16 @@ import { DoctorMypatientComponent } from './pages/doctor-mypatient/doctor-mypati
     FullCalendarModule,
     FormsModule,
     MatDialogModule,
-    PaginatorModule
+    PaginatorModule,
+    ImageModule,
+    CalendarModule,
+    ProgressSpinnerModule,
+    DateFormatPipeModule,
+    MatTabsModule,
+    DialogModule,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule
   ]
 })
 export class DoctorModule { }

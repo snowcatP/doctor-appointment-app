@@ -41,4 +41,8 @@ export class PatientService {
     const url = `${this.appointmentUrl}/list/patient?page=${page}&size=${size}`;
     return this.http.get<any>(url);
   }
+
+  getPatientDetail(id: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/detail/${id}`);
+  }
 }

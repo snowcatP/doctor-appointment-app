@@ -47,16 +47,14 @@
                             : "Unknow Doctor"
                         }}</a>
                       </h5>
+                      <p class="doc-speciality">{{ doctorSelected?.specialty?.specialtyName }}</p>
                       <div class="rating">
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star"></i>
-                        <span class="d-inline-block average-rating">35</span>
+                        <i class="fas fa-star" *ngFor="let star of [1,2,3,4,5]; let i = index"
+                          [ngClass]="{'filled': doctorSelected?.averageRating >= i + 1}"></i>
+                        <span class="d-inline-block average-rating">({{doctorSelected?.numberOfFeedbacks}})</span>
                       </div>
                       <p class="text-muted mb-0">
-                        <i class="fas fa-map-marker-alt"></i> Newyork, USA
+                        <i class="fas fa-map-marker-alt"></i> {{doctorSelected?.address}}
                       </p>
                     </div>
                   </div>

@@ -10,8 +10,8 @@ import { MessageService } from 'primeng/api';
   styleUrl: './doctor-profile.component.css'
 })
 export class DoctorProfileComponent {
-  doctorId!: number;  // ID của bác sĩ
-  doctorDetails: any; // Thông tin chi tiết của bác sĩ
+  doctorId!: number; 
+  doctorDetails: any;
   feedbackList: any[] = []; // Feedback list for the doctor
   numberOfFeedbacks!: number;
 

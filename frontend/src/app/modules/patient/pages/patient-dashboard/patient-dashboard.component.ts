@@ -11,12 +11,7 @@ export class PatientDashboardComponent {
   appointments: any[] = [];
   totalAppointments: number = 0; 
   pageSize: number = 10; 
-  currentPage: number = 1; 
-  pageSizeOptions = [
-    { label: '5', value: 5 },
-    { label: '10', value: 10 },
-    { label: '20', value: 20 }
-  ];
+  currentPage: number = 1;
 
   visible: boolean = false; // Control dialog visibility
   selectedAppointment: any = null; // Store selected appointment for dialog

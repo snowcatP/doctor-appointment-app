@@ -2,18 +2,21 @@
 <div class="profile-sidebar">
     <div class="widget-profile pro-widget-content">
       <div class="profile-info-widget">
-        <a href="#" class="booking-doc-img">
-          <img src="assets/images/doctors/doctor-thumb-02.jpg" alt="User Image" />
-        </a>
+        <div class="booking-doc-img">
+          <p-image [src]="doctorProfile?.avatarFilePath || 'assets/images/doctors/doctor-thumb-02.jpg'"
+          alt="Doctor Image" width="100%"  [preview]="true"/>
+        </div>
+        
         <div class="profile-det-info">
-          <a class="external-link" href="#">
+          <a class="external-link" routerLink="/doctor/profile">
             <h3 class="d-flex align-items-center justify-content-center">
-              Dr. Darren Elder &nbsp;
+              {{doctorProfile.firstName}} {{doctorProfile.lastName}} &nbsp;
               <i class="fa-solid fa-arrow-up-right-from-square"></i>
             </h3>
           </a>
           <div class="patient-details">
-            <h5 class="mb-0">BDS, MDS - Oral & Maxillofacial Surgery</h5>
+            <h5 class="mb-0">{{doctorProfile.specialty?.specialtyName}}</h5>
+            <h5><i class="fas fa-birthday-cake"></i> {{doctorProfile.dateOfBirth | dateFormat}}</h5>
           </div>
         </div>
       </div>
