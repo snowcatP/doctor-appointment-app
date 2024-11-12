@@ -27,6 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+
 @RestController
 @RequestMapping("api/doctor")
 @CrossOrigin("*")
@@ -83,7 +85,7 @@ public class DoctorController {
         }
     }
 
-    @PostMapping("/add-doctor")
+    @PostMapping(path = "/add-doctor", consumes = {MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> createAndUploadFileDoctorByAdmin(
             @RequestParam("file") MultipartFile file,
             @ModelAttribute @Valid AddDoctorRequest addDoctorRequest, // sử dụng ModelAttribute để bind dữ liệu

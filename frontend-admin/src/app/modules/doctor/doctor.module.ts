@@ -21,6 +21,9 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
+import { PasswordModule } from 'primeng/password';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
 @NgModule({
   declarations: [
     DoctorComponent,
@@ -29,6 +32,7 @@ import { DropdownModule } from 'primeng/dropdown';
   imports: [
     CommonModule,
     DoctorRoutingModule,
+    ConfirmDialogModule,
     RouterOutlet,
     TableModule, 
     ToastModule,
@@ -48,7 +52,8 @@ import { DropdownModule } from 'primeng/dropdown';
     InputMaskModule,
     FileUploadModule,
     CalendarModule,
-    DropdownModule
+    DropdownModule,
+    PasswordModule
     
   ]
 })

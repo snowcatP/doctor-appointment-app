@@ -15,7 +15,7 @@ import { BrandingComponent } from './shared/sidebar/branding.components';
 import { NavItemComponent } from './shared/sidebar/nav-item/nav-item.component';
 import { TranslateModule } from '@ngx-translate/core';
 import * as TablerIcons from 'angular-tabler-icons/icons';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { StarterComponent } from './shared/starter/starter.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -58,10 +58,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     ],
   providers: [
     MessageService,
+    ConfirmationService,
     provideAnimations(),
-    provideHttpClient(
-      withInterceptors([httpErrorInterceptor, authInterceptor])
-    ),
+      provideHttpClient(
+        withInterceptors([httpErrorInterceptor, authInterceptor])
+      ),
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     JwtHelperService,
     HttpClientModule

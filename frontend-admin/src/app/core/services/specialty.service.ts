@@ -7,10 +7,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class SpecialtyService {
-
   constructor(private http: HttpClient) { }
   getListSpecialty(): Observable<any>{
-    return this.http.get(environment.apiEndpoint + '/api/specialty/list-specialty')
+    return this.http.get<any>(environment.apiEndpoint + '/api/specialty/list-specialty')
   }
 
 }
