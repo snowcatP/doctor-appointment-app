@@ -1,6 +1,6 @@
+import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { DoctorRoutingModule } from './doctor-routing.module';
 import { DoctorAppointmentComponent } from './pages/doctor-appointment/doctor-appointment.component';
 import { DoctorBreadCrumbComponent } from './pages/doctor-bread-crumb/doctor-bread-crumb.component';
@@ -27,6 +27,9 @@ import { DialogModule } from 'primeng/dialog';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { MatButtonModule } from '@angular/material/button';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmationService } from 'primeng/api';
 @NgModule({
   declarations: [
     DoctorAppointmentComponent,
@@ -57,7 +60,11 @@ import { InputTextModule } from 'primeng/inputtext';
     DialogModule,
     IconFieldModule,
     InputIconModule,
-    InputTextModule
-  ]
+    InputTextModule,
+    ScrollPanelModule,
+    MatButtonModule,
+    ConfirmPopupModule,
+  ],
+  providers: [ConfirmationService],
 })
 export class DoctorModule { }

@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   errorMessage: string = '';
   @ViewChild('email') emailInput: ElementRef;
   private unsubscribe$ = new Subject<void>();
+  isLoading: boolean = false;
   constructor(
     private fb: FormBuilder,
     private store: Store,
@@ -44,6 +45,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.store.select(selectErrorMessage).subscribe((error) => {
       if (error) {
         this.errorMessage = 'Wrong email or password.';
+        this.isLoading = false;
         setTimeout(() => {
           this.emailInput.nativeElement.select();
         }, 0);
@@ -59,6 +61,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           summary: 'Success',
           detail: 'Login successfully',
         });
+        this.isLoading = false;
         setTimeout(() => {
           this.router.navigateByUrl('/');
         }, 1500);
@@ -72,6 +75,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: this.formLogin.controls['email'].value,
       password: this.formLogin.controls['password'].value,
     };
+    this.isLoading = true;
     this.store.dispatch(AuthActions.loginRequest({ credential: loginRequest }));
   }
 

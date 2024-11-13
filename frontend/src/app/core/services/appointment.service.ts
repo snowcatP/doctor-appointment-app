@@ -1,20 +1,33 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AppointmentsBooked, BookingDataGuest, BookingDataPatient } from '../models/booking.model';
+import {
+  AppointmentsBooked,
+  BookingDataGuest,
+  BookingDataPatient,
+} from '../models/booking.model';
 import { host } from '../../../environments/environment';
+import { AppointmentResponse } from '../models/appointment.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppointmentService {
-  private appointmentDataGuest = new BehaviorSubject(new BookingDataGuest);
+  private appointmentDataGuest = new BehaviorSubject(new BookingDataGuest());
   getAppointmentBookedGuest = this.appointmentDataGuest.asObservable();
 
-  private appointmentDataPatient = new BehaviorSubject(new BookingDataPatient);
+  private appointmentDataPatient = new BehaviorSubject(
+    new BookingDataPatient()
+  );
   getAppointmentBookedPatient = this.appointmentDataPatient.asObservable();
 
   constructor(private http: HttpClient) {}
+
+  getAllAppointmentsByDoctorEmail(): Observable<AppointmentResponse[]> {
+    return this.http.get<AppointmentResponse[]>(
+      `${host}/api/appointment/get-all-appointments-by-doctor`
+    );
+  }
 
   getAppointmentsForBooking(
     doctorId: number
@@ -37,7 +50,6 @@ export class AppointmentService {
       bookingData
     );
   }
-
 
   setAppointmentBookedGuest(appointment: BookingDataGuest) {
     this.appointmentDataGuest.next(appointment);

@@ -19,7 +19,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
 
     Page<Appointment> findByDoctorId(Long doctorId, Pageable pageable);
 
-
     @Query(value = "SELECT a " +
             "FROM Appointment a " +
             "WHERE a.doctor.id = ?1 " +
@@ -29,6 +28,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
 
     Page<Appointment> findByPatient_Profile_Email(String email, Pageable pageable);
 
+    List<Appointment> getAppointmentsByDoctor(Doctor doctor);
+    
     Page<Appointment> findByDoctor_Profile_Email(String email, Pageable pageable);
 
     @Query("SELECT a FROM Appointment a WHERE a.doctor.profile.email = :email AND " +
