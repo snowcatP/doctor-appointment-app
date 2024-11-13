@@ -2,7 +2,7 @@
 <div class="content">
   <div class="container-fluid">
     <div class="row">
-      <div style="min-height: 550px; padding: 3rem">
+      <div style="min-height: 80vh; padding: 3rem">
         <div class="col-md-8 offset-md-2">
           <!-- Login Tab Content -->
           <div class="account-content">
@@ -95,9 +95,16 @@
                     (click)="onLogin()"
                     class="btn btn-primary btn-block btn-lg full-width"
                     type="submit"
-                    [disabled]="!formLogin.valid"
+                    [disabled]="!formLogin.valid || isLoading"
                   >
-                    Login
+                    <div
+                      class="d-flex align-items-center justify-content-center"
+                    >
+                      Login&nbsp;
+                      <mat-icon class="pt-1" *ngIf="isLoading"
+                        ><mat-spinner diameter="20"></mat-spinner
+                      ></mat-icon>
+                    </div>
                   </button>
                   <div class="login-or">
                     <span class="or-line"></span>

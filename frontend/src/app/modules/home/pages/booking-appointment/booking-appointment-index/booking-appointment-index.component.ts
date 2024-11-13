@@ -194,8 +194,10 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (res) => {
             this.appointmentsBooked = res;
-            this.handleAppointmentsBooked();
             this.isLoading = false;
+            setTimeout(() => {
+              this.handleAppointmentsBooked();
+            }, 100);
           },
           error: (err) => {
             console.log(err);

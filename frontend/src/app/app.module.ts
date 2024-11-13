@@ -38,6 +38,8 @@ import { authReducer } from './core/states/auth/auth.reducer';
 import { AuthEffect } from './core/states/auth/auth.effects';
 import { SidebarModule } from 'primeng/sidebar';
 import { MatButtonModule } from '@angular/material/button';
+import { ScrollTopModule } from 'primeng/scrolltop';
+
 
 @NgModule({
   declarations: [
@@ -62,6 +64,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     SidebarModule,
     MatButtonModule,
+    ScrollTopModule,
     StoreModule.forRoot({ auth: authReducer }, {}),
     EffectsModule.forRoot([AuthEffect]),
   ],
@@ -70,7 +73,6 @@ import { MatButtonModule } from '@angular/material/button';
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
     provideHttpClient(withInterceptors([appInterceptorInterceptor])),
-    // provideHttpClient(),
     JwtHelperService,
     MessageService,
     provideAnimations(),

@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
@@ -31,6 +32,5 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     @Query("SELECT d FROM Doctor d ORDER BY (SELECT AVG(f.rating) FROM Feedback f WHERE f.doctor.id = d.id) DESC")
     List<Doctor> findTop10ByRating(Pageable pageable);
 
-
-
+    Optional<Doctor> findByProfile_Email(String email);
 }

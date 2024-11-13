@@ -28,7 +28,9 @@
                     (ngSubmit)="onSubmitRegister()"
                   >
                     <div class="row">
-                      <mat-error *ngIf="errorMessage" class="pt-0 pb-1">{{errorMessage}}</mat-error>
+                      <mat-error *ngIf="errorMessage" class="pt-0 pb-1">{{
+                        errorMessage
+                      }}</mat-error>
                       <mat-form-field
                         appearance="outline"
                         class="col-md-12 col-lg-6 col-xl-6 pb-2"
@@ -297,17 +299,28 @@
                         formControlName="gender"
                       >
                         <mat-label class="pe-2">Gender:</mat-label>
-                        <mat-radio-button value="0" tabIndex="7">Male</mat-radio-button>
-                        <mat-radio-button value="1" tabIndex="8">Female</mat-radio-button>
+                        <mat-radio-button value="0" tabIndex="7"
+                          >Male</mat-radio-button
+                        >
+                        <mat-radio-button value="1" tabIndex="8"
+                          >Female</mat-radio-button
+                        >
                       </mat-radio-group>
                     </div>
                     <div class="pt-2">
                       <button
                         class="btn btn-primary btn-block btn-lg login-btn full-width"
                         type="submit"
-                        [disabled]="formSignup.invalid"
+                        [disabled]="formSignup.invalid || isLoading"
                       >
-                        Signup
+                        <div
+                          class="d-flex align-items-center justify-content-center"
+                        >
+                          Signup&nbsp;
+                          <mat-icon class="pt-1" *ngIf="isLoading"
+                            ><mat-spinner diameter="20"></mat-spinner
+                          ></mat-icon>
+                        </div>
                       </button>
                     </div>
                     <div class="login-or">

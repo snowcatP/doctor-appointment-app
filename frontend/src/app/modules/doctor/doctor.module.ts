@@ -17,6 +17,14 @@ import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PaginatorModule } from 'primeng/paginator';
 import { DoctorMypatientComponent } from './pages/doctor-mypatient/doctor-mypatient.component';
+import { ImageModule } from 'primeng/image';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmationService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { MatButtonModule } from '@angular/material/button';
+
 @NgModule({
   declarations: [
     DoctorAppointmentComponent,
@@ -37,7 +45,14 @@ import { DoctorMypatientComponent } from './pages/doctor-mypatient/doctor-mypati
     FullCalendarModule,
     FormsModule,
     MatDialogModule,
-    PaginatorModule
-  ]
+    PaginatorModule,
+    ImageModule,
+    ProgressSpinnerModule,
+    ConfirmPopupModule,
+    DialogModule,
+    ScrollPanelModule,
+    MatButtonModule
+  ],
+  providers: [ConfirmationService],
 })
 export class DoctorModule { }

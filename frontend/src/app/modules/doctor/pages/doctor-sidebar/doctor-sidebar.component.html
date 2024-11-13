@@ -1,77 +1,84 @@
 <!-- Profile Sidebar -->
 <div class="profile-sidebar">
-    <div class="widget-profile pro-widget-content">
-      <div class="profile-info-widget">
-        <a href="#" class="booking-doc-img">
-          <img src="assets/images/doctors/doctor-thumb-02.jpg" alt="User Image" />
+  <div class="widget-profile pro-widget-content">
+    <div class="profile-info-widget">
+      <div class="booking-doc-img">
+        <p-image
+          src="assets/images/user.png"
+          alt="Doctor Image"
+          width="150"
+          [preview]="true"
+        />
+      </div>
+      <div class="profile-det-info">
+        <a class="external-link" href="#">
+          <h3 class="d-flex align-items-center justify-content-center">
+            Dr. &nbsp;{{ doctorData?.fullName }} &nbsp;
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </h3>
         </a>
-        <div class="profile-det-info">
-          <a class="external-link" href="#">
-            <h3 class="d-flex align-items-center justify-content-center">
-              Dr. Darren Elder &nbsp;
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </h3>
-          </a>
-          <div class="patient-details">
-            <h5 class="mb-0">BDS, MDS - Oral & Maxillofacial Surgery</h5>
-          </div>
+        <div class="patient-details">
+          <h5 class="mb-0">BDS, MDS - Oral & Maxillofacial Surgery</h5>
         </div>
       </div>
     </div>
-    <div class="dashboard-widget">
-      <nav class="dashboard-menu">
-        <ul>
-          <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-            <a routerLink="/doctor/dashboard">
-              <i class="fas fa-columns"></i>
-              <span>Dashboard</span>
-            </a>
-          </li>
-          <li routerLinkActive="active">
-            <a routerLink="/doctor/appointment">
-              <i class="fas fa-calendar-check"></i>
-              <span>Appointments</span>
-            </a>
-          </li>
-          <li routerLinkActive="active">
-            <a routerLink="/doctor/calendar">
-              <i class="fa-regular fa-calendar"></i>
-              <span>My Calendar</span>
-            </a>
-          </li>
-          <li routerLinkActive="active">
-            <a routerLink="/doctor/myPatient">
-              <i class="fa-regular fa-address-card"></i>
-              <span>My Patients</span>
-            </a>
-          </li>
-          <li routerLinkActive="active">
-            <a routerLink="/doctor/schedule">
-              <i class="fas fa-hourglass-start"></i>
-              <span>Scheduling</span>
-            </a>
-          </li>
-          <li routerLinkActive="active">
-            <a routerLink="/doctor/review">
-              <i class="fas fa-star"></i>
-              <span>Reviews</span>
-            </a>
-          </li>
-          <li routerLinkActive="active">
-            <a routerLink="/doctor/profile">
-              <i class="fas fa-user-cog"></i>
-              <span>Profile Settings</span>
-            </a>
-          </li>
-          <li>
-            <a href="index-2.html">
-              <i class="fas fa-sign-out-alt"></i>
-              <span>Logout</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </div>
   </div>
-  <!-- /Profile Sidebar -->
-  
+  <div class="dashboard-widget">
+    <nav class="dashboard-menu">
+      <ul>
+        <li
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <a routerLink="/doctor/dashboard">
+            <i class="fas fa-columns"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="/doctor/appointment">
+            <i class="fas fa-calendar-check"></i>
+            <span>Appointments</span>
+          </a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="/doctor/calendar">
+            <i class="fa-regular fa-calendar"></i>
+            <span>My Calendar</span>
+          </a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="/doctor/myPatient">
+            <i class="fa-regular fa-address-card"></i>
+            <span>My Patients</span>
+          </a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="/doctor/schedule">
+            <i class="fas fa-hourglass-start"></i>
+            <span>Scheduling</span>
+          </a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="/doctor/review">
+            <i class="fas fa-star"></i>
+            <span>Reviews</span>
+          </a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="/doctor/profile">
+            <i class="fas fa-user-cog"></i>
+            <span>Profile Settings</span>
+          </a>
+        </li>
+        <li>
+          <a href="index-2.html">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<!-- /Profile Sidebar -->

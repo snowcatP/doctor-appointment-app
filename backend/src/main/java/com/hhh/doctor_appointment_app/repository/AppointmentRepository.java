@@ -18,7 +18,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
 
     Page<Appointment> findByDoctorId(Long doctorId, Pageable pageable);
 
-
     @Query(value = "SELECT a " +
             "FROM Appointment a " +
             "WHERE a.doctor.id = ?1 " +
@@ -27,4 +26,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
     List<Appointment> getAppointmentsForBooking(Long doctorId, Date currentDate, Date endDate);
 
     Page<Appointment> findByPatient_Profile_Email(String email, Pageable pageable);
+
+    List<Appointment> getAppointmentsByDoctor(Doctor doctor);
 }
