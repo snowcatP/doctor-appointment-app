@@ -10,5 +10,4 @@ public class AddMedicalRecordRequest {
     private String description;
     private String filePath;
     private Long patientId;
-    private Long doctorId;
 }

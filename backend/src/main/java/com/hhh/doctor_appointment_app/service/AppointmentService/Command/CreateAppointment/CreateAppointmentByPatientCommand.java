@@ -7,14 +7,17 @@ import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.Appointme
 import com.hhh.doctor_appointment_app.entity.Appointment;
 import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Patient;
+import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.enums.AppointmentStatus;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
 import com.hhh.doctor_appointment_app.service.NotificationService.Implement.BookingNotificationService;
+import com.hhh.doctor_appointment_app.service.UserService.Query.FindUserByEmail.FindUserByEmailQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -35,12 +38,20 @@ public class CreateAppointmentByPatientCommand {
     private AppointmentMapper appointmentMapper;
 
     @Autowired
+    private FindUserByEmailQuery findUserByEmailQuery;
+
+    @Autowired
     private BookingNotificationService bookingNotificationService;
 
     public ApiResponse<Object> createAppointmentByPatient(AppointmentByPatientRequest appointmentByPatientRequest) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try {
-            Patient patient = patientRepository.findById(appointmentByPatientRequest.getPatientId())
+            var context = SecurityContextHolder.getContext();
+            String username = context.getAuthentication().getName();
+            User user = findUserByEmailQuery.findUserByEmail(username)
+                    .orElseThrow(() -> new NotFoundException("User not found"));
+
+            Patient patient = patientRepository.findPatientByProfile_Email(user.getEmail())
                     .orElseThrow(() -> new NotFoundException("Patient Not Found"));
 
             Doctor doctor = doctorRepository.findById(appointmentByPatientRequest.getDoctorId())

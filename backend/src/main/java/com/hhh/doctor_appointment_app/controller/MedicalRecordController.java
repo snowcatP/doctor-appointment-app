@@ -4,7 +4,6 @@ import com.hhh.doctor_appointment_app.dto.request.MedicalRecordRequest.AddMedica
 import com.hhh.doctor_appointment_app.dto.request.MedicalRecordRequest.EditMedicalRecordRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
-import com.hhh.doctor_appointment_app.service.FirebaseStorageService;
 import com.hhh.doctor_appointment_app.service.MedicalRecordService.Command.CreateMedicalRecord.CreateMedicalRecordCommand;
 import com.hhh.doctor_appointment_app.service.MedicalRecordService.Command.DeleteMedicalRecord.DeleteMedicalRecordCommand;
 import com.hhh.doctor_appointment_app.service.MedicalRecordService.Command.EditMedicalRecord.EditMedicalRecordCommand;
@@ -22,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/medical-record")
@@ -69,10 +69,11 @@ public class MedicalRecordController {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         // Kiểm tra lỗi validation
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(fieldError -> fieldError.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
-            apiResponse.setMessage("Validation errors: " + errors);
+            apiResponse.setMessage(errorMessage);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse); // Trả về lỗi 400 cho validation
         }
         try {
@@ -89,9 +90,8 @@ public class MedicalRecordController {
         }
     }
 
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<?> editMedicalRecordAndUploadImageByDoctor(@PathVariable Long id,
-                                                                     @RequestParam("file") MultipartFile file,
+    @PutMapping("/edit")
+    public ResponseEntity<?> editMedicalRecordAndUploadImageByDoctor(@RequestParam("file") MultipartFile file,
                                                                      @ModelAttribute @Valid EditMedicalRecordRequest editMedicalRecordRequest, // sử dụng ModelAttribute để bind dữ liệu
                                                                      BindingResult bindingResult){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
@@ -104,7 +104,7 @@ public class MedicalRecordController {
         }
         try {
 
-            apiResponse = editMedicalRecordCommand.editMedicalRecordByDoctor(id,file,editMedicalRecordRequest);
+            apiResponse = editMedicalRecordCommand.editMedicalRecordByDoctor(file,editMedicalRecordRequest);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         }
         catch (NotFoundException ex){
@@ -184,8 +184,5 @@ public class MedicalRecordController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
     }
-
-
-
 
 }

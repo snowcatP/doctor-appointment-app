@@ -31,7 +31,7 @@ export class DoctorReviewComponent {
         }
       },
       (error) => {
-        console.error('Error fetching appointments', error);
+        console.error('Error fetching feedback', error);
       }
     );
   }

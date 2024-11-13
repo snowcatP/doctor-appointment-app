@@ -1,18 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { User } from '../../../../core/models/authentication.model';
-
+import { Component } from '@angular/core';
+import { DoctorService } from '../../../../core/services/doctor.service';
 @Component({
   selector: 'app-doctor-sidebar',
   templateUrl: './doctor-sidebar.component.html',
   styleUrl: './doctor-sidebar.component.css'
 })
-export class DoctorSidebarComponent implements OnInit{
-  @Input() doctorData: User;
+export class DoctorSidebarComponent {
+  doctorProfile: any = {};
 
+  constructor(private doctorService: DoctorService) {}
 
-  constructor() {}
+  ngOnInit() {
+    // Subscribe to the profile observable to get live updates
+    this.doctorService.userData$.subscribe(profile => {
+      if (profile) {
+        this.doctorProfile = profile;
+      }
+    });
 
-  ngOnInit(): void {
-    
+    this.doctorService.getDoctorProfile().subscribe(profile => {
+        this.doctorProfile = profile.data;
+    });
   }
 }

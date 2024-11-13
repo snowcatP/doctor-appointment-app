@@ -33,4 +33,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     List<Doctor> findTop10ByRating(Pageable pageable);
 
     Optional<Doctor> findByProfile_Email(String email);
+    
+    Optional<Doctor> findDoctorByProfile_Email(String email);
+
 }

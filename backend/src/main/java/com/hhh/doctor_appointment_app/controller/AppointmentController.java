@@ -17,6 +17,7 @@ import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetAppoin
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetDetailAppointment.GetDetailAppointmentByPatientQuery;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentByDoctorId.GetListAppointmentByDoctorIdQuery;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentOfPatient.GetListAppointmentOfPatientQuery;
+import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentOfPatientByPatientId.GetListAppointmentOfPatientByPatientIdQuery;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentsForBooking.GetListAppointmentsForBookingQuery;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/appointment")
@@ -66,6 +68,9 @@ public class AppointmentController {
     @Autowired
     private GetAllAppointmentsByDoctorIdQuery getAllAppointmentsByDoctorIdQuery;
 
+    @Autowired
+    private GetListAppointmentOfPatientByPatientIdQuery getListAppointmentOfPatientByPatientIdQuery;
+
     @GetMapping("/list")
     public ResponseEntity<?> getAppointments(@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "10") int size){
@@ -85,10 +90,11 @@ public class AppointmentController {
             BindingResult bindingResult){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(fieldError -> fieldError.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
-            apiResponse.setMessage("An unexpected error occurred: " + errors);
+            apiResponse.setMessage(errorMessage);
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
@@ -235,4 +241,21 @@ public class AppointmentController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @GetMapping("/list/patient/{id}")
+    public ResponseEntity<?> getAppointmentsOfPatientByPatientId(@PathVariable(name = "id") Long id,
+                                                      @RequestParam(defaultValue = "1") int page,
+                                                      @RequestParam(defaultValue = "10") int size){
+        try{
+            return new ResponseEntity<>(getListAppointmentOfPatientByPatientIdQuery.
+                    getListAppointmentOfPatientByPatientId(id,page, size), HttpStatus.OK);
+        }catch (Exception ex){
+            ApiResponse<Object> apiResponse = new ApiResponse<>();
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+    }
+
+
 }

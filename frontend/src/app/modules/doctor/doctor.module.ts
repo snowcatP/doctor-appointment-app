@@ -1,6 +1,6 @@
+import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { DoctorRoutingModule } from './doctor-routing.module';
 import { DoctorAppointmentComponent } from './pages/doctor-appointment/doctor-appointment.component';
 import { DoctorBreadCrumbComponent } from './pages/doctor-bread-crumb/doctor-bread-crumb.component';
@@ -18,13 +18,18 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { PaginatorModule } from 'primeng/paginator';
 import { DoctorMypatientComponent } from './pages/doctor-mypatient/doctor-mypatient.component';
 import { ImageModule } from 'primeng/image';
+import { CalendarModule } from 'primeng/calendar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { DateFormatPipeModule } from '../../core/pipes/date-format.module';
+import { DoctorPatientProfileComponent } from './pages/doctor-patient-profile/doctor-patient-profile.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { DialogModule } from 'primeng/dialog';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+import { MatButtonModule } from '@angular/material/button';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
-import { DialogModule } from 'primeng/dialog';
-import { ScrollPanelModule } from 'primeng/scrollpanel';
-import { MatButtonModule } from '@angular/material/button';
-
 @NgModule({
   declarations: [
     DoctorAppointmentComponent,
@@ -38,6 +43,7 @@ import { MatButtonModule } from '@angular/material/button';
     DoctorReviewComponent,
     ReplyDialogComponent,
     DoctorMypatientComponent,
+    DoctorPatientProfileComponent
   ],
   imports: [
     CommonModule,
@@ -47,11 +53,17 @@ import { MatButtonModule } from '@angular/material/button';
     MatDialogModule,
     PaginatorModule,
     ImageModule,
+    CalendarModule,
     ProgressSpinnerModule,
-    ConfirmPopupModule,
+    DateFormatPipeModule,
+    MatTabsModule,
     DialogModule,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule,
     ScrollPanelModule,
-    MatButtonModule
+    MatButtonModule,
+    ConfirmPopupModule,
   ],
   providers: [ConfirmationService],
 })

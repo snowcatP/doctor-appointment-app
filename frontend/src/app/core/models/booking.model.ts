@@ -3,9 +3,12 @@ export class DoctorBooking {
   firstName: string;
   lastName: string;
   fullName: string;
+  address: string;
   schedule: string;
   avatarFilePath: string;
   specialty: Specialty;
+  averageRating: number;
+  numberOfFeedbacks: number;
   constructor() {}
 }
 

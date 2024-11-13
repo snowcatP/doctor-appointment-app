@@ -217,28 +217,41 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         doctorName: this.doctorSelected.fullName,
         reason: this.formBooking.get('reason').value,
       };
-      this.appointmentService
-        .createAppointmentByPatient(bookingData)
-        .subscribe({
-          next: (res) => {
-            if (res.statusCode == 200) {
-              this.setAppointmentForSuccess(null, res?.data);
-              this.showToast(true, 'Booked appointment successfully!');
-              setTimeout(() => {
-                this.router.navigate([
-                  '/booking/success',
-                  { bookingSuccess: true },
-                ]);
-              }, 2000);
-            } else {
-              this.showToast(false, 'Booked appointment unsuccessfully!');
-            }
-          },
-          error: (err) => {
-            this.showToast(false, 'Booked appointment unsuccessfully!');
-            console.log(err);
-          },
-        });
+      this.appointmentService.createAppointmentByPatient(bookingData).subscribe({
+        next: (res) => {
+          if (res.statusCode === 200) {
+            this.setAppointmentForSuccess(null, res?.data);
+            this.messageService.add({
+              key: 'messageToast',
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Booked appointment successfully!'
+            });
+            setTimeout(() => {
+              this.router.navigate([
+                '/booking/success',
+                { bookingSuccess: true },
+              ]);
+            }, 2000);
+          } else {
+            this.messageService.add({
+              key: 'messageToast',
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Booked appointment unsuccessfully!'
+            });
+          }
+        },
+        error: (err) => {
+          this.messageService.add({
+            key: 'messageToast',
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Booked appointment unsuccessfully!'
+          });
+          console.log(err);
+        },
+      })
     } else {
       const bookingData: BookingDataGuest = {
         doctorId: this.doctorSelected.id,
@@ -252,24 +265,43 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         dateBooking: this.timeSlotSelected.date,
         bookingHour: this.timeSlotSelected.time,
       };
-      this.appointmentService.createAppointmentByGuest(bookingData).subscribe({
-        next: (res) => {
-          if (res.statusCode == 200) {
-            this.setAppointmentForSuccess(res?.data);
-            this.showToast(true, 'Booked appointment successfully!');
-            setTimeout(() => {
-              this.router.navigate([
-                '/booking/success',
-                { bookingSuccess: true },
-              ]);
-            }, 2000);
-          }
-        },
-        error: (err) => {
-          this.showToast(false, 'Booked appointment unsuccessfully!');
-          console.log(err);
-        },
-      });
+      this.appointmentService
+        .createAppointmentByGuest(bookingData)
+        .subscribe({
+          next: (res) => {
+            if (res.statusCode === 200) {
+              this.setAppointmentForSuccess(res?.data);
+              this.messageService.add({
+                key: 'messageToast',
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Booked appointment successfully!'
+              });
+              setTimeout(() => {
+                this.router.navigate([
+                  '/booking/success',
+                  { bookingSuccess: true },
+                ]);
+              }, 2000);
+            }else {
+              this.messageService.add({
+                key: 'messageToast',
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Booked appointment unsuccessfully!'
+              });
+            }
+          },
+          error: (err) => {
+            this.messageService.add({
+              key: 'messageToast',
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Booked appointment unsuccessfully!'
+            });
+            console.log(err);
+          },
+        });
     }
   }
 
@@ -527,20 +559,17 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
     return dayMap.get(dayWeek) || dayWeek;
   }
 
+  testToast() {
+    this.showToast(true, 'yes');
+  }
+
   showToast(status: boolean, message: string) {
-    if (status) {
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: message,
-      });
-    } else {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: message,
-      });
-    }
+    this.messageService.add({
+      severity: status ? 'success' : 'error',
+      summary: status ? 'Success' : 'Error',
+      detail: message,
+      life: 1500  // Thời gian hiển thị toast (ms)
+    });
   }
 
   showDialog() {

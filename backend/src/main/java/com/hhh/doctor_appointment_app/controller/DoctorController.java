@@ -3,14 +3,18 @@ package com.hhh.doctor_appointment_app.controller;
 import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.AddDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.EditDoctorRequest;
 import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.SearchDoctorRequest;
+import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.UpdateDoctorProfileRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorBookingResponse;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.service.DoctorService.Command.CreateDoctor.CreateDoctorByAdminCommand;
 import com.hhh.doctor_appointment_app.service.DoctorService.Command.DeleteDoctor.DeleteDoctorCommand;
 import com.hhh.doctor_appointment_app.service.DoctorService.Command.EditDoctor.EditDoctorCommand;
+import com.hhh.doctor_appointment_app.service.DoctorService.Command.UpdateProfileDoctor.UpdateProfileDoctorCommand;
 import com.hhh.doctor_appointment_app.service.DoctorService.Query.GetAllDoctorsForBooking.GetAllDoctorsForBookingQuery;
+import com.hhh.doctor_appointment_app.service.DoctorService.Query.GetAllPatientOfDoctor.GetAllPatientOfDoctorQuery;
 import com.hhh.doctor_appointment_app.service.DoctorService.Query.GetDetailDoctor.GetDetailDoctorQuery;
+import com.hhh.doctor_appointment_app.service.DoctorService.Query.GetDoctorProfile.GetDoctorProfileQuery;
 import com.hhh.doctor_appointment_app.service.DoctorService.Query.GetDoctorWithPage.GetDoctorWithPageQuery;
 import com.hhh.doctor_appointment_app.service.DoctorService.Query.GetTopTenRatingDoctor.GetTopTenRatingDoctorQuery;
 import com.hhh.doctor_appointment_app.service.DoctorService.Query.SearchDoctors.SearchDoctorsQuery;
@@ -26,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/doctor")
@@ -54,8 +59,18 @@ public class DoctorController {
 
     @Autowired
     private GetTopTenRatingDoctorQuery getTopTenRatingDoctorQuery;
+
     @Autowired
     private GetAllDoctorsForBookingQuery getAllDoctorsForBookingQuery;
+
+    @Autowired
+    private GetDoctorProfileQuery getDoctorProfileQuery;
+
+    @Autowired
+    private UpdateProfileDoctorCommand updateProfileDoctorCommand;
+
+    @Autowired
+    private GetAllPatientOfDoctorQuery getAllPatientOfDoctorQuery;
 
     @GetMapping("/list-doctor")
     public ResponseEntity<?> getDoctors(@RequestParam(defaultValue = "1") int page,
@@ -93,19 +108,20 @@ public class DoctorController {
 
         // Kiểm tra lỗi validation
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(fieldError -> fieldError.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
-            apiResponse.setMessage("Validation errors: " + errors);
+            apiResponse.setMessage(errorMessage);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse); // Trả về lỗi 400 cho validation
         }
 
         try {
 
-            // Lưu hồ sơ
+            //Save
             apiResponse = createDoctorCommand.addDoctor(file,addDoctorRequest);
 
-            // Kiểm tra xem email đã tồn tại trong hệ thống hay chưa
+            // Check exist email
             if (HttpStatus.INTERNAL_SERVER_ERROR.value() == apiResponse.getStatusCode()) {
                 apiResponse.setMessage("Doctor's Email already exists in the system");
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponse); // Trả về lỗi 409 cho email bị trùng
@@ -136,7 +152,7 @@ public class DoctorController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
-            // Upload file lên Firebase Storage
+            // Upload file to Firebase Storage
             String fileUrl = firebaseStorageService.uploadFile(file);
             editDoctorRequest.setAvatarFilePath(fileUrl);
 
@@ -216,5 +232,74 @@ public class DoctorController {
     public ResponseEntity<List<DoctorBookingResponse>> getAllDoctorsForBooking(){
         var result = getAllDoctorsForBookingQuery.getAllDoctorsForBookingQuery();
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @GetMapping("/myInfo")
+    public ResponseEntity<?> getDoctorProfile()
+    {
+        ApiResponse<?> apiResponse = new ApiResponse<>();
+        try {
+            apiResponse = getDoctorProfileQuery.getDoctorProfile();
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+        catch (NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+        catch (Exception ex) {
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+    }
+
+    @PutMapping("/update-profile")
+    public ResponseEntity<?> updateDoctorProfile(@RequestParam("file") MultipartFile file,
+                                                 @ModelAttribute @Valid UpdateDoctorProfileRequest updateDoctorProfileRequest, // sử dụng ModelAttribute để bind dữ liệu
+                                                 BindingResult bindingResult){
+        ApiResponse<Object> apiResponse = new ApiResponse<>();
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(fieldError -> fieldError.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage(errorMessage);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+        try {
+            // Upload file to Firebase Storage
+            if(!file.isEmpty()){
+                String fileUrl = firebaseStorageService.uploadFile(file);
+                updateDoctorProfileRequest.setAvatarFilePath(fileUrl);
+            }
+            apiResponse = updateProfileDoctorCommand.updateProfileDoctor(updateDoctorProfileRequest);
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
+        }
+        catch (NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+        catch (Exception ex) {
+
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+    }
+
+    @GetMapping("/all-patient")
+    public ResponseEntity<?> getAllPatientsOfDoctor(@RequestParam(defaultValue = "1") int page,
+                                                    @RequestParam(defaultValue = "10") int size,
+                                                    @RequestParam(defaultValue = "") String patientName){
+        try{
+            return new ResponseEntity<>(getAllPatientOfDoctorQuery.getAllPatientsOfDoctor(patientName, page, size), HttpStatus.OK);
+        }catch (Exception ex){
+            ApiResponse<Object> apiResponse = new ApiResponse<>();
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
     }
 }
