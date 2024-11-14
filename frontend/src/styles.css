@@ -6734,3 +6734,16 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .form-focus .focus-label{
 	margin-top: -7px;
 }
+
+.p-dropdown-items {
+	padding-left: 0 !important;
+	
+}
+/* .p-element ng-star-inserted{
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+} */
+/* .p-dropdown-items-wrapper{
+	padding: ;
+} */

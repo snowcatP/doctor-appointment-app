@@ -27,6 +27,10 @@ import { DialogModule } from 'primeng/dialog';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { CarouselModule } from 'primeng/carousel';
+import { DividerModule } from 'primeng/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
 @NgModule({
   declarations: [
     DoctorAppointmentComponent,
@@ -57,7 +61,11 @@ import { InputTextModule } from 'primeng/inputtext';
     DialogModule,
     IconFieldModule,
     InputIconModule,
-    InputTextModule
+    InputTextModule,
+    CarouselModule,
+    DividerModule,
+    MatTooltipModule,
+    MatIconModule
   ]
 })
 export class DoctorModule { }

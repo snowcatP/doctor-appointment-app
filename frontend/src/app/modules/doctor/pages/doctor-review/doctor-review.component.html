@@ -24,10 +24,11 @@
                                     </div>
                                     <p class="comment-content">{{ feedback.comment }}</p>
                                     <div class="comment-reply">
-                                        <a class="comment-btn" href="#" (click)="openReplyDialog(feedback,$event)">
+                                        <a class="comment-btn" href="javascript:void(0);" (click)="openReplyDialog(feedback,$event)">
                                             <i class="fas fa-reply"></i> Reply
                                         </a>
                                     </div>
+                                    
                                 </div>
                             </div>
 
@@ -66,6 +67,11 @@
                 <p-paginator [rows]="pageSize" [totalRecords]="totalFeedbacks" [rowsPerPageOptions]="[5,10,20]"
                 (onPageChange)="handlePageEvent($event)"></p-paginator>
             </div>
+            <app-reply-dialog
+  *ngIf="isReplyDialogVisible"
+  [data]="replyFeedbackData"
+  (onClose)="onDialogClose($event)"
+></app-reply-dialog>
         </div>
     </div>
 </div>

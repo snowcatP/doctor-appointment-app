@@ -39,5 +39,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
             Pageable pageable
     );
 
+
     Page<Appointment> findByPatient_Id(Long id, Pageable pageable);
 }

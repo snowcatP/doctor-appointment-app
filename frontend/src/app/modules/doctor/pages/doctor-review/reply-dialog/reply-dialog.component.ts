@@ -1,13 +1,4 @@
-import { Component , Inject } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle,
-} from '@angular/material/dialog';
+import { Component , Inject, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { ReplyFeedbackRequest, ApiResponse } from '../../../../../core/models/feedback.model';
 import { FeedbackService } from '../../../../../core/services/feedback.service';
 import { MessageService } from 'primeng/api';
@@ -16,24 +7,30 @@ import { MessageService } from 'primeng/api';
   templateUrl: './reply-dialog.component.html',
   styleUrl: './reply-dialog.component.css'
 })
-export class ReplyDialogComponent {
+export class ReplyDialogComponent implements OnInit{
+  @Input() data: any; // Nhận data từ component cha
+  @Output() onClose = new EventEmitter<ApiResponse>();
+
   feedbackRequest = {
     comment: '',
   };
 
   replyFeedback: ReplyFeedbackRequest = new ReplyFeedbackRequest();
 
+  visible: boolean = false;
+
+  ngOnInit(): void {
+    this.visible = true;
+    console.log('Received feedback data:', this.data);
+    this.replyFeedback.doctorId = this.data.doctorResponse.id;
+    this.replyFeedback.patientId = this.data.patientResponse.id;
+    this.replyFeedback.replyCommentID = this.data.id;
+  }
 
   constructor(
-    public dialogRef: MatDialogRef<ReplyDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
     private feedbackService: FeedbackService,
-    private messageService: MessageService,
+    private messageService: MessageService
   ) {
-    console.log('Received feedback data:', data.feedback);
-    this.replyFeedback.doctorId = data.feedback.doctorResponse.id;
-    this.replyFeedback.patientId = data.feedback.patientResponse.id;
-    this.replyFeedback.replyCommentID = data.feedback.id;
   }
 
   onSubmitReview(): void {
@@ -50,7 +47,8 @@ export class ReplyDialogComponent {
             detail: response.message || 'Reply review successfully',
           });
           setTimeout(() => {
-            this.dialogRef.close(response);
+            this.visible = false; // Close dialog
+            this.onClose.emit(response);
               }, 1000);
         } else {
           this.messageService.add({
@@ -75,6 +73,7 @@ export class ReplyDialogComponent {
   }
 
   onCancel(): void {
-    this.dialogRef.close();
+    this.onClose.emit();
   }
+
 }

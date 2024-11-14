@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AppointmentsBooked, BookingDataGuest, BookingDataPatient } from '../models/booking.model';
 import { host } from '../../../environments/environment';
-
+import { Appointment, RescheduleAppointment } from '../models/appointment.model';
+import { ApiResponse } from '../models/doctor.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -49,5 +50,31 @@ export class AppointmentService {
   getAppointmentsOfPatientByPatientId(id: number, page: number, size: number): Observable<any> {
     const url = `${host}/api/appointment/list/patient/${id}?page=${page}&size=${size}`;
     return this.http.get<any>(url);
+  }
+
+  getListAppointmentsOfDoctor(page: number, size: number): Observable<any> {
+    const url = `${host}/api/appointment/list/doctor?page=${page}&size=${size}`;
+    return this.http.get<any>(url);
+  }
+
+  changeStatusAppointmentByDoctor(id: number): Observable<any> {
+    const url = `${host}/api/appointment/change-status/${id}`;
+    return this.http.put<ApiResponse>(url,id);
+  }
+
+  cancelAppointmentByDoctor(id: number): Observable<any> {
+    const url = `${host}/api/appointment/cancel/${id}`;
+    return this.http.put<ApiResponse>(url,id);
+  }
+
+  getAppointmentsForRescheduling(): Observable<AppointmentsBooked[]> {
+    return this.http.get<AppointmentsBooked[]>(
+      `${host}/api/appointment/get-appointments-for-rescheduling`
+    );
+  }
+
+  rescheduleAppointmentByDoctor(id: number, rescheduleAppointment: RescheduleAppointment): Observable<any>{
+    const url = `${host}/api/appointment/reschedule/${id}`;
+    return this.http.put<ApiResponse>(url,rescheduleAppointment);
   }
 }
