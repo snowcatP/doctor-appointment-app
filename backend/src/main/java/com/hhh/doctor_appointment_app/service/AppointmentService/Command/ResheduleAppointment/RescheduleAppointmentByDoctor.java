@@ -8,11 +8,14 @@ import com.hhh.doctor_appointment_app.entity.Appointment;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
 import com.hhh.doctor_appointment_app.state.AcceptState;
+import com.hhh.doctor_appointment_app.state.RescheduledState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Service
@@ -31,15 +34,32 @@ public class RescheduleAppointmentByDoctor {
             Appointment appointment = appointmentRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Appointment Not Found"));
 
-            // Kiểm tra trạng thái hiện tại để đảm bảo chỉ có thể dời lịch từ trạng thái SCHEDULED
-            if (!(appointment.getAppointmentState() instanceof AcceptState)) {
-                throw new IllegalStateException("Appointment can only be rescheduled from Scheduled status.");
+            // Convert the dateBooking from Date to LocalDateTime
+            LocalDateTime dateBooking = rescheduleWithDateRequest.getDateBooking()
+                    .toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+
+            // Get the current date and time
+            LocalDateTime currentDateTime = LocalDateTime.now();
+
+            // Check if the dateBooking is after the current date and time
+            if (dateBooking.isBefore(currentDateTime)) {
+                return ApiResponse.builder()
+                        .statusCode(HttpStatus.BAD_REQUEST.value())
+                        .message("The booking date and time must be in the future.")
+                        .build();
             }
 
             // Thực hiện việc chuyển trạng thái sang RESCHEDULED
-            ((AcceptState) appointment.getAppointmentState()).reschedule(appointment, rescheduleWithDateRequest.getNewDateBooking());
-
+            if(appointment.getAppointmentState() instanceof AcceptState){
+                ((AcceptState) appointment.getAppointmentState()).next(appointment);
+            } else {
+                ((RescheduledState) appointment.getAppointmentState()).reschedule(appointment);
+            }
             // Lưu lại appointment với trạng thái RESCHEDULED
+            appointment.setDateBooking(rescheduleWithDateRequest.getDateBooking());
+            appointment.setBookingHour(rescheduleWithDateRequest.getBookingHour());
             appointmentRepository.saveAndFlush(appointment);
 
             // Tạo phản hồi từ Appointment sau khi thay đổi

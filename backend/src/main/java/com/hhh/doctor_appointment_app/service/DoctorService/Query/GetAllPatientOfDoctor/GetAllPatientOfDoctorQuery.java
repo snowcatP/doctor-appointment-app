@@ -20,7 +20,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,8 +48,11 @@ public class GetAllPatientOfDoctorQuery {
         Pageable pageable = PageRequest.of(page-1, size);
         Page<Appointment> appointmentPage = appointmentRepository.findByDoctorEmailAndPatientNameContainingIgnoreCase(username,patientName,pageable);
 
+        // Remove duplicate patients by using a set of patient IDs
+        Set<Long> patientIds = new HashSet<>();
         //Convert entities to responses
         List<PatientResponse> appointmentResponses = appointmentPage.getContent().stream()
+                .filter(appointment -> patientIds.add(appointment.getPatient().getId()))
                 .map(appointment -> {
                     PatientResponse response = new PatientResponse();
                     response.setId(appointment.getPatient().getId());

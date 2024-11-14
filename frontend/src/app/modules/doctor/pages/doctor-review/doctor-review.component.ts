@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FeedbackService } from '../../../../core/services/feedback.service';
 import { ReplyDialogComponent } from './reply-dialog/reply-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { ApiResponse } from '../../../../core/models/feedback.model';
 @Component({
   selector: 'app-doctor-review',
   templateUrl: './doctor-review.component.html',
@@ -14,9 +14,11 @@ export class DoctorReviewComponent {
   pageSize: number = 5;
   currentPage: number = 1;
 
+  isReplyDialogVisible: boolean = false;
+  replyFeedbackData: any;
+
   constructor(private feedbackService: FeedbackService,
-    private router: Router,
-    public dialog: MatDialog) { }
+    private router: Router) { }
 
   ngOnInit(): void {
     this.fetchFeedbackOfDoctorByDoctorEmail(1, this.pageSize);
@@ -50,14 +52,16 @@ export class DoctorReviewComponent {
 
   openReplyDialog(feedback: any, event: Event): void {
     event.preventDefault();
-    const dialogRef = this.dialog.open(ReplyDialogComponent, {
-      width: '500px',
-      data: { feedback} // truyền dữ liệu bác sĩ nếu cần thiết
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.fetchFeedbackOfDoctorByDoctorEmail(1, this.pageSize);
-      }
-    });
+    console.log("Feedback data:", feedback);
+    this.replyFeedbackData = feedback; // Lưu dữ liệu phản hồi để truyền vào dialog
+    this.isReplyDialogVisible = true; // Hiển thị dialog
+  }
+
+  onDialogClose(result: ApiResponse | undefined): void {
+    this.isReplyDialogVisible = false; // Ẩn dialog
+    if (result) {
+      console.log("Dialog closed with result:", result);
+      this.fetchFeedbackOfDoctorByDoctorEmail(1, this.pageSize); // Cập nhật lại danh sách phản hồi
+    }
   }
 }

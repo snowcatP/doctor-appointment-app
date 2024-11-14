@@ -19,6 +19,7 @@ import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAp
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentOfPatient.GetListAppointmentOfPatientQuery;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentOfPatientByPatientId.GetListAppointmentOfPatientByPatientIdQuery;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentsForBooking.GetListAppointmentsForBookingQuery;
+import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentsForRescheduling.GetListAppointmentsForReschedulingQuery;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -71,6 +72,8 @@ public class AppointmentController {
     @Autowired
     private GetListAppointmentOfPatientByPatientIdQuery getListAppointmentOfPatientByPatientIdQuery;
 
+    @Autowired
+    private GetListAppointmentsForReschedulingQuery getListAppointmentsForReshedulingQuery;
     @GetMapping("/list")
     public ResponseEntity<?> getAppointments(@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "10") int size){
@@ -191,11 +194,11 @@ public class AppointmentController {
         }
     }
 
-    @GetMapping("/list/doctor/{id}")
+    @GetMapping("/list/doctor")
     public ResponseEntity<?> getAppointmentsByDoctorId(@RequestParam(defaultValue = "1") int page,
-                                             @RequestParam(defaultValue = "10") int size, @PathVariable Long id){
+                                             @RequestParam(defaultValue = "10") int size){
         try{
-            return new ResponseEntity<>(getListAppointmentByDoctorIdQuery.getAppointmentsWithPageByDoctorId(page, size, id), HttpStatus.OK);
+            return new ResponseEntity<>(getListAppointmentByDoctorIdQuery.getAppointmentsWithPageByDoctorId(page, size), HttpStatus.OK);
         }catch (Exception ex){
             ApiResponse<Object> apiResponse = new ApiResponse<>();
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
@@ -254,6 +257,15 @@ public class AppointmentController {
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+    }
+
+    @GetMapping("/get-appointments-for-rescheduling")
+    public ResponseEntity<List<AppointmentBookedResponse>> getAppointmentsForResheduling() {
+        try {
+            return new ResponseEntity<>(getListAppointmentsForReshedulingQuery.getListAppointmentsForResheduling(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

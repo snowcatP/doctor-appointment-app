@@ -105,3 +105,4 @@ export class TimeSlot {
     this.isBooked = false;
   }
 }
+

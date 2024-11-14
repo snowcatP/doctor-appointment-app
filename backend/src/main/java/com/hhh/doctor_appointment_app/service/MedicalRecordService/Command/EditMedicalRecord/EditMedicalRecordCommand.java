@@ -59,6 +59,7 @@ public class EditMedicalRecordCommand {
                 editMedicalRecordRequest.setFilePath(fileUrl);
             }
 
+
             MedicalRecord existingMedicalRecord = medicalRecordRepository.findById(editMedicalRecordRequest.getMedicalRecordId()).
                     orElseThrow(() -> new NotFoundException("Medical Record Not Found"));
 
@@ -68,8 +69,11 @@ public class EditMedicalRecordCommand {
             Doctor doctor = doctorRepository.findDoctorByProfile_Email(usernameDoctor)
                     .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
 
+
+            if(editMedicalRecordRequest.getFilePath()!=null){
+                existingMedicalRecord.setFilePath(editMedicalRecordRequest.getFilePath());
+            }
             existingMedicalRecord.setDescription(editMedicalRecordRequest.getDescription());
-            existingMedicalRecord.setFilePath(editMedicalRecordRequest.getFilePath());
             existingMedicalRecord.setPatient(patient);
             existingMedicalRecord.setDoctorModified(doctor);
 

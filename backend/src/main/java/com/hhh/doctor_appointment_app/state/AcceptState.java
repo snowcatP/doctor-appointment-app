@@ -10,10 +10,7 @@ public class AcceptState implements AppointmentState{
         appointment.setAppointmentState(new CompletedState());
     }
 
-    public void reschedule(Appointment appointment, Date newDateBooking){
-        // Cập nhật lại ngày đặt lịch mới cho Appointment
-        appointment.setDateBooking(newDateBooking);
-
+    public void reschedule(Appointment appointment){
         // Chuyển trạng thái sang RESCHEDULED
         appointment.setAppointmentState(new RescheduledState());
     }

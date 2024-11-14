@@ -40,6 +40,7 @@ public class GetListAppointmentOfPatientByPatientIdQuery {
                     response.setEmail(appointment.getEmail());
                     response.setReason(appointment.getReason());
                     response.setDateBooking(appointment.getDateBooking());
+                    response.setBookingHour(appointment.getBookingHour());
                     response.setAppointmentStatus(appointment.getAppointmentStatus());
                     response.setDoctor(doctorMapper.toResponse(appointment.getDoctor()));
                     return response;

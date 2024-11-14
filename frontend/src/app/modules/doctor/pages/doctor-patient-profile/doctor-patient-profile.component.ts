@@ -19,6 +19,7 @@ export class DoctorPatientProfileComponent {
   totalAppointments: number = 0;
   pageSize: number = 10;
   currentPage: number = 1;
+  
 
   constructor(
     private patientService: PatientService,

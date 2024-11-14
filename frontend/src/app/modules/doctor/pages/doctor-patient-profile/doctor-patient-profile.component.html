@@ -1,40 +1,53 @@
 <div class="content">
-    <div class="d-flex">
-        <!-- Sidebar Component -->
-        <div class="col-md-3 col-lg-3 col-xl-3 theiaStickySidebar dct-dashbd-lft">
+  <div class="d-flex">
+    <!-- Sidebar Component -->
+    <div class="col-md-3 col-lg-3 col-xl-3 theiaStickySidebar dct-dashbd-lft">
+      <!-- Profile Widget -->
+      <div class="card widget-profile pat-widget-profile">
+        <div class="card-body">
+          <div class="pro-widget-content">
+            <div class="profile-info-widget">
+              <a href="#" class="booking-doc-img">
+                <img
+                  src="../../../../../assets/images/patients/patient3.jpg"
+                  alt="User Image"
+                />
+              </a>
+              <div class="profile-det-info">
+                <h3>
+                  {{ patientDetail?.firstName }} {{ patientDetail?.lastName }}
+                </h3>
 
-            <!-- Profile Widget -->
-            <div class="card widget-profile pat-widget-profile">
-                <div class="card-body">
-                    <div class="pro-widget-content">
-                        <div class="profile-info-widget">
-                            <a href="#" class="booking-doc-img">
-                                <img src="../../../../../assets/images/patients/patient3.jpg" alt="User Image">
-                            </a>
-                            <div class="profile-det-info">
-                                <h3>{{patientDetail?.firstName}} {{patientDetail?.lastName}} </h3>
-
-                                <div class="patient-details">
-                                    <h5><b>Patient ID :</b>{{patientDetail?.id}}</h5>
-                                    <h5 class="mb-0"><i class="fas fa-map-marker-alt"></i>{{patientDetail?.address}}
-                                    </h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="patient-info">
-                        <ul>
-                            <li>Phone <span>{{patientDetail?.phone}}</span></li>
-                            <li>Age <span>{{ calculateAge(patientDetail?.dateOfBirth) }} Years,
-                                    {{ patientDetail?.gender ? 'Male' : 'Female' }}</span></li>
-                        </ul>
-                    </div>
+                <div class="patient-details">
+                  <h5><b>Patient ID :</b>{{ patientDetail?.id }}</h5>
+                  <h5 class="mb-0">
+                    <i class="fas fa-map-marker-alt"></i
+                    >{{ patientDetail?.address }}
+                  </h5>
                 </div>
+              </div>
             </div>
-            <!-- /Profile Widget -->
+          </div>
+          <div class="patient-info">
+            <ul>
+              <li>
+                Phone <span>{{ patientDetail?.phone }}</span>
+              </li>
+              <li>
+                Age
+                <span
+                  >{{ calculateAge(patientDetail?.dateOfBirth) }} Years,
+                  {{ patientDetail?.gender ? "Male" : "Female" }}</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- /Profile Widget -->
 
-            <!-- Last Booking -->
-            <!-- <div class="card">
+      <!-- Last Booking -->
+      <!-- <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Last Booking</h4>
                 </div>
@@ -67,343 +80,531 @@
                     </li>
                 </ul>
             </div> -->
-            <!-- /Last Booking -->
-
-        </div>
-        <div class="col-md-7 col-lg-8 col-xl-9 dct-appoinment" *ngIf="!isFormVisible && !isEditFormVisible">
-            <div class="card">
-                <div class="card-body">
-                    <mat-tab-group>
-                        <mat-tab label="Appointments">
-                            <div id="pat_appointments">
-                                <div class="card card-table mb-3">
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover table-center mb-3">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Doctor</th>
-                                                        <th>Appointment Date</th>
-                                                        <th>Booking Date</th>
-                                                        <th>Status</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr *ngFor="let appointment of appointments">
-                                                        <td>
-                                                            <h2 class="table-avatar">
-                                                                <a class="avatar avatar-sm mr-3">
-                                                                    <img class="avatar-img rounded-circle"
-                                                                        [src]="appointment.doctor.avatarFilePath"
-                                                                        alt="User Image" />
-                                                                </a>
-                                                                <a>Dr. {{ appointment.doctor.firstName }}
-                                                                    {{
-                                                                    appointment.doctor.lastName }} <span>{{
-                                                                        appointment.doctor.specialty.specialtyName
-                                                                        }}</span> </a>
-                                                            </h2>
-                                                        </td>
-                                                        <td>
-                                                            <!-- {{ appointment.dateBooking | date: 'dd MMM yyyy' }}
+      <!-- /Last Booking -->
+    </div>
+    <div
+      class="col-md-7 col-lg-8 col-xl-9 dct-appoinment"
+      *ngIf="!isFormVisible && !isEditFormVisible"
+    >
+      <div class="card">
+        <div class="card-body">
+          <mat-tab-group>
+            <mat-tab label="Appointments">
+              <div id="pat_appointments">
+                <div class="card card-table mb-3">
+                  <div class="card-body">
+                    <div class="table-responsive" style="min-height: 60vh">
+                      <table class="table table-hover table-center mb-3">
+                        <thead>
+                          <tr>
+                            <th>Doctor</th>
+                            <th>Appointment Date</th>
+                            <th>Booking Date</th>
+                            <th>Status</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let appointment of appointments">
+                            <td>
+                              <h2 class="table-avatar">
+                                <a class="avatar avatar-sm mr-3">
+                                  <img
+                                    class="avatar-img rounded-circle"
+                                    [src]="appointment.doctor.avatarFilePath"
+                                    alt="User Image"
+                                  />
+                                </a>
+                                <a
+                                  >Dr. {{ appointment.doctor.firstName }}
+                                  {{ appointment.doctor.lastName }}
+                                  <span>{{
+                                    appointment.doctor.specialty.specialtyName
+                                  }}</span>
+                                </a>
+                              </h2>
+                            </td>
+                            <td>
+                              <!-- {{ appointment.dateBooking | date: 'dd MMM yyyy' }}
                                       <span class="d-block text-info">
                                         {{ appointment.dateBooking | date: 'hh:mm a' }}
                                       </span> -->
-                                                        </td>
-                                                        <td>
-                                                            {{ appointment.dateBooking | date: 'dd MMM yyyy' }}
-                                                            <span class="d-block text-info">
-                                                                {{ appointment.dateBooking | date: 'hh:mm a' }}
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge badge-pill" [ngClass]="{
-                                          'bg-success-light': appointment.appointmentStatus === 'COMPLETED',
-                                          'bg-warning-light': appointment.appointmentStatus === 'PENDING',
-                                          'bg-danger-light': appointment.appointmentStatus === 'CANCELLED'
-                                        }">
-                                                                {{ appointment.appointmentStatus }}
-                                                            </span>
-                                                        </td>
-                                                        <td class="text-right">
-                                                            <div class="table-action">
-                                                                <a href="javascript:void(0);"
-                                                                    class="btn btn-sm bg-info-light"
-                                                                    (click)="viewAppointmentDetails(appointment)">
-                                                                    <i class="far fa-eye"></i> View
-                                                                </a>
-                                                            </div>
-                                                        </td>
-                                                        <td class="text-right">
-                                                            <div class="table-action">
-                                                                <a href="javascript:void(0);"
-                                                                    class="btn btn-sm bg-success-light">
-                                                                    <i class="far fa-edit"></i> Edit
-                                                                </a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <!-- Paginator Component -->
-                                        <p-paginator [rows]="pageSize" [totalRecords]="totalAppointments"
-                                            [rowsPerPageOptions]="[10,20]"
-                                            (onPageChange)="handlePageEvent($event)"></p-paginator>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Appointment Detail Dialog -->
-                            <p-dialog header="Appointment Details" [modal]="true" [(visible)]="visible"
-                                [style]="{ width: '25rem' }">
-                                <div *ngIf="selectedAppointment">
-                                    <p><strong>Doctor:</strong>Dr. {{
-                                        selectedAppointment.doctor.firstName }} {{
-                                        selectedAppointment.doctor.lastName }}</p>
-                                    <p><strong>Appointment Date:</strong> {{ selectedAppointment.dateBooking | date: 'dd
-                                        MMM yyyy, hh:mm a' }}
-                                    </p>
-                                    <p><strong>Status:</strong>
-                                        <span class="badge badge-pill" [ngClass]="{
-                  'bg-success-light': selectedAppointment.appointmentStatus === 'COMPLETED',
-                  'bg-warning-light': selectedAppointment.appointmentStatus === 'PENDING',
-                  'bg-danger-light': selectedAppointment.appointmentStatus === 'CANCELLED'
-                }">
-                                            {{ selectedAppointment.appointmentStatus }}
-                                        </span>
-                                    </p>
-
-                                    <p><strong>Reason:</strong> {{ selectedAppointment.reason }}</p>
-                                    <p><strong>Patient Name:</strong> {{ selectedAppointment.fullName }}</p>
-                                    <p><strong>Phone:</strong> {{ selectedAppointment.phone }}</p>
-                                </div>
-
-                            </p-dialog>
-                        </mat-tab>
-                        <mat-tab label="Medical Records">
-                            <!-- Medical Records Tab -->
-                            <div id="pat_medical_records">
-                                <div class="text-right">
-                                    <a href="javascript:void(0);" class="add-new-btn" data-toggle="modal"
-                                        data-target="#add_medical_records" (click)="openForm()">Add Medical
-                                        Records</a>
-                                </div>
-                                <div class="card card-table mb-0">
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover table-center mb-0">
-                                                <thead>
-                                                    <tr>
-                                                        <th>ID</th>
-                                                        <th>Created Date</th>
-                                                        <th>Description</th>
-                                                        <th>Attachment</th>
-                                                        <th>Created</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr *ngFor="let medicalRecord of medicalRecords">
-                                                        <td>{{medicalRecord.id}}</td>
-                                                        <td>{{medicalRecord.dateCreated | date: 'dd MMM yyyy, hh:mm a'
-                                                            }}</td>
-                                                        <td>{{medicalRecord.description}}</td>
-                                                        <td><a href={{medicalRecord.filePath}} target="_blank">File</a>
-                                                        </td>
-                                                        <td>
-                                                            <h2 class="table-avatar">
-                                                                <a class="avatar avatar-sm mr-3">
-                                                                    <img class="avatar-img rounded-circle"
-                                                                        [src]="medicalRecord.doctorResponse.avatarFilePath || 'assets/images/doctors/doctor-thumb-01.jpg'"
-                                                                        alt="User Image" />
-                                                                </a>
-                                                                <a>Dr. {{
-                                                                    medicalRecord.doctorResponse.firstName }} {{
-                                                                    medicalRecord.doctorResponse.lastName }} <span>{{
-                                                                        medicalRecord.doctorResponse.specialty.specialtyName
-                                                                        }}</span> </a>
-                                                            </h2>
-                                                        </td>
-                                                        <td class="text-right">
-                                                            <div class="table-action">
-                                                                <a href="javascript:void(0);"
-                                                                    class="btn btn-sm bg-info-light"
-                                                                    (click)="viewMedicalRecordDetails(medicalRecord)">
-                                                                    <i class="far fa-eye"></i> View
-                                                                </a>
-                                                            </div>
-                                                        </td>
-                                                        <td class="text-right">
-                                                            <div class="table-action">
-                                                                <a href="javascript:void(0);"
-                                                                    class="btn btn-sm bg-success-light"
-                                                                    (click)="clickEditMedicalRecord(medicalRecord)">
-                                                                    <i class="far fa-edit"></i> Edit
-                                                                </a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <!-- Paginator Component -->
-                                        <p-paginator [rows]="pageSize" [totalRecords]="totalMedicalRecords"
-                                            [rowsPerPageOptions]="[10,20]"
-                                            (onPageChange)="handlePageEvent($event)"></p-paginator>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Medical Record Detail Dialog -->
-                            <p-dialog header="Medical Record Details" [modal]="true" [(visible)]="visibleMedicalRecord"
-                                [style]="{ width: '25rem' }">
-                                <div *ngIf="selectedMedicalRecord">
-                                    <p><strong>Doctor:</strong>Dr. {{
-                                        selectedMedicalRecord.doctorResponse.firstName }} {{
-                                        selectedMedicalRecord.doctorResponse.lastName }}
-                                    </p>
-
-
-
-                                    <p><strong>Created Date:</strong> {{ selectedMedicalRecord.dateCreated | date: 'dd
-                                        MMM yyyy, hh:mm a' }}
-                                    </p>
-                                    <p><strong>Last Modified:</strong> {{ selectedMedicalRecord.lastModified | date: 'dd
-                                        MMM yyyy, hh:mm a' }}
-                                    </p>
-                                    <p><strong>Description:</strong> {{ selectedMedicalRecord.description }}</p>
-                                    <p><strong>File:</strong></p>
-                                    <div class="doctor-img">
-                                        <p-image
-                                            [src]="selectedMedicalRecord?.filePath"
-                                            class="img-fluid" alt="Doctor Image" width="150" [preview]="true" />
-                                    </div>
-                                </div>
-
-                            </p-dialog>
-                        </mat-tab>
-                    </mat-tab-group>
+                            </td>
+                            <td>
+                              {{
+                                appointment.dateBooking | date : "dd MMM yyyy"
+                              }}
+                              <span class="d-block text-info">
+                                {{appointment.bookingHour}}
+                              </span>
+                            </td>
+                            <td>
+                              <span
+                                class="badge badge-pill"
+                                [ngClass]="{
+                                  'bg-primary-light':
+                                    appointment.appointmentStatus === 'ACCEPT',
+                                  'bg-info-light':
+                                    appointment.appointmentStatus ===
+                                    'RESCHEDULED',
+                                  'bg-success-light':
+                                    appointment.appointmentStatus ===
+                                    'COMPLETED',
+                                  'bg-warning-light':
+                                    appointment.appointmentStatus === 'PENDING',
+                                  'bg-danger-light':
+                                    appointment.appointmentStatus ===
+                                    'CANCELLED'
+                                }"
+                              >
+                                {{ appointment.appointmentStatus }}
+                              </span>
+                            </td>
+                            <td class="text-right">
+                              <div class="table-action">
+                                <a
+                                  href="javascript:void(0);"
+                                  class="btn btn-sm bg-info-light"
+                                  (click)="viewAppointmentDetails(appointment)"
+                                >
+                                  <i class="far fa-eye"></i> View
+                                </a>
+                              </div>
+                            </td>
+                            <!-- <td class="text-right">
+                              <div class="table-action">
+                                <a
+                                  href="javascript:void(0);"
+                                  class="btn btn-sm bg-success-light"
+                                >
+                                  <i class="far fa-edit"></i> Edit
+                                </a>
+                              </div>
+                            </td> -->
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- Paginator Component -->
+                    <p-paginator
+                      [rows]="pageSize"
+                      [totalRecords]="totalAppointments"
+                      [rowsPerPageOptions]="[10, 20, 30]"
+                      (onPageChange)="handlePageEvent($event)"
+                    ></p-paginator>
+                  </div>
                 </div>
-            </div>
-        </div>
+              </div>
 
-        <div class="col-md-7 col-lg-8 col-xl-9 dct-appointment" *ngIf="isFormVisible && !isEditFormVisible">
-            <div class="card">
-                <div class="card-body">
-                    <h2 mat-dialog-title>Add Medical Record For Patient</h2>
+              <!-- Appointment Detail Dialog -->
+              <p-dialog
+                header="Appointment Details"
+                [modal]="true"
+                [(visible)]="visible"
+                [style]="{ width: '25rem' }"
+              >
+                <div *ngIf="selectedAppointment">
+                  <p>
+                    <strong>Doctor:</strong>Dr.
+                    {{ selectedAppointment.doctor.firstName }}
+                    {{ selectedAppointment.doctor.lastName }}
+                  </p>
+                  <p>
+                    <strong>Appointment Date:</strong>
+                    {{
+                      selectedAppointment.dateBooking
+                        | date
+                          : "dd
+                                        MMM yyyy"
+                    }}, {{selectedAppointment.bookingHour}}
+                  </p>
+                  <p>
+                    <strong>Status:</strong>
+                    <span
+                      class="badge badge-pill"
+                      [ngClass]="{
+                        'bg-primary-light':
+                          selectedAppointment.appointmentStatus === 'ACCEPT',
+                        'bg-info-light':
+                          selectedAppointment.appointmentStatus ===
+                          'RESCHEDULED',
+                        'bg-success-light':
+                          selectedAppointment.appointmentStatus === 'COMPLETED',
+                        'bg-warning-light':
+                          selectedAppointment.appointmentStatus === 'PENDING',
+                        'bg-danger-light':
+                          selectedAppointment.appointmentStatus === 'CANCELLED'
+                      }"
+                    >
+                      {{ selectedAppointment.appointmentStatus }}
+                    </span>
+                  </p>
 
-                    <form #reviewForm="ngForm" (ngSubmit)="onSubmit()">
-                        <mat-dialog-content>
-                            <div class="form-group">
-                                <label>Description</label>
-                                <textarea id="review_desc" maxlength="100" class="form-control" name="comment"
-                                    [(ngModel)]="medicalRecordRequest.description" name="description"></textarea>
-                                <small class="text-muted"><span id="chars">255</span> characters remaining</small>
-                            </div>
-                            <div class="change-avatar">
-                                <div class="profile-img">
-                                    <p-image *ngIf="imagePreview" [src]="imagePreview" alt="Doctor Image" width="100%"
-                                        [preview]="true"></p-image>
-                                    <div *ngIf="fileName" class="file-name">
-                                        {{ fileName }}
-                                    </div>
-                                </div>
-                                <div class="upload-img">
-                                    <div class="change-photo-btn">
-                                        <span><i class="fa fa-upload"></i> Upload File</span>
-                                        <input type="file" class="upload" (change)="onFileSelected($event)" />
-                                    </div>
-                                    <small class="form-text text-muted">Allowed DOC, DOCX, PDF, JPG, PNG. Max size of
-                                        5MB</small>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="terms-accept">
-                                    <div class="custom-checkbox">
-                                        <input type="checkbox" id="terms_accept" required />
-                                        <label for="terms_accept">I have read and accept <a href="#">Terms &
-                                                Conditions</a></label>
-                                    </div>
-                                </div>
-                            </div>
-                        </mat-dialog-content>
-
-                        <mat-dialog-actions>
-                            <button type="button" class="btn btn-cancel" (click)="closeForm()">Cancel</button>
-                            <button type="submit" class="btn btn-primary submit-btn"
-                                [disabled]="!reviewForm.valid">Add</button>
-                            <!-- Spinner -->
-                            <div *ngIf="loading" class="spinner-container">
-                                <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="5"
-                                    fill="var(--surface-ground)" animationDuration=".5s">
-                                </p-progressSpinner>
-                            </div>
-                        </mat-dialog-actions>
-                    </form>
+                  <p>
+                    <strong>Reason:</strong> {{ selectedAppointment.reason }}
+                  </p>
+                  <p>
+                    <strong>Patient Name:</strong>
+                    {{ selectedAppointment.fullName }}
+                  </p>
+                  <p><strong>Phone:</strong> {{ selectedAppointment.phone }}</p>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-7 col-lg-8 col-xl-9 dct-appointment" *ngIf="isEditFormVisible"
-        (onClose)="closeEditForm()" (onUpdated)="fetchMedicalRecords()">
-            <div class="card">
-                <div class="card-body">
-                    <h2 mat-dialog-title>Edit Medical Record For Patient</h2>
-
-                    <form #editForm="ngForm" (ngSubmit)="onUpdate()">
-                        <mat-dialog-content>
-                            <div class="form-group">
-                                <label>Description</label>
-                                <textarea id="review_desc" maxlength="100" class="form-control" name="comment"
-                                    [(ngModel)]="editingMedicalRecord.description" name="description"></textarea>
-                                <small class="text-muted"><span id="chars">255</span> characters remaining</small>
-                            </div>
-                            <div class="change-avatar">
-                                <div class="profile-img">
-                                    <p-image *ngIf="imagePreview" [src]="imagePreview" alt="Doctor Image" width="100%"
-                                        [preview]="true"></p-image>
-                                        
-                                    <div *ngIf="fileName" class="file-name">
-                                        {{ fileName }}
-                                    </div>
-                                </div>
-                                <div class="upload-img">
-                                    <div class="change-photo-btn">
-                                        <span><i class="fa fa-upload"></i> Upload File</span>
-                                        <input type="file" class="upload" (change)="onFileSelected($event)" />
-                                        
-                                    </div>
-                                    <small class="form-text text-muted">Allowed DOC, DOCX, PDF, JPG, PNG. Max size of
-                                        5MB</small>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="terms-accept">
-                                    <div class="custom-checkbox">
-                                        <input type="checkbox" id="terms_accept" required />
-                                        <label for="terms_accept">I have read and accept <a href="#">Terms &
-                                                Conditions</a></label>
-                                    </div>
-                                </div>
-                            </div>
-                        </mat-dialog-content>
-
-                        <mat-dialog-actions>
-                            <button type="button" class="btn btn-cancel" (click)="closeEditForm()">Cancel</button>
-                            <button type="submit" class="btn btn-primary submit-btn"
-                                [disabled]="!editForm.valid">Edit</button>
-                            <!-- Spinner -->
-                            <div *ngIf="loading" class="spinner-container">
-                                <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="5"
-                                    fill="var(--surface-ground)" animationDuration=".5s">
-                                </p-progressSpinner>
-                            </div>
-                        </mat-dialog-actions>
-                    </form>
+              </p-dialog>
+            </mat-tab>
+            <mat-tab label="Medical Records">
+              <!-- Medical Records Tab -->
+              <div id="pat_medical_records">
+                <div class="text-right">
+                  <a
+                    href="javascript:void(0);"
+                    class="add-new-btn"
+                    data-toggle="modal"
+                    data-target="#add_medical_records"
+                    (click)="openForm()"
+                    >Add Medical Records</a
+                  >
                 </div>
-            </div>
+                <div class="card card-table mb-0">
+                  <div class="card-body">
+                    <div class="table-responsive" style="min-height: 60vh">
+                      <table class="table table-hover table-center mb-0">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Created Date</th>
+                            <th>Description</th>
+                            <th>Attachment</th>
+                            <th>Created</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let medicalRecord of medicalRecords">
+                            <td>{{ medicalRecord.id }}</td>
+                            <td>
+                              {{
+                                medicalRecord.dateCreated
+                                  | date : "dd MMM yyyy, hh:mm a"
+                              }}
+                            </td>
+                            <td>{{ medicalRecord.description }}</td>
+                            <td>
+                              <a
+                                href="{{ medicalRecord.filePath }}"
+                                target="_blank"
+                                >File</a
+                              >
+                            </td>
+                            <td>
+                              <h2 class="table-avatar">
+                                <a class="avatar avatar-sm mr-3">
+                                  <img
+                                    class="avatar-img rounded-circle"
+                                    [src]="
+                                      medicalRecord.doctorResponse
+                                        .avatarFilePath ||
+                                      'assets/images/doctors/doctor-thumb-01.jpg'
+                                    "
+                                    alt="User Image"
+                                  />
+                                </a>
+                                <a
+                                  >Dr.
+                                  {{ medicalRecord.doctorResponse.firstName }}
+                                  {{ medicalRecord.doctorResponse.lastName }}
+                                  <span>{{
+                                    medicalRecord.doctorResponse.specialty
+                                      .specialtyName
+                                  }}</span>
+                                </a>
+                              </h2>
+                            </td>
+                            <td class="text-right">
+                              <div class="table-action">
+                                <a
+                                  href="javascript:void(0);"
+                                  class="btn btn-sm bg-info-light"
+                                  (click)="
+                                    viewMedicalRecordDetails(medicalRecord)
+                                  "
+                                >
+                                  <i class="far fa-eye"></i> View
+                                </a>
+                              </div>
+                            </td>
+                            <td class="text-right">
+                              <div class="table-action">
+                                <a
+                                  href="javascript:void(0);"
+                                  class="btn btn-sm bg-success-light"
+                                  (click)="
+                                    clickEditMedicalRecord(medicalRecord)
+                                  "
+                                >
+                                  <i class="far fa-edit"></i> Edit
+                                </a>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- Paginator Component -->
+                    <p-paginator
+                      [rows]="pageSize"
+                      [totalRecords]="totalMedicalRecords"
+                      [rowsPerPageOptions]="[10, 20]"
+                      (onPageChange)="handlePageEvent($event)"
+                    ></p-paginator>
+                  </div>
+                </div>
+              </div>
+              <!-- Medical Record Detail Dialog -->
+              <p-dialog
+                header="Medical Record Details"
+                [modal]="true"
+                [(visible)]="visibleMedicalRecord"
+                [style]="{ width: '25rem' }"
+              >
+                <div *ngIf="selectedMedicalRecord">
+                  <p>
+                    <strong>Doctor:</strong>Dr.
+                    {{ selectedMedicalRecord.doctorResponse.firstName }}
+                    {{ selectedMedicalRecord.doctorResponse.lastName }}
+                  </p>
+
+                  <p>
+                    <strong>Created Date:</strong>
+                    {{
+                      selectedMedicalRecord.dateCreated
+                        | date
+                          : "dd
+                                        MMM yyyy, hh:mm a"
+                    }}
+                  </p>
+                  <p>
+                    <strong>Last Modified:</strong>
+                    {{
+                      selectedMedicalRecord.lastModified
+                        | date
+                          : "dd
+                                        MMM yyyy, hh:mm a"
+                    }}
+                  </p>
+                  <p>
+                    <strong>Description:</strong>
+                    {{ selectedMedicalRecord.description }}
+                  </p>
+                  <p><strong>File:</strong></p>
+                  <div class="doctor-img">
+                    <p-image
+                      [src]="selectedMedicalRecord?.filePath"
+                      class="img-fluid"
+                      alt="Doctor Image"
+                      width="150"
+                      [preview]="true"
+                    />
+                  </div>
+                </div>
+              </p-dialog>
+            </mat-tab>
+          </mat-tab-group>
         </div>
+      </div>
     </div>
+
+    <div
+      class="col-md-7 col-lg-8 col-xl-9 dct-appointment"
+      *ngIf="isFormVisible && !isEditFormVisible"
+    >
+      <div class="card" >
+        <div class="card-body" style="min-height: 60vh">
+          <h2 mat-dialog-title>Add Medical Record For Patient</h2>
+
+          <form #reviewForm="ngForm" (ngSubmit)="onSubmit()">
+            <mat-dialog-content>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea
+                  id="review_desc"
+                  maxlength="100"
+                  class="form-control"
+                  name="comment"
+                  [(ngModel)]="medicalRecordRequest.description"
+                  name="description"
+                ></textarea>
+                <small class="text-muted"
+                  ><span id="chars">255</span> characters remaining</small
+                >
+              </div>
+              <div class="change-avatar">
+                <div class="profile-img">
+                  <p-image
+                    *ngIf="imagePreview"
+                    [src]="imagePreview"
+                    alt="Doctor Image"
+                    width="100%"
+                    [preview]="true"
+                  ></p-image>
+                  <div *ngIf="fileName" class="file-name">
+                    {{ fileName }}
+                  </div>
+                </div>
+                <div class="upload-img">
+                  <div class="change-photo-btn">
+                    <span><i class="fa fa-upload"></i> Upload File</span>
+                    <input
+                      type="file"
+                      class="upload"
+                      (change)="onFileSelected($event)"
+                    />
+                  </div>
+                  <small class="form-text text-muted" style="margin-top: 15px;"
+                    >Allowed DOC, DOCX, PDF, JPG, PNG. Max size of 5MB</small
+                  >
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-top: 15px">
+                <div class="terms-accept">
+                  <div class="custom-checkbox">
+                    <input type="checkbox" id="terms_accept" required />
+                    <label for="terms_accept"
+                      >I have read and accept
+                      <a href="#">Terms & Conditions</a></label
+                    >
+                  </div>
+                </div>
+              </div>
+            </mat-dialog-content>
+
+            <mat-dialog-actions>
+              <button
+                type="button"
+                class="btn btn-cancel"
+                (click)="closeForm()"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary submit-btn"
+                [disabled]="loading"
+              >
+                Add
+              </button>
+              <!-- Spinner -->
+              <div *ngIf="loading" class="spinner-container">
+                <p-progressSpinner
+                  styleClass="w-4rem h-4rem"
+                  strokeWidth="5"
+                  fill="var(--surface-ground)"
+                  animationDuration=".5s"
+                >
+                </p-progressSpinner>
+              </div>
+            </mat-dialog-actions>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div
+      class="col-md-7 col-lg-8 col-xl-9 dct-appointment"
+      *ngIf="isEditFormVisible"
+      (onClose)="closeEditForm()"
+      (onUpdated)="fetchMedicalRecords()"
+    >
+      <div class="card">
+        <div class="card-body" style="min-height: 60vh">
+          <h2 mat-dialog-title>Edit Medical Record For Patient</h2>
+
+          <form #editForm="ngForm" (ngSubmit)="onUpdate()">
+            <mat-dialog-content>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea
+                  id="review_desc"
+                  maxlength="100"
+                  class="form-control"
+                  name="comment"
+                  [(ngModel)]="editingMedicalRecord.description"
+                  name="description"
+                ></textarea>
+                <small class="text-muted"
+                  ><span id="chars">255</span> characters remaining</small
+                >
+              </div>
+              <div class="change-avatar">
+                <div class="profile-img">
+                  <p-image
+                    *ngIf="imagePreview"
+                    [src]="imagePreview"
+                    alt="Doctor Image"
+                    width="100%"
+                    [preview]="true"
+                  ></p-image>
+
+                  <div *ngIf="fileName" class="file-name">
+                    {{ fileName }}
+                  </div>
+                </div>
+                <div class="upload-img">
+                  <div class="change-photo-btn">
+                    <span><i class="fa fa-upload"></i> Upload File</span>
+                    <input
+                      type="file"
+                      class="upload"
+                      (change)="onFileSelected($event)"
+                    />
+                  </div>
+                  <small class="form-text text-muted" style="margin-top: 15px;"
+                    >Allowed DOC, DOCX, PDF, JPG, PNG. Max size of 5MB</small
+                  >
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-top: 15px;">
+                <div class="terms-accept">
+                  <div class="custom-checkbox">
+                    <input type="checkbox" id="terms_accept" required />
+                    <label for="terms_accept"
+                      >I have read and accept
+                      <a href="#">Terms & Conditions</a></label
+                    >
+                  </div>
+                </div>
+              </div>
+            </mat-dialog-content>
+
+            <mat-dialog-actions>
+              <button
+                type="button"
+                class="btn btn-cancel"
+                (click)="closeEditForm()"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary submit-btn"
+                [disabled]="loading"
+              >
+                Edit
+              </button>
+              <!-- Spinner -->
+              <div *ngIf="loading" class="spinner-container">
+                <p-progressSpinner
+                  styleClass="w-4rem h-4rem"
+                  strokeWidth="5"
+                  fill="var(--surface-ground)"
+                  animationDuration=".5s"
+                >
+                </p-progressSpinner>
+              </div>
+            </mat-dialog-actions>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

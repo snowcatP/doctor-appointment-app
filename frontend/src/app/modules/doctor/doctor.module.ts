@@ -27,6 +27,10 @@ import { DialogModule } from 'primeng/dialog';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { CarouselModule } from 'primeng/carousel';
+import { DividerModule } from 'primeng/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
@@ -61,6 +65,10 @@ import { ConfirmationService } from 'primeng/api';
     IconFieldModule,
     InputIconModule,
     InputTextModule,
+    CarouselModule,
+    DividerModule,
+    MatTooltipModule,
+    MatIconModule,
     ScrollPanelModule,
     MatButtonModule,
     ConfirmPopupModule,

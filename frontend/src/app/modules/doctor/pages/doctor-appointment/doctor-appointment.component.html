@@ -1,4 +1,5 @@
 <div class="appointments">
+  <div *ngFor="let appointment of appointments">
     <!-- Appointment List -->
     <div class="appointment-list">
       <div class="profile-info-widget">
@@ -6,427 +7,263 @@
           <img src="assets/images/patients/patient.jpg" alt="User Image" />
         </a>
         <div class="profile-det-info">
-          <h3><a href="patient-profile.html">Richard Wilson</a></h3>
+          <h3>
+            <a href="patient-profile.html">{{ appointment.fullName }}</a>
+          </h3>
           <div class="patient-details">
-            <h5><i class="far fa-clock"></i> 14 Nov 2019, 10.00 AM</h5>
-            <h5><i class="fas fa-map-marker-alt"></i> Newyork, United States</h5>
-            <h5><i class="fas fa-envelope"></i> richardexample.com</h5>
-            <h5 class="mb-0"><i class="fas fa-phone"></i> +1 923 782 4575</h5>
-          </div>
-        </div>
-      </div>
-      <div class="appointment-action">
-        <a
-          href="#"
-          class="btn btn-sm bg-info-light"
-          data-toggle="modal"
-          data-target="#appt_details"
-        >
-          <i class="far fa-eye"></i> View
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-          <i class="fas fa-check"></i> Accept
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-          <i class="fas fa-times"></i> Cancel
-        </a>
-      </div>
-    </div>
-    <!-- /Appointment List -->
-  
-    <!-- Appointment List -->
-    <div class="appointment-list">
-      <div class="profile-info-widget">
-        <a href="patient-profile.html" class="booking-doc-img">
-          <img src="assets/images/patients/patient1.jpg" alt="User Image" />
-        </a>
-        <div class="profile-det-info">
-          <h3><a href="patient-profile.html">Charlene Reed </a></h3>
-          <div class="patient-details">
-            <h5><i class="far fa-clock"></i> 12 Nov 2019, 5.00 PM</h5>
             <h5>
-              <i class="fas fa-map-marker-alt"></i> North Carolina, United States
+              <i class="far fa-clock"></i> {{ appointment.dateBooking }},
+              {{ appointment.bookingHour }}
             </h5>
-            <h5><i class="fas fa-envelope"></i> charlenereedexample.com</h5>
-            <h5 class="mb-0"><i class="fas fa-phone"></i> +1 828 632 9170</h5>
-          </div>
-        </div>
-      </div>
-      <div class="appointment-action">
-        <a
-          href="#"
-          class="btn btn-sm bg-info-light"
-          data-toggle="modal"
-          data-target="#appt_details"
-        >
-          <i class="far fa-eye"></i> View
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-          <i class="fas fa-check"></i> Accept
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-          <i class="fas fa-times"></i> Cancel
-        </a>
-      </div>
-    </div>
-    <!-- /Appointment List -->
-  
-    <!-- Appointment List -->
-    <div class="appointment-list">
-      <div class="profile-info-widget">
-        <a href="patient-profile.html" class="booking-doc-img">
-          <img src="assets/images/patients/patient2.jpg" alt="User Image" />
-        </a>
-        <div class="profile-det-info">
-          <h3><a href="patient-profile.html">Travis Trimble</a></h3>
-  
-          <div class="patient-details">
-            <h5><i class="far fa-clock"></i> 11 Nov 2019, 8.00 PM</h5>
-            <h5><i class="fas fa-map-marker-alt"></i> Maine, United States</h5>
-            <h5><i class="fas fa-envelope"></i> travistrimbleexample.com</h5>
-            <h5 class="mb-0"><i class="fas fa-phone"></i> +1 207 729 9974</h5>
-          </div>
-        </div>
-      </div>
-      <div class="appointment-action">
-        <a
-          href="#"
-          class="btn btn-sm bg-info-light"
-          data-toggle="modal"
-          data-target="#appt_details"
-        >
-          <i class="far fa-eye"></i> View
-        </a>
-  
-        <a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-          <i class="fas fa-check"></i> Accept
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-          <i class="fas fa-times"></i> Cancel
-        </a>
-      </div>
-    </div>
-    <!-- /Appointment List -->
-  
-    <!-- Appointment List -->
-    <div class="appointment-list">
-      <div class="profile-info-widget">
-        <a href="patient-profile.html" class="booking-doc-img">
-          <img src="assets/images/patients/patient3.jpg" alt="User Image" />
-        </a>
-        <div class="profile-det-info">
-          <h3><a href="patient-profile.html">Carl Kelly</a></h3>
-          <div class="patient-details">
-            <h5><i class="far fa-clock"></i> 9 Nov 2019, 9.00 AM</h5>
-            <h5><i class="fas fa-map-marker-alt"></i> Newyork, United States</h5>
-            <h5><i class="fas fa-envelope"></i> carlkellyexample.com</h5>
-            <h5 class="mb-0"><i class="fas fa-phone"></i> +1 260 724 7769</h5>
-          </div>
-        </div>
-      </div>
-      <div class="appointment-action">
-        <a
-          href="#"
-          class="btn btn-sm bg-info-light"
-          data-toggle="modal"
-          data-target="#appt_details"
-        >
-          <i class="far fa-eye"></i> View
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-          <i class="fas fa-check"></i> Accept
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-          <i class="fas fa-times"></i> Cancel
-        </a>
-      </div>
-    </div>
-    <!-- /Appointment List -->
-  
-    <!-- Appointment List -->
-    <div class="appointment-list">
-      <div class="profile-info-widget">
-        <a href="patient-profile.html" class="booking-doc-img">
-          <img src="assets/images/patients/patient4.jpg" alt="User Image" />
-        </a>
-        <div class="profile-det-info">
-          <h3><a href="patient-profile.html">Michelle Fairfax</a></h3>
-          <div class="patient-details">
-            <h5><i class="far fa-clock"></i> 9 Nov 2019, 1.00 PM</h5>
-            <h5><i class="fas fa-map-marker-alt"></i> Indiana, United States</h5>
-            <h5><i class="fas fa-envelope"></i> michellefairfaxexample.com</h5>
-            <h5 class="mb-0"><i class="fas fa-phone"></i> +1 504 368 6874</h5>
-          </div>
-        </div>
-      </div>
-      <div class="appointment-action">
-        <a
-          href="#"
-          class="btn btn-sm bg-info-light"
-          data-toggle="modal"
-          data-target="#appt_details"
-        >
-          <i class="far fa-eye"></i> View
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-          <i class="fas fa-check"></i> Accept
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-          <i class="fas fa-times"></i> Cancel
-        </a>
-      </div>
-    </div>
-    <!-- /Appointment List -->
-  
-    <!-- Appointment List -->
-    <div class="appointment-list">
-      <div class="profile-info-widget">
-        <a href="patient-profile.html" class="booking-doc-img">
-          <img src="assets/images/patients/patient5.jpg" alt="User Image" />
-        </a>
-        <div class="profile-det-info">
-          <h3><a href="patient-profile.html">Gina Moore</a></h3>
-          <div class="patient-details">
-            <h5><i class="far fa-clock"></i> 8 Nov 2019, 3.00 PM</h5>
-            <h5><i class="fas fa-map-marker-alt"></i> Florida, United States</h5>
-            <h5><i class="fas fa-envelope"></i> ginamooreexample.com</h5>
-            <h5 class="mb-0"><i class="fas fa-phone"></i> +1 954 820 7887</h5>
-          </div>
-        </div>
-      </div>
-      <div class="appointment-action">
-        <a
-          href="#"
-          class="btn btn-sm bg-info-light"
-          data-toggle="modal"
-          data-target="#appt_details"
-        >
-          <i class="far fa-eye"></i> View
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-          <i class="fas fa-check"></i> Accept
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-          <i class="fas fa-times"></i> Cancel
-        </a>
-      </div>
-    </div>
-    <!-- /Appointment List -->
-  
-    <!-- Appointment List -->
-    <div class="appointment-list">
-      <div class="profile-info-widget">
-        <a href="patient-profile.html" class="booking-doc-img">
-          <img src="assets/images/patients/patient6.jpg" alt="User Image" />
-        </a>
-        <div class="profile-det-info">
-          <h3><a href="patient-profile.html">Elsie Gilley</a></h3>
-          <div class="patient-details">
-            <h5><i class="far fa-clock"></i> 6 Nov 2019, 9.00 AM</h5>
-            <h5><i class="fas fa-map-marker-alt"></i> Kentucky, United States</h5>
-            <h5><i class="fas fa-envelope"></i> elsiegilleyexample.com</h5>
-            <h5 class="mb-0"><i class="fas fa-phone"></i> +1 315 384 4562</h5>
-          </div>
-        </div>
-      </div>
-      <div class="appointment-action">
-        <a
-          href="#"
-          class="btn btn-sm bg-info-light"
-          data-toggle="modal"
-          data-target="#appt_details"
-        >
-          <i class="far fa-eye"></i> View
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-          <i class="fas fa-check"></i> Accept
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-          <i class="fas fa-times"></i> Cancel
-        </a>
-      </div>
-    </div>
-    <!-- /Appointment List -->
-  
-    <!-- Appointment List -->
-    <div class="appointment-list">
-      <div class="profile-info-widget">
-        <a href="patient-profile.html" class="booking-doc-img">
-          <img src="assets/images/patients/patient7.jpg" alt="User Image" />
-        </a>
-        <div class="profile-det-info">
-          <h3><a href="patient-profile.html">Joan Gardner</a></h3>
-          <div class="patient-details">
-            <h5><i class="far fa-clock"></i> 5 Nov 2019, 12.00 PM</h5>
-            <h5>
-              <i class="fas fa-map-marker-alt"></i> California, United States
+            <h5><i class="fas fa-envelope"></i> {{ appointment.email }}</h5>
+            <h5 class="mb-0">
+              <i class="fas fa-phone"></i>{{ appointment.phone }}
             </h5>
-            <h5><i class="fas fa-envelope"></i> joangardnerexample.com</h5>
-            <h5 class="mb-0"><i class="fas fa-phone"></i> +1 707 2202 603</h5>
+            <span
+              class="badge badge-pill"
+              [ngClass]="{
+                'bg-primary-light': appointment.appointmentStatus === 'ACCEPT',
+                'bg-info-light':
+                  appointment.appointmentStatus === 'RESCHEDULED',
+                'bg-success-light':
+                  appointment.appointmentStatus === 'COMPLETED',
+                'bg-warning-light': appointment.appointmentStatus === 'PENDING',
+                'bg-danger-light': appointment.appointmentStatus === 'CANCELLED'
+              }"
+            >
+              {{ appointment.appointmentStatus }}
+            </span>
           </div>
         </div>
       </div>
       <div class="appointment-action">
         <a
-          href="#"
-          class="btn btn-sm bg-info-light"
+          href="javascript:void(0);"
+          class="btn btn-sm bg-warning-light"
+          (click)="viewAppointmentDetails(appointment)"
           data-toggle="modal"
           data-target="#appt_details"
         >
           <i class="far fa-eye"></i> View
         </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-          <i class="fas fa-check"></i> Accept
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-          <i class="fas fa-times"></i> Cancel
-        </a>
-      </div>
-    </div>
-    <!-- /Appointment List -->
-  
-    <!-- Appointment List -->
-    <div class="appointment-list">
-      <div class="profile-info-widget">
-        <a href="patient-profile.html" class="booking-doc-img">
-          <img src="assets/images/patients/patient8.jpg" alt="User Image" />
-        </a>
-        <div class="profile-det-info">
-          <h3><a href="patient-profile.html">Daniel Griffing</a></h3>
-          <div class="patient-details">
-            <h5><i class="far fa-clock"></i> 5 Nov 2019, 7.00 PM</h5>
-            <h5>
-              <i class="fas fa-map-marker-alt"></i> New Jersey, United States
-            </h5>
-            <h5><i class="fas fa-envelope"></i> danielgriffingexample.com</h5>
-            <h5 class="mb-0"><i class="fas fa-phone"></i> +1 973 773 9497</h5>
-          </div>
-        </div>
-      </div>
-      <div class="appointment-action">
+        <!-- Show Accept and Cancel buttons if status is PENDING -->
         <a
-          href="#"
-          class="btn btn-sm bg-info-light"
-          data-toggle="modal"
-          data-target="#appt_details"
+          *ngIf="appointment.appointmentStatus === 'PENDING'"
+          href="javascript:void(0);"
+          class="btn btn-sm bg-primary-light"
+          (click)="onChangeStatusAppointment(appointment.id)"
         >
-          <i class="far fa-eye"></i> View
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-success-light">
           <i class="fas fa-check"></i> Accept
         </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-          <i class="fas fa-times"></i> Cancel
-        </a>
-      </div>
-    </div>
-    <!-- /Appointment List -->
-  
-    <!-- Appointment List -->
-    <div class="appointment-list">
-      <div class="profile-info-widget">
-        <a href="patient-profile.html" class="booking-doc-img">
-          <img src="assets/images/patients/patient9.jpg" alt="User Image" />
-        </a>
-        <div class="profile-det-info">
-          <h3><a href="patient-profile.html">Walter Roberson</a></h3>
-          <div class="patient-details">
-            <h5><i class="far fa-clock"></i> 4 Nov 2019, 10.00 AM</h5>
-            <h5><i class="fas fa-map-marker-alt"></i> Florida, United States</h5>
-            <h5><i class="fas fa-envelope"></i> walterrobersonexample.com</h5>
-            <h5 class="mb-0"><i class="fas fa-phone"></i> +1 850 358 4445</h5>
-          </div>
-        </div>
-      </div>
-      <div class="appointment-action">
         <a
-          href="#"
-          class="btn btn-sm bg-info-light"
-          data-toggle="modal"
-          data-target="#appt_details"
+          *ngIf="appointment.appointmentStatus === 'PENDING'"
+          href="javascript:void(0);"
+          class="btn btn-sm bg-danger-light"
+          (click)="onChangeStatusAppointment(appointment.id)"
         >
-          <i class="far fa-eye"></i> View
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-          <i class="fas fa-check"></i> Accept
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
           <i class="fas fa-times"></i> Cancel
         </a>
-      </div>
-    </div>
-    <!-- /Appointment List -->
-  
-    <!-- Appointment List -->
-    <div class="appointment-list">
-      <div class="profile-info-widget">
-        <a href="patient-profile.html" class="booking-doc-img">
-          <img src="assets/images/patients/patient10.jpg" alt="User Image" />
-        </a>
-        <div class="profile-det-info">
-          <h3><a href="patient-profile.html">Robert Rhodes</a></h3>
-          <div class="patient-details">
-            <h5><i class="far fa-clock"></i> 4 Nov 2019, 11.00 AM</h5>
-            <h5>
-              <i class="fas fa-map-marker-alt"></i> California, United States
-            </h5>
-            <h5><i class="fas fa-envelope"></i> robertrhodesexample.com</h5>
-            <h5 class="mb-0"><i class="fas fa-phone"></i> +1 858 259 5285</h5>
-          </div>
-        </div>
-      </div>
-      <div class="appointment-action">
+        <!-- Show Reschedule and Complete buttons if status is ACCEPT -->
         <a
-          href="#"
+          *ngIf="appointment.appointmentStatus === 'ACCEPT'"
+          href="javascript:void(0);"
           class="btn btn-sm bg-info-light"
-          data-toggle="modal"
-          data-target="#appt_details"
+          (click)="openRescheduleDialog(appointment)"
+          (click)="getAppointmentsBooked()"
         >
-          <i class="far fa-eye"></i> View
+          <i class="fa-solid fa-rotate"></i> Reschedule
         </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-          <i class="fas fa-check"></i> Accept
-        </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-          <i class="fas fa-times"></i> Cancel
-        </a>
-      </div>
-    </div>
-    <!-- /Appointment List -->
-  
-    <!-- Appointment List -->
-    <div class="appointment-list">
-      <div class="profile-info-widget">
-        <a href="patient-profile.html" class="booking-doc-img">
-          <img src="assets/images/patients/patient11.jpg" alt="User Image" />
-        </a>
-        <div class="profile-det-info">
-          <h3><a href="patient-profile.html">Harry Williams</a></h3>
-          <div class="patient-details">
-            <h5><i class="far fa-clock"></i> 3 Nov 2019, 6.00 PM</h5>
-            <h5><i class="fas fa-map-marker-alt"></i> Colorado, United States</h5>
-            <h5><i class="fas fa-envelope"></i> harrywilliamsexample.com</h5>
-            <h5 class="mb-0"><i class="fas fa-phone"></i> +1 303 607 7075</h5>
-          </div>
-        </div>
-      </div>
-      <div class="appointment-action">
         <a
-          href="#"
-          class="btn btn-sm bg-info-light"
-          data-toggle="modal"
-          data-target="#appt_details"
+          *ngIf="appointment.appointmentStatus === 'ACCEPT'"
+          href="javascript:void(0);"
+          class="btn btn-sm bg-success-light"
+          (click)="onChangeStatusAppointment(appointment.id)"
         >
-          <i class="far fa-eye"></i> View
+          <i class="fas fa-check-circle"></i> Complete
         </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-          <i class="fas fa-check"></i> Accept
+        <!-- Show Reschedule buttons if status is Reschedule -->
+        <a
+          *ngIf="appointment.appointmentStatus === 'RESCHEDULED'"
+          href="javascript:void(0);"
+          class="btn btn-sm bg-info-light"
+          (click)="openRescheduleDialog(appointment)"
+          (click)="getAppointmentsBooked()"
+        >
+          <i class="fa-solid fa-rotate"></i> Reschedule
         </a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-          <i class="fas fa-times"></i> Cancel
+        <a
+          *ngIf="appointment.appointmentStatus === 'RESCHEDULED'"
+          href="javascript:void(0);"
+          class="btn btn-sm bg-success-light"
+          (click)="onChangeStatusAppointment(appointment.id)"
+        >
+          <i class="fas fa-check-circle"></i> Complete
         </a>
       </div>
     </div>
     <!-- /Appointment List -->
   </div>
-  
+  <!-- Paginator Component -->
+  <p-paginator
+    [rows]="pageSize"
+    [totalRecords]="totalAppointments"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    (onPageChange)="handlePageEvent($event)"
+  ></p-paginator>
+
+  <!-- Appointment Detail Dialog -->
+  <p-dialog
+    header="Appointment Details"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '25rem' }"
+  >
+    <div *ngIf="selectedAppointment">
+      <p>
+        <strong>Doctor:</strong>Dr. {{ selectedAppointment.doctor.firstName }}
+        {{ selectedAppointment.doctor.lastName }}
+      </p>
+      <p>
+        <strong>Appointment Date:</strong>
+        {{
+          selectedAppointment.dateBooking
+            | date
+              : "dd
+        MMM yyyy"
+        }}, {{selectedAppointment.bookingHour}}
+      </p>
+      <p>
+        <strong>Status:</strong>
+        <span
+          class="badge badge-pill"
+          [ngClass]="{
+            'bg-primary-light':
+              selectedAppointment.appointmentStatus === 'ACCEPT',
+            'bg-info-light':
+              selectedAppointment.appointmentStatus === 'RESCHEDULED',
+            'bg-success-light':
+              selectedAppointment.appointmentStatus === 'COMPLETED',
+            'bg-warning-light':
+              selectedAppointment.appointmentStatus === 'PENDING',
+            'bg-danger-light':
+              selectedAppointment.appointmentStatus === 'CANCELLED'
+          }"
+        >
+          {{ selectedAppointment.appointmentStatus }}
+        </span>
+      </p>
+
+      <p><strong>Reason:</strong> {{ selectedAppointment.reason }}</p>
+      <p><strong>Patient Name:</strong> {{ selectedAppointment.fullName }}</p>
+      <p><strong>Phone:</strong> {{ selectedAppointment.phone }}</p>
+    </div>
+  </p-dialog>
+
+  <!-- Reschedule Dialog -->
+  <p-dialog
+    header="Reschedule Appointment"
+    [(visible)]="rescheduleVisible"
+    [modal]="true"
+    [style]="{ width: '55rem' }"
+  >
+    <div class="card mt-2" *ngIf="!isLoading">
+      <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="card-title col">Booking Date</h4>
+          <p-calendar
+            [(ngModel)]="dateToday"
+            [disabled]="true"
+            class="d-flex flex-row-reverse"
+            dateFormat="dd/mm/yy"
+          ></p-calendar>
+        </div>
+      </div>
+      <p-carousel [value]="schedules" [numVisible]="1" [numScroll]="1">
+        <ng-template pTemplate="item" let-schedule>
+          <div class="schedule-header px-0">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="day-slot">
+                  <ul>
+                    <li *ngFor="let day of schedule">
+                      <span>{{ day.dayWeek }}</span>
+                      <span class="slot-date">{{ day.date }}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="schedule-cont px-0">
+            <div class="row">
+              <div class="col-md-12">
+                <h6>Morning</h6>
+                <div class="time-slot">
+                  <ul class="clearfix">
+                    <li *ngFor="let day of schedule">
+                      <button
+                        class="timing"
+                        *ngFor="let slot of day.timeSlotsMorning"
+                        [ngClass]="{
+                          selected: slot === timeSlotSelected,
+                          booked: slot.isBooked
+                        }"
+                        (click)="selectBookingDate(slot)"
+                        matTooltip="Booked"
+                        [matTooltipDisabled]="!slot.isBooked"
+                        [disabled]="slot.isBooked"
+                      >
+                        <span>{{ slot.time }}</span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <p-divider />
+              <div class="col-md-12">
+                <h6>Afternoon</h6>
+                <div class="time-slot">
+                  <ul class="clearfix">
+                    <li *ngFor="let day of schedule">
+                      <button
+                        class="timing"
+                        *ngFor="let slot of day.timeSlotsAfternoon"
+                        [ngClass]="{
+                          selected: slot === timeSlotSelected,
+                          booked: slot.isBooked
+                        }"
+                        (click)="selectBookingDate(slot)"
+                        matTooltip="Booked"
+                        [matTooltipDisabled]="!slot.isBooked"
+                        [disabled]="slot.isBooked"
+                      >
+                        <span>{{ slot.time }}</span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </p-carousel>
+    </div>
+
+    <div class="d-flex justify-content-between mx-2">
+      <button
+        type="button"
+        class="btn btn-cancel"
+        (click)="closeRescheduleDialog()"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary submit-btn"
+        (click)="submitRescheduleAppointment()"
+      >
+        Done
+      </button>
+    </div>
+  </p-dialog>
+</div>
