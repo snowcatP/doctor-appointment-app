@@ -3,6 +3,7 @@ import { Doctor } from '../../../core/models/doctor';
 import { DoctorService } from '../../../core/services/doctor.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {
+  date,
   email,
   password,
   RxwebValidators,
@@ -12,6 +13,7 @@ import { FileUploadErrorEvent, UploadEvent } from 'primeng/fileupload';
 import { Specialty } from '../../../core/models/speciality';
 import { SpecialtyService } from '../../../core/services/specialty.service';
 import { first } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-doctor-table',
@@ -27,12 +29,17 @@ export class DoctorTableComponent {
   formEditDoctor: FormGroup;
   selectedDoctors: Doctor[] | null;
   selectedFile: File;
+  defaultDate: string;
+  specialtyName: string;
+  doctorGender: boolean;
+  loadingFetchingData: boolean = true;
   constructor(
     private doctorService: DoctorService,
     private specialtyService: SpecialtyService,
     private fb: FormBuilder,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private datePipe: DatePipe
   ) {}
   ngOnInit(): void {
     this.getListDoctor();
@@ -45,7 +52,7 @@ export class DoctorTableComponent {
       phone: ['', [RxwebValidators.alpha()]],
       email: ['', RxwebValidators.required()],
       avatarFilePath: [
-        '',
+        'assets/images/profile/default-avatar.jpg',
         RxwebValidators.fileSize({
           maxSize: 50,
           conditionalExpression: 'x => x.fileType == "Picture"',
@@ -73,13 +80,23 @@ export class DoctorTableComponent {
       dateOfBirth: ['', RxwebValidators.date()],
       specialtyId: ['', RxwebValidators.required()],
     });
+    
   }
   showAddNewDoctorDialog() {
     this.addNewDoctorVisible = !this.addNewDoctorVisible;
   }
   getListDoctor() {
-    this.doctorService.getListDoctor().subscribe((resp) => {
-      this.doctors = resp.data;
+    const defaultAvatarPath ='https://firebasestorage.googleapis.com/v0/b/doctorappointmentwebapp.appspot.com/o/16971d8f-924a-4dc0-9de4-f2de7db5fe40_default-avatar.jpg?alt=media';
+    this.doctorService.getListDoctor().subscribe({
+      next: (resp) =>{
+        this.doctors = resp.data.map((doctor: Doctor) => {
+          // Check if avatarFilePath is null or empty, and set default if needed
+          doctor.avatarFilePath = doctor.avatarFilePath ? doctor.avatarFilePath : defaultAvatarPath;
+          return doctor;
+        });
+        this.loadingFetchingData = false;
+      }
+      
     });
   }
   getListSpecialty() {
@@ -106,8 +123,9 @@ export class DoctorTableComponent {
       dateOfBirth: this.formAddNewDoctor.controls['dateOfBirth'].value,
       address: this.formAddNewDoctor.controls['address'].value,
       specialtyId: this.formAddNewDoctor.controls['specialtyId'].value,
-      avatarFilePath: null,
+      avatarFilePath: this.formAddNewDoctor.controls['avatarFilePath'].value,
     };
+
     this.doctorService.addNewDoctor(doctor, this.selectedFile).subscribe({
       next: (res) => {
         this.messageService.add({
@@ -122,16 +140,26 @@ export class DoctorTableComponent {
   openEditDialog(doctor: any){
     this.viewDoctorDetailsVisible = true;
     this.formEditDoctor.patchValue({
+      id: doctor.id,
       firstName: doctor.firstName,
       lastName: doctor.lastName,
       gender: doctor.gender,
       phone: doctor.phone,
       email: doctor.email,
-      dateOfBirth: doctor.dateOfBirth,
+      dateOfBirth: doctor.dateOfBirth ,
       address: doctor.address,
-      
+      avatarFilePath: doctor.avatarFilePath,
+      speciality: doctor.specialty.specialtyName,
+      password: doctor.password,
 
     })
+    this.defaultDate = this.datePipe.transform(doctor.dateOfBirth, 'dd-MM-yyyy'),
+    this.specialtyName = doctor.specialty.specialtyName,
+    this.doctorGender = doctor.gender,
+    //console.log(this.formEditDoctor.controls)
+    console.log(doctor)
+  }
+  editDoctorInformation(){
 
   }
   deleteSelectedDoctor() {

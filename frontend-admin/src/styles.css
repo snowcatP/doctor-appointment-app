@@ -24,3 +24,6 @@ p-dropdown,p-password {
     width: auto;
     border-radius: 6px;
 }
+p-radiobutton{
+    margin: 0 10px;
+}

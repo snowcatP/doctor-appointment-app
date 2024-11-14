@@ -23,6 +23,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { PasswordModule } from 'primeng/password';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { RatingModule } from 'primeng/rating';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,9 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     FileUploadModule,
     CalendarModule,
     DropdownModule,
-    PasswordModule
+    PasswordModule,
+    RatingModule,
+    SkeletonModule
     
   ]
 })

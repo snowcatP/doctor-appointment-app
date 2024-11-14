@@ -21,5 +21,5 @@ export class Doctor{
     @prop()
     specialtyId: string
     @prop()
-    avatarFilePath: null
+    avatarFilePath: string
 }   

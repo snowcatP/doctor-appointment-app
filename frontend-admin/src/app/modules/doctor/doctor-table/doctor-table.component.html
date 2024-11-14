@@ -17,14 +17,8 @@
                     </p-inputGroup>
                     <p-inputGroup>
                         <span class="font-bold block mb-2">Gender: </span>
-                        <p-radioButton value=true formControlName="gender" inputId="male" />
-                        <label for="male" class="ml-2">
-                            Male
-                        </label>
-                        <p-radioButton value=false formControlName="gender" inputId="female" />
-                        <label for="female" class="ml-2">
-                            Female
-                        </label>
+                        <p-radioButton p-label-active label="Male" value=true formControlName="gender" inputId="male" />
+                        <p-radioButton label="Female" value=false formControlName="gender" inputId="female" />
                     </p-inputGroup>
                     <p-inputGroup>
                         <span class="font-bold block mb-2">Password: </span>
@@ -38,7 +32,7 @@
                     </p-inputGroup>
                     <p-inputGroup>
                         <span class="font-bold block mb-2">Birth Day: </span>
-                        <p-calendar dateFormat="dd.mm.yy" [showTime]="false" formControlName="dateOfBirth"
+                        <p-calendar dateFormat="dd.mm.yy" [showOnFocus]="false" inputId="buttondisplay" [showTime]="false" formControlName="dateOfBirth"
                             [iconDisplay]="'input'" [showIcon]="true" />
                     </p-inputGroup>
                     <p-inputGroup class="flex-auto">
@@ -57,7 +51,7 @@
                         <p-toast />
                         <span class="font-bold block mb-2">Image profile: </span>
                         <p-fileUpload mode="basic" chooseLabel="Choose" chooseIcon="pi pi-upload" name="demo[]"
-                            url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000"
+                            url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000" formControlName="avatarFilePath"
                             [auto]="true" (onUpload)="onUpload($event)" />
                     </p-inputGroup>
                     <div class="save-cancel-container">
@@ -65,6 +59,8 @@
                         <p-button class="cancel-btn" label="Cancel" icon="pi pi-times" severity="danger"
                             (onClick)="addNewDoctorVisible = false" />
                     </div>
+                    <p-inputGroup></p-inputGroup>
+
                 </form>
             </p-dialog>
             <p-button severity="danger" label="Delete" icon="pi pi-trash" (onClick)="deleteSelectedDoctor()"
@@ -82,9 +78,12 @@
     [tableStyle]="{'min-width': '75rem'}" [rowHover]="true " dataKey="id" [rows]="25"
     [globalFilterFields]="['firstName', 'lastName']" [(selection)]="selectedDoctors">
     <ng-template pTemplate="header">
-            <p-dialog header="Doctor's information" [modal]="true" [(visible)]="viewDoctorDetailsVisible" [style]="{ width: '55rem' }">
+            <p-dialog header="Edit Doctor's Information" [modal]="true" [(visible)]="viewDoctorDetailsVisible" [style]="{ width: '55rem' }">
                 <span class="p-text-secondary block mb-5">Type doctor's information.</span>
                 <form [formGroup]="formEditDoctor" (ngSubmit)="addNewDoctor()">
+                    <div class="edit-doctor-avatar">
+                        <img class="doctor-avatar" [src]="formEditDoctor.get('avatarFilePath').value" alt="">
+                    </div>
                     <p-inputGroup>
                         <span class="font-bold block mb-2">First name: </span>
                         <input pInputText placeholder="First name" formControlName="firstName">
@@ -93,14 +92,8 @@
                     </p-inputGroup>
                     <p-inputGroup>
                         <span class="font-bold block mb-2">Gender: </span>
-                        <p-radioButton value=true formControlName="gender" inputId="male" />
-                        <label for="male" class="ml-2">
-                            Male
-                        </label>
-                        <p-radioButton value=false formControlName="gender" inputId="female" />
-                        <label for="female" class="ml-2">
-                            Female
-                        </label>
+                        <p-radioButton label="Male"  value="true" formControlName="gender" inputId="male" />
+                        <p-radioButton label="Female"  value="false" formControlName="gender" inputId="female" />
                     </p-inputGroup>
                     <p-inputGroup>
                         <span class="font-bold block mb-2">Password: </span>
@@ -110,11 +103,11 @@
                         <span class="font-bold block mb-2">Speciality: </span>
                         <p-dropdown formControlName="specialtyId" [options]="listSpecialty" optionLabel="specialtyName"
                             optionValue="id" [filter]="true" filterBy="specialtyName" [showClear]="true"
-                            placeholder="Select a Speciality" />
+                            placeholder={{specialtyName}} />
                     </p-inputGroup>
                     <p-inputGroup>
                         <span class="font-bold block mb-2">Birth Day: </span>
-                        <p-calendar dateFormat="dd.mm.yy" [showTime]="false" formControlName="dateOfBirth"
+                        <p-calendar dateFormat="dd.mm.yy" [showOnFocus]="false" placeholder={{defaultDate}} [showTime]="false" formControlName="dateOfBirth"
                             [iconDisplay]="'input'" [showIcon]="true" />
                     </p-inputGroup>
                     <p-inputGroup class="flex-auto">
@@ -141,23 +134,33 @@
                         <p-button class="cancel-btn" label="Cancel" icon="pi pi-times" severity="danger"
                             (onClick)="viewDoctorDetailsVisible = false" />
                     </div>
+                    <p-inputGroup></p-inputGroup>
                 </form>
             </p-dialog>
             <tr>
                 <th style="width: 4rem">
                     <p-tableHeaderCheckbox />
                 </th>
-                <th pSortableColumn="firstName" style="min-width:15rem">
+                <th pSortableColumn="id" style="min-width:10rem">
+                    <div class="flex justify-content-between align-items-center">
+                        Doctor Id <p-sortIcon field="id" />
+                        <p-columnFilter type="text" field="id" display="menu" class="ml-auto" />
+                    </div>
+                </th>
+                <th pSortableColumn="firstName" style="min-width:12rem">
                     <div class="flex justify-content-between align-items-center">
                         First Name <p-sortIcon field="firstName" />
                         <p-columnFilter type="text" field="firstName" display="menu" class="ml-auto" />
                     </div>
                 </th>
-                <th pSortableColumn="lastName" style="min-width:15rem">
+                <th pSortableColumn="lastName" style="min-width:12rem">
 
                     Last Name <p-sortIcon field="lastName" />
                     <p-columnFilter type="text" field="lastName" display="menu" class="ml-auto" />
 
+                </th>
+                <th style="min-width:10rem">
+                    Doctor Avatar 
                 </th>
                 <th pSortableColumn="gender" style="min-width:15rem">
                     Gender <p-sortIcon field="gender" />
@@ -172,6 +175,10 @@
                     <p-columnFilter type="text" field="specialty.specialtyName" display="menu" class="ml-auto" />
 
                 </th>
+                <th pSortableColumn="averageRating" style="min-width:15rem">
+                    Rating <p-sortIcon field="averageRating" />
+                    
+                </th>
                 <th pSortableColumn="phone" style="min-width:15rem">
                     Phone <p-sortIcon field="phone" />
                     <p-columnFilter type="text" field="phone" display="menu" class="ml-auto" />
@@ -183,7 +190,7 @@
                 </th>
                 <th pSortableColumn="dateOfBirth" style="min-width:15rem">
                     BirthDay <p-sortIcon field="dateOfBirth" />
-                    <p-columnFilter type="text" field="dateOfBirth" display="menu" class="ml-auto" />
+                    <p-columnFilter type="text" dateFormat="dd/mm/yy" field="dateOfBirth" display="menu" class="ml-auto" />
                 </th>
                 <th></th>
 
@@ -191,32 +198,47 @@
 
 
         </ng-template>
-        <ng-template pTemplate="body" let-doctor>
-            <tr>
-                <td>
-                    <p-tableCheckbox [value]="doctor" />
-                </td>
-                
-                <td>{{doctor.firstName}}</td>
-                <td>{{doctor.lastName}}</td>
-                <td>{{doctor.gender ? 'Male': 'Female'}}</td>
-                <td>{{doctor.address}}</td>
-                <td>{{doctor.specialty.specialtyName}}</td>
-                <td>{{doctor.phone}}</td>
-                <td>{{doctor.email}}</td>
-                <td>{{doctor.dateOfBirth}}</td>
-                <td style="display: flex; justify-content: space-evenly;">
-                    <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" severity="success" />
+        <ng-template pTemplate="body" let-doctor class="body">
+                <tr *ngIf="!loadingFetchingData">
+                    <td>
+                        <p-tableCheckbox [value]="doctor" />
+                    </td>
+                    <td>{{doctor.id}}</td>
+                    <td>{{doctor.firstName}}</td>
+                    <td>{{doctor.lastName}}</td>
+                    <td><img class="doctor-avatar" [src]="doctor.avatarFilePath" alt=""></td>
+                    <td>{{doctor.gender ? 'Male': 'Female'}}</td>
+                    <td>{{doctor.address}}</td>
+                    <td>{{doctor.specialty.specialtyName}}</td>
+                    <td style="display: flex; flex-direction: column; justify-content: center;">
+                        <p-rating [(ngModel)]= "doctor.averageRating"[readonly]="true" [cancel]="false" />
+                        <div style="display: flex;">
+                            Based on <p style="margin: 0 5px; color: #3B82F6; font-weight: bold;">{{doctor.numberOfFeedbacks}}</p>  reviews
+                        </div>
                     
-                </td>
-                <td style="display: flex; justify-content: space-evenly;">
-                    <p-button  icon="pi pi-trash" 
-                    severity="danger" 
-                    [rounded]="true" 
-                    [outlined]="true"   />
-                    
-                </td>
-            </tr>
+                    </td>
+                    <td>{{doctor.phone}}</td>
+                    <td>{{doctor.email}}</td>
+                    <td>{{doctor.dateOfBirth | date: 'dd-MM-yyyy'}}</td>
+                    <td style="display: flex; justify-content: space-evenly;">
+                        <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" severity="success" (onClick)="openEditDialog(doctor)" />
+                        <p-button  icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"   />
+                    </td>
+                </tr>
+                <tr *ngIf="loadingFetchingData">
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                </tr>
         </ng-template>
     </p-table>
 </div>

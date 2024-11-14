@@ -1,6 +1,8 @@
 .p-inputgroup{
     margin-bottom: 20px;
-    
+}
+.p-inputgroup span{
+    width: 150px;
 }
 span.mb-2{
     padding: 10px;
@@ -15,4 +17,17 @@ span.mb-2{
 .save-btn, .cancel-btn{
     margin: 0 5px;
     float: right;
+}
+.edit-doctor-avatar .doctor-avatar{
+    width: 150px;
+    height: 100px;
+    margin: 10px;
+}
+.doctor-avatar{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    
 }

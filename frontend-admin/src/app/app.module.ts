@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { RouterModule } from '@angular/router';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule, DatePipe, NgIf } from '@angular/common';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { MaterialModule } from './material.module';
 import { HomeComponent } from './shared/home/home.component';
@@ -65,7 +65,8 @@ import { ReactiveFormsModule } from '@angular/forms';
       ),
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     JwtHelperService,
-    HttpClientModule
+    HttpClientModule,
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })
