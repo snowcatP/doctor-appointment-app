@@ -21,8 +21,6 @@ public class AppointmentResponse {
 
     private String email;
 
-    private Date dateOfBirth;
-
     private String reason;
 
     private Date dateBooking;
@@ -34,7 +32,6 @@ public class AppointmentResponse {
     @Enumerated(EnumType.STRING)
     private AppointmentStatus appointmentStatus;
 
-    //tra ve thong tin cua bac si
     private DoctorResponse doctor;
 
 

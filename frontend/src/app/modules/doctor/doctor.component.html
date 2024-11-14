@@ -7,9 +7,12 @@
         *ngIf="showSidebar"
         class="col-md-12 col-lg-4 col-xl-3"
       ></app-doctor-sidebar>
-      <div [class.col-md-12]="!showSidebar" 
-           [class.col-lg-8]="showSidebar" 
-           [class.col-xl-9]="showSidebar">
+      <div
+        [class.col-md-12]="!showSidebar"
+        [class.col-lg-8]="showSidebar"
+        [class.col-xl-9]="showSidebar"
+        style="min-height: 80vh"
+      >
         <router-outlet></router-outlet>
       </div>
     </div>

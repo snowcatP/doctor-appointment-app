@@ -18,6 +18,7 @@ export class RegisterComponent {
   minDate: Date;
   errorMessage: string = '';
   @ViewChild('emailInput') emailInput: ElementRef;
+  isLoading: boolean = false;
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -76,9 +77,10 @@ export class RegisterComponent {
       confirmPassword: this.formSignup.controls['confirmPassword'].value,
     };
 
-
+    this.isLoading = true;
     this.authService.onSignupPatient(registerData).subscribe({
       next: (res) => {
+        this.isLoading = false;
         this.messageService.add({
           key: 'messageToast',
           severity: 'success',
@@ -91,6 +93,7 @@ export class RegisterComponent {
       },
       error: (err) => {
         this.errorMessage = err.error;
+        this.isLoading = false;
         setTimeout(() => {
           this.emailInput.nativeElement.focus();
         }, 0);

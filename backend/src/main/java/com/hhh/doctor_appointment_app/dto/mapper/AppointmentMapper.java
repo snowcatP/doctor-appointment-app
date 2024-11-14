@@ -22,6 +22,8 @@ public interface AppointmentMapper {
 
     List<AppointmentBookedResponse> toBookedResponses(List<Appointment> appointments);
 
+    List<AppointmentResponse> toResponses(List<Appointment> appointments);
+
     @Mapping(source = "id", target = "appointmentId")
     BookingNotificationResponse toBookingNotificationResponse(Appointment appointment);
 }

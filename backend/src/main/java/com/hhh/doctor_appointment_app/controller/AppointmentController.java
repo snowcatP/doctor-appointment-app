@@ -5,12 +5,14 @@ import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.Appointment
 import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.RescheduleWithDateRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentBookedResponse;
+import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentResponse;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Command.CancelAppointment.CancelAppointmentCommand;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Command.ChangeStatusAppointment.ChangeStatusAppointmentCommand;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Command.CreateAppointment.CreateAppointmentByGuestCommand;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Command.CreateAppointment.CreateAppointmentByPatientCommand;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Command.ResheduleAppointment.RescheduleAppointmentByDoctor;
+import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetAllAppointmentsByDoctorId.GetAllAppointmentsByDoctorIdQuery;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetAppointmentWithPage.GetAppointmentWithPageQuery;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetDetailAppointment.GetDetailAppointmentByPatientQuery;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentByDoctorId.GetListAppointmentByDoctorIdQuery;
@@ -63,6 +65,9 @@ public class AppointmentController {
 
     @Autowired
     private GetListAppointmentOfPatientQuery getListAppointmentOfPatientQuery;
+
+    @Autowired
+    private GetAllAppointmentsByDoctorIdQuery getAllAppointmentsByDoctorIdQuery;
 
     @Autowired
     private GetListAppointmentOfPatientByPatientIdQuery getListAppointmentOfPatientByPatientIdQuery;
@@ -215,7 +220,11 @@ public class AppointmentController {
     public ResponseEntity<?> getAppointmentsOfPatient(@RequestParam(defaultValue = "1") int page,
                                                        @RequestParam(defaultValue = "10") int size){
         try{
-            return new ResponseEntity<>(getListAppointmentOfPatientQuery.getAppointmentsWithPageOfPatient(page, size), HttpStatus.OK);
+            return new ResponseEntity<>(
+                    getListAppointmentOfPatientQuery
+                    .getAppointmentsWithPageOfPatient(page, size),
+                    HttpStatus.OK
+            );
         }catch (Exception ex){
             ApiResponse<Object> apiResponse = new ApiResponse<>();
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
@@ -224,6 +233,18 @@ public class AppointmentController {
         }
     }
 
+    @GetMapping("/get-all-appointments-by-doctor")
+    public ResponseEntity<List<AppointmentResponse>> getAppointmentByDoctor() {
+        try {
+            return new ResponseEntity<>(
+                    getAllAppointmentsByDoctorIdQuery.getAllAppointmentsByDoctorId(),
+                    HttpStatus.OK
+            );
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     @GetMapping("/list/patient/{id}")
     public ResponseEntity<?> getAppointmentsOfPatientByPatientId(@PathVariable(name = "id") Long id,
                                                       @RequestParam(defaultValue = "1") int page,
