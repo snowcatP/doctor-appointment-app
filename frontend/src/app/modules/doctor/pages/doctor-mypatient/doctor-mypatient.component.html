@@ -1,0 +1,55 @@
+<div>
+    <p-iconField iconPosition="left">
+        <p-inputIcon styleClass="pi pi-search" />
+        <input type="text" pInputText placeholder="Enter Name Patient" 
+        style="width: 49%; height: 40px; font-size: 16px; margin-bottom: 10px;"
+        [(ngModel)]="searchPatientName" 
+            (input)="onSearchChange()" />
+    </p-iconField>
+    <div class="card">
+        <div class="col-md-13 col-lg-14 col-xl-15">
+            <div class="row row-grid">
+                
+                <div *ngFor="let patient of patients" class="col-md-6 col-lg-4 col-xl-3">
+
+                    <div class="card widget-profile pat-widget-profile">
+                        <div class="card-body">
+                            <div class="pro-widget-content">
+                                <div class="profile-info-widget">
+
+                                    <p-image class="booking-doc-img"
+                                        [src]="patient?.avatarFilePath || '../../../../../assets/images/patients/patient10.jpg'"
+                                        alt="Doctor Image" width="100%" [preview]="true" />
+
+                                    <div class="profile-det-info">
+                                        <h3><a (click)="viewPatientProfile(patient.id)">{{patient.fullname}}</a></h3>
+                                        <div class="patient-details">
+                                            <h5><b>Patient ID :</b> {{patient.id}}</h5>
+                                            <h5 class="mb-0"><i class="fas fa-map-marker-alt"></i>{{patient.address}}
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="patient-info">
+                                <ul>
+                                    <li>Phone <span>{{patient.phone}}</span></li>
+                                    <li>Age
+                                        <span>
+                                            {{ calculateAge(patient.dateOfBirth) }} Years,
+                                            {{ patient.gender ? 'Male' : 'Female' }}
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <!-- Paginator Component -->
+    <p-paginator [rows]="pageSize" [totalRecords]="totalPatients" [rowsPerPageOptions]="[12,24,36]"
+    (onPageChange)="handlePageEvent($event)"></p-paginator>
+</div>

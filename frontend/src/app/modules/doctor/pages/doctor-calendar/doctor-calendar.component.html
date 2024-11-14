@@ -1,10 +1,82 @@
 <!-- Calendar -->
 <div class="card">
-    <div class="card-body">
-      <h6>My Calendar</h6>
-      <full-calendar [options]="calendarOptions"></full-calendar>
+  <div class="card-body">
+    <h6>My Calendar</h6>
+    <div
+      class="card d-flex justify-content-center align-items-center"
+      *ngIf="isLoading"
+      style="min-height: 70vh"
+    >
+      <p-progressSpinner
+        styleClass="w-4rem h-4rem"
+        strokeWidth="8"
+        fill="var(--surface-ground)"
+        animationDuration=".5s"
+      />
+    </div>
+    <full-calendar [options]="calendarOptions" *ngIf="!isLoading" #calendar>
+    </full-calendar>
+  </div>
+</div>
+<!-- /Calendar -->
+
+<!-- Popup -->
+<p-confirmPopup #confirmPopupRef>
+  <ng-template pTemplate="headless" let-message let-test>
+    <div class="border-round p-3">
+      <p>{{ message?.message }}</p>
+    </div>
+  </ng-template>
+</p-confirmPopup>
+<!-- Popup -->
+
+<!-- Details -->
+<p-dialog
+  header="Appointment details"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '35rem' }"
+>
+  <div class="row">
+    <div class="d-flex justify-content-between pe-2">
+      <p>Patient Name</p>
+      <p>{{ selectedAppointment?.fullName }}</p>
+    </div>
+    <div class="d-flex justify-content-between pe-2">
+      <p>Phone</p>
+      <p>{{ selectedAppointment?.phone }}</p>
+    </div>
+    <div class="d-flex justify-content-between pe-2">
+      <p>Email</p>
+      <p>{{ selectedAppointment?.email }}</p>
+    </div>
+    <div class="d-flex justify-content-between pe-2">
+      <p>Date Booking</p>
+      <p>{{ selectedAppointment?.dateBooking | date }}</p>
+    </div>
+    <div class="d-flex justify-content-between pe-2">
+      <p>Booking Hour</p>
+      <p>{{ selectedAppointment?.bookingHour }}</p>
+    </div>
+    <div class="d-flex justify-content-between pe-2">
+      <p>Status</p>
+      <p>{{ selectedAppointment?.appointmentStatus }}</p>
+    </div>
+    <div class="row d-flex justify-content-between pe-0">
+      <p class="col-4">Reason</p>
+      <div
+        class="col-8 pe-0 d-flex justify-content-end"
+        style="text-align: justify"
+      >
+        <p-scrollPanel [style]="{ width: '100%', height: '120px' }">
+          {{ selectedAppointment?.reason }}
+        </p-scrollPanel>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between pt-4">
+      <button mat-raised-button (click)="visible = !visible">Close</button>
+      <button mat-flat-button>...</button>
     </div>
   </div>
-  
-  <!-- /Calendar -->
-  
+</p-dialog>
+<!-- Details -->

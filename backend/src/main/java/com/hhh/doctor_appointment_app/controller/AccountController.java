@@ -102,6 +102,7 @@ public class AccountController {
         return ApiResponse.<Patient>builder()
                 .data(createPatientCommand.createPatient(request))
                 .statusCode(HttpStatus.OK.value())
+                .message("Create account successfully")
                 .build();
     }
 

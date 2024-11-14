@@ -8,6 +8,7 @@ export class User {
   phone: string;
   dateOfBirth: Date;
   address: string;
+  avatarFilePath: string;
   role: Role;
 }
 

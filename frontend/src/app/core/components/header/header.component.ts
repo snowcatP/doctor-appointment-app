@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { NbAccessChecker } from '@nebular/security';
 import { Store } from '@ngrx/store';
 import * as fromAuth from '../../states/auth/auth.reducer';
@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import * as AuthActions from '../../states/auth/auth.actions';
 import { MessageService } from 'primeng/api';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-header',
@@ -17,7 +18,7 @@ import { MessageService } from 'primeng/api';
 export class HeaderComponent implements OnInit {
   token$: Observable<string>;
   user$: Observable<User>;
-
+  sidebarVisible: boolean = false;
   constructor(
     public accessChecker: NbAccessChecker,
     private store: Store<fromAuth.State>,
@@ -29,6 +30,30 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.token$ = this.store.select(fromAuth.selectToken);
     this.user$ = this.store.select(fromAuth.selectUser);
+  }
+
+  goToDashboard() {
+    this.user$.subscribe(user => {
+      if (user?.role.roleName === 'PATIENT') {
+        this.router.navigate(['/patient']);
+      } else if (user?.role.roleName === 'DOCTOR') {
+        this.router.navigate(['/doctor']);
+      } else {
+        console.warn('Unknown role, unable to redirect');
+      }
+    });
+  }
+
+  goToProfile() {
+    this.user$.subscribe(user => {
+      if (user?.role.roleName === 'PATIENT') {
+        this.router.navigate(['/patient/profile']);
+      } else if (user?.role.roleName === 'DOCTOR') {
+        this.router.navigate(['/doctor/profile']);
+      } else {
+        console.warn('Unknown role, unable to redirect');
+      }
+    });
   }
 
   logout() {

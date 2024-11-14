@@ -1,0 +1,77 @@
+<div>
+    <div class="card">
+        <div class="card-body">
+            <div class="doc-review review-listing">
+                <!-- Review Listing -->
+                <ul class="comments-list">
+                    <div *ngIf="feedbacks.length > 0">
+                        <!-- Comment List -->
+                        <li *ngFor="let feedback of feedbacks">
+                            <div class="comment">
+                                <img class="avatar rounded-circle" alt="User Image"
+                                    src="../../../../../assets/images/patients/patient.jpg">
+                                <div class="comment-body">
+                                    <div class="meta-data">
+                                        <span class="comment-author">{{ feedback.patientResponse.firstName }} {{
+                                            feedback.patientResponse.lastName }}</span>
+                                        <span class="comment-date">{{feedback.dateComment | date : "short"}}</span>
+                                        <div class="review-count rating">
+                                            <i class="fas fa-star" *ngFor="
+                                            let star of [1, 2, 3, 4, 5];
+                                            let i = index
+                                          " [ngClass]="{ filled: feedback.rating >= i + 1 }"></i>
+                                        </div>
+                                    </div>
+                                    <p class="comment-content">{{ feedback.comment }}</p>
+                                    <div class="comment-reply">
+                                        <a class="comment-btn" href="javascript:void(0);" (click)="openReplyDialog(feedback,$event)">
+                                            <i class="fas fa-reply"></i> Reply
+                                        </a>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+
+                            <!-- Comment Reply -->
+                            <ul class="comments-reply" *ngIf="
+                        feedback.replyFeedbackResponse &&
+                        feedback.replyFeedbackResponse.length > 0">
+
+                                <!-- Comment Reply List -->
+                                <li *ngFor="let reply of feedback.replyFeedbackResponse">
+                                    <div class="comment">
+                                        <img class="avatar avatar-sm rounded-circle" alt="User Image"
+                                            [src]="reply.doctorResponse?.avatarFilePath ||'assets/images/doctors/doctor-thumb-02.jpg'" />
+                                        <div class="comment-body">
+                                            <div class="meta-data">
+                                                <span class="comment-author">{{reply.doctorResponse?.firstName}}
+                                                    {{reply.doctorResponse?.lastName}}</span>
+                                                <span class="comment-date"><span class="comment-date">{{ reply.dateComment | date : "short"}}</span></span>
+                                            </div>
+                                            <p class="comment-content">
+                                                {{ reply.comment }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- /Comment Reply List -->
+
+                            </ul>
+                            <!-- /Comment Reply -->
+                        </li>
+                        <!-- /Comment List -->
+                    </div>
+                </ul>
+                <!-- /Comment List -->
+                 <!-- Paginator Component -->
+                <p-paginator [rows]="pageSize" [totalRecords]="totalFeedbacks" [rowsPerPageOptions]="[5,10,20]"
+                (onPageChange)="handlePageEvent($event)"></p-paginator>
+            </div>
+            <app-reply-dialog
+  *ngIf="isReplyDialogVisible"
+  [data]="replyFeedbackData"
+  (onClose)="onDialogClose($event)"
+></app-reply-dialog>
+        </div>
+    </div>
+</div>

@@ -6,7 +6,9 @@ import { DoctorProfileComponent } from './pages/doctor-profile/doctor-profile.co
 import { DoctorScheduleComponent } from './pages/doctor-schedule/doctor-schedule.component';
 import { DoctorCalendarComponent } from './pages/doctor-calendar/doctor-calendar.component';
 import { DoctorAppointmentComponent } from './pages/doctor-appointment/doctor-appointment.component';
-
+import { DoctorReviewComponent } from './pages/doctor-review/doctor-review.component';
+import { DoctorMypatientComponent } from './pages/doctor-mypatient/doctor-mypatient.component';
+import { DoctorPatientProfileComponent } from './pages/doctor-patient-profile/doctor-patient-profile.component';
 const routes: Routes = [
   {
     // doctor
@@ -42,6 +44,21 @@ const routes: Routes = [
         path: 'appointment',
         component: DoctorAppointmentComponent,
         title: 'Doctor Appointments'
+      },
+      {
+        path: 'review',
+        component: DoctorReviewComponent,
+        title: 'Doctor Reviews'
+      },
+      {
+        path: 'myPatient',
+        component: DoctorMypatientComponent,
+        title: 'Doctor My Patients'
+      },
+      {
+        path: 'patient-profile/:id',
+        component: DoctorPatientProfileComponent,
+        title: 'Doctor Patient Profile'
       }
     ],
   },

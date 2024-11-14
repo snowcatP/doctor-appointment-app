@@ -12,4 +12,8 @@ public class RescheduledState implements AppointmentState{
     public String getStatus() {
         return "Rescheduled";
     }
+
+    public void reschedule(Appointment appointment) {
+
+    }
 }

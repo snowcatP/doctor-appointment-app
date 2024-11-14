@@ -2,6 +2,7 @@ package com.hhh.doctor_appointment_app.dto.mapper;
 
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentBookedResponse;
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentResponse;
+import com.hhh.doctor_appointment_app.dto.response.NotificationResponse.BookingNotificationResponse;
 import com.hhh.doctor_appointment_app.entity.Appointment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,4 +21,9 @@ public interface AppointmentMapper {
     AppointmentBookedResponse toBookedResponse(Appointment appointment);
 
     List<AppointmentBookedResponse> toBookedResponses(List<Appointment> appointments);
+
+    List<AppointmentResponse> toResponses(List<Appointment> appointments);
+
+    @Mapping(source = "id", target = "appointmentId")
+    BookingNotificationResponse toBookingNotificationResponse(Appointment appointment);
 }

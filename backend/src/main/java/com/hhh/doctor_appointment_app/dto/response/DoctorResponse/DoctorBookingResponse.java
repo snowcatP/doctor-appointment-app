@@ -15,7 +15,10 @@ public class DoctorBookingResponse {
     private String firstName;
     private String lastName;
     private String fullName;
+    private String address;
     private String schedule;
     private String avatarFilePath;
     private Specialty specialty;
+    private double averageRating;
+    private Integer numberOfFeedbacks;
 }

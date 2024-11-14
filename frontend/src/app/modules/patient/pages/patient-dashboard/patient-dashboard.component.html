@@ -45,6 +45,8 @@
                         </td>
                         <td>
                           <span class="badge badge-pill" [ngClass]="{
+                            'bg-primary-light': appointment.appointmentStatus === 'ACCEPT',
+                            'bg-info-light': appointment.appointmentStatus === 'RESCHEDULED',
                                 'bg-success-light': appointment.appointmentStatus === 'COMPLETED',
                                 'bg-warning-light': appointment.appointmentStatus === 'PENDING',
                                 'bg-danger-light': appointment.appointmentStatus === 'CANCELLED'
@@ -83,6 +85,8 @@
               </p>
               <p><strong>Status:</strong>
                 <span class="badge badge-pill" [ngClass]="{
+                  'bg-primary-light': selectedAppointment.appointmentStatus === 'ACCEPT',
+                  'bg-info-light': selectedAppointment.appointmentStatus === 'RESCHEDULED',
                   'bg-success-light': selectedAppointment.appointmentStatus === 'COMPLETED',
                   'bg-warning-light': selectedAppointment.appointmentStatus === 'PENDING',
                   'bg-danger-light': selectedAppointment.appointmentStatus === 'CANCELLED'

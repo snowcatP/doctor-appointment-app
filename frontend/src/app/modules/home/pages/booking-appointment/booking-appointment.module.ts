@@ -21,6 +21,7 @@ import { CarouselModule } from 'primeng/carousel';
 import { CalendarModule } from 'primeng/calendar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from 'primeng/toast';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { ToastModule } from 'primeng/toast';
     CarouselModule,
     CalendarModule,
     ProgressSpinnerModule,
-    ToastModule
+    ToastModule,
+    DialogModule,
   ],
 })
 export class BookingAppointmentModule {}

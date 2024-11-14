@@ -1,4 +1,10 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 
@@ -7,31 +13,59 @@ import { MessageService } from 'primeng/api';
 import { LoginRequest } from '../../../../core/models/authentication.model';
 import { Store } from '@ngrx/store';
 import * as AuthActions from '../../../../core/states/auth/auth.actions';
-import { AuthService } from '../../../../core/services/auth.service';
+import { selectErrorMessage } from '../../../../core/states/auth/auth.reducer';
+import { Actions, ofType } from '@ngrx/effects';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit, OnDestroy {
   formLogin: FormGroup;
   showPass: boolean = false;
-  errorMessage: string = "";
+  errorMessage: string = '';
   @ViewChild('email') emailInput: ElementRef;
-
+  private unsubscribe$ = new Subject<void>();
+  isLoading: boolean = false;
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
-    private messageService: MessageService,
-    private route: Router,
-    private store: Store
+    private store: Store,
+    private action$: Actions,
+    private router: Router,
+    private messageService: MessageService
   ) {}
   ngOnInit(): void {
     this.formLogin = this.fb.group({
       email: ['', [RxwebValidators.required(), RxwebValidators.email()]],
       password: ['', [RxwebValidators.required()]],
     });
+
+    this.store.select(selectErrorMessage).subscribe((error) => {
+      if (error) {
+        this.errorMessage = 'Wrong email or password.';
+        this.isLoading = false;
+        setTimeout(() => {
+          this.emailInput.nativeElement.select();
+        }, 0);
+      }
+    });
+
+    this.action$
+      .pipe(ofType(AuthActions.loginSuccess), takeUntil(this.unsubscribe$))
+      .subscribe(() => {
+        this.messageService.add({
+          key: 'messageToast',
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Login successfully',
+        });
+        this.isLoading = false;
+        setTimeout(() => {
+          this.router.navigateByUrl('/');
+        }, 1500);
+      });
   }
   showPassword() {
     this.showPass = !this.showPass;
@@ -39,30 +73,14 @@ export class LoginComponent {
   onLogin() {
     let loginRequest: LoginRequest = {
       email: this.formLogin.controls['email'].value,
-      password: this.formLogin.controls['password'].value
+      password: this.formLogin.controls['password'].value,
     };
+    this.isLoading = true;
+    this.store.dispatch(AuthActions.loginRequest({ credential: loginRequest }));
+  }
 
-    this.store.dispatch(AuthActions.loginRequest({credential: loginRequest}))
-
-    // this.accountService.onLogin(loginRequest).subscribe({
-    //   next: (res: any) => {
-    //   localStorage.setItem('token', res.data.token);
-    //   this.messageService.add({
-    //     key: 'messageToast',
-    //     severity: 'success',
-    //     summary: 'Success',
-    //     detail: 'Login successfully',
-    //   });
-    //   setTimeout(() => {
-    //     this.route.navigateByUrl('/');
-    //   }, 1500);
-    // },
-    // error: () => {
-    //   this.errorMessage = "Wrong email or password."
-    //   setTimeout(() => {
-    //     this.emailInput.nativeElement.focus();
-    //   }, 0);
-    // }
-    // });
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete(); // Cleanup subscription on component destroy
   }
 }

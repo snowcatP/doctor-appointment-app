@@ -45,7 +45,7 @@ public class VerifyTokenCommand {
         SignedJWT signedJWT = SignedJWT.parse(token);
 
         Date expirationTime = isRefresh
-                ? new Date(signedJWT.getJWTClaimsSet().getIssueTime()
+                ? new Date(signedJWT.getJWTClaimsSet().getExpirationTime()
                 .toInstant().plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS).toEpochMilli())
                 : signedJWT.getJWTClaimsSet().getExpirationTime();
 

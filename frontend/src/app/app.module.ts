@@ -5,7 +5,11 @@ import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import {
   ErrorStateMatcher,
@@ -32,6 +36,10 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { authReducer } from './core/states/auth/auth.reducer';
 import { AuthEffect } from './core/states/auth/auth.effects';
+import { SidebarModule } from 'primeng/sidebar';
+import { MatButtonModule } from '@angular/material/button';
+import { ScrollTopModule } from 'primeng/scrolltop';
+
 
 @NgModule({
   declarations: [
@@ -54,6 +62,9 @@ import { AuthEffect } from './core/states/auth/auth.effects';
     BookingAppointmentModule,
     MatMenuModule,
     MatIconModule,
+    SidebarModule,
+    MatButtonModule,
+    ScrollTopModule,
     StoreModule.forRoot({ auth: authReducer }, {}),
     EffectsModule.forRoot([AuthEffect]),
   ],
@@ -61,10 +72,7 @@ import { AuthEffect } from './core/states/auth/auth.effects';
     { provide: NbRoleProvider, useClass: RoleProviderService },
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
-    provideHttpClient(
-      withInterceptors([appInterceptorInterceptor])
-    ),
-    // provideHttpClient(),
+    provideHttpClient(withInterceptors([appInterceptorInterceptor])),
     JwtHelperService,
     MessageService,
     provideAnimations(),

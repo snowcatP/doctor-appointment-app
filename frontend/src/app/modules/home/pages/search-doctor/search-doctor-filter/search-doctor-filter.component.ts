@@ -12,7 +12,7 @@ export class SearchDoctorFilterComponent implements OnInit{
   specialties: any[] = [];
   searchRequest: any = {
     keyword: '',
-    specialty_Id: [],
+    specialtyId: [],
     gender: null
   };
 
@@ -68,10 +68,10 @@ export class SearchDoctorFilterComponent implements OnInit{
 
   onSpecialtyChange(specialtyId: number, event: any): void {
     if (event.target.checked) {
-      this.searchRequest.specialty_Id.push(specialtyId);
-      console.log( this.searchRequest.specialty_Id)
+      this.searchRequest.specialtyId.push(specialtyId);
+      console.log( this.searchRequest.specialtyId)
     } else {
-      this.searchRequest.specialty_Id = this.searchRequest.specialty_Id.filter((id: number) => id !== specialtyId);
+      this.searchRequest.specialtyId = this.searchRequest.specialtyId.filter((id: number) => id !== specialtyId);
     }
   }
   

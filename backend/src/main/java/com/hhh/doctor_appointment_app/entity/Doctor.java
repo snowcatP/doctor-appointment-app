@@ -20,8 +20,6 @@ public class Doctor{
     @JoinColumn(name = "user_id")
     private User profile;
 
-    private String avatarFilePath;
-
     private double averageRating;
 
     private String schedule;    // MONDAY,TUESDAY
