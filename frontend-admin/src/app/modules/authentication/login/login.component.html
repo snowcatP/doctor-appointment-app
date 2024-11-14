@@ -65,9 +65,10 @@
                         </mat-form-field>
   
                         <!-- password -->
-                        <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Password</mat-label>
+                        <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block" >Password</mat-label>
                         <mat-form-field appearance="outline" class="w-100" color="primary">
-                          <input matInput type="password" formControlName="password" />
+                          <input matInput type="password" formControlName="password"  [type]="hide ? 'password' : 'text'"/>
+                          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>  
                           @if(f['password'].touched && f['password'].invalid) {
                           <mat-hint class="m-b-16 error-msg">
                             @if(f['password'].errors &&

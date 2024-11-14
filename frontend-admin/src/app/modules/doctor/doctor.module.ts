@@ -8,9 +8,24 @@ import { RouterOutlet } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
-import { FileUploadModule } from 'primeng/fileupload';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { DialogModule } from 'primeng/dialog';
+import {  FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { InputMaskModule } from 'primeng/inputmask';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ToastModule } from 'primeng/toast';
+import { CalendarModule } from 'primeng/calendar';
+import { DropdownModule } from 'primeng/dropdown';
+import { PasswordModule } from 'primeng/password';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { RatingModule } from 'primeng/rating';
+import { SkeletonModule } from 'primeng/skeleton';
+
 @NgModule({
   declarations: [
     DoctorComponent,
@@ -19,15 +34,31 @@ import { DialogModule } from 'primeng/dialog';
   imports: [
     CommonModule,
     DoctorRoutingModule,
+    ConfirmDialogModule,
     RouterOutlet,
     TableModule, 
+    ToastModule,
     ToolbarModule, 
     ButtonModule, 
     FileUploadModule, 
-    CommonModule,
-    HttpClientModule,
     DialogModule,
-
+    ReactiveFormsModule,
+    FormsModule,
+    InputGroupAddonModule,
+    InputGroupModule,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule,
+    RadioButtonModule,
+    ReactiveFormsModule, 
+    InputMaskModule,
+    FileUploadModule,
+    CalendarModule,
+    DropdownModule,
+    PasswordModule,
+    RatingModule,
+    SkeletonModule
+    
   ]
 })
 export class DoctorModule { }

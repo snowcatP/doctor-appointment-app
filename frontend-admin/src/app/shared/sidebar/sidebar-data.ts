@@ -17,6 +17,12 @@ export const navItems: NavItem[] = [
     route: '/ui-components/badge',
   },
   {
+    displayName: 'Specialty',
+    iconName: 'hospital',
+    bgcolor: 'primary',
+    route: '/specialty',
+  },
+  {
     displayName: 'Doctors',
     iconName: 'stethoscope',
     bgcolor: 'primary',

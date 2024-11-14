@@ -18,7 +18,7 @@ public class CalculateAverageRatingDoctorQuery {
 
         // Kiểm tra xem có feedback nào không
         if (feedbacks.isEmpty()) {
-            return 0.0;  // Nếu không có feedback, trả về 0
+            return 0;  // Nếu không có feedback, trả về 0
         }
 
         // Tính tổng rating

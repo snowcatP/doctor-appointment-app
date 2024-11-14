@@ -12,7 +12,7 @@ import { LoginRequest } from '../../../core/models/authentication';
 })
 export class LoginComponent {
   constructor(private router: Router, private accountService: AccountService, private messageService: MessageService) { }
-  
+  hide = true;
   form = new FormGroup({
     uname: new FormControl('', [Validators.email, Validators.required]),
     password: new FormControl('', [Validators.required]),
