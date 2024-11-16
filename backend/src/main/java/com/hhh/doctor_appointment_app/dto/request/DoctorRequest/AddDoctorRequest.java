@@ -26,14 +26,14 @@ public class AddDoctorRequest {
 
     private String password;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // Định dạng ngày yyyy-MM-dd
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy-MM-dd") // Định dạng ngày yyyy-MM-dd
     private Date dateOfBirth;
 
     private String address;
 
     private Long specialtyID;
-
-    private String avatarFilePath;
+    private String avatarFilePath;  
 
     private String role;
+
 }

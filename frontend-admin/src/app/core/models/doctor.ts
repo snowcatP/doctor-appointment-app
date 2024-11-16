@@ -2,8 +2,6 @@ import {  email, prop, required } from "@rxweb/reactive-form-validators"
 import { Specialty } from "./speciality"
 
 export class Doctor{
-    @prop({ isPrimaryKey: true})
-    id: number
     @prop()
     firstName:string
     @prop()
@@ -12,14 +10,16 @@ export class Doctor{
     gender:boolean
     @prop()
     phone:string
+    @prop()
+    password:string
     @email()
     email:string
     @prop()
-    dateOfBirth:string
+    dateOfBirth:Date
     @prop()
     address:string
     @prop()
-    specialty: Specialty
+    specialtyId: string
     @prop()
     avatarFilePath: string
 }   
