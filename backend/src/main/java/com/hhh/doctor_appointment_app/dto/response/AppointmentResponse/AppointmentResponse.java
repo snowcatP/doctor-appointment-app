@@ -1,8 +1,6 @@
 package com.hhh.doctor_appointment_app.dto.response.AppointmentResponse;
 
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
-import com.hhh.doctor_appointment_app.entity.Doctor;
-import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.enums.AppointmentStatus;
 import jakarta.persistence.*;
 import lombok.Getter;

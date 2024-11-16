@@ -22,6 +22,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
+import { SharedModule } from "../../../../shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { DialogModule } from 'primeng/dialog';
     ProgressSpinnerModule,
     ToastModule,
     DialogModule,
-  ],
+    SharedModule
+],
 })
 export class BookingAppointmentModule {}

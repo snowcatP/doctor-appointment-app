@@ -34,6 +34,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
+import { SharedModule } from '../../shared/shared.module';
+
 @NgModule({
   declarations: [
     DoctorAppointmentComponent,
@@ -47,7 +49,7 @@ import { ConfirmationService } from 'primeng/api';
     DoctorReviewComponent,
     ReplyDialogComponent,
     DoctorMypatientComponent,
-    DoctorPatientProfileComponent
+    DoctorPatientProfileComponent,
   ],
   imports: [
     CommonModule,
@@ -72,6 +74,7 @@ import { ConfirmationService } from 'primeng/api';
     ScrollPanelModule,
     MatButtonModule,
     ConfirmPopupModule,
+    SharedModule,
   ],
   providers: [ConfirmationService],
 })
