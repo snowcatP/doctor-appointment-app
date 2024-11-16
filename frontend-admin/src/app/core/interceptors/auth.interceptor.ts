@@ -9,15 +9,15 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService)
   const messageService = inject(MessageService)
   const authToken = localStorage.getItem('token'); 
-  if(authService.isAuthenticated()){
+  const isUploadEndpoint = req.url.includes('https://www.primefaces.org/cdn/api/upload.php');
+  if(authService.isAuthenticated()&&!isUploadEndpoint){
     const clonedRequest = req.clone({
       setHeaders:{
         'Authorization': `Bearer ${authToken}`,
-        'Content-Type': 'application/json'
       }
     });
     return next(clonedRequest);
-  }else{ //if token is expired, so we need to remove it
+  }else if(!isUploadEndpoint){ //if token is expired, so we need to remove it
       localStorage.removeItem('token')
       route.navigateByUrl('')
   }

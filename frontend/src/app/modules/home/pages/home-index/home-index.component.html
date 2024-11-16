@@ -11,27 +11,84 @@
   
         <!-- Search -->
         <div class="search-box">
-          <form action="templateshub.net">
+          <form (ngSubmit)="fetchGetAppointmentByReferenceCode()" #appointmentForm="ngForm">
             <div class="form-group search-location">
               <input
                 type="text"
                 class="form-control"
-                placeholder="Search Location"
+                placeholder="Code"
+                [(ngModel)]="referenceCode"
+                name="referenceCode"
               />
-              <span class="form-text">Based on your Location</span>
+              <span class="form-text">Code of appointment sent to your email</span>
             </div>
             <div class="form-group search-info">
               <input
                 type="text"
                 class="form-control"
-                placeholder="Search Doctors, Clinics, Hospitals, Diseases Etc"
+                placeholder="Search Doctors"
               />
-              <span class="form-text">Ex : Dental or Sugar Check up etc</span>
+              <span class="form-text">Ex : Nguyen Van A</span>
             </div>
             <button type="submit" class="btn btn-primary search-btn">
               <i class="fas fa-search"></i> <span>Search</span>
             </button>
           </form>
+
+          <!-- Appointment Detail Dialog -->
+          <p-dialog
+          header="Appointment Details"
+          [modal]="true"
+          [(visible)]="visible"
+          [style]="{ width: '25rem' }"
+        >
+          <div *ngIf="appointment">
+            <p>
+              <strong>Doctor:</strong>Dr.
+              {{ appointment.doctor.firstName }}
+              {{ appointment.doctor.lastName }}
+            </p>
+            <p>
+              <strong>Appointment Date:</strong>
+              {{
+                appointment.dateBooking
+                  | date
+                    : "dd
+                                  MMM yyyy"
+              }}, {{appointment.bookingHour}}
+            </p>
+            <p>
+              <strong>Status:</strong>
+              <span
+                class="badge badge-pill"
+                [ngClass]="{
+                  'bg-primary-light':
+                  appointment.appointmentStatus === 'ACCEPT',
+                  'bg-info-light':
+                  appointment.appointmentStatus ===
+                    'RESCHEDULED',
+                  'bg-success-light':
+                  appointment.appointmentStatus === 'COMPLETED',
+                  'bg-warning-light':
+                  appointment.appointmentStatus === 'PENDING',
+                  'bg-danger-light':
+                  appointment.appointmentStatus === 'CANCELLED'
+                }"
+              >
+                {{ appointment.appointmentStatus }}
+              </span>
+            </p>
+
+            <p>
+              <strong>Reason:</strong> {{ appointment.reason }}
+            </p>
+            <p>
+              <strong>Patient Name:</strong>
+              {{ appointment.fullName }}
+            </p>
+            <p><strong>Phone:</strong> {{ appointment.phone }}</p>
+          </div>
+        </p-dialog>
         </div>
         <!-- /Search -->
       </div>
@@ -45,8 +102,7 @@
       <div class="section-header text-center">
         <h2>Clinic and Specialities</h2>
         <p class="sub-title">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua.
+          
         </p>
       </div>
       <div class="row justify-content-center">

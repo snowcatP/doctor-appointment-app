@@ -1,6 +1,7 @@
 package com.hhh.doctor_appointment_app.dto.response.AppointmentResponse;
 
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
+import com.hhh.doctor_appointment_app.dto.response.MedicalRecordResponse.MedicalRecordResponse;
 import com.hhh.doctor_appointment_app.enums.AppointmentStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -32,5 +33,6 @@ public class AppointmentResponse {
 
     private DoctorResponse doctor;
 
+    private MedicalRecordResponse medicalRecordResponse;
 
 }

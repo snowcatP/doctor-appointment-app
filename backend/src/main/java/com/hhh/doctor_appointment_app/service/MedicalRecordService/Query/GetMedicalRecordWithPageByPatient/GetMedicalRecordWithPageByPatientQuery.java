@@ -1,5 +1,6 @@
 package com.hhh.doctor_appointment_app.service.MedicalRecordService.Query.GetMedicalRecordWithPageByPatient;
 
+import com.hhh.doctor_appointment_app.dto.mapper.AppointmentMapper;
 import com.hhh.doctor_appointment_app.dto.mapper.DoctorMapper;
 import com.hhh.doctor_appointment_app.dto.mapper.MedicalRecordMapper;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
@@ -37,6 +38,9 @@ public class GetMedicalRecordWithPageByPatientQuery {
     @Autowired
     private MedicalRecordMapper medicalRecordMapper;
 
+    @Autowired
+    private AppointmentMapper appointmentMapper;
+
     public PageResponse<List<MedicalRecordResponse>> getMedicalRecordsWithPageByPatientId(int page, int size, Long id) {
         Pageable pageable = PageRequest.of(page-1, size);
         Page<MedicalRecord> medicalRecordPage = medicalRecordRepository.findMedicalRecordByPatient_Id(id, pageable);
@@ -51,6 +55,7 @@ public class GetMedicalRecordWithPageByPatientQuery {
                     response.setDateCreated(medicalRecord.getDateCreated());
                     response.setLastModified(medicalRecord.getLastModified());
                     response.setDoctorResponse(doctorMapper.toResponse(medicalRecord.getDoctorModified()));
+                    response.setAppointmentResponse(appointmentMapper.toResponse(medicalRecord.getAppointment()));
                     return response;
                 })
                 .collect(Collectors.toList());

@@ -2,6 +2,7 @@ package com.hhh.doctor_appointment_app.controller;
 
 import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.AppointmentByGuestRequest;
 import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.AppointmentByPatientRequest;
+import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.ReferenceCodeRequest;
 import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.RescheduleWithDateRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentBookedResponse;
@@ -13,6 +14,7 @@ import com.hhh.doctor_appointment_app.service.AppointmentService.Command.CreateA
 import com.hhh.doctor_appointment_app.service.AppointmentService.Command.CreateAppointment.CreateAppointmentByPatientCommand;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Command.ResheduleAppointment.RescheduleAppointmentByDoctor;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetAllAppointmentsByDoctorId.GetAllAppointmentsByDoctorIdQuery;
+import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetAppointmentByReferenceCode.GetAppointmentByReferenceCodeQuery;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetAppointmentWithPage.GetAppointmentWithPageQuery;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetDetailAppointment.GetDetailAppointmentByPatientQuery;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentByDoctorId.GetListAppointmentByDoctorIdQuery;
@@ -74,6 +76,9 @@ public class AppointmentController {
 
     @Autowired
     private GetListAppointmentsForReschedulingQuery getListAppointmentsForReshedulingQuery;
+
+    @Autowired
+    private GetAppointmentByReferenceCodeQuery getAppointmentByReferenceCodeQuery;
     @GetMapping("/list")
     public ResponseEntity<?> getAppointments(@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "10") int size){
@@ -266,6 +271,26 @@ public class AppointmentController {
             return new ResponseEntity<>(getListAppointmentsForReshedulingQuery.getListAppointmentsForResheduling(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/search/reference-code")
+    public ResponseEntity<?> getAppointmentByReferenceCodeForPatient(@RequestBody ReferenceCodeRequest referenceCodeRequest)
+    {
+        ApiResponse<?> apiResponse = new ApiResponse<>();
+        try {
+            apiResponse = getAppointmentByReferenceCodeQuery.getAppointmentByReferenceCode(referenceCodeRequest);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+        catch (NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+        catch (Exception ex) {
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.hhh.doctor_appointment_app.dto.response.MedicalRecordResponse;
 
+import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentResponse;
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
 import lombok.*;
 
@@ -19,4 +20,5 @@ public class MedicalRecordResponse {
     private LocalDateTime dateCreated;
     private LocalDateTime lastModified;
     private DoctorResponse doctorResponse;
+    private AppointmentResponse appointmentResponse;
 }

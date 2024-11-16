@@ -36,6 +36,7 @@ export class MedicalRecordService {
 
     formData.append('description', addMedicalRecordRequest.description || '');
     formData.append('patientId', addMedicalRecordRequest.patientId.toString());
+    formData.append('appointmentId', addMedicalRecordRequest.appointmentId.toString());
 
     return this.http.post(url, formData);
   }

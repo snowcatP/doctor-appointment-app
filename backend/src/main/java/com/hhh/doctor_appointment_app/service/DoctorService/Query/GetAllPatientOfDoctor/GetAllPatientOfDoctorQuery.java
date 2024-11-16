@@ -52,15 +52,26 @@ public class GetAllPatientOfDoctorQuery {
         Set<Long> patientIds = new HashSet<>();
         //Convert entities to responses
         List<PatientResponse> appointmentResponses = appointmentPage.getContent().stream()
-                .filter(appointment -> patientIds.add(appointment.getPatient().getId()))
+                .filter(appointment -> {
+                    // Allow appointments with patients or guests
+                    return appointment.getPatient() == null || patientIds.add(appointment.getPatient().getId());
+                })
                 .map(appointment -> {
                     PatientResponse response = new PatientResponse();
-                    response.setId(appointment.getPatient().getId());
-                    response.setFullname(appointment.getFullName());
+                    if (appointment.getPatient() != null) {
+                        // Case: Patient exists
+                        response.setId(appointment.getPatient().getId());
+                        response.setFullname(appointment.getPatient().getProfile().getFullName());
+                        response.setAddress(appointment.getPatient().getProfile().getAddress());
+                        response.setDateOfBirth(appointment.getPatient().getProfile().getDateOfBirth());
+                    } else {
+                        // Case: Guest
+                        response.setId(null); // Guest has no patient ID
+                        response.setFullname(appointment.getFullName());
+                        response.setEmail(appointment.getEmail());
+                    }
+
                     response.setPhone(appointment.getPhone());
-                    response.setAddress(appointment.getPatient().getProfile().getAddress());
-                    response.setPhone(appointment.getPhone());
-                    response.setDateOfBirth(appointment.getPatient().getProfile().getDateOfBirth());
                     return response;
                 })
                 .collect(Collectors.toList());

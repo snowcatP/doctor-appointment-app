@@ -9,7 +9,7 @@ import {
 import { host } from '../../../environments/environment';
 import { Appointment, RescheduleAppointment } from '../models/appointment.model';
 import { ApiResponse } from '../models/doctor.model';
-import { AppointmentResponse } from '../models/appointment.model';
+import { AppointmentResponse, ReferenceCodeRequest } from '../models/appointment.model';
 
 @Injectable({
   providedIn: 'root',
@@ -89,5 +89,10 @@ export class AppointmentService {
   rescheduleAppointmentByDoctor(id: number, rescheduleAppointment: RescheduleAppointment): Observable<any>{
     const url = `${host}/api/appointment/reschedule/${id}`;
     return this.http.put<ApiResponse>(url,rescheduleAppointment);
+  }
+
+  getAppointmentByReferenceCode(referenceCodeRequest: ReferenceCodeRequest): Observable<any>{
+    const url = `${host}/api/appointment/search/reference-code`;
+    return this.http.post<ApiResponse>(url,referenceCodeRequest);
   }
 }
