@@ -39,7 +39,7 @@ import { AuthEffect } from './core/states/auth/auth.effects';
 import { SidebarModule } from 'primeng/sidebar';
 import { MatButtonModule } from '@angular/material/button';
 import { ScrollTopModule } from 'primeng/scrolltop';
-
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -50,16 +50,17 @@ import { ScrollTopModule } from 'primeng/scrolltop';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     CommonModule,
     ToastModule,
     PatientModule,
     RouterModule,
     AuthModule,
-    BrowserAnimationsModule,
     HttpClientModule,
     HomeModule,
     BookingAppointmentModule,
+    SharedModule,
     MatMenuModule,
     MatIconModule,
     SidebarModule,

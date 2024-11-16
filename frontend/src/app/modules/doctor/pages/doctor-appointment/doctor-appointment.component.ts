@@ -16,7 +16,8 @@ export class DoctorAppointmentComponent {
   totalAppointments: number = 0;
   pageSize: number = 12;
   currentPage: number = 1;
-
+  visible: boolean = false;
+  selectedAppointment: any = null;
   rescheduleVisible: boolean = false;
   dateToday: Date = new Date();
   schedules: any[] = [];
@@ -35,7 +36,8 @@ export class DoctorAppointmentComponent {
     { time: '16:00 - 16:30' },
   ];
 
-  constructor(private appointmentService: AppointmentService,
+  constructor(
+    private appointmentService: AppointmentService,
     private router: Router,
     private messageService: MessageService,
   ) { }
@@ -71,7 +73,6 @@ export class DoctorAppointmentComponent {
     );
   }
 
-
   handlePageEvent(event: any): void {
     this.currentPage = (event.page + 1);
     this.pageSize = event.rows;
@@ -83,11 +84,6 @@ export class DoctorAppointmentComponent {
     this.fetchGetListAppointmentsOfDoctor(this.currentPage, this.pageSize);
   }
 
-
-  visible: boolean = false; // Control dialog visibility
-  selectedAppointment: any = null; // Store selected appointment for dialog
-
-  // Open dialog and set selected appointment
   viewAppointmentDetails(appointment: any): void {
     this.selectedAppointment = appointment;
     this.visible = true;
@@ -103,7 +99,6 @@ export class DoctorAppointmentComponent {
             summary: 'Success',
             detail: response.message || 'Status changed successfully',
           });
-
           setTimeout(() => {
             this.fetchGetListAppointmentsOfDoctor(this.currentPage, this.pageSize);
           }, 1000);
@@ -323,6 +318,5 @@ export class DoctorAppointmentComponent {
         console.log(err);
       },
     })
-
   }
 }

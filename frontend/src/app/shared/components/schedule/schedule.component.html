@@ -1,0 +1,114 @@
+<div
+  class="card d-flex justify-content-center align-items-center"
+  *ngIf="isLoading"
+  style="min-height: 70vh"
+>
+  <p-progressSpinner
+    styleClass="w-4rem h-4rem"
+    strokeWidth="8"
+    fill="var(--surface-ground)"
+    animationDuration=".5s"
+  />
+</div>
+<div class="card mt-2" *ngIf="!isLoading">
+  <div class="card-header">
+    <div class="d-flex justify-content-between align-items-center">
+      <h4 class="card-title col">Booking Date</h4>
+      <p-calendar
+        [(ngModel)]="dateToday"
+        [disabled]="true"
+        class="d-flex flex-row-reverse"
+        dateFormat="dd/mm/yy"
+      />
+    </div>
+    <a
+      class="col d-flex justify-content-end p-0 pt-1"
+      (click)="showDialog()"
+      *ngIf="!(isLogged$ | async) && !isReschedule"
+      >Login as patient</a
+    >
+  </div>
+  <p-carousel [value]="schedules" [numVisible]="1" [numScroll]="1">
+    <ng-template pTemplate="item" let-schedule>
+      <!-- Schedule Header -->
+      <div class="schedule-header px-0">
+        <div class="row">
+          <div class="col-md-12">
+            <!-- Day Slot -->
+            <div class="day-slot">
+              <ul>
+                <li *ngFor="let day of schedule">
+                  <span>{{ day.dayWeek }}</span>
+                  <span class="slot-date">{{ day.date }}</span>
+                </li>
+              </ul>
+            </div>
+            <!-- /Day Slot -->
+          </div>
+        </div>
+      </div>
+      <!-- /Schedule Header -->
+      <!-- Schedule Content -->
+      <div class="schedule-cont px-0">
+        <div class="row">
+          <div class="col-md-12">
+            <!-- Time Slot -->
+            <h6>Morning</h6>
+            <div class="time-slot">
+              <ul class="clearfix">
+                <li *ngFor="let day of schedule">
+                  <button
+                    class="timing"
+                    *ngFor="let slot of day.timeSlotsMorning"
+                    [ngClass]="{
+                      selected: slot === timeSlotSelected,
+                      booked: slot.isBooked,
+                      prev: slot.isPassedIn === true
+                    }"
+                    (click)="selectBookingDate(slot)"
+                    matTooltip="Booked"
+                    [matTooltipDisabled]="!slot.isBooked"
+                    [disabled]="slot.isBooked"
+                  >
+                    <span>{{ slot.time }}</span>
+                    
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <!-- /Time Slot -->
+          </div>
+          <p-divider />
+          <div class="col-md-12">
+            <!-- Time Slot -->
+            <h6>Afternoon</h6>
+            <div class="time-slot">
+              <ul class="clearfix">
+                <li *ngFor="let day of schedule">
+                  <button
+                    class="timing"
+                    *ngFor="let slot of day.timeSlotsAfternoon"
+                    [ngClass]="{
+                      selected: slot === timeSlotSelected,
+                      booked: slot.isBooked === true,
+                      prev: slot.isPassedIn === true
+                    }"
+                    (click)="selectBookingDate(slot)"
+                    matTooltip="Booked"
+                    [matTooltipDisabled]="!slot.isBooked"
+                    [disabled]="slot.isBooked"
+                  >
+                    <span>{{ slot.time }}</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <!-- /Time Slot -->
+          </div>
+        </div>
+      </div>
+      <!-- /Schedule Content -->
+    </ng-template>
+  </p-carousel>
+</div>
+<!-- /Schedule Widget -->

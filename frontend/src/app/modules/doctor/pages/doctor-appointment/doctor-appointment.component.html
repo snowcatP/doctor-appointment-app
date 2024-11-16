@@ -38,7 +38,6 @@
       </div>
       <div class="appointment-action">
         <a
-          href="javascript:void(0);"
           class="btn btn-sm bg-warning-light"
           (click)="viewAppointmentDetails(appointment)"
           data-toggle="modal"
@@ -49,7 +48,6 @@
         <!-- Show Accept and Cancel buttons if status is PENDING -->
         <a
           *ngIf="appointment.appointmentStatus === 'PENDING'"
-          href="javascript:void(0);"
           class="btn btn-sm bg-primary-light"
           (click)="onChangeStatusAppointment(appointment.id)"
         >
@@ -57,7 +55,6 @@
         </a>
         <a
           *ngIf="appointment.appointmentStatus === 'PENDING'"
-          href="javascript:void(0);"
           class="btn btn-sm bg-danger-light"
           (click)="onChangeStatusAppointment(appointment.id)"
         >
@@ -66,7 +63,6 @@
         <!-- Show Reschedule and Complete buttons if status is ACCEPT -->
         <a
           *ngIf="appointment.appointmentStatus === 'ACCEPT'"
-          href="javascript:void(0);"
           class="btn btn-sm bg-info-light"
           (click)="openRescheduleDialog(appointment)"
           (click)="getAppointmentsBooked()"
@@ -75,7 +71,6 @@
         </a>
         <a
           *ngIf="appointment.appointmentStatus === 'ACCEPT'"
-          href="javascript:void(0);"
           class="btn btn-sm bg-success-light"
           (click)="onChangeStatusAppointment(appointment.id)"
         >
@@ -84,7 +79,6 @@
         <!-- Show Reschedule buttons if status is Reschedule -->
         <a
           *ngIf="appointment.appointmentStatus === 'RESCHEDULED'"
-          href="javascript:void(0);"
           class="btn btn-sm bg-info-light"
           (click)="openRescheduleDialog(appointment)"
           (click)="getAppointmentsBooked()"
@@ -93,7 +87,6 @@
         </a>
         <a
           *ngIf="appointment.appointmentStatus === 'RESCHEDULED'"
-          href="javascript:void(0);"
           class="btn btn-sm bg-success-light"
           (click)="onChangeStatusAppointment(appointment.id)"
         >
@@ -125,12 +118,7 @@
       </p>
       <p>
         <strong>Appointment Date:</strong>
-        {{
-          selectedAppointment.dateBooking
-            | date
-              : "dd
-        MMM yyyy"
-        }}, {{selectedAppointment.bookingHour}}
+        {{selectedAppointment.dateBooking | date: "dd MMM yyyy"}}, {{ selectedAppointment.bookingHour }}
       </p>
       <p>
         <strong>Status:</strong>
