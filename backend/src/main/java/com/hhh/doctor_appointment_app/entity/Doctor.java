@@ -1,5 +1,6 @@
 package com.hhh.doctor_appointment_app.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,6 +30,7 @@ public class Doctor{
     private Specialty specialty;
 
     @OneToMany(mappedBy = "doctorModified",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<MedicalRecord> medicalRecordList = new ArrayList<>();
 
     @OneToMany(mappedBy = "doctor",cascade = CascadeType.ALL)

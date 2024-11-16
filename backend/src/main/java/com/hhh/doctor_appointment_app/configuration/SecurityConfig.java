@@ -33,7 +33,8 @@ public class SecurityConfig {
             "api/auth/refreshToken",
             "api/auth/register/user",
             "api/appointment/guest/create-appointment",
-            "api/doctor/search"
+            "api/doctor/search",
+            "api/appointment/search/reference-code"
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {

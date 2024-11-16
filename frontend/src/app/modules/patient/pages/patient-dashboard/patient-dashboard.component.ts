@@ -76,6 +76,7 @@ export class PatientDashboardComponent {
       (response) => {
         if (response.statusCode === 200) {
           this.medicalRecords = response.data;
+          console.log(this.medicalRecords)
           this.totalMedicalRecords = response.totalPage * pageSize;
         }
       },

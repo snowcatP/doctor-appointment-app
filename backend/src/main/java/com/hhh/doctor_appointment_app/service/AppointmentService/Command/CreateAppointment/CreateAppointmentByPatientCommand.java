@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.UUID;
 
 @Service
 public class CreateAppointmentByPatientCommand {
@@ -74,6 +75,9 @@ public class CreateAppointmentByPatientCommand {
                         .build();
             }
 
+            // Generate reference code for the new appointment
+            String referenceCode = UUID.randomUUID().toString();
+
             Appointment appointment = Appointment.builder()
                     .fullName(patient.getProfile().getFullName())
                     .phone(patient.getProfile().getPhone())
@@ -85,6 +89,7 @@ public class CreateAppointmentByPatientCommand {
                     .cusType("PATIENT")
                     .doctor(doctor)
                     .appointmentStatus(AppointmentStatus.PENDING)
+                    .referenceCode(referenceCode)
                     .build();
 
 
@@ -108,7 +113,7 @@ public class CreateAppointmentByPatientCommand {
         } catch (Exception ex) {
             return ApiResponse.builder()
                     .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                    .message("Appointment Created Failed !")
+                    .message(ex.getMessage())
                     .build();
         }
     }

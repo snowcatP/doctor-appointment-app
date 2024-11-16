@@ -1,13 +1,20 @@
 import { Component } from '@angular/core';
 import { DoctorService } from '../../../../core/services/doctor.service';
 import { Router } from '@angular/router';
-
+import { ReferenceCodeRequest } from '../../../../core/models/appointment.model';
+import { AppointmentService } from '../../../../core/services/appointment.service';
 @Component({
   selector: 'app-home-index',
   templateUrl: './home-index.component.html',
   styleUrl: './home-index.component.css'
 })
 export class HomeIndexComponent {
+
+  referenceCode: string;
+  referenceCodeRequest: ReferenceCodeRequest;
+  visible: boolean = false;
+
+  appointment!: any;
   ngOnInit(): void {
     this.fetchTopRatingDoctors();
   }
@@ -43,7 +50,9 @@ export class HomeIndexComponent {
   ];
 
   topRatingDoctors: any[] = [];
-  constructor(private doctorService: DoctorService, private router: Router) {}
+  constructor(private doctorService: DoctorService, 
+    private router: Router,
+    private appointmentService: AppointmentService) {}
 
   fetchTopRatingDoctors(): void {
     this.doctorService.getTopRatingDoctors().subscribe(
@@ -79,4 +88,22 @@ export class HomeIndexComponent {
       numScroll: 1,
     },
   ];
+
+  fetchGetAppointmentByReferenceCode(): void {
+    this.referenceCodeRequest = { referenceCode: this.referenceCode };
+    console.log(this.referenceCodeRequest)
+    this.appointmentService.getAppointmentByReferenceCode(this.referenceCodeRequest).subscribe(
+      (response) => {
+        if (response.statusCode === 200) {
+          this.appointment = response.data;
+          this.visible = true;
+        } else{
+          console.log(response)
+        }
+      },
+      (error) => {
+        console.error('Error fetching appointment', error);
+      }
+    );
+  }
 }
