@@ -53,7 +53,7 @@ public class RescheduleAppointmentByDoctor {
 
             // Thực hiện việc chuyển trạng thái sang RESCHEDULED
             if(appointment.getAppointmentState() instanceof AcceptState){
-                ((AcceptState) appointment.getAppointmentState()).next(appointment);
+                ((AcceptState) appointment.getAppointmentState()).reschedule(appointment);
             } else {
                 ((RescheduledState) appointment.getAppointmentState()).reschedule(appointment);
             }

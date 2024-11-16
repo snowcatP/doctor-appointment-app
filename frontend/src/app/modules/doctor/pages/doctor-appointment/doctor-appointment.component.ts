@@ -301,6 +301,7 @@ export class DoctorAppointmentComponent {
             this.fetchGetListAppointmentsOfDoctor(this.currentPage, this.pageSize);
             this.getAppointmentsBooked();
             this.handleAppointmentsBooked();
+            this.generateAppointmentSlots();
             this.closeRescheduleDialog();
           }, 2000);
         } else {
@@ -308,7 +309,7 @@ export class DoctorAppointmentComponent {
             key: 'messageToast',
             severity: 'error',
             summary: 'Error',
-            detail: 'Reschedule unsuccessfully!'
+            detail: res.message
           });
         }
       },

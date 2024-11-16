@@ -2292,7 +2292,7 @@ html.menu-opened body {
     width: 240px;
 }
 .search-location .form-control {
-	background: #fff url(assets/images/location.png) no-repeat 10px center;
+	background: #fff url(assets/images/search.png) no-repeat 10px center;
 }
 .search-box .search-info {
     -ms-flex: 0 0 490px;

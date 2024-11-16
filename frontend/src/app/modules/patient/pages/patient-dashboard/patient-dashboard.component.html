@@ -10,15 +10,16 @@
                   <table class="table table-hover table-center mb-3">
                     <thead>
                       <tr>
+                        <th>ID</th>
                         <th>Doctor</th>
                         <th>Appointment Date</th>
-                        <th>Booking Date</th>
                         <th>Status</th>
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr *ngFor="let appointment of appointments">
+                        <td>{{appointment.id}}</td>
                         <td>
                           <h2 class="table-avatar">
                             <a (click)="viewDoctorProfile(appointment.doctor.id)" class="avatar avatar-sm mr-3">
@@ -30,12 +31,6 @@
                               appointment.doctor.lastName }} <span>{{ appointment.doctor.specialty.specialtyName
                                 }}</span> </a>
                           </h2>
-                        </td>
-                        <td>
-                          <!-- {{ appointment.dateBooking | date: 'dd MMM yyyy' }}
-                            <span class="d-block text-info">
-                              {{ appointment.dateBooking | date: 'hh:mm a' }}
-                            </span> -->
                         </td>
                         <td>
                           {{ appointment.dateBooking | date: 'dd MMM yyyy' }}
@@ -116,6 +111,8 @@
                       <tr>
                         <th>ID</th>
                         <th>Created Date</th>
+                        <th>Appointment Date</th>
+                        <th>Appointment Status</th>
                         <th>Description</th>
                         <th>Attachment</th>
                         <th>Created</th>
@@ -126,6 +123,33 @@
                       <tr *ngFor="let medicalRecord of medicalRecords">
                         <td>{{medicalRecord.id}}</td>
                         <td>{{medicalRecord.dateCreated | date: 'dd MMM yyyy, hh:mm a' }}</td>
+                        <td>
+                          {{
+                            medicalRecord.appointmentResponse?.dateBooking | date : "dd MMM yyyy"
+                            }}
+                            <span class="d-block text-info">
+                              {{medicalRecord.appointmentResponse?.bookingHour}}
+                            </span>
+                        </td>
+                        <td>
+                          <span class="badge badge-pill" [ngClass]="{
+                              'bg-primary-light':
+                              medicalRecord.appointmentResponse?.appointmentStatus === 'ACCEPT',
+                              'bg-info-light':
+                              medicalRecord.appointmentResponse?.appointmentStatus ===
+                                'RESCHEDULED',
+                              'bg-success-light':
+                              medicalRecord.appointmentResponse?.appointmentStatus ===
+                                'COMPLETED',
+                              'bg-warning-light':
+                              medicalRecord.appointmentResponse?.appointmentStatus === 'PENDING',
+                              'bg-danger-light':
+                              medicalRecord.appointmentResponse?.appointmentStatus ===
+                                'CANCELLED'
+                            }">
+                            {{ medicalRecord.appointmentResponse?.appointmentStatus }}
+                          </span>
+                        </td>
                         <td>{{medicalRecord.description}}</td>
                         <td><a href={{medicalRecord.filePath}} target="_blank">File</a></td>
                         <td>

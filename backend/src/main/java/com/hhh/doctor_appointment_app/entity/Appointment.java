@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Builder
@@ -16,6 +17,10 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    private String referenceCode;
+
     private String fullName;
     private String phone;
 
@@ -43,6 +48,10 @@ public class Appointment {
     @JsonIgnore
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "medical_record_id")
+    private MedicalRecord medicalRecord;
 
     @Transient
     private AppointmentState appointmentState;
@@ -79,6 +88,7 @@ public class Appointment {
     }
 
     public Appointment(){
+        this.referenceCode = UUID.randomUUID().toString();
         this.appointmentState = new PendingState();
         this.appointmentStatus = AppointmentStatus.PENDING;
     }

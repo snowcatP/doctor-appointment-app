@@ -9,8 +9,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
@@ -42,4 +44,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
 
 
     Page<Appointment> findByPatient_Id(Long id, Pageable pageable);
+
+    Optional<Appointment> findAppointmentByReferenceCode(String referenceCode);
 }

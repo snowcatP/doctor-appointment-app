@@ -1,6 +1,7 @@
 export class AddMedicalRecordRequest {
     description: string;
     patientId: number;
+    appointmentId: number;
     constructor() {}
 }
 

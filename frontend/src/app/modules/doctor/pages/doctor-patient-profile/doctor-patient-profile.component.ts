@@ -44,7 +44,6 @@ export class DoctorPatientProfileComponent {
       (response) => {
         if (response.statusCode === 200) {
           this.patientDetail = response.data;
-          console.log(this.patientDetail)
         }
       },
       (error) => {
@@ -123,8 +122,9 @@ export class DoctorPatientProfileComponent {
 
   isFormVisible = false;
 
-  openForm() {
+  openForm(appointment:any) {
     this.isFormVisible = true;
+    this.selectedAppointment = appointment;
   }
 
   closeForm() {
@@ -160,6 +160,8 @@ export class DoctorPatientProfileComponent {
   onSubmit() {
     this.loading = true; // Start loading
     this.medicalRecordRequest.patientId = this.patientId; //Set id of patient
+    this.medicalRecordRequest.appointmentId = this.selectedAppointment.id;
+    console.log(this.medicalRecordRequest)
     this.medicalRecordService.addMedicalRecordForPatient(this.medicalRecordRequest, this.selectedFile).subscribe(
       (response: ApiResponse) => {
         this.loading = false; // Stop loading
@@ -178,6 +180,7 @@ export class DoctorPatientProfileComponent {
           setTimeout(() => {
             this.closeForm();
             this.fetchMedicalRecordsOfPatientByPatientID(this.patientId, 1, this.pageSizeMR)
+            this.fetchAppointmentsOfPatientByPatientID(this.patientId, 1, this.pageSize);
           }, 1000);
         } else {
           this.messageService.add({

@@ -1,5 +1,6 @@
 package com.hhh.doctor_appointment_app.service.MedicalRecordService.Query.GetMedicalRecordOfPatient;
 
+import com.hhh.doctor_appointment_app.dto.mapper.AppointmentMapper;
 import com.hhh.doctor_appointment_app.dto.mapper.DoctorMapper;
 import com.hhh.doctor_appointment_app.dto.mapper.MedicalRecordMapper;
 import com.hhh.doctor_appointment_app.dto.response.MedicalRecordResponse.MedicalRecordResponse;
@@ -31,6 +32,9 @@ public class GetMedicalRecordOfPatientQuery {
     @Autowired
     private FindUserByEmailQuery findUserByEmailQuery;
 
+    @Autowired
+    private AppointmentMapper appointmentMapper;
+
     public PageResponse<List<MedicalRecordResponse>> getMedicalRecordsWithPageOfPatient(int page, int size) {
         var context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();
@@ -50,6 +54,7 @@ public class GetMedicalRecordOfPatientQuery {
                     response.setDateCreated(medicalRecord.getDateCreated());
                     response.setLastModified(medicalRecord.getLastModified());
                     response.setDoctorResponse(doctorMapper.toResponse(medicalRecord.getDoctorModified()));
+                    response.setAppointmentResponse(appointmentMapper.toResponse(medicalRecord.getAppointment()));
                     return response;
                 })
                 .collect(Collectors.toList());

@@ -234,6 +234,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
               ]);
             }, 2000);
           } else {
+            console.log(res)
             this.messageService.add({
               key: 'messageToast',
               severity: 'error',
@@ -257,7 +258,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         doctorId: this.doctorSelected.id,
         doctorName: this.doctorSelected.fullName,
         fullName:
-          this.formBooking.get('firstName').value +
+          this.formBooking.get('firstName').value + ' ' +
           this.formBooking.get('lastName').value,
         phone: this.formBooking.get('phone').value,
         email: this.formBooking.get('email').value,
@@ -284,6 +285,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
                 ]);
               }, 2000);
             }else {
+              console.log(res)
               this.messageService.add({
                 key: 'messageToast',
                 severity: 'error',

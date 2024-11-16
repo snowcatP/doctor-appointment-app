@@ -40,4 +40,8 @@ public class MedicalRecord {
     @JsonIgnore
     @JoinColumn(name = "doctor_id")
     private Doctor doctorModified;
+
+    @OneToOne()
+    @JsonIgnore
+    private Appointment appointment;
 }
