@@ -27,3 +27,6 @@ p-dropdown,p-password {
 p-radiobutton{
     margin: 0 10px;
 }
+ol, ul{
+    padding-left: 0;
+}

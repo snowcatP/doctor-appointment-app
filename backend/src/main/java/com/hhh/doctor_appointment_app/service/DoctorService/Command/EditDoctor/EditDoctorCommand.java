@@ -35,17 +35,6 @@ public class EditDoctorCommand {
             Doctor existingDoctor = doctorRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
 
-            // Kiểm tra xem email trong edit request có khác với email của bác sĩ hiện tại hay không
-            if (!editDoctorRequest.getEmail().equals(existingDoctor.getProfile().getEmail())) {
-                // Nếu khác, kiểm tra xem email này có tồn tại trong hệ thống hay không (ngoại trừ bác sĩ hiện tại)
-                boolean isDuplicate = doctorRepository.existsByProfile_Email(editDoctorRequest.getEmail());
-                if (isDuplicate) {
-                    // Nếu email đã tồn tại, trả về lỗi duplicate
-                    apiResponse.duplicatedCode();
-                    return apiResponse;
-                }
-            }
-
             existingDoctor.getProfile().setFirstName(editDoctorRequest.getFirstName());
             existingDoctor.getProfile().setLastName(editDoctorRequest.getLastName());
             existingDoctor.getProfile().setGender(editDoctorRequest.isGender());
@@ -56,7 +45,7 @@ public class EditDoctorCommand {
             existingDoctor.setSpecialty(specialty);
             existingDoctor.getProfile().setAvatarFilePath(editDoctorRequest.getAvatarFilePath());
 
-            doctorRepository.saveAndFlush(existingDoctor);
+            doctorRepository.save(existingDoctor);
 
             DoctorResponse doctorResponse = doctorMapper.toResponse(existingDoctor);
             apiResponse.ok(doctorResponse);

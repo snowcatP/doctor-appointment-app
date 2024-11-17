@@ -21,7 +21,7 @@ public class EditDoctorRequest {
 
     private String phone;
 
-    @Email(message = "Email không hợp lệ")
+    @Email(message = "Invalid email")
     private String email;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // Định dạng ngày yyyy-MM-dd
