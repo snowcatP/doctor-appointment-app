@@ -21,6 +21,7 @@ import com.hhh.doctor_appointment_app.service.DoctorService.Query.SearchDoctors.
 import com.hhh.doctor_appointment_app.service.FirebaseStorageService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -102,7 +103,7 @@ public class DoctorController {
 
     @PostMapping(path = "/add-doctor", consumes = {MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> createAndUploadFileDoctorByAdmin(
-            @RequestParam("file") MultipartFile file,
+            @Param("file") MultipartFile file,
             @ModelAttribute @Valid AddDoctorRequest addDoctorRequest, // sử dụng ModelAttribute để bind dữ liệu
             BindingResult bindingResult) {
 
@@ -142,21 +143,22 @@ public class DoctorController {
 
     @PutMapping("/edit-doctor/{id}")
     public ResponseEntity<?> editDoctor(@PathVariable Long id,
-                                        @RequestParam("file") MultipartFile file,
+                                        @Param("file") MultipartFile file,
                                         @ModelAttribute @Valid EditDoctorRequest editDoctorRequest, // sử dụng ModelAttribute để bind dữ liệu
                                         BindingResult bindingResult){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + errors);
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
             // Upload file to Firebase Storage
-            String fileUrl = firebaseStorageService.uploadFile(file);
-            editDoctorRequest.setAvatarFilePath(fileUrl);
+            if(file != null){
+                String fileUrl = firebaseStorageService.uploadFile(file);
+                editDoctorRequest.setAvatarFilePath(fileUrl);
+            }
 
             apiResponse = editDoctorCommand.editDoctor(id,editDoctorRequest);
             // Check if the status code is 500 for duplicated code

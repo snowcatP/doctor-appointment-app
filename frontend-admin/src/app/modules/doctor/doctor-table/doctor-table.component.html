@@ -47,12 +47,20 @@
                         <span class="font-bold block mb-2">Email: </span>
                         <input pInputText placeholder="Email" formControlName="email" />
                     </p-inputGroup>
-                    <p-inputGroup>
+                    <p-inputGroup [style]="{display: 'flex;'}">
                         <p-toast />
                         <span class="font-bold block mb-2">Image profile: </span>
-                        <p-fileUpload mode="basic" chooseLabel="Choose" chooseIcon="pi pi-upload" name="demo[]"
-                            url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000" formControlName="avatarFilePath"
-                            [auto]="true" (onUpload)="onUpload($event)" />
+                        <p-fileUpload  
+                            url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000"
+                            [auto]="true" (onUpload)="onUpload($event)" >
+                            <ng-template pTemplate="content">
+                                <ul >
+                                    <li *ngIf="selectedFile!=null">
+                                        {{ selectedFile?.name }} - {{ selectedFile?.size }} bytes
+                                    </li>
+                                </ul>
+                            </ng-template>
+                        </p-fileUpload>
                     </p-inputGroup>
                     <div class="save-cancel-container">
                         <p-button class="save-btn" label="Save" icon="pi pi-check" severity="success" type="submit" />
@@ -63,8 +71,8 @@
 
                 </form>
             </p-dialog>
-            <p-button severity="danger" label="Delete" icon="pi pi-trash" (onClick)="deleteSelectedDoctor()"
-                [disabled]="!selectedDoctors || !selectedDoctors.length" />
+            <p-button severity="danger" label="Delete" icon="pi pi-trash" 
+                [disabled]="!selectedDoctors || !selectedDoctors.length" (onClick)="deleteMultipleDoctor()"/>
         </ng-template>
         <ng-template pTemplate="right">
             <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import"
@@ -73,17 +81,29 @@
         </ng-template>
     </p-toolbar>
     <p-confirmDialog />
-    
-    <p-table #myTab [value]="doctors" styleClass="p-datatable-striped" [paginator]="true"
-    [tableStyle]="{'min-width': '75rem'}" [rowHover]="true " dataKey="id" [rows]="25"
-    [globalFilterFields]="['firstName', 'lastName']" [(selection)]="selectedDoctors">
-    <ng-template pTemplate="header">
-            <p-dialog header="Edit Doctor's Information" [modal]="true" [(visible)]="viewDoctorDetailsVisible" [style]="{ width: '55rem' }">
-                <span class="p-text-secondary block mb-5">Type doctor's information.</span>
-                <form [formGroup]="formEditDoctor" (ngSubmit)="addNewDoctor()">
-                    <div class="edit-doctor-avatar">
-                        <img class="doctor-avatar" [src]="formEditDoctor.get('avatarFilePath').value" alt="">
+    <p-dialog header="Edit Doctor's Information" [modal]="true" [(visible)]="viewDoctorDetailsVisible" [style]="{ width: '55rem' }">
+        <span class="p-text-secondary block mb-5">Type doctor's information.</span>
+        <form [formGroup]="formEditDoctor" (ngSubmit)="editDoctor()">
+            <div class="doctor-details-form">
+
+                <div class="general-doctor-information">
+                    <p-image class="doctor-avatar" [preview]="true" width="150" height="150" [src]="formEditDoctor.get('avatarFilePath').value" alt="Doctor avatar"/>
+                    <div class="doctor-name" style="display: flex;">
+                        <label class="label" >Name: </label>
+                        <label>{{doctorFirstName}} {{doctorLastName}}</label>
                     </div>
+                    <div class="specialty">
+                        <label class="label" >Specialty: </label>
+                        <label>{{specialtyName}}</label>
+                    </div>
+                    <div class="reviews" style="display: flex;">
+                        <p-rating [(ngModel)]= "doctorAverageRating" [readonly]="true" [cancel]="false" />
+                        <div>
+                            Based on <p style="margin: 0 5px; color: #3B82F6; font-weight: bold;">{{doctorNumberOfFeedbacks}}</p>  reviews
+                        </div>
+                    </div>
+                </div>
+                <div>
                     <p-inputGroup>
                         <span class="font-bold block mb-2">First name: </span>
                         <input pInputText placeholder="First name" formControlName="firstName">
@@ -92,8 +112,8 @@
                     </p-inputGroup>
                     <p-inputGroup>
                         <span class="font-bold block mb-2">Gender: </span>
-                        <p-radioButton label="Male"  value="true" formControlName="gender" inputId="male" />
-                        <p-radioButton label="Female"  value="false" formControlName="gender" inputId="female" />
+                        <p-radioButton label="Male"  [value]="true" formControlName="gender" inputId="male" />
+                        <p-radioButton label="Female"  [value]="false" formControlName="gender" inputId="female" />
                     </p-inputGroup>
                     <p-inputGroup>
                         <span class="font-bold block mb-2">Password: </span>
@@ -122,21 +142,38 @@
                         <span class="font-bold block mb-2">Email: </span>
                         <input pInputText placeholder="Email" formControlName="email" />
                     </p-inputGroup>
-                    <p-inputGroup>
+                    <p-inputGroup [style]="{display: 'flex;'}">
                         <p-toast />
                         <span class="font-bold block mb-2">Image profile: </span>
-                        <p-fileUpload mode="basic" chooseLabel="Choose" chooseIcon="pi pi-upload" name="demo[]"
-                            url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000"
-                            [auto]="true" (onUpload)="onUpload($event)" />
+                        <p-fileUpload  
+                        url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000"
+                        [auto]="true" (onUpload)="onUpload($event)" >
+                        <ng-template pTemplate="content">
+                            <ul >
+                                <li *ngIf="selectedFile!=null">
+                                    {{ selectedFile?.name }} - {{ selectedFile?.size }} bytes
+                                </li>
+                            </ul>
+                        </ng-template>
+                    </p-fileUpload>
                     </p-inputGroup>
                     <div class="save-cancel-container">
                         <p-button class="save-btn" label="Save" icon="pi pi-check" severity="success" type="submit" />
                         <p-button class="cancel-btn" label="Cancel" icon="pi pi-times" severity="danger"
                             (onClick)="viewDoctorDetailsVisible = false" />
                     </div>
+                    
                     <p-inputGroup></p-inputGroup>
-                </form>
-            </p-dialog>
+                </div>
+            </div>
+            
+        </form>
+    </p-dialog>
+    <p-table #myTab [value]="doctors" styleClass="p-datatable-striped" [paginator]="true"
+    [tableStyle]="{'min-width': '75rem'}" [rowHover]="true " dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+    [globalFilterFields]="['firstName', 'lastName']" [(selection)]="selectedDoctors">
+    <ng-template pTemplate="header">
+            
             <tr>
                 <th style="width: 4rem">
                     <p-tableHeaderCheckbox />
@@ -199,6 +236,7 @@
 
         </ng-template>
         <ng-template pTemplate="body" let-doctor class="body">
+            
                 <tr *ngIf="!loadingFetchingData">
                     <td>
                         <p-tableCheckbox [value]="doctor" />
@@ -222,7 +260,7 @@
                     <td>{{doctor.dateOfBirth | date: 'dd-MM-yyyy'}}</td>
                     <td style="display: flex; justify-content: space-evenly;">
                         <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" severity="success" (onClick)="openEditDialog(doctor)" />
-                        <p-button  icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"   />
+                        <p-button  icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"  (onClick)="deleteSelectedDoctor(doctor)"  />
                     </td>
                 </tr>
                 <tr *ngIf="loadingFetchingData">
