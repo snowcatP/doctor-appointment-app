@@ -6728,3 +6728,6 @@ body { margin: 0; font-family: Roboto, sans-serif, "Helvetica Neue" ; }
 .p-dropdown-items {
 	padding-left: 0 !important;
 }
+.table-responsive {
+	min-height: 70vh;
+}

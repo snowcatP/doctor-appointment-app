@@ -6,55 +6,103 @@
           <div id="pat_appointments">
             <div class="card card-table mb-3">
               <div class="card-body">
-                <div class="table-responsive">
+                <div class="table-responsive" style="min-height: 70vh;">
                   <table class="table table-hover table-center mb-3">
                     <thead>
                       <tr>
-                        <th>ID</th>
                         <th>Doctor</th>
                         <th>Appointment Date</th>
                         <th>Status</th>
-                        <th></th>
+                        <th class="d-flex justify-content-end">
+                          <p-dropdown
+                          [options]="filterOptions"
+                          [(ngModel)]="selectedOption"
+                          [checkmark]="true"
+                          optionLabel="name"
+                          [showClear]="true"
+                          placeholder="Filter"
+                          resetFilterOnHide="true"
+                          [style]="{ 'min-width': '50px' }"
+                          (onChange)="applyFilter($event)"
+                        />
+                      </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let appointment of appointments">
-                        <td>{{appointment.id}}</td>
+                      <tr *ngFor="let appointment of filteredAppointments">
                         <td>
                           <h2 class="table-avatar">
-                            <a (click)="viewDoctorProfile(appointment.doctor.id)" class="avatar avatar-sm mr-3">
-                              <img class="avatar-img rounded-circle" [src]="appointment.doctor.avatarFilePath"
-                                alt="User Image" />
+                            <a class="avatar avatar-sm me-3">
+                              <p-image
+                                [src]="
+                                  appointment.doctor.avatarFilePath ||
+                                  'assets/images/user.png'
+                                "
+                                alt="Doctor Image"
+                                width="100%"
+                                [preview]="true"
+                                class="booking-doc-img"
+                              />
                             </a>
-                            <a (click)="viewDoctorProfile(appointment.doctor.id)">Dr. {{ appointment.doctor.firstName }}
-                              {{
-                              appointment.doctor.lastName }} <span>{{ appointment.doctor.specialty.specialtyName
-                                }}</span> </a>
+                            <a
+                              (click)="viewDoctorProfile(appointment.doctor.id)"
+                              >Dr. {{ appointment.doctor.firstName }}
+                              {{ appointment.doctor.lastName }}
+                              <span>{{
+                                appointment.doctor.specialty.specialtyName
+                              }}</span>
+                            </a>
                           </h2>
                         </td>
                         <td>
-                          {{ appointment.dateBooking | date: 'dd MMM yyyy' }}
+                          {{ appointment.dateBooking | date : "dd MMM yyyy" }}
                           <span class="d-block text-info">
-                            {{ appointment.dateBooking | date: 'hh:mm a' }}
+                            At {{ appointment.bookingHour }}
                           </span>
                         </td>
                         <td>
-                          <span class="badge badge-pill" [ngClass]="{
-                            'bg-primary-light': appointment.appointmentStatus === 'ACCEPT',
-                            'bg-info-light': appointment.appointmentStatus === 'RESCHEDULED',
-                                'bg-success-light': appointment.appointmentStatus === 'COMPLETED',
-                                'bg-warning-light': appointment.appointmentStatus === 'PENDING',
-                                'bg-danger-light': appointment.appointmentStatus === 'CANCELLED'
-                              }">
+                          <span
+                            class="badge badge-pill"
+                            [ngClass]="{
+                              'bg-primary-light':
+                                appointment.appointmentStatus === 'ACCEPT',
+                              'bg-info-light':
+                                appointment.appointmentStatus === 'RESCHEDULED',
+                              'bg-success-light':
+                                appointment.appointmentStatus === 'COMPLETED',
+                              'bg-warning-light':
+                                appointment.appointmentStatus === 'PENDING',
+                              'bg-danger-light':
+                                appointment.appointmentStatus === 'CANCELLED'
+                            }"
+                          >
                             {{ appointment.appointmentStatus }}
                           </span>
                         </td>
                         <td class="text-right">
-                          <div class="table-action">
-                            <a href="javascript:void(0);" class="btn btn-sm bg-info-light"
-                              (click)="viewAppointmentDetails(appointment)">
+                          <div class="table-action d-flex justify-content-end">
+                            <button
+                              class="btn btn-sm bg-warning-light me-2"
+                              (click)="viewAppointmentDetails(appointment)"
+                              type="button"
+                            >
                               <i class="far fa-eye"></i> View
-                            </a>
+                            </button>
+                            <button
+                              *ngIf="appointment.appointmentStatus === 'PENDING'"
+                              class="btn btn-sm bg-danger-light me-2"
+                              (click)="onCancelAppointment(appointment.id)"
+                            >
+                              <i class="fas fa-times"></i> Cancel
+                            </button>
+                            <!-- Show Reschedule and Complete buttons if status is ACCEPT -->
+                            <button
+                              *ngIf="appointment.appointmentStatus === 'ACCEPT'"
+                              class="btn btn-sm bg-info-light me-2"
+                              (click)="openRescheduleDialog(appointment)"
+                            >
+                              <i class="fa-solid fa-rotate"></i> Reschedule
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -62,43 +110,69 @@
                   </table>
                 </div>
                 <!-- Paginator Component -->
-                <p-paginator [rows]="pageSize" [totalRecords]="totalAppointments" [rowsPerPageOptions]="[10,20]"
-                  (onPageChange)="handlePageEvent($event)"></p-paginator>
+                <p-paginator
+                  [rows]="pageSize"
+                  [totalRecords]="totalAppointments"
+                  [rowsPerPageOptions]="[10, 20]"
+                  (onPageChange)="handlePageEvent($event)"
+                  [showCurrentPageReport]="true"
+                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                ></p-paginator>
               </div>
             </div>
           </div>
-
-
-
           <!-- Appointment Detail Dialog -->
-          <p-dialog header="Appointment Details" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+          <p-dialog
+            header="Appointment Details"
+            [modal]="true"
+            [(visible)]="visible"
+            [style]="{ width: '25rem' }"
+          >
             <div *ngIf="selectedAppointment">
-              <p><strong>Doctor:</strong><a (click)="viewDoctorProfile(selectedAppointment.doctor.id)">Dr. {{
-                selectedAppointment.doctor.firstName }} {{
-                  selectedAppointment.doctor.lastName }}</a></p>
-              <p><strong>Appointment Date:</strong> {{ selectedAppointment.dateBooking | date: 'dd MMM yyyy, hh:mm a' }}
+              <p>
+                <strong>Doctor:</strong
+                ><a (click)="viewDoctorProfile(selectedAppointment.doctor.id)"
+                  >Dr. {{ selectedAppointment.doctor.firstName }}
+                  {{ selectedAppointment.doctor.lastName }}</a
+                >
               </p>
-              <p><strong>Status:</strong>
-                <span class="badge badge-pill" [ngClass]="{
-                  'bg-primary-light': selectedAppointment.appointmentStatus === 'ACCEPT',
-                  'bg-info-light': selectedAppointment.appointmentStatus === 'RESCHEDULED',
-                  'bg-success-light': selectedAppointment.appointmentStatus === 'COMPLETED',
-                  'bg-warning-light': selectedAppointment.appointmentStatus === 'PENDING',
-                  'bg-danger-light': selectedAppointment.appointmentStatus === 'CANCELLED'
-                }">
+              <p>
+                <strong>Appointment Date:</strong>
+                {{
+                  selectedAppointment.dateBooking
+                    | date : "dd MMM yyyy, hh:mm a"
+                }}
+              </p>
+              <p>
+                <strong>Status:</strong>
+                <span
+                  class="badge badge-pill"
+                  [ngClass]="{
+                    'bg-primary-light':
+                      selectedAppointment.appointmentStatus === 'ACCEPT',
+                    'bg-info-light':
+                      selectedAppointment.appointmentStatus === 'RESCHEDULED',
+                    'bg-success-light':
+                      selectedAppointment.appointmentStatus === 'COMPLETED',
+                    'bg-warning-light':
+                      selectedAppointment.appointmentStatus === 'PENDING',
+                    'bg-danger-light':
+                      selectedAppointment.appointmentStatus === 'CANCELLED'
+                  }"
+                >
                   {{ selectedAppointment.appointmentStatus }}
                 </span>
               </p>
 
               <p><strong>Reason:</strong> {{ selectedAppointment.reason }}</p>
-              <p><strong>Patient Name:</strong> {{ selectedAppointment.fullName }}</p>
+              <p>
+                <strong>Patient Name:</strong>
+                {{ selectedAppointment.fullName }}
+              </p>
               <p><strong>Phone:</strong> {{ selectedAppointment.phone }}</p>
             </div>
-
           </p-dialog>
-
         </mat-tab>
-
 
         <mat-tab label="Medical Records">
           <!-- Medical Records Tab -->
@@ -121,55 +195,95 @@
                     </thead>
                     <tbody>
                       <tr *ngFor="let medicalRecord of medicalRecords">
-                        <td>{{medicalRecord.id}}</td>
-                        <td>{{medicalRecord.dateCreated | date: 'dd MMM yyyy, hh:mm a' }}</td>
+                        <td>{{ medicalRecord.id }}</td>
                         <td>
                           {{
-                            medicalRecord.appointmentResponse?.dateBooking | date : "dd MMM yyyy"
-                            }}
-                            <span class="d-block text-info">
-                              {{medicalRecord.appointmentResponse?.bookingHour}}
-                            </span>
+                            medicalRecord.dateCreated
+                              | date : "dd MMM yyyy, hh:mm a"
+                          }}
                         </td>
                         <td>
-                          <span class="badge badge-pill" [ngClass]="{
-                              'bg-primary-light':
-                              medicalRecord.appointmentResponse?.appointmentStatus === 'ACCEPT',
-                              'bg-info-light':
-                              medicalRecord.appointmentResponse?.appointmentStatus ===
-                                'RESCHEDULED',
-                              'bg-success-light':
-                              medicalRecord.appointmentResponse?.appointmentStatus ===
-                                'COMPLETED',
-                              'bg-warning-light':
-                              medicalRecord.appointmentResponse?.appointmentStatus === 'PENDING',
-                              'bg-danger-light':
-                              medicalRecord.appointmentResponse?.appointmentStatus ===
-                                'CANCELLED'
-                            }">
-                            {{ medicalRecord.appointmentResponse?.appointmentStatus }}
+                          {{
+                            medicalRecord.appointmentResponse?.dateBooking
+                              | date : "dd MMM yyyy"
+                          }}
+                          <span class="d-block text-info">
+                            {{ medicalRecord.appointmentResponse?.bookingHour }}
                           </span>
                         </td>
-                        <td>{{medicalRecord.description}}</td>
-                        <td><a href={{medicalRecord.filePath}} target="_blank">File</a></td>
+                        <td>
+                          <span
+                            class="badge badge-pill"
+                            [ngClass]="{
+                              'bg-primary-light':
+                                medicalRecord.appointmentResponse
+                                  ?.appointmentStatus === 'ACCEPT',
+                              'bg-info-light':
+                                medicalRecord.appointmentResponse
+                                  ?.appointmentStatus === 'RESCHEDULED',
+                              'bg-success-light':
+                                medicalRecord.appointmentResponse
+                                  ?.appointmentStatus === 'COMPLETED',
+                              'bg-warning-light':
+                                medicalRecord.appointmentResponse
+                                  ?.appointmentStatus === 'PENDING',
+                              'bg-danger-light':
+                                medicalRecord.appointmentResponse
+                                  ?.appointmentStatus === 'CANCELLED'
+                            }"
+                          >
+                            {{
+                              medicalRecord.appointmentResponse
+                                ?.appointmentStatus
+                            }}
+                          </span>
+                        </td>
+                        <td>{{ medicalRecord.description }}</td>
+                        <td>
+                          <a [href]="medicalRecord.filePath" target="_blank"
+                            >File</a
+                          >
+                        </td>
                         <td>
                           <h2 class="table-avatar">
-                            <a (click)="viewDoctorProfile(medicalRecord.doctorResponse.id)"
-                              class="avatar avatar-sm mr-3">
-                              <img class="avatar-img rounded-circle"
-                                [src]="medicalRecord.doctorResponse.avatarFilePath || 'assets/images/doctors/doctor-thumb-01.jpg'"
-                                alt="User Image" />
+                            <a
+                              (click)="
+                                viewDoctorProfile(
+                                  medicalRecord.doctorResponse.id
+                                )
+                              "
+                              class="avatar avatar-sm mr-3"
+                            >
+                              <img
+                                class="avatar-img rounded-circle"
+                                [src]="
+                                  medicalRecord.doctorResponse.avatarFilePath ||
+                                  'assets/images/user.png'
+                                "
+                                alt="User Image"
+                              />
                             </a>
-                            <a (click)="viewDoctorProfile(medicalRecord.doctorResponse.id)">Dr. {{
-                              medicalRecord.doctorResponse.firstName }} {{
-                              medicalRecord.doctorResponse.lastName }} <span>{{
-                                medicalRecord.doctorResponse.specialty.specialtyName }}</span> </a>
+                            <a
+                              (click)="
+                                viewDoctorProfile(
+                                  medicalRecord.doctorResponse.id
+                                )
+                              "
+                              >Dr. {{ medicalRecord.doctorResponse.firstName }}
+                              {{ medicalRecord.doctorResponse.lastName }}
+                              <span>{{
+                                medicalRecord.doctorResponse.specialty
+                                  .specialtyName
+                              }}</span>
+                            </a>
                           </h2>
                         </td>
                         <td class="text-right">
                           <div class="table-action">
-                            <a href="javascript:void(0);" class="btn btn-sm bg-info-light"
-                              (click)="viewMedicalRecordDetails(medicalRecord)">
+                            <a
+                              class="btn btn-sm bg-info-light"
+                              (click)="viewMedicalRecordDetails(medicalRecord)"
+                            >
                               <i class="far fa-eye"></i> View
                             </a>
                           </div>
@@ -179,131 +293,103 @@
                   </table>
                 </div>
                 <!-- Paginator Component -->
-                <p-paginator [rows]="pageSize" [totalRecords]="totalMedicalRecords" [rowsPerPageOptions]="[10,20]"
-                  (onPageChange)="handlePageEvent($event)"></p-paginator>
+                <p-paginator
+                  [rows]="pageSize"
+                  [totalRecords]="totalMedicalRecords"
+                  [rowsPerPageOptions]="[10, 20]"
+                  (onPageChange)="handlePageEvent($event)"
+                ></p-paginator>
               </div>
             </div>
           </div>
           <!-- Medical Record Detail Dialog -->
-          <p-dialog header="Medical Record Details" [modal]="true" [(visible)]="visibleMedicalRecord"
-            [style]="{ width: '25rem' }">
+          <p-dialog
+            header="Medical Record Details"
+            [modal]="true"
+            [(visible)]="visibleMedicalRecord"
+            [style]="{ width: '25rem' }"
+          >
             <div *ngIf="selectedMedicalRecord">
-              <p><strong>Doctor:</strong>
-                <a (click)="viewDoctorProfile(selectedMedicalRecord.doctorResponse.id)">Dr. {{
-                  selectedMedicalRecord.doctorResponse.firstName }} {{
-                  selectedMedicalRecord.doctorResponse.lastName }}</a>
+              <p>
+                <strong>Doctor:</strong>
+                <a
+                  (click)="
+                    viewDoctorProfile(selectedMedicalRecord.doctorResponse.id)
+                  "
+                  >Dr. {{ selectedMedicalRecord.doctorResponse.firstName }}
+                  {{ selectedMedicalRecord.doctorResponse.lastName }}</a
+                >
               </p>
 
-
-
-              <p><strong>Created Date:</strong> {{ selectedMedicalRecord.dateCreated | date: 'dd MMM yyyy, hh:mm a' }}
+              <p>
+                <strong>Created Date:</strong>
+                {{
+                  selectedMedicalRecord.dateCreated
+                    | date : "dd MMM yyyy, hh:mm a"
+                }}
               </p>
-              <p><strong>Last Modified:</strong> {{ selectedMedicalRecord.lastModified | date: 'dd MMM yyyy, hh:mm a' }}
+              <p>
+                <strong>Last Modified:</strong>
+                {{
+                  selectedMedicalRecord.lastModified
+                    | date : "dd MMM yyyy, hh:mm a"
+                }}
               </p>
-              <p><strong>Description:</strong> {{ selectedMedicalRecord.description }}</p>
+              <p>
+                <strong>Description:</strong>
+                {{ selectedMedicalRecord.description }}
+              </p>
               <p><strong>File:</strong></p>
               <div class="doctor-img">
-                <p-image [src]="selectedMedicalRecord?.filePath || 'assets/images/doctors/doctor-thumb-01.jpg'"
-                  class="img-fluid" alt="Doctor Image" width="150" [preview]="true" />
+                <p-image
+                  [src]="
+                    selectedMedicalRecord?.filePath || 'assets/images/user.png'
+                  "
+                  class="img-fluid"
+                  alt="Doctor Image"
+                  width="150"
+                  [preview]="true"
+                />
               </div>
             </div>
-
           </p-dialog>
         </mat-tab>
-
       </mat-tab-group>
     </div>
   </div>
 </div>
 
-<!-- 
-  <tr>
-    <td>
-      <h2 class="table-avatar">
-        <a
-          href="doctor-profile.html"
-          class="avatar avatar-sm mr-2"
-        >
-          <img
-            class="avatar-img rounded-circle"
-            src="assets/images/doctors/doctor-thumb-03.jpg"
-            alt="User Image"
-          />
-        </a>
-        <a href="doctor-profile.html"
-          >Dr. Deborah Angel <span>Cardiology</span></a
-        >
-      </h2>
-    </td>
-    <td>
-      11 Nov 2019
-      <span class="d-block text-info">11.00 AM</span>
-    </td>
-    <td>10 Nov 2019</td>
-    <td>
-      <span class="badge badge-pill bg-danger-light"
-        >Cancelled</span
-      >
-    </td>
-    <td class="text-right">
-      <div class="table-action">
-        <a
-          href="javascript:void(0);"
-          class="btn btn-sm bg-primary-light"
-        >
-          <i class="fas fa-print"></i> Print
-        </a>
-        <a
-          href="javascript:void(0);"
-          class="btn btn-sm bg-info-light"
-        >
-          <i class="far fa-eye"></i> View
-        </a>
-      </div>
-    </td>
-  </tr>
-  <tr>  
-    <td>
-      <h2 class="table-avatar">
-        <a
-          href="doctor-profile.html"
-          class="avatar avatar-sm mr-2"
-        >
-          <img
-            class="avatar-img rounded-circle"
-            src="assets/images/doctors/doctor-thumb-04.jpg"
-            alt="User Image"
-          />
-        </a>
-        <a href="doctor-profile.html"
-          >Dr. Sofia Brient <span>Urology</span></a
-        >
-      </h2>
-    </td>
-    <td>
-      10 Nov 2019
-      <span class="d-block text-info">3.00 PM</span>
-    </td>
-    <td>10 Nov 2019</td>
-    <td>
-      <span class="badge badge-pill bg-warning-light"
-        >Pending</span
-      >
-    </td>
-    <td class="text-right">
-      <div class="table-action">
-        <a
-          href="javascript:void(0);"
-          class="btn btn-sm bg-primary-light"
-        >
-          <i class="fas fa-print"></i> Print
-        </a>
-        <a
-          href="javascript:void(0);"
-          class="btn btn-sm bg-info-light"
-        >
-          <i class="far fa-eye"></i> View
-        </a>
-      </div>
-    </td>
-  </tr> -->
+<!-- Reschedule Dialog -->
+<p-dialog
+header="Reschedule Appointment"
+[(visible)]="rescheduleVisible"
+[modal]="true"
+[style]="{ width: '55rem' }"
+>
+<!-- Schedule -->
+<app-schedule
+  [isReschedule]="true"
+  [selectedApp]="selectedAppointment"
+  (selectedSlot)="handleSelectedSlot($event)"
+></app-schedule>
+<!-- Schedule -->
+
+<div class="d-flex justify-content-between mx-2">
+  <button
+    mat-raised-button
+    extended
+    type="button"
+    (click)="closeRescheduleDialog()"
+  >
+    Cancel
+  </button>
+  <button
+    type="submit"
+    mat-flat-button
+    extended
+    (click)="submitRescheduleAppointment()"
+  >
+    Done
+  </button>
+</div>
+</p-dialog>

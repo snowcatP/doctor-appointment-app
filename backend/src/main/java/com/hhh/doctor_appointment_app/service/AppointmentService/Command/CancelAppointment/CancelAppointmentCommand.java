@@ -21,11 +21,10 @@ public class CancelAppointmentCommand {
     @Autowired
     private AppointmentMapper appointmentMapper;
 
-    @PreAuthorize("hasRole('DOCTOR')")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'PATIENT')")
     public ApiResponse<Object> cancelAppointmentByDoctor(Long id) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try {
-            // Tìm kiếm Appointment theo id
             Appointment appointment = appointmentRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Appointment Not Found"));
 
@@ -35,11 +34,8 @@ public class CancelAppointmentCommand {
             }
 
             appointment.setAppointmentState(new CancelledState());
-
-            // Lưu lại appointment với trạng thái CANCELLED
             appointmentRepository.saveAndFlush(appointment);
 
-            // Tạo phản hồi từ Appointment sau khi thay đổi
             AppointmentResponse appointmentResponse = appointmentMapper.toResponse(appointment);
             apiResponse.setMessage("Appointment Cancelled Successfully!");
             apiResponse.ok(appointmentResponse);

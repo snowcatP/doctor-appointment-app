@@ -35,6 +35,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
 import { SharedModule } from '../../shared/shared.module';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { SharedModule } from '../../shared/shared.module';
     MatButtonModule,
     ConfirmPopupModule,
     SharedModule,
+    DropdownModule
   ],
   providers: [ConfirmationService],
 })

@@ -12,10 +12,7 @@ import { FullCalendarComponent } from '@fullcalendar/angular';
 import listPlugin from '@fullcalendar/list';
 import { ConfirmPopup } from 'primeng/confirmpopup';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import {
-  AppointmentSlot,
-  TimeSlot,
-} from '../../../../core/models/booking.model';
+import { TimeSlot } from '../../../../core/models/booking.model';
 
 @Component({
   selector: 'app-doctor-calendar',
@@ -32,19 +29,7 @@ export class DoctorCalendarComponent implements OnInit {
   selectedAppointment: AppointmentResponse = new AppointmentResponse();
   visible: boolean = false;
   visibleSchedule: boolean = false;
-  schedules: any[] = [];
   timeSlotSelected: TimeSlot;
-  dateToday: Date = new Date();
-  timeSchedulesMorning: any[] = [
-    { time: '09:00 - 09:30' },
-    { time: '10:00 - 10:30' },
-    { time: '11:00 - 11:30' },
-  ];
-  timeSchedulesAfternoon: any[] = [
-    { time: '14:00 - 14:30' },
-    { time: '15:00 - 15:30' },
-    { time: '16:00 - 16:30' },
-  ];
   constructor(
     private appointmentService: AppointmentService,
     private confirmationService: ConfirmationService,
@@ -54,7 +39,6 @@ export class DoctorCalendarComponent implements OnInit {
   ngOnInit(): void {
     this.calendarInit();
     this.getData();
-    this.generateAppointmentSlots();
   }
 
   calendarInit() {
@@ -99,7 +83,7 @@ export class DoctorCalendarComponent implements OnInit {
       bookingHour: this.timeSlotSelected.time,
     };
     this.appointmentService
-      .rescheduleAppointmentByDoctor(this.selectedAppointment.id, bookingData)
+      .rescheduleAppointment(this.selectedAppointment.id, bookingData)
       .subscribe({
         next: (res) => {
           if (res.statusCode === 200) {
@@ -135,62 +119,6 @@ export class DoctorCalendarComponent implements OnInit {
   closeModals() {
     this.visibleSchedule = false;
     this.visible = false;
-  }
-
-  generateAppointmentSlots() {
-    this.schedules = [this.generateSchedule(0), this.generateSchedule(7)];
-  }
-
-  generateSchedule(dateStart: number): AppointmentSlot[] {
-    const schedule: AppointmentSlot[] = [];
-    let currentDate: Date = new Date(
-      Date.now() + dateStart * 24 * 60 * 60 * 1000
-    );
-
-    let dayLoop = dateStart;
-    while (schedule.length < 6) {
-      const dayWeek = this.mapDayWeek(
-        currentDate.toLocaleDateString('vi-VN', {
-          weekday: 'short',
-        })
-      );
-
-      // Skip Sunday
-      if (dayWeek !== 'Sun') {
-        const date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}`;
-        const slotsMorning: TimeSlot[] = [];
-        const slotsAfternoon: TimeSlot[] = [];
-
-        // gen timeslots for morning
-        this.timeSchedulesMorning.forEach((time) => {
-          slotsMorning.push(new TimeSlot(time.time, currentDate));
-        });
-
-        // gen timeslots for afternoon
-        this.timeSchedulesAfternoon.forEach((time) => {
-          slotsAfternoon.push(new TimeSlot(time.time, currentDate));
-        });
-        schedule.push(
-          new AppointmentSlot(dayWeek, date, slotsMorning, slotsAfternoon)
-        );
-      }
-      dayLoop++;
-      currentDate = new Date(Date.now() + dayLoop * 24 * 60 * 60 * 1000);
-    }
-    return schedule;
-  }
-
-  mapDayWeek(dayWeek: string) {
-    const dayMap = new Map<string, string>([
-      ['CN', 'Sun'],
-      ['Th 2', 'Mon'],
-      ['Th 3', 'Tue'],
-      ['Th 4', 'Wed'],
-      ['Th 5', 'Thu'],
-      ['Th 6', 'Fri'],
-      ['Th 7', 'Sat'],
-    ]);
-    return dayMap.get(dayWeek) || dayWeek;
   }
 
   handleLeaveHoverEvent(arg: any) {
@@ -236,14 +164,16 @@ export class DoctorCalendarComponent implements OnInit {
     this.appointments.forEach((appointment) => {
       const date = this.formatDate(appointment.dateBooking);
       const bookingHours = this.formatBookingHour(appointment.bookingHour);
-      this.appointmentEvents.push({
-        id: appointment.id.toString(),
-        title: `Meet ${appointment.fullName}`,
-        start: `${date}T${bookingHours[0]}`,
-        end: `${date}T${bookingHours[1]}`,
-        backgroundColor: this.statusColor(appointment.appointmentStatus),
-        groupId: `${appointment.appointmentStatus}`,
-      } as EventInput);
+      if (appointment.appointmentStatus != 'RESCHEDULED') {
+        this.appointmentEvents.push({
+          id: appointment.id.toString(),
+          title: `Meet ${appointment.fullName}`,
+          start: `${date}T${bookingHours[0]}`,
+          end: `${date}T${bookingHours[1]}`,
+          backgroundColor: this.statusColor(appointment.appointmentStatus),
+          groupId: `${appointment.appointmentStatus}`,
+        } as EventInput);
+      }
     });
     this.calendarOptions.events = this.appointmentEvents;
     this.isLoading = false;

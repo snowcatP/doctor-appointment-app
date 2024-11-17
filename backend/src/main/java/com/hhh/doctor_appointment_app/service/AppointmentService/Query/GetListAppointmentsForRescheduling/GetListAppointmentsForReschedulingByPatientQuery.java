@@ -1,6 +1,7 @@
 package com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListAppointmentsForRescheduling;
 
 import com.hhh.doctor_appointment_app.dto.mapper.AppointmentMapper;
+import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.GetAppointmentForReschedulingRequest;
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentBookedResponse;
 import com.hhh.doctor_appointment_app.entity.Appointment;
 import com.hhh.doctor_appointment_app.entity.Doctor;
@@ -11,7 +12,6 @@ import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.service.UserService.Query.FindUserByEmail.FindUserByEmailQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class GetListAppointmentsForReschedulingQuery {
+public class GetListAppointmentsForReschedulingByPatientQuery {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
@@ -32,14 +32,14 @@ public class GetListAppointmentsForReschedulingQuery {
 
     @Autowired
     private DoctorRepository doctorRepository;
-    @PreAuthorize("hasRole('DOCTOR')")
-    public List<AppointmentBookedResponse> getListAppointmentsForRescheduling() {
-        var context = SecurityContextHolder.getContext();
-        String username = context.getAuthentication().getName();
-        User user = findUserByEmailQuery.findUserByEmail(username)
-                .orElseThrow(() -> new NotFoundException("User not found"));
 
-        Doctor doctor = doctorRepository.findDoctorByProfile_Email(username).orElseThrow(() -> new NotFoundException("Doctor Not Found"));
+    @PreAuthorize("hasRole('PATIENT')")
+    public List<AppointmentBookedResponse> getListAppointmentsForReschedulingByPatient(GetAppointmentForReschedulingRequest request) {
+        User user = findUserByEmailQuery.findUserByEmail(request.getDoctorEmail())
+                .orElseThrow(() -> new NotFoundException("Doctor not found"));
+
+        Doctor doctor = doctorRepository.findDoctorByProfile_Email(request.getDoctorEmail())
+                .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
         LocalDateTime currentDateTime = LocalDateTime.now().plusDays(-1);
         LocalDateTime endDateTime = LocalDateTime.now().plusDays(14);
         Date currentDate = Date.from(currentDateTime.atZone(ZoneId.systemDefault()).toInstant());
