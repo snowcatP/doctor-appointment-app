@@ -14,9 +14,11 @@ import com.hhh.doctor_appointment_app.service.NotificationService.Implement.Book
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.UUID;
 
 @Service
 public class CreateAppointmentByGuestCommand {
@@ -32,6 +34,7 @@ public class CreateAppointmentByGuestCommand {
     @Autowired
     private AppointmentMapper appointmentMapper;
 
+    @Transactional
     public ApiResponse<Object> createAppointmentByGuest(AppointmentByGuestRequest appointmentByGuestRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
@@ -54,6 +57,10 @@ public class CreateAppointmentByGuestCommand {
                         .message("The booking date and time must be in the future.")
                         .build();
             }
+
+            // Generate reference code for the new appointment
+            String referenceCode = UUID.randomUUID().toString();
+
             Appointment appointment = Appointment.builder()
                     .fullName(appointmentByGuestRequest.getFullName())
                     .phone(appointmentByGuestRequest.getPhone())
@@ -64,6 +71,7 @@ public class CreateAppointmentByGuestCommand {
                     .cusType("GUEST")
                     .doctor(doctor)
                     .appointmentStatus(AppointmentStatus.PENDING)
+                    .referenceCode(referenceCode)
                     .build();
 
             appointmentRepository.saveAndFlush(appointment);
@@ -86,7 +94,7 @@ public class CreateAppointmentByGuestCommand {
         catch (Exception ex){
             return ApiResponse.builder()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .message("Appointment Created Failed !")
+                    .message(ex.getMessage())
                     .build();
         }
     }

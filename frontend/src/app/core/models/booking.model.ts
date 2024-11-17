@@ -99,10 +99,12 @@ export class TimeSlot {
   time: string;
   date: Date;
   isBooked: boolean;
+  isPassedIn: boolean;
   constructor(time: string, date: Date) {
     this.time = time;
     this.date = date;
     this.isBooked = false;
+    this.isPassedIn = false;
   }
 }
 

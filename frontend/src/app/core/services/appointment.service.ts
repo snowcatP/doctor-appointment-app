@@ -7,9 +7,15 @@ import {
   BookingDataPatient,
 } from '../models/booking.model';
 import { host } from '../../../environments/environment';
-import { Appointment, RescheduleAppointment } from '../models/appointment.model';
+import {
+  GetAppointmentForReschedulingRequest,
+  RescheduleAppointment,
+} from '../models/appointment.model';
 import { ApiResponse } from '../models/doctor.model';
-import { AppointmentResponse } from '../models/appointment.model';
+import {
+  AppointmentResponse,
+  ReferenceCodeRequest,
+} from '../models/appointment.model';
 
 @Injectable({
   providedIn: 'root',
@@ -60,7 +66,11 @@ export class AppointmentService {
     this.appointmentDataPatient.next(appointment);
   }
 
-  getAppointmentsOfPatientByPatientId(id: number, page: number, size: number): Observable<any> {
+  getAppointmentsOfPatientByPatientId(
+    id: number,
+    page: number,
+    size: number
+  ): Observable<any> {
     const url = `${host}/api/appointment/list/patient/${id}?page=${page}&size=${size}`;
     return this.http.get<any>(url);
   }
@@ -72,12 +82,12 @@ export class AppointmentService {
 
   changeStatusAppointmentByDoctor(id: number): Observable<any> {
     const url = `${host}/api/appointment/change-status/${id}`;
-    return this.http.put<ApiResponse>(url,id);
+    return this.http.put<ApiResponse>(url, id);
   }
 
   cancelAppointmentByDoctor(id: number): Observable<any> {
     const url = `${host}/api/appointment/cancel/${id}`;
-    return this.http.put<ApiResponse>(url,id);
+    return this.http.put<ApiResponse>(url, id);
   }
 
   getAppointmentsForRescheduling(): Observable<AppointmentsBooked[]> {
@@ -86,8 +96,27 @@ export class AppointmentService {
     );
   }
 
-  rescheduleAppointmentByDoctor(id: number, rescheduleAppointment: RescheduleAppointment): Observable<any>{
+  getAppointmentsForReschedulingByPatient(
+    request: GetAppointmentForReschedulingRequest
+  ): Observable<AppointmentsBooked[]> {
+    return this.http.post<AppointmentsBooked[]>(
+      `${host}/api/appointment/get-appointments-for-rescheduling-by-patient`,
+      request
+    );
+  }
+
+  rescheduleAppointment(
+    id: number,
+    rescheduleAppointment: RescheduleAppointment
+  ): Observable<any> {
     const url = `${host}/api/appointment/reschedule/${id}`;
-    return this.http.put<ApiResponse>(url,rescheduleAppointment);
+    return this.http.put<ApiResponse>(url, rescheduleAppointment);
+  }
+
+  getAppointmentByReferenceCode(
+    referenceCodeRequest: ReferenceCodeRequest
+  ): Observable<any> {
+    const url = `${host}/api/appointment/search/reference-code`;
+    return this.http.post<ApiResponse>(url, referenceCodeRequest);
   }
 }

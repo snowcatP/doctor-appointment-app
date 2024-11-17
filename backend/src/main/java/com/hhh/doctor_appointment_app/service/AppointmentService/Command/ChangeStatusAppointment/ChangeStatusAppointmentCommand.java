@@ -4,6 +4,7 @@ import com.hhh.doctor_appointment_app.dto.mapper.AppointmentMapper;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentResponse;
 import com.hhh.doctor_appointment_app.entity.Appointment;
+import com.hhh.doctor_appointment_app.enums.AppointmentStatus;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
@@ -11,9 +12,17 @@ import com.hhh.doctor_appointment_app.repository.PatientRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 @Service
 public class ChangeStatusAppointmentCommand {
@@ -37,12 +46,49 @@ public class ChangeStatusAppointmentCommand {
         try {
             Appointment appointment = appointmentRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Appointment Not Found"));
-            appointment.nextState();
 
+            // Lấy trạng thái hiện tại
+            AppointmentStatus currentStatus = appointment.getAppointmentStatus();
+            LocalDateTime now = LocalDateTime.now();
+
+            // Chuyển đổi `dateBooking` và `bookingHour` thành `LocalDateTime`
+            LocalDate dateBooking = appointment.getDateBooking().toInstant()
+                    .atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+
+            String bookingHour = appointment.getBookingHour();
+            LocalTime bookingStartTime;
+
+            try {
+                // Tách giờ bắt đầu
+                String startTime = bookingHour.split(" - ")[0];
+                bookingStartTime = LocalTime.parse(startTime, DateTimeFormatter.ofPattern("HH:mm"));
+            } catch (DateTimeParseException | ArrayIndexOutOfBoundsException e) {
+                throw new IllegalArgumentException("Invalid bookingHour format. Expected format: 'HH:mm - HH:mm'", e);
+            }
+
+            LocalDateTime appointmentDateTime = LocalDateTime.of(dateBooking, bookingStartTime);
+
+            // Logic chuyển đổi trạng thái
+            if (currentStatus == AppointmentStatus.PENDING) {
+                // Chuyển từ PENDING -> ACCEPT
+                appointment.setAppointmentStatus(AppointmentStatus.ACCEPT);
+                apiResponse.setMessage("Appointment status changed from PENDING to ACCEPT.");
+            } else if ((currentStatus == AppointmentStatus.ACCEPT || currentStatus == AppointmentStatus.RESCHEDULED) &&
+                    now.isAfter(appointmentDateTime)) {
+                // Chuyển từ ACCEPT/RESCHEDULED -> COMPLETED nếu đã qua thời gian hẹn
+                appointment.setAppointmentStatus(AppointmentStatus.COMPLETED);
+                apiResponse.setMessage("Appointment status changed to COMPLETED.");
+            } else {
+                apiResponse.setMessage("Cannot change status to COMPLETED before appointment time.");
+                apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+                return apiResponse;
+            }
+
+            // Lưu trạng thái mới
             appointmentRepository.saveAndFlush(appointment);
             AppointmentResponse appointmentResponse = appointmentMapper.toResponse(appointment);
-            apiResponse.setMessage("Change Status Successfully !");
             apiResponse.ok(appointmentResponse);
+
             return apiResponse;
 
 

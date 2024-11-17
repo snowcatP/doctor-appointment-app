@@ -9,12 +9,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
-    @Query("SELECT a FROM Appointment a")
+    @Query("SELECT a FROM Appointment a ORDER BY a.dateBooking desc")
     Page<Appointment> getAppointmentsWithPage(Pageable pageable);
 
     Page<Appointment> findByDoctorId(Long doctorId, Pageable pageable);
@@ -33,7 +35,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
     Page<Appointment> findByDoctor_Profile_Email(String email, Pageable pageable);
 
     @Query("SELECT a FROM Appointment a WHERE a.doctor.profile.email = :email AND " +
-            "LOWER(a.fullName) LIKE LOWER(CONCAT('%', :patientName, '%'))")
+            "LOWER(a.fullName) LIKE LOWER(CONCAT('%', :patientName, '%')) ORDER BY a.dateBooking desc")
     Page<Appointment> findByDoctorEmailAndPatientNameContainingIgnoreCase(
             @Param("email") String email,
             @Param("patientName") String patientName,
@@ -42,4 +44,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
 
 
     Page<Appointment> findByPatient_Id(Long id, Pageable pageable);
+
+    Optional<Appointment> findAppointmentByReferenceCode(String referenceCode);
 }

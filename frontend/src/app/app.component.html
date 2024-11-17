@@ -1,9 +1,9 @@
 <div class="app-container">
   <app-header></app-header>
-  <main class="p-0">
+  <main class="p-0" style="min-height: 80vh;">
     <router-outlet></router-outlet>
   </main>
   <app-footer></app-footer>
 </div>
 <p-scrollTop styleClass="custom-scrolltop"/>
-<p-toast position="bottom-left" key="messageToast" />
+<p-toast position="bottom-left" key="messageToast" [life]="2000"/>

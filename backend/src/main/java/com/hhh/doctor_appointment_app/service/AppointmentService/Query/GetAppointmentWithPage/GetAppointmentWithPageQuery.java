@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class GetAppointmentWithPageQuery {
 
     @PreAuthorize("hasRole('ADMIN')")
     public PageResponse<List<AppointmentResponse>> getAppointmentsWithPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page-1, size, Sort.by("dateBooking").descending());
         Page<Appointment> appointmentPage = appointmentRepository.getAppointmentsWithPage(pageable);
 
         //Convert entities to responses

@@ -27,6 +27,8 @@ export class DoctorMypatientComponent {
         if (response.statusCode === 200) {
           this.patients = response.data;
           this.totalPatients = response.totalPage * pageSize;
+        } else{
+          console.log(response)
         }
       },
       (error) => {

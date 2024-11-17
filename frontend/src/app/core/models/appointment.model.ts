@@ -32,6 +32,10 @@ export class RescheduleAppointment{
   bookingHour: string;
 }
 
+export class GetAppointmentForReschedulingRequest {
+  doctorEmail: string;
+}
+
 // export class DoctorResponse {
 //   id: number;
 //   firstName: string;
@@ -51,3 +55,7 @@ export interface ApiResponse {
     message: string;
     data?: any; // Use the actual data type if known, such as `data?: UserProfile`
   }
+
+export class ReferenceCodeRequest{
+  referenceCode: string;
+}

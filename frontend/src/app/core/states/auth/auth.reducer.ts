@@ -11,12 +11,14 @@ export interface State {
   isLogged: boolean;
   token: string;
   user: User;
+  role: string;
   loginError?: string;
 }
 
 export const initialState: State = {
   token: null,
   user: null,
+  role: 'GUEST',
   isLogged: false
 };
 
@@ -27,6 +29,7 @@ const _authReducer = createReducer(
       ...state,
       token: loginSuccessResponse.token,
       user: loginSuccessResponse.user,
+      role: loginSuccessResponse.user.role.roleName,
       isLogged: true,
     };
   }),
@@ -35,6 +38,7 @@ const _authReducer = createReducer(
       ...state,
       token: null,
       user: null,
+      role: 'GUEST',
       isLogged: false,
       loginError: error,
     };
@@ -44,6 +48,7 @@ const _authReducer = createReducer(
       ...state,
       token: loginSuccessResponse.token,
       user: loginSuccessResponse.user,
+      role: loginSuccessResponse.user.role.roleName,
       isLogged: true,
     };
   }),
@@ -52,6 +57,7 @@ const _authReducer = createReducer(
       ...state,
       token: refreshTokenResponse.token,
       user: refreshTokenResponse.user,
+      role: refreshTokenResponse.user.role.roleName,
       isLogged: true,
     }
   }),
@@ -60,6 +66,7 @@ const _authReducer = createReducer(
       ...state,
       token: null,
       user: null,
+      role: 'GUEST',
       loginError: null,
       isLogged: false,
     }
@@ -87,3 +94,7 @@ export const selectIsLogged = createSelector(
   selectAuthState,
   (state) => state.isLogged
 );
+export const selectRole = createSelector(
+  selectAuthState,
+  (state) => state.role
+)

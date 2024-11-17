@@ -15,6 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home.component';
 import { HomeIndexComponent } from './pages/home-index/home-index.component';
 import { ImageModule } from 'primeng/image';
+import { DialogModule } from 'primeng/dialog';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -34,7 +35,8 @@ import { ImageModule } from 'primeng/image';
     PaginatorModule,
     FormsModule,
     ReactiveFormsModule,
-    ImageModule
+    ImageModule,
+    DialogModule
   ]
 })
 export class HomeModule { }

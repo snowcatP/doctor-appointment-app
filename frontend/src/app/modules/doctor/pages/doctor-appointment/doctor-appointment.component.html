@@ -1,116 +1,138 @@
 <div class="appointments">
-  <div *ngFor="let appointment of appointments">
-    <!-- Appointment List -->
-    <div class="appointment-list">
-      <div class="profile-info-widget">
-        <a href="patient-profile.html" class="booking-doc-img">
-          <img src="assets/images/patients/patient.jpg" alt="User Image" />
-        </a>
-        <div class="profile-det-info">
-          <h3>
-            <a href="patient-profile.html">{{ appointment.fullName }}</a>
-          </h3>
-          <div class="patient-details">
-            <h5>
-              <i class="far fa-clock"></i> {{ appointment.dateBooking }},
-              {{ appointment.bookingHour }}
-            </h5>
-            <h5><i class="fas fa-envelope"></i> {{ appointment.email }}</h5>
-            <h5 class="mb-0">
-              <i class="fas fa-phone"></i>{{ appointment.phone }}
-            </h5>
-            <span
-              class="badge badge-pill"
-              [ngClass]="{
-                'bg-primary-light': appointment.appointmentStatus === 'ACCEPT',
-                'bg-info-light':
-                  appointment.appointmentStatus === 'RESCHEDULED',
-                'bg-success-light':
-                  appointment.appointmentStatus === 'COMPLETED',
-                'bg-warning-light': appointment.appointmentStatus === 'PENDING',
-                'bg-danger-light': appointment.appointmentStatus === 'CANCELLED'
-              }"
-            >
-              {{ appointment.appointmentStatus }}
-            </span>
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center pb-3">
+        <h5>Appointments</h5>
+        <p-dropdown
+          [options]="filterOptions"
+          [(ngModel)]="selectedOption"
+          [checkmark]="true"
+          optionLabel="name"
+          [showClear]="true"
+          placeholder="Filter"
+          resetFilterOnHide="true"
+          [style]="{ 'min-width': '50px' }"
+          (onChange)="applyFilter($event)"
+        />
+      </div>
+      <div style="min-height: 60vh">
+        <div *ngFor="let appointment of filteredAppointments">
+          <!-- Appointment List -->
+          <div class="appointment-list">
+            <div class="profile-info-widget">
+              <p-image
+                [src]="'assets/images/user.png'"
+                alt="Patient Image"
+                width="100%"
+                [preview]="true"
+                class="booking-doc-img"
+              />
+              <div class="profile-det-info">
+                <h3>
+                  <a href="patient-profile.html">{{ appointment.fullName }}</a>
+                </h3>
+                <div class="patient-details">
+                  <h5>
+                    <i class="far fa-clock"></i>
+                    {{ appointment.dateBooking | date : "dd/MM/yyyy" }} at
+                    {{ appointment.bookingHour }}
+                  </h5>
+                  <h5>
+                    <i class="fas fa-envelope"></i> {{ appointment.email }}
+                  </h5>
+                  <h5 class="mb-0">
+                    <i class="fas fa-phone"></i>{{ appointment.phone }}
+                  </h5>
+                  <span
+                    class="badge badge-pill"
+                    [ngClass]="{
+                      'bg-primary-light':
+                        appointment.appointmentStatus === 'ACCEPT',
+                      'bg-info-light':
+                        appointment.appointmentStatus === 'RESCHEDULED',
+                      'bg-success-light':
+                        appointment.appointmentStatus === 'COMPLETED',
+                      'bg-warning-light':
+                        appointment.appointmentStatus === 'PENDING',
+                      'bg-danger-light':
+                        appointment.appointmentStatus === 'CANCELLED'
+                    }"
+                  >
+                    {{ appointment.appointmentStatus }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="appointment-action">
+              <a
+                class="btn btn-sm bg-warning-light"
+                (click)="viewAppointmentDetails(appointment)"
+                data-toggle="modal"
+                data-target="#appt_details"
+              >
+                <i class="far fa-eye"></i> View
+              </a>
+              <!-- Show Accept and Cancel buttons if status is PENDING -->
+              <a
+                *ngIf="appointment.appointmentStatus === 'PENDING'"
+                class="btn btn-sm bg-primary-light"
+                (click)="onChangeStatusAppointment(appointment.id)"
+              >
+                <i class="fas fa-check"></i> Accept
+              </a>
+              <a
+                *ngIf="appointment.appointmentStatus === 'PENDING'"
+                class="btn btn-sm bg-danger-light"
+                (click)="onChangeStatusAppointment(appointment.id)"
+              >
+                <i class="fas fa-times"></i> Cancel
+              </a>
+              <!-- Show Reschedule and Complete buttons if status is ACCEPT -->
+              <a
+                *ngIf="appointment.appointmentStatus === 'ACCEPT'"
+                class="btn btn-sm bg-info-light"
+                (click)="openRescheduleDialog(appointment)"
+              >
+                <i class="fa-solid fa-rotate"></i> Reschedule
+              </a>
+              <a
+                *ngIf="appointment.appointmentStatus === 'ACCEPT'"
+                class="btn btn-sm bg-success-light"
+                (click)="onChangeStatusAppointment(appointment.id)"
+              >
+                <i class="fas fa-check-circle"></i> Complete
+              </a>
+              <!-- Show Reschedule buttons if status is Reschedule -->
+              <a
+                *ngIf="appointment.appointmentStatus === 'RESCHEDULED'"
+                class="btn btn-sm bg-info-light"
+                (click)="openRescheduleDialog(appointment)"
+              >
+                <i class="fa-solid fa-rotate"></i> Reschedule
+              </a>
+              <a
+                *ngIf="appointment.appointmentStatus === 'RESCHEDULED'"
+                class="btn btn-sm bg-success-light"
+                (click)="onChangeStatusAppointment(appointment.id)"
+              >
+                <i class="fas fa-check-circle"></i> Complete
+              </a>
+            </div>
           </div>
+          <!-- /Appointment List -->
         </div>
       </div>
-      <div class="appointment-action">
-        <a
-          href="javascript:void(0);"
-          class="btn btn-sm bg-warning-light"
-          (click)="viewAppointmentDetails(appointment)"
-          data-toggle="modal"
-          data-target="#appt_details"
-        >
-          <i class="far fa-eye"></i> View
-        </a>
-        <!-- Show Accept and Cancel buttons if status is PENDING -->
-        <a
-          *ngIf="appointment.appointmentStatus === 'PENDING'"
-          href="javascript:void(0);"
-          class="btn btn-sm bg-primary-light"
-          (click)="onChangeStatusAppointment(appointment.id)"
-        >
-          <i class="fas fa-check"></i> Accept
-        </a>
-        <a
-          *ngIf="appointment.appointmentStatus === 'PENDING'"
-          href="javascript:void(0);"
-          class="btn btn-sm bg-danger-light"
-          (click)="onChangeStatusAppointment(appointment.id)"
-        >
-          <i class="fas fa-times"></i> Cancel
-        </a>
-        <!-- Show Reschedule and Complete buttons if status is ACCEPT -->
-        <a
-          *ngIf="appointment.appointmentStatus === 'ACCEPT'"
-          href="javascript:void(0);"
-          class="btn btn-sm bg-info-light"
-          (click)="openRescheduleDialog(appointment)"
-          (click)="getAppointmentsBooked()"
-        >
-          <i class="fa-solid fa-rotate"></i> Reschedule
-        </a>
-        <a
-          *ngIf="appointment.appointmentStatus === 'ACCEPT'"
-          href="javascript:void(0);"
-          class="btn btn-sm bg-success-light"
-          (click)="onChangeStatusAppointment(appointment.id)"
-        >
-          <i class="fas fa-check-circle"></i> Complete
-        </a>
-        <!-- Show Reschedule buttons if status is Reschedule -->
-        <a
-          *ngIf="appointment.appointmentStatus === 'RESCHEDULED'"
-          href="javascript:void(0);"
-          class="btn btn-sm bg-info-light"
-          (click)="openRescheduleDialog(appointment)"
-          (click)="getAppointmentsBooked()"
-        >
-          <i class="fa-solid fa-rotate"></i> Reschedule
-        </a>
-        <a
-          *ngIf="appointment.appointmentStatus === 'RESCHEDULED'"
-          href="javascript:void(0);"
-          class="btn btn-sm bg-success-light"
-          (click)="onChangeStatusAppointment(appointment.id)"
-        >
-          <i class="fas fa-check-circle"></i> Complete
-        </a>
-      </div>
+      <!-- Paginator Component -->
+      <p-paginator
+        [rows]="pageSize"
+        [totalRecords]="totalAppointments"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        (onPageChange)="handlePageEvent($event)"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+      ></p-paginator>
     </div>
-    <!-- /Appointment List -->
   </div>
-  <!-- Paginator Component -->
-  <p-paginator
-    [rows]="pageSize"
-    [totalRecords]="totalAppointments"
-    [rowsPerPageOptions]="[5, 10, 20]"
-    (onPageChange)="handlePageEvent($event)"
-  ></p-paginator>
-
   <!-- Appointment Detail Dialog -->
   <p-dialog
     header="Appointment Details"
@@ -125,12 +147,8 @@
       </p>
       <p>
         <strong>Appointment Date:</strong>
-        {{
-          selectedAppointment.dateBooking
-            | date
-              : "dd
-        MMM yyyy"
-        }}, {{selectedAppointment.bookingHour}}
+        {{ selectedAppointment.dateBooking | date : "dd MMM yyyy" }},
+        {{ selectedAppointment.bookingHour }}
       </p>
       <p>
         <strong>Status:</strong>
@@ -166,100 +184,27 @@
     [modal]="true"
     [style]="{ width: '55rem' }"
   >
-    <div class="card mt-2" *ngIf="!isLoading">
-      <div class="card-header">
-        <div class="d-flex justify-content-between align-items-center">
-          <h4 class="card-title col">Booking Date</h4>
-          <p-calendar
-            [(ngModel)]="dateToday"
-            [disabled]="true"
-            class="d-flex flex-row-reverse"
-            dateFormat="dd/mm/yy"
-          ></p-calendar>
-        </div>
-      </div>
-      <p-carousel [value]="schedules" [numVisible]="1" [numScroll]="1">
-        <ng-template pTemplate="item" let-schedule>
-          <div class="schedule-header px-0">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="day-slot">
-                  <ul>
-                    <li *ngFor="let day of schedule">
-                      <span>{{ day.dayWeek }}</span>
-                      <span class="slot-date">{{ day.date }}</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="schedule-cont px-0">
-            <div class="row">
-              <div class="col-md-12">
-                <h6>Morning</h6>
-                <div class="time-slot">
-                  <ul class="clearfix">
-                    <li *ngFor="let day of schedule">
-                      <button
-                        class="timing"
-                        *ngFor="let slot of day.timeSlotsMorning"
-                        [ngClass]="{
-                          selected: slot === timeSlotSelected,
-                          booked: slot.isBooked
-                        }"
-                        (click)="selectBookingDate(slot)"
-                        matTooltip="Booked"
-                        [matTooltipDisabled]="!slot.isBooked"
-                        [disabled]="slot.isBooked"
-                      >
-                        <span>{{ slot.time }}</span>
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <p-divider />
-              <div class="col-md-12">
-                <h6>Afternoon</h6>
-                <div class="time-slot">
-                  <ul class="clearfix">
-                    <li *ngFor="let day of schedule">
-                      <button
-                        class="timing"
-                        *ngFor="let slot of day.timeSlotsAfternoon"
-                        [ngClass]="{
-                          selected: slot === timeSlotSelected,
-                          booked: slot.isBooked
-                        }"
-                        (click)="selectBookingDate(slot)"
-                        matTooltip="Booked"
-                        [matTooltipDisabled]="!slot.isBooked"
-                        [disabled]="slot.isBooked"
-                      >
-                        <span>{{ slot.time }}</span>
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ng-template>
-      </p-carousel>
-    </div>
+    <!-- Schedule -->
+    <app-schedule
+      [isReschedule]="true"
+      [selectedApp]="selectedAppointment"
+      (selectedSlot)="handleSelectedSlot($event)"
+    ></app-schedule>
+    <!-- Schedule -->
 
     <div class="d-flex justify-content-between mx-2">
       <button
+        mat-raised-button
+        extended
         type="button"
-        class="btn btn-cancel"
         (click)="closeRescheduleDialog()"
       >
         Cancel
       </button>
       <button
         type="submit"
-        class="btn btn-primary submit-btn"
+        mat-flat-button
+        extended
         (click)="submitRescheduleAppointment()"
       >
         Done

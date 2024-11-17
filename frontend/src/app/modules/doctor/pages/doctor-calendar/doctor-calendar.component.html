@@ -22,9 +22,30 @@
 
 <!-- Popup -->
 <p-confirmPopup #confirmPopupRef>
-  <ng-template pTemplate="headless" let-message let-test>
-    <div class="border-round p-3">
-      <p>{{ message?.message }}</p>
+  <ng-template
+    pTemplate="headless"
+    let-message
+    let-header
+    let-key
+    let-acceptLabel
+  >
+    <div class="border-round p-3" style="font-size: 14px !important">
+      <p>{{ header?.header }}</p>
+      <p>At {{ message?.message | date : "dd/MM/yyyy hh:mm a" }}</p>
+      <p class="d-flex align-items-center">
+        Status:&nbsp;
+        <span
+          class="badge"
+          [ngClass]="{
+            'badge-primary': acceptLabel?.acceptLabel === 'COMPLETED',
+            'badge-warning': acceptLabel?.acceptLabel === 'PENDING',
+            'badge-secondary': acceptLabel?.acceptLabel === 'RESCHEDULED',
+            'badge-danger': acceptLabel?.acceptLabel === 'CANCELLED',
+            'badge-success': acceptLabel?.acceptLabel === 'ACCEPT',
+          }"
+          >{{ acceptLabel?.acceptLabel | titlecase }}</span
+        >
+      </p>
     </div>
   </ng-template>
 </p-confirmPopup>
@@ -39,44 +60,102 @@
 >
   <div class="row">
     <div class="d-flex justify-content-between pe-2">
-      <p>Patient Name</p>
+      <p>Patient Name:</p>
       <p>{{ selectedAppointment?.fullName }}</p>
     </div>
     <div class="d-flex justify-content-between pe-2">
-      <p>Phone</p>
+      <p>Phone:</p>
       <p>{{ selectedAppointment?.phone }}</p>
     </div>
     <div class="d-flex justify-content-between pe-2">
-      <p>Email</p>
+      <p>Email:</p>
       <p>{{ selectedAppointment?.email }}</p>
     </div>
     <div class="d-flex justify-content-between pe-2">
-      <p>Date Booking</p>
+      <p>Date Booking:</p>
       <p>{{ selectedAppointment?.dateBooking | date }}</p>
     </div>
     <div class="d-flex justify-content-between pe-2">
-      <p>Booking Hour</p>
+      <p>Booking Hour:</p>
       <p>{{ selectedAppointment?.bookingHour }}</p>
     </div>
     <div class="d-flex justify-content-between pe-2">
-      <p>Status</p>
-      <p>{{ selectedAppointment?.appointmentStatus }}</p>
+      <p>Status:</p>
+      <p>
+        <span
+          class="badge"
+          [ngClass]="{
+            'badge-primary': selectedAppointment?.appointmentStatus === 'COMPLETED',
+            'badge-warning': selectedAppointment?.appointmentStatus === 'PENDING',
+            'badge-secondary': selectedAppointment?.appointmentStatus === 'RESCHEDULED',
+            'badge-danger': selectedAppointment?.appointmentStatus === 'CANCELLED',
+            'badge-success': selectedAppointment?.appointmentStatus === 'ACCEPT',
+          }"
+          >{{ selectedAppointment?.appointmentStatus | titlecase }}</span
+        >
+      </p>
     </div>
     <div class="row d-flex justify-content-between pe-0">
-      <p class="col-4">Reason</p>
+      <p class="col-4">Reason:</p>
       <div
         class="col-8 pe-0 d-flex justify-content-end"
         style="text-align: justify"
       >
-        <p-scrollPanel [style]="{ width: '100%', height: '120px' }">
+        <p-scrollPanel
+          [style]="{ width: '100%', height: '120px' }"
+          class="mh-25"
+        >
           {{ selectedAppointment?.reason }}
         </p-scrollPanel>
       </div>
     </div>
     <div class="d-flex justify-content-between pt-4">
       <button mat-raised-button (click)="visible = !visible">Close</button>
-      <button mat-flat-button>...</button>
+      <button
+        mat-flat-button
+        (click)="visibleSchedule = !visibleSchedule"
+        *ngIf="
+          selectedAppointment.appointmentStatus != 'CANCELLED' &&
+          selectedAppointment.appointmentStatus != 'RESCHEDULED' &&
+          checkValidDate(selectedAppointment)
+        "
+      >
+        Reschedule
+      </button>
     </div>
   </div>
 </p-dialog>
 <!-- Details -->
+
+<!-- Reschedule -->
+<p-dialog
+  header="Reschedule Appointment"
+  [modal]="true"
+  [(visible)]="visibleSchedule"
+  [style]="{ width: '55rem' }"
+>
+  <app-schedule
+    [isReschedule]="true"
+    [selectedApp]="selectedAppointment"
+    (selectedSlot)="handleSelectedSlot($event)"
+  ></app-schedule>
+  <div class="d-flex justify-content-between mx-2">
+    <button
+      mat-raised-button
+      extended
+      (click)="visibleSchedule = !visibleSchedule"
+    >
+      <mat-icon>close</mat-icon>
+      Cancel
+    </button>
+    <button
+      mat-flat-button
+      extended
+      [disabled]="!timeSlotSelected"
+      (click)="submitRescheduleAppointment()"
+    >
+      <mat-icon iconPositionEnd>chevron_right</mat-icon>
+      Next
+    </button>
+  </div>
+</p-dialog>

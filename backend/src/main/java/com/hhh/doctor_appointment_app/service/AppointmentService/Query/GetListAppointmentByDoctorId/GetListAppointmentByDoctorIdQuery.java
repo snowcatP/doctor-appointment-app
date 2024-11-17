@@ -2,6 +2,7 @@ package com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListA
 
 import com.hhh.doctor_appointment_app.dto.mapper.AppointmentMapper;
 import com.hhh.doctor_appointment_app.dto.mapper.DoctorMapper;
+import com.hhh.doctor_appointment_app.dto.mapper.MedicalRecordMapper;
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.entity.Appointment;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,9 @@ public class GetListAppointmentByDoctorIdQuery {
     @Autowired
     private FindUserByEmailQuery findUserByEmailQuery;
 
+    @Autowired
+    private MedicalRecordMapper medicalRecordMapper;
+
     @PreAuthorize("hasRole('DOCTOR')")
     public PageResponse<List<AppointmentResponse>> getAppointmentsWithPageByDoctorId(int page, int size) {
         var context = SecurityContextHolder.getContext();
@@ -46,10 +51,11 @@ public class GetListAppointmentByDoctorIdQuery {
         User user = findUserByEmailQuery.findUserByEmail(username)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
-        Doctor doctor = doctorRepository.findDoctorByProfile_Email(username).orElseThrow(() -> new NotFoundException("Doctor Not Found"));
+        Doctor doctor = doctorRepository.findDoctorByProfile_Email(username)
+                .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
 
 
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page-1, size, Sort.by("dateBooking").descending());
         Page<Appointment> appointmentPage = appointmentRepository.findByDoctorId(doctor.getId(),pageable);
 
         //Convert entities to responses
@@ -66,6 +72,7 @@ public class GetListAppointmentByDoctorIdQuery {
                     response.setCusType(appointment.getCusType());
                     response.setDoctor(doctorMapper.toResponse(appointment.getDoctor()));
                     response.setBookingHour(appointment.getBookingHour());
+                    response.setMedicalRecordResponse(medicalRecordMapper.toResponse(appointment.getMedicalRecord()));
                     return response;
                 })
                 .collect(Collectors.toList());
