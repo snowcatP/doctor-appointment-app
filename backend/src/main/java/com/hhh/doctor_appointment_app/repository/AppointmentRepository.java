@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
-    @Query("SELECT a FROM Appointment a")
+    @Query("SELECT a FROM Appointment a ORDER BY a.dateBooking desc")
     Page<Appointment> getAppointmentsWithPage(Pageable pageable);
 
     Page<Appointment> findByDoctorId(Long doctorId, Pageable pageable);
@@ -35,7 +35,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
     Page<Appointment> findByDoctor_Profile_Email(String email, Pageable pageable);
 
     @Query("SELECT a FROM Appointment a WHERE a.doctor.profile.email = :email AND " +
-            "LOWER(a.fullName) LIKE LOWER(CONCAT('%', :patientName, '%'))")
+            "LOWER(a.fullName) LIKE LOWER(CONCAT('%', :patientName, '%')) ORDER BY a.dateBooking desc")
     Page<Appointment> findByDoctorEmailAndPatientNameContainingIgnoreCase(
             @Param("email") String email,
             @Param("patientName") String patientName,

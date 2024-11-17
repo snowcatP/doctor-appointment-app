@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class GetListAppointmentOfPatientByPatientIdQuery {
     private MedicalRecordMapper medicalRecordMapper;
 
     public PageResponse<List<AppointmentResponse>> getListAppointmentOfPatientByPatientId(Long id,int page, int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page-1, size, Sort.by("dateBooking").descending());
         Page<Appointment> appointmentPage = appointmentRepository.findByPatient_Id(id,pageable);
 
         //Convert entities to responses

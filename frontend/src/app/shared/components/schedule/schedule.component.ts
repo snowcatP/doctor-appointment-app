@@ -20,7 +20,12 @@ import { FormGroup } from '@angular/forms';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { BookingNotification } from '../../../core/models/notification.model';
 import { WebSocketService } from '../../../core/services/webSocket.service';
-import { AppointmentResponse } from '../../../core/models/appointment.model';
+import {
+  AppointmentResponse,
+  GetAppointmentForReschedulingRequest,
+} from '../../../core/models/appointment.model';
+import * as fromAuth from '../../../core/states/auth/auth.reducer';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-schedule',
@@ -57,7 +62,8 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   constructor(
     private appointmentService: AppointmentService,
-    private webSocketService: WebSocketService
+    private webSocketService: WebSocketService,
+    private store: Store<fromAuth.State>
   ) {}
 
   ngOnInit(): void {
@@ -67,9 +73,31 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    // Handle patient and guest booking
+    this.isLoading = true;
+    if (this.isReschedule && changes.selectedApp?.currentValue != undefined) {
+      const request: GetAppointmentForReschedulingRequest = {
+        doctorEmail: changes.selectedApp?.currentValue.doctor.email,
+      };
+      this.appointmentService
+        .getAppointmentsForReschedulingByPatient(request)
+        .subscribe({
+          next: (res) => {
+            this.appointmentsBooked = res;
+            this.isLoading = false;
+            setTimeout(() => {
+              this.handleAppointmentsBooked();
+            }, 100);
+          },
+          error: (err) => {
+            console.log(err);
+            this.isLoading = false;
+          },
+        });
+    }
     if (
       !this.isReschedule &&
-      changes.doctorSelected.currentValue != undefined
+      changes.doctorSelected?.currentValue != undefined
     ) {
       this.appointmentService
         .getAppointmentsForBooking(this.doctorSelected.id)
@@ -147,19 +175,23 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
 
   getAppointmentsBooked() {
     this.isLoading = true;
-    if (this.isReschedule) {
-      this.appointmentService.getAppointmentsForRescheduling().subscribe({
-        next: (res) => {
-          this.appointmentsBooked = res;
-          this.handleAppointmentsBooked();
-          this.isLoading = false;
-        },
-        error: (err) => {
-          console.log(err);
-          this.isLoading = false;
-        },
-      });
-    }
+    this.store.select(fromAuth.selectRole).subscribe((role) => {
+      if (role == 'DOCTOR') {
+        if (this.isReschedule) {
+          this.appointmentService.getAppointmentsForRescheduling().subscribe({
+            next: (res) => {
+              this.appointmentsBooked = res;
+              this.handleAppointmentsBooked();
+              this.isLoading = false;
+            },
+            error: (err) => {
+              console.log(err);
+              this.isLoading = false;
+            },
+          });
+        }
+      }
+    });
     this.isLoading = false;
   }
 
@@ -174,6 +206,7 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
               timeSlot.isBooked = true;
             }
             if (
+              this.selectedApp &&
               this.selectedApp.dateBooking != null &&
               tsDate == this.formatDate(this.selectedApp.dateBooking) &&
               timeSlot.time == this.selectedApp.bookingHour
@@ -188,6 +221,7 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
               timeSlot.isBooked = true;
             }
             if (
+              this.selectedApp &&
               this.selectedApp.dateBooking != null &&
               tsDate == this.formatDate(this.selectedApp.dateBooking) &&
               timeSlot.time == this.selectedApp.bookingHour
