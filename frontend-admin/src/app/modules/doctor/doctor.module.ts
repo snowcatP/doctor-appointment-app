@@ -25,6 +25,8 @@ import { PasswordModule } from 'primeng/password';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { RatingModule } from 'primeng/rating';
 import { SkeletonModule } from 'primeng/skeleton';
+import { ImageModule } from 'primeng/image';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @NgModule({
   declarations: [
@@ -57,8 +59,9 @@ import { SkeletonModule } from 'primeng/skeleton';
     DropdownModule,
     PasswordModule,
     RatingModule,
-    SkeletonModule
-    
+    SkeletonModule,
+    ImageModule,
+    ProgressBarModule
   ]
 })
 export class DoctorModule { }

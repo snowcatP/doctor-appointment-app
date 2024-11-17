@@ -3,6 +3,8 @@ import { Specialty } from "./speciality"
 
 export class Doctor{
     @prop()
+    id:string
+    @prop()
     firstName:string
     @prop()
     lastName:string
