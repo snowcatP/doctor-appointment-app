@@ -85,7 +85,7 @@ public class MedicalRecordController {
         } catch (Exception ex) {
 
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
-            apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+            apiResponse.setMessage(ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
     }
@@ -105,17 +105,18 @@ public class MedicalRecordController {
         try {
 
             apiResponse = editMedicalRecordCommand.editMedicalRecordByDoctor(file,editMedicalRecordRequest);
+            apiResponse.setMessage("Edit Successfully");
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         }
         catch (NotFoundException ex){
             apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
-            apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+            apiResponse.setMessage(ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         catch (Exception ex) {
 
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
-            apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+            apiResponse.setMessage(ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
     }

@@ -64,6 +64,8 @@ public class GetAllPatientOfDoctorQuery {
                         response.setFullname(appointment.getPatient().getProfile().getFullName());
                         response.setAddress(appointment.getPatient().getProfile().getAddress());
                         response.setDateOfBirth(appointment.getPatient().getProfile().getDateOfBirth());
+                        response.setAvatarFilePath(appointment.getPatient().getProfile().getAvatarFilePath());
+
                     } else {
                         // Case: Guest
                         response.setId(null); // Guest has no patient ID

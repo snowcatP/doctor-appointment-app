@@ -17,6 +17,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { PaginatorModule } from 'primeng/paginator';
 import { DialogModule } from 'primeng/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SharedModule } from "../../shared/shared.module";
 import { MatButtonModule } from '@angular/material/button';
 import { DropdownModule } from 'primeng/dropdown';
@@ -41,6 +42,7 @@ import { DropdownModule } from 'primeng/dropdown';
     PaginatorModule,
     DialogModule,
     MatDialogModule,
+    ProgressSpinnerModule,
     SharedModule,
     MatButtonModule,
     DropdownModule

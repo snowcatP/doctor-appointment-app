@@ -12,16 +12,16 @@ export class SearchDoctorComponent implements OnInit {
   totalDoctors: number = 0; 
   pageSize: number = 10;
   currentPage: number = 1;
-  pageSizeOptions = [
-    { label: '5', value: 5 },
-    { label: '10', value: 10 },
-    { label: '20', value: 20 }
-  ];
 
+  searchRequest: any = {
+    keyword: '',
+    specialtyId: [],
+    gender: null
+  };
   constructor(private doctorService: DoctorService, private router: Router) {}
 
   ngOnInit(): void {
-    this.fetchDoctors(1, this.pageSize);
+    this.searchDoctors(this.currentPage, this.pageSize);
   }
 
   onDoctorsFound(doctors: any[]): void {
@@ -35,10 +35,26 @@ export class SearchDoctorComponent implements OnInit {
         if (response.statusCode === 200) {
           this.doctors = response.data;
           this.totalDoctors = response.totalPage * pageSize; // Tính tổng số lượng bác sĩ
+        } else{
+          console.log(response)
         }
       },
       (error) => {
         console.error('Error fetching doctors', error);
+      }
+    );
+  }
+
+  searchDoctors(page: number, pageSize: number): void {
+    this.doctorService.searchDoctors(this.searchRequest, page, pageSize).subscribe(
+      (response) => {
+        if (response.statusCode === 200) {
+          this.doctors = response.data;
+          this.totalDoctors = response.totalPage * pageSize;
+        }
+      },
+      (error) => {
+        console.error('Error searching doctors', error);
       }
     );
   }
@@ -47,12 +63,12 @@ export class SearchDoctorComponent implements OnInit {
   handlePageEvent(event: any): void {
     this.currentPage = (event.page + 1);
     this.pageSize = event.rows;
-    this.fetchDoctors(this.currentPage, this.pageSize);
+    this.searchDoctors(this.currentPage, this.pageSize);
   }
 
   onPageSizeChange(): void {
     this.currentPage = 1;
-    this.fetchDoctors(this.currentPage, this.pageSize);
+    this.searchDoctors(this.currentPage, this.pageSize);
   }
 
   viewDoctorProfile(doctorId: number): void {

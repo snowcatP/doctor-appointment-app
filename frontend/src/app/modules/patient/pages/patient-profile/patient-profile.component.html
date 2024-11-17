@@ -1,32 +1,25 @@
-<!-- <div class="col-12 col-md-12">
-              <div class="form-group">
-                <div class="change-avatar">
-                  <div class="profile-img">
-                    <p-image 
-                      src="assets/images/patients/patient.jpg" 
-                      alt="User Image" 
-                      width="250" 
-                      [preview]="true" />
-                  </div>
-                  <div class="upload-img">
-                    <div class="change-photo-btn">
-                      <span><i class="fa fa-upload"></i> Upload Photo</span>
-                      <input type="file" class="upload" />
-                    </div>
-                    <small class="form-text text-muted"
-                      >Allowed JPG, GIF or PNG. Max size of 2MB</small
-                    >
-                  </div>
-                </div>
-              </div>
-            </div> -->
 <div>
   <div class="card">
     <div class="card-body">
       <!-- Profile Settings Form -->
       <form (ngSubmit)="onSubmit()">
         <div class="row form-row">
-
+          <div class="col-md-12">
+            <div class="form-group">
+              <div class="change-avatar">
+                <div class="profile-img">
+                  <p-image [src]="imagePreview" alt="Doctor Image" width="100%" [preview]="true" />
+                </div>
+                <div class="upload-img">
+                  <div class="change-photo-btn">
+                    <span><i class="fa fa-upload"></i> Upload Photo</span>
+                    <input type="file" class="upload" (change)="onFileSelected($event)" />
+                  </div>
+                  <small class="form-text text-muted">Allowed JPG, GIF or PNG. Max size of 2MB</small>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="col-12 col-md-6">
             <div class="form-group">
               <label>First Name</label>
@@ -85,6 +78,11 @@
           <button type="submit" class="btn btn-primary submit-btn">
             Save Changes
           </button>
+          <div class="spinner-container" *ngIf="loading">
+            <p-progressSpinner styleClass="w-2rem h-2rem" strokeWidth="3" fill="var(--surface-ground)"
+              animationDuration=".5s">
+            </p-progressSpinner>
+          </div>
         </div>
       </form>
       <!-- /Profile Settings Form -->

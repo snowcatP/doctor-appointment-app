@@ -32,4 +32,6 @@ public class PatientResponse {
 
     private Role role;
 
+    private String avatarFilePath;
+
 }

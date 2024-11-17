@@ -55,6 +55,16 @@ public class CreateMedicalRecordCommand {
             User userDoctor = findUserByEmailQuery.findUserByEmail(usernameDoctor)
                     .orElseThrow(() -> new NotFoundException("Doctor not found"));
 
+            Appointment appointment = appointmentRepository.findById(addRequest.getAppointmentId())
+                    .orElseThrow(() -> new NotFoundException("Appointment Not Found"));
+
+            Doctor doctor = doctorRepository.findDoctorByProfile_Email(usernameDoctor)
+                    .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
+
+            if (!appointment.getDoctor().getId().equals(doctor.getId())) {
+                throw new ApplicationException("You are not allowed to add medical record for this appointment.");
+            }
+
             //Check file has null ?
             if (!file.isEmpty()) {
                 // Upload file to Firebase Storage if file not null
@@ -64,12 +74,6 @@ public class CreateMedicalRecordCommand {
 
             Patient patient = patientRepository.findById(addRequest.getPatientId())
                     .orElseThrow(() -> new NotFoundException("Patient Not Found"));
-
-            Doctor doctor = doctorRepository.findDoctorByProfile_Email(usernameDoctor)
-                    .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
-
-            Appointment appointment = appointmentRepository.findById(addRequest.getAppointmentId())
-                    .orElseThrow(() -> new NotFoundException("Appointment Not Found"));
 
             MedicalRecord medicalRecord = new MedicalRecord();
 

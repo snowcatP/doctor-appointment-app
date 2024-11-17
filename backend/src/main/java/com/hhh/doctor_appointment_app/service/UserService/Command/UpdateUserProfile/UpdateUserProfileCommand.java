@@ -55,6 +55,10 @@ public class UpdateUserProfileCommand {
             user.setGender(request.isGender());
             user.setPhone(request.getPhone());
 
+            if(request.getAvatarFilePath()!=null){
+                user.setAvatarFilePath(request.getAvatarFilePath());
+            }
+
             userRepository.save(user);
 
             UserResponse userResponse = userMapper.toUserResponse(user);

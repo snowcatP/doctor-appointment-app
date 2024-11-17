@@ -31,8 +31,29 @@ export class PatientService {
     );
   }
 
-  updatePatientProfile(data: UpdateProfileRequest): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(this.updateProfileUrl, data).pipe(
+  updatePatientProfile(updateProfileRequest: UpdateProfileRequest, file?: File): Observable<ApiResponse> {
+    const formData: FormData = new FormData();
+
+    const formattedDateOfBirth = updateProfileRequest.dateOfBirth
+      ? new Date(updateProfileRequest.dateOfBirth).toISOString().split('T')[0]
+      : '';
+
+    // Check if the file exists before appending it to the formData
+    if (file) {
+      formData.append('file', file, file.name);
+    } else {
+      formData.append('file', new Blob(),'');  // Append null if no file is selected
+    }
+
+    formData.append('email', updateProfileRequest.email || '');
+    formData.append('firstName', updateProfileRequest.firstName || '');
+    formData.append('lastName', updateProfileRequest.lastName || '');
+    formData.append('gender', updateProfileRequest.gender ? 'true' : 'false');
+    formData.append('phone', updateProfileRequest.phone || '');
+    formData.append('dateOfBirth', formattedDateOfBirth);
+    formData.append('address', updateProfileRequest.address || '');
+
+    return this.http.put<ApiResponse>(this.updateProfileUrl, formData).pipe(
       tap(() => this.fetchMyInfo().subscribe()) // Fetch updated profile after successful update
     );
   }

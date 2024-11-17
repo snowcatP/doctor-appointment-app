@@ -25,6 +25,7 @@ export class DoctorMypatientComponent {
     this.doctorService.getAllPatientsOfDoctor(page, pageSize,patientName).subscribe(
       (response) => {
         if (response.statusCode === 200) {
+          console.log(response)
           this.patients = response.data;
           this.totalPatients = response.totalPage * pageSize;
         } else{
