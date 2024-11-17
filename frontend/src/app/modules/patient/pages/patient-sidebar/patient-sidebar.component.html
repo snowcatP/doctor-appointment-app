@@ -4,11 +4,8 @@
       <div class="widget-profile pro-widget-content">
         <div class="profile-info-widget">
           <div class="booking-doc-img">
-            <p-image
-              src="assets/images/patients/patient.jpg"
-              class="img-fluid" alt="Patient Image" width="150"
-              [preview]="true"
-            />
+            <p-image [src]="patientProfile?.avatarFilePath || 'assets/images/doctors/doctor-thumb-02.jpg'"
+            alt="Doctor Image" width="100%"  [preview]="true"/>
           </div>
           <div class="profile-det-info">
             <h3>{{patientProfile.firstName}} {{patientProfile.lastName}}</h3>

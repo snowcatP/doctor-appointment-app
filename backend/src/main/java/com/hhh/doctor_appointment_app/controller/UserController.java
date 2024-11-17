@@ -9,6 +9,7 @@ import com.hhh.doctor_appointment_app.entity.Patient;
 import com.hhh.doctor_appointment_app.entity.User;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
+import com.hhh.doctor_appointment_app.service.FirebaseStorageService;
 import com.hhh.doctor_appointment_app.service.UserService.Command.UpdateUserPassword.UpdateUserPasswordCommand;
 import com.hhh.doctor_appointment_app.service.UserService.Command.UpdateUserProfile.UpdateUserProfileCommand;
 import com.hhh.doctor_appointment_app.service.UserService.Query.GetAdminProfile.GetAdminProfileQuery;
@@ -23,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -52,8 +54,13 @@ public class UserController {
     @Autowired
     private GetMyInfoQuery getMyInfoQuery;
 
+    @Autowired
+    private FirebaseStorageService firebaseStorageService;
+
     @PutMapping("/user/update-profile")
-    public ResponseEntity<?> updateProfile(@Valid @RequestBody UserUpdateProfileRequest request, BindingResult bindingResult) {
+    public ResponseEntity<?> updateProfile(@RequestParam("file") MultipartFile file,
+                                           @ModelAttribute @Valid UserUpdateProfileRequest request,
+                                           BindingResult bindingResult) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
             // Collect only error messages into a single string, separated by commas if there are multiple errors.
@@ -65,6 +72,11 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
+            // Upload file to Firebase Storage
+            if(!file.isEmpty()){
+                String fileUrl = firebaseStorageService.uploadFile(file);
+                request.setAvatarFilePath(fileUrl);
+            }
             apiResponse = updateUserProfileCommand.updateUserProfile(request);
             apiResponse.setStatusCode(HttpStatus.OK.value());
             apiResponse.setMessage("Update profile successful");

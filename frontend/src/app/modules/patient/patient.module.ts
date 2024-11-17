@@ -17,6 +17,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { PaginatorModule } from 'primeng/paginator';
 import { DialogModule } from 'primeng/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 @NgModule({
   declarations: [
     PatientComponent,
@@ -37,7 +38,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     CalendarModule,
     PaginatorModule,
     DialogModule,
-    MatDialogModule
+    MatDialogModule,
+    ProgressSpinnerModule
   ]
 })
 export class PatientModule { }

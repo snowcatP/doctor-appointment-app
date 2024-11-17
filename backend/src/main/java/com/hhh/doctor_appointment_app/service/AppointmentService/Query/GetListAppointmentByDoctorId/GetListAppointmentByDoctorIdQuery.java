@@ -71,6 +71,9 @@ public class GetListAppointmentByDoctorIdQuery {
                     response.setDoctor(doctorMapper.toResponse(appointment.getDoctor()));
                     response.setBookingHour(appointment.getBookingHour());
                     response.setMedicalRecordResponse(medicalRecordMapper.toResponse(appointment.getMedicalRecord()));
+                    if(appointment.getPatient()!=null){
+                        response.setAvatarFilePath(appointment.getPatient().getProfile().getAvatarFilePath());
+                    }
                     return response;
                 })
                 .collect(Collectors.toList());

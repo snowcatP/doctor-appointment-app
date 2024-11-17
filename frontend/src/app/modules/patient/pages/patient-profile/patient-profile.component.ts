@@ -13,7 +13,9 @@ import { Router } from '@angular/router';
 export class PatientProfileComponent implements OnInit {
   originalProfile: any = {}; // Store the original profile
   updateProfile: UpdateProfileRequest = new UpdateProfileRequest();
-
+  selectedFile?: File;
+  imagePreview: string | ArrayBuffer | null = null;
+  loading: boolean = false; // Add loading state
   constructor(
     private patientService: PatientService,
     private messageService: MessageService,
@@ -34,9 +36,22 @@ export class PatientProfileComponent implements OnInit {
     return this.updateProfile?.gender ? 'Male' : 'Female';
   }
 
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+    if (this.selectedFile) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
   onSubmit() {
-    this.patientService.updatePatientProfile(this.updateProfile).subscribe(
+    this.loading = true; // Start loading
+    this.patientService.updatePatientProfile(this.updateProfile, this.selectedFile).subscribe(
       (response: ApiResponse) => {
+        this.loading = false; // Stop loading
         if (response.statusCode === 200) {
           this.messageService.add({
             key: 'messageToast',
@@ -44,12 +59,13 @@ export class PatientProfileComponent implements OnInit {
             summary: 'Success',
             detail: response.message || 'Profile updated successfully',
           });
-          //Send update user data event
-          this.authService.setUserData(this.updateProfile);
           setTimeout(() => {
-                this.route.navigateByUrl('/patient/dashboard');
+            this.authService.getUserData().subscribe(profile => {
+              this.authService.setUserData(profile)
+          });
               }, 1000);
         } else {
+          console.log(response.message)
           this.messageService.add({
             key: 'messageToast',
             severity: 'error',
@@ -59,6 +75,7 @@ export class PatientProfileComponent implements OnInit {
         }
       },
       (error) => {
+        this.loading = false; // Stop loading
         console.error('Failed to update profile', error);
         this.messageService.add({
           key: 'messageToast',

@@ -389,9 +389,9 @@
                 <div *ngIf="feedbackList.length > 0">
                   <li *ngFor="let feedback of feedbackList">
                     <div class="comment">
-                      <!-- <img class="avatar avatar-sm rounded-circle"
-                            [src]="feedback.patientResponse.avatarFilePath || 'assets/img/patients/patient.jpg'"
-                            alt="User Image"> -->
+                      <img class="avatar avatar-sm rounded-circle"
+                            [src]="feedback.patientResponse.avatarFilePath || '../../../../../assets/images/patients/patient.jpg'"
+                            alt="User Image">
                       <div class="comment-body">
                         <div class="meta-data">
                           <span class="comment-author"

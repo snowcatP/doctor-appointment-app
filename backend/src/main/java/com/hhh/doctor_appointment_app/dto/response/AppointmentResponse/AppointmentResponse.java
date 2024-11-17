@@ -38,4 +38,6 @@ public class AppointmentResponse {
 
     private MedicalRecordResponse medicalRecordResponse;
 
+    private String avatarFilePath;
+
 }

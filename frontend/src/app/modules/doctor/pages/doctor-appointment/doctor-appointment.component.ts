@@ -63,6 +63,8 @@ export class DoctorAppointmentComponent {
             return appointment;
           });
           this.totalAppointments = response.totalPage * pageSize;
+        }else{
+          console.log(response)
         }
       },
       (error) => {

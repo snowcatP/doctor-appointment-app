@@ -3,12 +3,13 @@
     <!-- Appointment List -->
     <div class="appointment-list">
       <div class="profile-info-widget">
-        <a href="patient-profile.html" class="booking-doc-img">
-          <img src="assets/images/patients/patient.jpg" alt="User Image" />
-        </a>
+        <div class="doctor-img">
+          <p-image [src]="appointment?.avatarFilePath || 'assets/images/doctors/doctor-thumb-01.jpg'"
+                    class="img-fluid" alt="Doctor Image" width="100%" [preview]="true" />
+        </div>
         <div class="profile-det-info">
           <h3>
-            <a href="patient-profile.html">{{ appointment.fullName }}</a>
+            <a href="javascript:void(0);">{{ appointment.fullName }}</a>
           </h3>
           <div class="patient-details">
             <h5>

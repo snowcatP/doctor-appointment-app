@@ -5,10 +5,7 @@ import com.hhh.doctor_appointment_app.dto.mapper.MedicalRecordMapper;
 import com.hhh.doctor_appointment_app.dto.request.MedicalRecordRequest.EditMedicalRecordRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.MedicalRecordResponse.MedicalRecordResponse;
-import com.hhh.doctor_appointment_app.entity.Doctor;
-import com.hhh.doctor_appointment_app.entity.MedicalRecord;
-import com.hhh.doctor_appointment_app.entity.Patient;
-import com.hhh.doctor_appointment_app.entity.User;
+import com.hhh.doctor_appointment_app.entity.*;
 import com.hhh.doctor_appointment_app.exception.ApplicationException;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
@@ -52,6 +49,17 @@ public class EditMedicalRecordCommand {
             String usernameDoctor = context.getAuthentication().getName();
             User userDoctor = findUserByEmailQuery.findUserByEmail(usernameDoctor)
                     .orElseThrow(() -> new NotFoundException("Doctor not found"));
+
+            MedicalRecord existingMedicalRecord = medicalRecordRepository.findById(editMedicalRecordRequest.getMedicalRecordId()).
+                    orElseThrow(() -> new NotFoundException("Medical Record Not Found"));
+
+            Doctor doctor = doctorRepository.findDoctorByProfile_Email(usernameDoctor)
+                    .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
+
+            if (!existingMedicalRecord.getDoctorModified().getId().equals(doctor.getId())) {
+                throw new ApplicationException("You are not allowed to edit medical record for this appointment.");
+            }
+
             //Check file has null ?
             if (!file.isEmpty()) {
                 // Upload file to Firebase Storage if file not null
@@ -60,15 +68,10 @@ public class EditMedicalRecordCommand {
             }
 
 
-            MedicalRecord existingMedicalRecord = medicalRecordRepository.findById(editMedicalRecordRequest.getMedicalRecordId()).
-                    orElseThrow(() -> new NotFoundException("Medical Record Not Found"));
+
 
             Patient patient = patientRepository.findById(editMedicalRecordRequest.getPatientId())
                     .orElseThrow(() -> new NotFoundException("Patient Not Found"));
-
-            Doctor doctor = doctorRepository.findDoctorByProfile_Email(usernameDoctor)
-                    .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
-
 
             if(editMedicalRecordRequest.getFilePath()!=null){
                 existingMedicalRecord.setFilePath(editMedicalRecordRequest.getFilePath());
@@ -82,7 +85,7 @@ public class EditMedicalRecordCommand {
             apiResponse.ok(medicalRecordResponse);
             return apiResponse;
         }catch (Exception ex){
-            throw new ApplicationException("An unexpected error occurred");
+            throw new ApplicationException(ex.getMessage());
         }
     }
 }

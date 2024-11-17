@@ -7,9 +7,13 @@
         <div class="card-body">
           <div class="pro-widget-content">
             <div class="profile-info-widget">
-              <a href="#" class="booking-doc-img">
+              <!-- <a href="#" class="booking-doc-img">
                 <img src="../../../../../assets/images/patients/patient3.jpg" alt="User Image" />
-              </a>
+              </a> -->
+              <div class="booking-doc-img">
+                <p-image  [src]="patientDetail?.avatarFilePath || 'assets/images/doctors/doctor-thumb-01.jpg'"
+                          class="img-fluid" alt="User Image" width="100%" [preview]="true" />
+              </div>
               <div class="profile-det-info">
                 <h3>
                   {{ patientDetail?.firstName }} {{ patientDetail?.lastName }}
@@ -145,7 +149,11 @@
                                   (click)="viewAppointmentDetails(appointment)">
                                   <i class="far fa-eye"></i> View
                                 </a>
-                                <a *ngIf="!appointment.medicalRecordResponse" href="javascript:void(0);" class="btn btn-sm bg-primary-light" data-toggle="modal"
+                                <a *ngIf="!appointment.medicalRecordResponse 
+                                && (appointment.appointmentStatus === 'ACCEPT' || 
+                                  appointment.appointmentStatus === 'RESCHEDULED' ||
+                                  appointment.appointmentStatus === 'COMPLETED'
+                                )" href="javascript:void(0);" class="btn btn-sm bg-primary-light" data-toggle="modal"
                                   data-target="#add_medical_records" (click)="openForm(appointment)">
                                   <i class="far fa-eye"></i> Add Medical Record
                                 </a>
