@@ -9,6 +9,5 @@ import java.util.Date;
 @Setter
 public class RescheduleWithDateRequest {
     private Date dateBooking;
-
     private String bookingHour;
 }

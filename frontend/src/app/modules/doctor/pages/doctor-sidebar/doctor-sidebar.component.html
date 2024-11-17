@@ -3,7 +3,7 @@
     <div class="widget-profile pro-widget-content">
       <div class="profile-info-widget">
         <div class="booking-doc-img">
-          <p-image [src]="doctorProfile?.avatarFilePath || 'assets/images/doctors/doctor-thumb-02.jpg'"
+          <p-image [src]="doctorProfile?.avatarFilePath || 'assets/images/user.png'"
           alt="Doctor Image" width="100%"  [preview]="true"/>
         </div>
 
@@ -31,15 +31,15 @@
             </a>
           </li>
           <li routerLinkActive="active">
-            <a routerLink="/doctor/appointment">
-              <i class="fas fa-calendar-check"></i>
-              <span>Appointments</span>
-            </a>
-          </li>
-          <li routerLinkActive="active">
             <a routerLink="/doctor/calendar">
               <i class="fa-regular fa-calendar"></i>
               <span>My Calendar</span>
+            </a>
+          </li>
+          <li routerLinkActive="active">
+            <a routerLink="/doctor/appointment">
+              <i class="fas fa-calendar-check"></i>
+              <span>Appointments</span>
             </a>
           </li>
           <li routerLinkActive="active">
@@ -48,12 +48,12 @@
               <span>My Patients</span>
             </a>
           </li>
-          <li routerLinkActive="active">
+          <!-- <li routerLinkActive="active">
             <a routerLink="/doctor/schedule">
               <i class="fas fa-hourglass-start"></i>
               <span>Scheduling</span>
             </a>
-          </li>
+          </li> -->
           <li routerLinkActive="active">
             <a routerLink="/doctor/review">
               <i class="fas fa-star"></i>
@@ -67,7 +67,7 @@
             </a>
           </li>
           <li>
-            <a href="javascript:void(0);" (click)="logout()">
+            <a (click)="logout()">
               <i class="fas fa-sign-out-alt"></i>
               <span>Logout</span>
             </a>

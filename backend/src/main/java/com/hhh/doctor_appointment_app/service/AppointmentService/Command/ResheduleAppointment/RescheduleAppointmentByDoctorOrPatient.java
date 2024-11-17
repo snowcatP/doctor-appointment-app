@@ -19,15 +19,15 @@ import java.time.ZoneId;
 import java.util.Date;
 
 @Service
-public class RescheduleAppointmentByDoctor {
+public class RescheduleAppointmentByDoctorOrPatient {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
     @Autowired
     private AppointmentMapper appointmentMapper;
 
-    @PreAuthorize("hasRole('DOCTOR')")
-    public ApiResponse<Object> rescheduleAppointmentByDoctor(Long id, RescheduleWithDateRequest rescheduleWithDateRequest) {
+    @PreAuthorize("hasAnyRole('DOCTOR', 'PATIENT')")
+    public ApiResponse<Object> rescheduleAppointmentByDoctorOrPatient(Long id, RescheduleWithDateRequest rescheduleWithDateRequest) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try {
             // Tìm kiếm Appointment theo id

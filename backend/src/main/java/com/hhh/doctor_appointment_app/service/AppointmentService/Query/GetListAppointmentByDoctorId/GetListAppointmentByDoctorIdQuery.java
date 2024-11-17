@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -50,10 +51,11 @@ public class GetListAppointmentByDoctorIdQuery {
         User user = findUserByEmailQuery.findUserByEmail(username)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
-        Doctor doctor = doctorRepository.findDoctorByProfile_Email(username).orElseThrow(() -> new NotFoundException("Doctor Not Found"));
+        Doctor doctor = doctorRepository.findDoctorByProfile_Email(username)
+                .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
 
 
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page-1, size, Sort.by("dateBooking").descending());
         Page<Appointment> appointmentPage = appointmentRepository.findByDoctorId(doctor.getId(),pageable);
 
         //Convert entities to responses

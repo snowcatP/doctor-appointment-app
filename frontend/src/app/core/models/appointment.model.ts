@@ -32,6 +32,10 @@ export class RescheduleAppointment{
   bookingHour: string;
 }
 
+export class GetAppointmentForReschedulingRequest {
+  doctorEmail: string;
+}
+
 // export class DoctorResponse {
 //   id: number;
 //   firstName: string;

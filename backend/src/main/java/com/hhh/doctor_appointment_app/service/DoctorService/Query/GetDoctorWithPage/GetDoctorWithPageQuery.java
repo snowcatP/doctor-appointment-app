@@ -27,15 +27,16 @@ public class GetDoctorWithPageQuery {
     @Autowired
     private CalculateAverageRatingDoctorQuery calculateAverageRatingDoctorQuery;
 
-    public PageResponse<List<DoctorResponse>> getDoctorsWithPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
-        Page<Doctor> doctorPage = doctorRepository.getDoctorsWithPage(pageable);
+    public List<DoctorResponse> getDoctorsWithPage(int page, int size) {
 
+        List<Doctor> doctors = doctorRepository.findAll();
         //Convert entities to responses
-        List<DoctorResponse> doctorResponses = doctorPage.getContent().stream()
+        // Convert entities to responses
+        List<DoctorResponse> doctorResponses = doctors.stream()
                 .map(doctor -> {
                     double ratingOfDoctor = calculateAverageRatingDoctorQuery.calculateAverageRating(doctor.getId());
                     List<Feedback> feedbacks = feedbackRepository.findAllByDoctor_Id(doctor.getId());
+
                     DoctorResponse response = new DoctorResponse();
                     response.setId(doctor.getId());
                     response.setFirstName(doctor.getProfile().getFirstName());
@@ -49,16 +50,12 @@ public class GetDoctorWithPageQuery {
                     response.setAvatarFilePath(doctor.getProfile().getAvatarFilePath());
                     response.setAverageRating(ratingOfDoctor);
                     response.setNumberOfFeedbacks(feedbacks.size());
+
                     return response;
                 })
                 .collect(Collectors.toList());
 
-        //Create PageResponse Object
-        PageResponse<List<DoctorResponse>> pageResponse = new PageResponse<>();
-        pageResponse.ok(doctorResponses);
-        double total = Math.ceil((double) doctorPage.getTotalElements() / size);
-        pageResponse.setTotalPage((int) total);
-
-        return pageResponse;
+        /// Return the list of doctor responses
+        return doctorResponses;
     }
 }

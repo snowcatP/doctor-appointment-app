@@ -55,6 +55,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
   listDoctors: DoctorBooking[] = [];
   listSpecialties: Specialty[] = [];
   doctorSelected: DoctorBooking;
+  doctorSelected$: Observable<DoctorBooking>;
   bookingDataGuest: BookingDataGuest = new BookingDataGuest();
   dateToday: Date = new Date();
   schedules: any[] = [];
@@ -97,17 +98,17 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
     this.generateAppointmentSlots();
     this.getData();
     this.getObservables();
-    this.webSocketInit();
+    // this.webSocketInit();
     this.subscribeToActions();
   }
 
   ngOnDestroy(): void {
-    if (this.bookingSubscription) {
-      this.bookingSubscription.unsubscribe();
-    }
-    this.webSocketService.disconnectSocket();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete(); // Cleanup subscription on component destroy
+    // if (this.bookingSubscription) {
+    //   this.bookingSubscription.unsubscribe();
+    // }
+    // this.webSocketService.disconnectSocket();
+    // this.unsubscribe$.next();
+    // this.unsubscribe$.complete(); // Cleanup subscription on component destroy
   }
 
   subscribeToActions() {

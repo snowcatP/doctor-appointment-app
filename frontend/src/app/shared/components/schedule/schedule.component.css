@@ -1,0 +1,12 @@
+.input-disabled {
+    cursor: not-allowed;
+}
+
+a {
+    cursor: pointer;
+    font-size: 15px;
+}
+
+a:hover {
+    color: #09dca4;
+}

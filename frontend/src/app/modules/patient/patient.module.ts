@@ -18,6 +18,9 @@ import { PaginatorModule } from 'primeng/paginator';
 import { DialogModule } from 'primeng/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SharedModule } from "../../shared/shared.module";
+import { MatButtonModule } from '@angular/material/button';
+import { DropdownModule } from 'primeng/dropdown';
 @NgModule({
   declarations: [
     PatientComponent,
@@ -39,7 +42,10 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     PaginatorModule,
     DialogModule,
     MatDialogModule,
-    ProgressSpinnerModule
-  ]
+    ProgressSpinnerModule,
+    SharedModule,
+    MatButtonModule,
+    DropdownModule
+]
 })
 export class PatientModule { }
