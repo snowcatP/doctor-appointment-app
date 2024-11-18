@@ -47,6 +47,7 @@ import { Actions, ofType } from '@ngrx/effects';
 export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
   @ViewChild('emailInput') emailInput: ElementRef;
   isLoading: boolean = false;
+  loading: boolean = false;
   formBooking: FormGroup;
   formBookingDate: FormGroup;
   formLogin: FormGroup;
@@ -182,6 +183,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         .getAppointmentsForBooking(this.doctorSelected.id)
         .subscribe({
           next: (res) => {
+            console.log(res)
             this.appointmentsBooked = res;
             this.isLoading = false;
             setTimeout(() => {
@@ -198,6 +200,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
 
   submitAppointment() {
     if (this.isLogged) {
+      this.loading = true; // Start loading
       const bookingData: BookingDataPatient = {
         doctorId: this.doctorSelected.id,
         patientId: this.user.id,
@@ -209,6 +212,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
       this.appointmentService.createAppointmentByPatient(bookingData).subscribe({
         next: (res) => {
           if (res.statusCode === 200) {
+            this.loading = false; // Stop loading
             this.setAppointmentForSuccess(null, res?.data);
             this.messageService.add({
               key: 'messageToast',
@@ -223,7 +227,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
               ]);
             }, 2000);
           } else {
-            console.log(res)
+            this.loading = false; // Stop loading
             this.messageService.add({
               key: 'messageToast',
               severity: 'error',
@@ -233,6 +237,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
           }
         },
         error: (err) => {
+          this.loading = false; // Stop loading
           this.messageService.add({
             key: 'messageToast',
             severity: 'error',
@@ -243,6 +248,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         },
       })
     } else {
+      this.loading = true; // Start loading
       const bookingData: BookingDataGuest = {
         doctorId: this.doctorSelected.id,
         doctorName: this.doctorSelected.fullName,
@@ -260,6 +266,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (res) => {
             if (res.statusCode === 200) {
+              this.loading = false; // Stop loading
               this.setAppointmentForSuccess(res?.data);
               this.messageService.add({
                 key: 'messageToast',
@@ -274,7 +281,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
                 ]);
               }, 2000);
             }else {
-              console.log(res)
+              this.loading = false; // Stop loading
               this.messageService.add({
                 key: 'messageToast',
                 severity: 'error',
@@ -284,6 +291,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
             }
           },
           error: (err) => {
+            this.loading = false; // Stop loading
             this.messageService.add({
               key: 'messageToast',
               severity: 'error',

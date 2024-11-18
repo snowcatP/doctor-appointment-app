@@ -42,6 +42,7 @@ export class DoctorAppointmentComponent implements OnInit {
       { name: 'All', code: 'ALL' },
       { name: 'Accept', code: 'ACCEPT' },
       { name: 'Pending', code: 'PENDING' },
+      { name: 'Rescheduled', code: 'RESCHEDULED' },
       { name: 'Cancelled', code: 'CANCELLED' },
     ];
     this.selectedOption = { name: 'All', code: 'ALL' };

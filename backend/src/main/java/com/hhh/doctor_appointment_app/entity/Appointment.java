@@ -1,5 +1,6 @@
 package com.hhh.doctor_appointment_app.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hhh.doctor_appointment_app.enums.AppointmentStatus;
 import com.hhh.doctor_appointment_app.state.*;
@@ -45,7 +46,7 @@ public class Appointment {
     private Patient patient;
 
     @ManyToOne()
-    @JsonIgnore
+    @JsonBackReference
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 

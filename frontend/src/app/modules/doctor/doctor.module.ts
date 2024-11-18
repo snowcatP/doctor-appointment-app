@@ -36,7 +36,8 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
 import { SharedModule } from '../../shared/shared.module';
 import { DropdownModule } from 'primeng/dropdown';
-
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 @NgModule({
   declarations: [
     DoctorAppointmentComponent,
@@ -76,7 +77,9 @@ import { DropdownModule } from 'primeng/dropdown';
     MatButtonModule,
     ConfirmPopupModule,
     SharedModule,
-    DropdownModule
+    DropdownModule,
+    InputGroupModule,
+    InputGroupAddonModule
   ],
   providers: [ConfirmationService],
 })

@@ -288,7 +288,9 @@ table.table td h2 span {
 }
 .card-table .card-body {
     padding: 0;
+	
 }
+
 .card-table .card-body .table > thead > tr > th {
     border-top: 0;
 }
@@ -4047,7 +4049,6 @@ html.menu-opened body {
     font-size: .875rem;
     font-weight: 500;
     color: #272b41;
-    text-transform: capitalize;
 }
 .patient-info ul li + li {
 	margin-top: 15px;
@@ -6474,6 +6475,7 @@ html.menu-opened body {
 	}
 	.card-body {
 		padding: 1.25rem;
+
 	}
 	.card-header {
 		padding: .75rem 1.25rem;
