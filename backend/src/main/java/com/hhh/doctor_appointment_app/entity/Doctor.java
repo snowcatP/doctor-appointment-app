@@ -34,8 +34,10 @@ public class Doctor{
     private List<MedicalRecord> medicalRecordList = new ArrayList<>();
 
     @OneToMany(mappedBy = "doctor",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Appointment> appointmentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "doctor",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Feedback> feedbackList = new ArrayList<>();
 }

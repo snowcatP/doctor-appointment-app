@@ -74,33 +74,13 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     // Handle patient and guest booking
-    if (
-      !this.isReschedule &&
-      changes.doctorSelected?.currentValue != undefined
-    ) {
-      this.isLoading = true;
-      this.appointmentService
-        .getAppointmentsForBooking(this.doctorSelected.id)
-        .subscribe({
-          next: (res) => {
-            this.appointmentsBooked = res;
-            this.isLoading = false;
-            setTimeout(() => {
-              this.handleAppointmentsBooked();
-            }, 100);
-          },
-          error: (err) => {
-            console.log(err);
-            this.isLoading = false;
-          },
-        });
-    }
-
-    // handle reschedule
-    if (this.isReschedule && changes.selectedApp?.currentValue != undefined) {
-      this.store.select(fromAuth.selectRole).subscribe((r) => {
-        if (r === 'PATIENT') {
-          this.isLoading = true;
+    this.isLoading = true;
+    this.store.select(fromAuth.selectRole).subscribe((r) => {
+      if (r === 'PATIENT') {
+        if (
+          this.isReschedule &&
+          changes.selectedApp?.currentValue != undefined
+        ) {
           const request: GetAppointmentForReschedulingRequest = {
             doctorEmail: changes.selectedApp?.currentValue?.doctor?.email,
           };
@@ -119,22 +99,36 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
                 this.isLoading = false;
               },
             });
-        } else {
-          this.appointmentService.getAppointmentsForRescheduling().subscribe({
-            next: (res) => {
-              this.appointmentsBooked = res;
-              this.handleAppointmentsBooked();
-              this.isLoading = false;
-            },
-            error: (err) => {
-              console.log(err);
-              this.isLoading = false;
-            },
-          });
         }
-      });
+      } else {
+        if (
+          !this.isReschedule &&
+          changes.doctorSelected?.currentValue != undefined
+        ) {
+          this.appointmentService
+            .getAppointmentsForBooking(this.doctorSelected.id)
+            .subscribe({
+              next: (res) => {
+                this.appointmentsBooked = res;
+                this.isLoading = false;
+                setTimeout(() => {
+                  this.handleAppointmentsBooked();
+                }, 100);
+              },
+              error: (err) => {
+                console.log(err);
+                this.isLoading = false;
+              },
+            });
+        }
+      }
+    });
+
+    if (changes.selectedApp?.currentValue != undefined) {
+      this.handleAppointmentsBooked();
     }
     this.isLoading = false;
+
   }
 
   ngOnDestroy(): void {
