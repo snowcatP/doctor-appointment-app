@@ -9,6 +9,7 @@ import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
+import com.hhh.doctor_appointment_app.service.EmailService.Command.SendEmailWhenAppointmentStatusChange.SendEmailWhenAppointmentStatusChangeCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -39,6 +37,9 @@ public class ChangeStatusAppointmentCommand {
 
     @Autowired
     private AppointmentMapper appointmentMapper;
+
+    @Autowired
+    private SendEmailWhenAppointmentStatusChangeCommand sendEmailWhenAppointmentStatusChangeCommand;
 
     @PreAuthorize("hasRole('DOCTOR')")
     public ApiResponse<Object> changeStatusAppointmentByDoctor(Long id) {
@@ -86,6 +87,18 @@ public class ChangeStatusAppointmentCommand {
 
             // Lưu trạng thái mới
             appointmentRepository.saveAndFlush(appointment);
+
+            sendEmailWhenAppointmentStatusChangeCommand.sendAppointmentNotificationWhenChangeStatus(
+                    appointment.getEmail(),
+                    appointment.getFullName(),
+                    appointment.getPhone(),
+                    appointment.getAppointmentStatus().toString(),
+                    appointment.getReferenceCode(),
+                    appointment.getDateBooking().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                    appointment.getBookingHour(),
+                    appointment.getDoctor().getProfile().getFullName()
+            );
+
             AppointmentResponse appointmentResponse = appointmentMapper.toResponse(appointment);
             apiResponse.ok(appointmentResponse);
 

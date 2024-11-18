@@ -1,11 +1,10 @@
-<p-dialog
-  header="Reply review for Patient {{ data.patientResponse.firstName }} {{ data.patientResponse.lastName }}"
-  [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }" (onHide)="onClose.emit()">
-<form (ngSubmit)="onSubmitReview()" #reviewForm="ngForm">
-  
+<p-dialog header="Reply review for Patient {{ data.patientResponse.firstName }} {{ data.patientResponse.lastName }}"
+  [modal]="true" [(visible)]="visible" [style]="{ width: '35rem' }" (onHide)="onClose.emit()">
+  <form (ngSubmit)="onSubmitReview()" #reviewForm="ngForm">
+
     <div class="form-group">
       <label class="font-semibold w-6rem">Your review</label>
-      
+
       <textarea id="review_desc" maxlength="100" class="form-control" [(ngModel)]="feedbackRequest.comment"
         name="comment"></textarea>
       <small class="text-muted"><span id="chars">100</span> characters remaining</small>
@@ -20,7 +19,13 @@
       </div>
     </div>
 
-    <button type="button" class="btn btn-cancel" (click)="onCancel()">Cancel</button>
-    <button type="submit" class="btn btn-primary submit-btn" [disabled]="!reviewForm.valid">Add Review</button>
+    <!-- <button type="button" class="btn btn-cancel" (click)="onCancel()">Cancel</button>
+    <button type="submit" class="btn btn-primary submit-btn" [disabled]="!reviewForm.valid">Add Review</button> -->
+    <div class="d-flex justify-content-between pt-4">
+      <button mat-raised-button (click)="onCancel()">Close</button>
+      <button type="submit" mat-flat-button [disabled]="!reviewForm.valid">
+        Add Review
+      </button>
+    </div>
   </form>
 </p-dialog>

@@ -85,6 +85,17 @@ public class CreateAppointmentByGuestCommand {
                     appointmentMapper.toBookingNotificationResponse(appointment)
             );
 
+            sendAppointmentNotificationCommand.sendAppointmentNotification(
+                    appointment.getEmail(),
+                    appointment.getFullName(),
+                    appointment.getPhone(),
+                    appointment.getAppointmentStatus().toString(),
+                    appointment.getReferenceCode(),
+                    appointment.getDateBooking().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                    appointment.getBookingHour(),
+                    appointment.getDoctor().getProfile().getFullName()
+            );
+
             apiResponse.setMessage("Appointment Created Successfully !");
             apiResponse.ok(appointmentResponse);
             return apiResponse;
