@@ -98,7 +98,6 @@ export class DoctorTableComponent {
       'https://firebasestorage.googleapis.com/v0/b/doctorappointmentwebapp.appspot.com/o/16971d8f-924a-4dc0-9de4-f2de7db5fe40_default-avatar.jpg?alt=media';
     this.doctorService.getListDoctor().subscribe({
       next: (resp) => {
-        console.log(resp);
         this.doctors = resp.map((doctor: Doctor) => {
           // Check if avatarFilePath is null or empty, and set default if needed
           doctor.avatarFilePath = doctor.avatarFilePath ?? defaultAvatarPath;
