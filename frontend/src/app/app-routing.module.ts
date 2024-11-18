@@ -30,7 +30,7 @@ const routes: Routes = [
       import('./modules/patient/patient.module').then((m) => m.PatientModule),
     canActivate: [authGuard],
     data: {
-      permission: 'PATIENT',
+      permission: ['PATIENT'],
       redirectTo: '/error-404'
     }
   },
@@ -40,7 +40,7 @@ const routes: Routes = [
       import('./modules/doctor/doctor.module').then((m) => m.DoctorModule),
     canActivate: [authGuard],
     data: {
-      permission: 'DOCTOR',
+      permission: ['DOCTOR'],
       redirectTo: '/error-404'
     }
   },

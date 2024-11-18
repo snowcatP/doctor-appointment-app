@@ -38,7 +38,8 @@ export class AuthService {
     const token = localStorage.getItem('token');
     if (token) {
       const decodedToken = jwtDecode<any>(token);
-      if (decodedToken?.scope == permission)  return true;
+      const scope: string = decodedToken?.scope;
+      if (scope.includes(permission))  return true;
     }
     return false;
   }
