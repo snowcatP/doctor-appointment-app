@@ -145,19 +145,6 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
     this.store.dispatch(AuthActions.loginRequest({ credential }));
   }
 
-  webSocketInit() {
-    this.webSocketService
-      .connectSocket()
-      .pipe(filter((state) => state))
-      .subscribe(() => {
-        this.bookingSubscription = this.webSocketService
-          .on('/app-ws/booking/notifications')
-          .subscribe((notification: BookingNotification) => {
-            this.handleAppointmentSendFromWs(notification);
-          });
-      });
-  }
-
   getObservables() {
     this.isLogged$ = this.store.select(fromAuth.selectIsLogged);
     this.isLogged$.subscribe((res) => (this.isLogged = res as boolean));
@@ -179,6 +166,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
 
   selectBookingDate(slot: TimeSlot) {
     this.timeSlotSelected = slot;
+    console.log(this.timeSlotSelected)
     this.formBookingDate.controls['bookingDate'].setValue(
       this.timeSlotSelected.date
     );
@@ -322,37 +310,6 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
 
   closeBooking() {
     this.router.navigate(['/']);
-  }
-
-  handleAppointmentSendFromWs(app: BookingNotification) {
-    if (!this.doctorSelected || app.doctor.id !== this.doctorSelected.id) {
-      return;
-    }
-    const bookingDate = this.formatDate(app.dateBooking);
-    if (
-      this.formatDate(this.timeSlotSelected.date) == bookingDate &&
-      app.bookingHour == this.timeSlotSelected.time
-    ) {
-      this.timeSlotSelected = null;
-    }
-    this.schedules.forEach((week: AppointmentSlot[]) => {
-      week.forEach((day: AppointmentSlot) => {
-        day.timeSlotsMorning.forEach((timeSlot: TimeSlot) => {
-          const tsDate = this.formatDate(timeSlot.date);
-          if (tsDate == bookingDate && timeSlot.time == app.bookingHour) {
-            timeSlot.isBooked = true;
-            return;
-          }
-        });
-        day.timeSlotsAfternoon.forEach((timeSlot: TimeSlot) => {
-          const tsDate = this.formatDate(timeSlot.date);
-          if (tsDate == bookingDate && timeSlot.time == app.bookingHour) {
-            timeSlot.isBooked = true;
-            return;
-          }
-        });
-      });
-    });
   }
 
   handleAppointmentsBooked() {

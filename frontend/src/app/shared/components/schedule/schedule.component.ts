@@ -115,7 +115,7 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
           },
         });
     }
-    if (changes.selectedApp.currentValue != undefined) {
+    if (changes.selectedApp?.currentValue != undefined) {
       this.handleAppointmentsBooked();
     }
   }
@@ -147,12 +147,12 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
     const bookingDate = this.formatDate(app.dateBooking);
-    if (
-      this.formatDate(this.timeSlotSelected.date) == bookingDate &&
-      app.bookingHour == this.timeSlotSelected.time
-    ) {
-      this.timeSlotSelected = null;
-    }
+    // if (
+    //   this.formatDate(this.timeSlotSelected.date) == bookingDate &&
+    //   app.bookingHour == this.timeSlotSelected.time
+    // ) {
+    //   this.timeSlotSelected = null;
+    // }
     this.schedules.forEach((week: AppointmentSlot[]) => {
       week.forEach((day: AppointmentSlot) => {
         day.timeSlotsMorning.forEach((timeSlot: TimeSlot) => {
