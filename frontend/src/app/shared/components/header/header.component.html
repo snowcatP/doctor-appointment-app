@@ -3,11 +3,57 @@
   <nav class="navbar navbar-expand-lg header-nav">
     <div class="navbar-header">
       <p-sidebar [(visible)]="sidebarVisible">
-        <h3>Sidebar</h3>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        </p>
+        <a routerLink="/" routerLinkActive="active" class="navbar-brand logo">
+          <img src="assets/images/logo.png" class="img-fluid" alt="Logo" />
+        </a>
+        <div class="pt-2" *ngIf="(role$ | async) === 'DOCTOR'">
+          <h5>Doctor</h5>
+          <mat-list>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/doctor/dashboard" (click)="closeSideBar()">Dashboard</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/doctor/appointment" (click)="closeSideBar()"
+                >Appointments</a
+              >
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/doctor/calendar" (click)="closeSideBar()">My Calendar</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/doctor/review" (click)="closeSideBar()">Reviews</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/doctor/profile" (click)="closeSideBar()"
+                >Profile Settings</a
+              >
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle (click)="logout()" (click)="closeSideBar()">Logout</a>
+            </mat-list-item>
+          </mat-list>
+        </div>
+        <div class="pt-2" *ngIf="(role$ | async) === 'PATIENT'">
+          <h5>Patient</h5>
+          <mat-list>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/patient/dashboard" (click)="closeSideBar()">Dashboard</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/patient/profile" (click)="closeSideBar()"
+                >Profile Settings</a
+              >
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/patient/change-password" (click)="closeSideBar()"
+                >Change Password</a
+              >
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle (click)="logout()" (click)="closeSideBar()">Logout</a>
+            </mat-list-item>
+          </mat-list>
+        </div>
       </p-sidebar>
       <button mat-icon-button (click)="sidebarVisible = true">
         <mat-icon>menu</mat-icon>
@@ -29,45 +75,47 @@
         <li class="active">
           <a routerLink="/" routerLinkActive="active">Home</a>
         </li>
-        <!-- <li
-          class="has-submenu"
-          *ngIf="accessChecker.isGranted('DOCTOR', '*') | async"
-        > -->
-        <!-- </li> -->
-        <li class="has-submenu">
+        <li class="has-submenu" *ngIf="(role$ | async) === 'DOCTOR'">
           <a href="#">Doctors <i class="fas fa-chevron-down"></i></a>
           <ul class="submenu">
             <li><a routerLink="/doctor">Doctor Dashboard</a></li>
             <li><a routerLink="/doctor/appointment">Appointments</a></li>
-            <li><a routerLink="/doctor/schedule">Schedule Timing</a></li>
             <li><a routerLink="/doctor/calendar">My Calendar</a></li>
             <li><a routerLink="/doctor/profile">Profile Settings</a></li>
             <li><a routerLink="/doctor/review">Reviews</a></li>
           </ul>
         </li>
-        <!-- <li
-          class="has-submenu"
-          *ngIf="accessChecker.isGranted('PATIENT', '*') | async"
-        > -->
-        <!-- </li> -->
-        <li class="has-submenu">
+        <li class="has-submenu"*ngIf="(role$ | async) !== 'DOCTOR'">
           <a href="#">Patients <i class="fas fa-chevron-down"></i></a>
           <ul class="submenu">
             <li><a [routerLink]="['/search-doctor']">Search Doctor</a></li>
             <li><a [routerLink]="['/doctor-profile']">Doctor Profile</a></li>
             <li><a [routerLink]="['/booking']">Booking</a></li>
-            <li><a [routerLink]="['/booking/success']">Booking Success</a></li>
-
-            <!-- <div *ngIf="accessChecker.isGranted('patient', 'view') | async"> -->
-            <li><a [routerLink]="['/patient']">Patient Dashboard</a></li>
-            <li><a [routerLink]="['/patient/profile']">Profile Settings</a></li>
             <li>
-              <a [routerLink]="['/patient/change-password']">Change Password</a>
+              <a
+                [routerLink]="['/patient']"
+                *ngIf="(role$ | async) === 'PATIENT'"
+                >Patient Dashboard</a
+              >
+            </li>
+            <li>
+              <a
+                [routerLink]="['/patient/profile']"
+                *ngIf="(role$ | async) === 'PATIENT'"
+                >Profile Settings</a
+              >
+            </li>
+            <li>
+              <a
+                [routerLink]="['/patient/change-password']"
+                *ngIf="(role$ | async) === 'PATIENT'"
+                >Change Password</a
+              >
             </li>
             <!-- </div> -->
           </ul>
         </li>
-        <li class="has-submenu">
+        <!-- <li class="has-submenu">
           <a href="#">Pages <i class="fas fa-chevron-down"></i></a>
           <ul class="submenu">
             <li><a href="voice-call.html">Voice Call</a></li>
@@ -87,7 +135,7 @@
         </li>
         <li>
           <a href="admin/index.html" target="_blank">Admin</a>
-        </li>
+        </li> -->
       </ul>
     </div>
     <ul class="nav header-navbar-rht">

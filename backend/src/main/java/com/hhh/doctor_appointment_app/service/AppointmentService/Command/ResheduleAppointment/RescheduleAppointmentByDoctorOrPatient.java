@@ -81,7 +81,7 @@ public class RescheduleAppointmentByDoctorOrPatient {
         } catch (Exception ex) {
             return ApiResponse.builder()
                     .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                    .message("Appointment Reschedule Failed!")
+                    .message(ex.getMessage())
                     .build();
         }
     }

@@ -75,6 +75,7 @@ export class DoctorCalendarComponent implements OnInit {
 
   handleSelectedSlot(timeslot: TimeSlot) {
     this.timeSlotSelected = timeslot;
+    console.log(this.timeSlotSelected)
   }
 
   submitRescheduleAppointment() {
@@ -164,7 +165,7 @@ export class DoctorCalendarComponent implements OnInit {
     this.appointments.forEach((appointment) => {
       const date = this.formatDate(appointment.dateBooking);
       const bookingHours = this.formatBookingHour(appointment.bookingHour);
-      if (appointment.appointmentStatus != 'RESCHEDULED') {
+      // if (appointment.appointmentStatus != 'RESCHEDULED') {
         this.appointmentEvents.push({
           id: appointment.id.toString(),
           title: `Meet ${appointment.fullName}`,
@@ -173,7 +174,7 @@ export class DoctorCalendarComponent implements OnInit {
           backgroundColor: this.statusColor(appointment.appointmentStatus),
           groupId: `${appointment.appointmentStatus}`,
         } as EventInput);
-      }
+      // }
     });
     this.calendarOptions.events = this.appointmentEvents;
     this.isLoading = false;

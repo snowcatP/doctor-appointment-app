@@ -42,12 +42,7 @@ import { ScrollTopModule } from 'primeng/scrolltop';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    FooterComponent,
-    HeaderComponent,
-    Page404Component,
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -61,10 +56,6 @@ import { SharedModule } from './shared/shared.module';
     HomeModule,
     BookingAppointmentModule,
     SharedModule,
-    MatMenuModule,
-    MatIconModule,
-    SidebarModule,
-    MatButtonModule,
     ScrollTopModule,
     StoreModule.forRoot({ auth: authReducer }, {}),
     EffectsModule.forRoot([AuthEffect]),

@@ -61,9 +61,9 @@ export class LoginComponent implements OnInit, OnDestroy {
           summary: 'Success',
           detail: 'Login successfully',
         });
-        this.isLoading = false;
         setTimeout(() => {
           this.router.navigateByUrl('/');
+          this.isLoading = false;
         }, 1500);
       });
   }
