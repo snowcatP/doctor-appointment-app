@@ -25,24 +25,33 @@ const routes: Routes = [
       ).then((m) => m.BookingAppointmentModule),
   },
   {
+    path: 'chat',
+    loadChildren: () =>
+      import(
+        './modules/chat/chat.module'
+      ).then((m) => m.ChatModule),
+    canActivate: [authGuard],
+    data: {
+      permission: ['PATIENT', 'DOCTOR']
+    }
+  },
+  {
     path: 'patient',
     loadChildren: () =>
       import('./modules/patient/patient.module').then((m) => m.PatientModule),
-    // canActivate: [authGuard],
-    // data: {
-    //   permission: 'patient',
-    //   redirectTo: '/error-404'
-    // }
+    canActivate: [authGuard],
+    data: {
+      permission: ['PATIENT']
+    }
   },
   {
     path: 'doctor',
     loadChildren: () =>
       import('./modules/doctor/doctor.module').then((m) => m.DoctorModule),
-    // canActivate: [authGuard],
-    // data: {
-    //   permission: 'doctor',
-    //   redirectTo: '/error-404'
-    // }
+    canActivate: [authGuard],
+    data: {
+      permission: ['DOCTOR']
+    }
   },
   {
     path: 'nurse',

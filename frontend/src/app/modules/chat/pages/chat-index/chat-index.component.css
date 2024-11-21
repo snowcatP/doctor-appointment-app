@@ -1,0 +1,27 @@
+.user-name {
+    font-weight: 500 !important;
+}
+
+.media.received > .avatar > img {
+    width: 30px !important;
+}
+
+.mat-success {
+    background-color: #5cefc8;
+}
+
+mat-icon {
+    color: #fff;
+}
+
+.chat-compose:hover {
+    cursor: pointer;
+}
+
+.more-icon {
+    color: #838080;
+}
+
+.more-icon:hover {
+    color: black;
+}

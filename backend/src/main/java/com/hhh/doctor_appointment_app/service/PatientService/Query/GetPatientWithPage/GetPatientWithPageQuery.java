@@ -31,7 +31,7 @@ public class GetPatientWithPageQuery {
                 .map(patient -> {
                     PatientResponse response = new PatientResponse();
                     response.setId(patient.getId());
-                    response.setFullname(patient.getProfile().getFirstName() + " " + patient.getProfile().getLastName());
+                    response.setFullName(patient.getProfile().getFirstName() + " " + patient.getProfile().getLastName());
                     response.setGender(patient.getProfile().isGender());
                     response.setPhone(patient.getProfile().getPhone());
                     response.setEmail(patient.getProfile().getEmail());

@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import * as AuthActions from '../../../core/states/auth/auth.actions';
 import { MessageService } from 'primeng/api';
-import { MediaMatcher } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-header',
@@ -18,6 +17,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 export class HeaderComponent implements OnInit {
   token$: Observable<string>;
   user$: Observable<User>;
+  role$: Observable<string>;
   sidebarVisible: boolean = false;
   constructor(
     public accessChecker: NbAccessChecker,
@@ -30,6 +30,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.token$ = this.store.select(fromAuth.selectToken);
     this.user$ = this.store.select(fromAuth.selectUser);
+    this.role$ = this.store.select(fromAuth.selectRole);
   }
 
   goToDashboard() {
@@ -76,5 +77,9 @@ export class HeaderComponent implements OnInit {
         });
       },
     });
+  }
+
+  closeSideBar() {
+    this.sidebarVisible = false;
   }
 }

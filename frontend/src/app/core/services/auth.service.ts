@@ -7,7 +7,7 @@ import {
   RegisterRequest,
   User,
 } from '../models/authentication.model';
-import { catchError, Observable, tap, throwError,BehaviorSubject } from 'rxjs';
+import { catchError, Observable, tap, throwError, BehaviorSubject, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { host } from '../../../environments/environment';
 import { Store } from '@ngrx/store';
@@ -24,16 +24,25 @@ export class AuthService {
     private jwtHelper: JwtHelperService,
     private http: HttpClient,
     private store: Store
-  ) { 
-    }
+  ) { }
 
 
-  isAuthenticated(): boolean {
+  isAuthenticated(): Observable<boolean> {
     const token = localStorage.getItem('token');
     if (this.jwtHelper.decodeToken(token) == null) {
-      return false;
+      return of(false);
     }
-    return !this.jwtHelper.isTokenExpired(token);
+    return of(!this.jwtHelper.isTokenExpired(token));
+  }
+
+  hasPermission(permission: string): boolean {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = jwtDecode<any>(token);
+      const scope: string = decodedToken?.scope;
+      if (permission.includes(scope))  return true;
+    }
+    return false;
   }
 
   refreshToken(): Observable<LoginSucessResponse> {

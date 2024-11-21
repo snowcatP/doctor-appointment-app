@@ -18,7 +18,7 @@ public class PatientResponse {
 
     private String lastName;
 
-    private String fullname;
+    private String fullName;
 
     private boolean gender;
 
