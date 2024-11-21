@@ -1,5 +1,5 @@
 <!-- Header -->
-<header class="header">
+<header class="header" style="max-height: 7vh;">
   <nav class="navbar navbar-expand-lg header-nav">
     <div class="navbar-header">
       <p-sidebar [(visible)]="sidebarVisible">
@@ -115,27 +115,9 @@
             <!-- </div> -->
           </ul>
         </li>
-        <!-- <li class="has-submenu">
-          <a href="#">Pages <i class="fas fa-chevron-down"></i></a>
-          <ul class="submenu">
-            <li><a href="voice-call.html">Voice Call</a></li>
-            <li><a href="video-call.html">Video Call</a></li>
-            <li><a [routerLink]="['/search-doctor']">Search Doctors</a></li>
-            <li><a href="calendar.html">Calendar</a></li>
-            <li><a href="components.html">Components</a></li>
-            <li class="has-submenu">
-              <a href="invoices.html">Invoices</a>
-              <ul class="submenu">
-                <li><a href="invoices.html">Invoices</a></li>
-                <li><a href="invoice-view.html">Invoice View</a></li>
-              </ul>
-            </li>
-            <li><a href="blank-page.html">Starter Page</a></li>
-          </ul>
-        </li>
         <li>
-          <a href="admin/index.html" target="_blank">Admin</a>
-        </li> -->
+          <a routerLink="/chat" routerLinkActive="active">Chat</a>
+        </li>
       </ul>
     </div>
     <ul class="nav header-navbar-rht">
@@ -170,7 +152,6 @@
                 'assets/images/patients/patient.jpg'
               "
               width="40"
-              alt="Ryan Taylor"
             />
           </span>
         </button>

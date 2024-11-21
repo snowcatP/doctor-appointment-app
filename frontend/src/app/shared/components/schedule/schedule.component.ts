@@ -146,7 +146,7 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(filter((state) => state))
       .subscribe(() => {
         this.bookingSubscription = this.webSocketService
-          .on('/app-ws/booking/notifications')
+          .on('/topic/booking/notifications')
           .subscribe((notification: BookingNotification) => {
             this.handleAppointmentSendFromWs(notification);
           });
