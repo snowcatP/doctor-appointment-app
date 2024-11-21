@@ -1,15 +1,22 @@
+<div>
+    <div class="card">
 
+    </div>
+    <div class="card">
+        
+    </div>
+</div>
 <div class="card">
     <p-toolbar>
     </p-toolbar>
     <p-toolbar styleClass="mb-4 gap-2">
         <ng-template pTemplate="left">
             <p-button severity="success" label="New" icon="pi pi-plus" class="mr-2"
-                (onClick)="showAddNewDoctorDialog()" />
-            <p-dialog header="Add new doctor" [modal]="true" [(visible)]="addNewDoctorVisible"
+                (onClick)="showAddSpecialty()" />
+            <!-- <p-dialog header="Add new doctor" [modal]="true" [(visible)]="addNewSpecialtyVisible"
                 [style]="{ width: '55rem' }">
                 <span class="p-text-secondary block mb-5">Type doctor's information.</span>
-                <form [formGroup]="formAddNewDoctor" (ngSubmit)="addNewDoctor()">
+                <form [formGroup]="formAddNewSpecialty" (ngSubmit)="addNewSpecialty()">
                     <p-inputGroup>
                         <span class="font-bold block mb-2">First name: </span>
                         <input pInputText placeholder="First name" formControlName="firstName">
@@ -71,9 +78,10 @@
                     <p-inputGroup></p-inputGroup>
 
                 </form>
-            </p-dialog>
+            </p-dialog> -->
             <p-button severity="danger" label="Delete" icon="pi pi-trash" 
-                [disabled]="!selectedDoctors || !selectedDoctors.length" (onClick)="deleteMultipleDoctor()"/>
+                [disabled]="!selectedSpecialty || !selectedSpecialty.length" (onClick)="deleteMultipleSpecialty()"
+                />
         </ng-template>
         <ng-template pTemplate="right">
             <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import"
@@ -82,9 +90,9 @@
         </ng-template>
     </p-toolbar>
     <p-confirmDialog />
-    <p-dialog header="Edit Doctor's Information" [modal]="true" [(visible)]="viewDoctorDetailsVisible" [style]="{ width: '55rem' }">
-        <span class="p-text-secondary block mb-5">Type doctor's information.</span>
-        <form [formGroup]="formEditDoctor" (ngSubmit)="editDoctor()">
+    <!-- <p-dialog header="Edit Doctor's Information" [modal]="true" [(visible)]="viewSpecilatyDetailsVisible" [style]="{ width: '55rem' }">
+        <span class="p-text-secondary block mb-5">Type doctor's information.</span> -->
+        <!-- <form [formGroup]="formEditDoctor" (ngSubmit)="editSpecialty()">
             <div class="doctor-details-form">
 
                 <div class="general-doctor-information">
@@ -169,10 +177,10 @@
             </div>
             
         </form>
-    </p-dialog>
-    <p-table #myTab [value]="doctors" styleClass="p-datatable-striped" [paginator]="true"
+    </p-dialog> -->
+    <p-table #myTab [value]="specialties" styleClass="p-datatable-striped" [paginator]="true"
     [tableStyle]="{'min-width': '75rem'}" [rowHover]="true " dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
-    [globalFilterFields]="['firstName', 'lastName']" [(selection)]="selectedDoctors">
+    [globalFilterFields]="['firstName', 'lastName']" [(selection)]="selectedSpecialty">
     <ng-template pTemplate="header">
             
             <tr>
@@ -181,88 +189,57 @@
                 </th>
                 <th pSortableColumn="id" style="min-width:10rem">
                     <div class="flex justify-content-between align-items-center">
-                        Doctor Id <p-sortIcon field="id" />
+                        Specialty Id <p-sortIcon field="id" />
                         <p-columnFilter type="text" field="id" display="menu" class="ml-auto" />
                     </div>
                 </th>
-                <th pSortableColumn="firstName" style="min-width:12rem">
+                <th pSortableColumn="specialtyName" style="min-width:12rem">
                     <div class="flex justify-content-between align-items-center">
-                        First Name <p-sortIcon field="firstName" />
-                        <p-columnFilter type="text" field="firstName" display="menu" class="ml-auto" />
+                        Specialty Name <p-sortIcon field="specialtyName" />
+                        <p-columnFilter type="text" field="specialtyName" display="menu" class="ml-auto" />
                     </div>
                 </th>
-                <th pSortableColumn="lastName" style="min-width:12rem">
+                <th pSortableColumn="headDoctor" style="min-width:12rem">
 
-                    Last Name <p-sortIcon field="lastName" />
-                    <p-columnFilter type="text" field="lastName" display="menu" class="ml-auto" />
-
-                </th>
-                <th style="min-width:10rem">
-                    Doctor Avatar 
-                </th>
-                <th pSortableColumn="gender" style="min-width:15rem">
-                    Gender <p-sortIcon field="gender" />
-                </th>
-                <th pSortableColumn="address" style="min-width:15rem">
-                    Address <p-sortIcon field="address" />
-                    <p-columnFilter type="text" field="address" display="menu" class="ml-auto" />
+                    Head Doctor<p-sortIcon field="headDoctor" />
+                    <p-columnFilter type="text" field="headDoctor" display="menu" class="ml-auto" />
 
                 </th>
-                <th pSortableColumn="specialty.specialtyName" style="min-width:15rem">
-                    Speciality <p-sortIcon field="specialty.specialtyName" />
-                    <p-columnFilter type="text" field="specialty.specialtyName" display="menu" class="ml-auto" />
+                
+                <th pSortableColumn="doctorList" style="min-width:15rem">
+                    Doctor List <p-sortIcon field="doctorList" />
+                    <p-columnFilter type="text" field="doctorList" display="menu" class="ml-auto" />
 
                 </th>
-                <th pSortableColumn="averageRating" style="min-width:15rem">
-                    Rating <p-sortIcon field="averageRating" />
-                    
-                </th>
-                <th pSortableColumn="phone" style="min-width:15rem">
-                    Phone <p-sortIcon field="phone" />
-                    <p-columnFilter type="text" field="phone" display="menu" class="ml-auto" />
-
-                </th>
-                <th pSortableColumn="email" style="min-width:15rem">
-                    Email <p-sortIcon field="email" />
-                    <p-columnFilter type="text" field="email" display="menu" class="ml-auto" />
-                </th>
-                <th pSortableColumn="dateOfBirth" style="min-width:15rem">
-                    BirthDay <p-sortIcon field="dateOfBirth" />
-                    <p-columnFilter type="text" dateFormat="dd/mm/yy" field="dateOfBirth" display="menu" class="ml-auto" />
-                </th>
+                
                 <th></th>
 
             </tr>
 
 
         </ng-template>
-        <ng-template pTemplate="body" let-doctor class="body">
+        <ng-template pTemplate="body" let-specialty class="body">
             
                 <tr *ngIf="!loadingFetchingData">
                     <td>
-                        <p-tableCheckbox [value]="doctor" />
+                        <p-tableCheckbox [value]="specialty" />
                     </td>
-                    <td>{{doctor.id}}</td>
-                    <td>{{doctor.firstName}}</td>
-                    <td>{{doctor.lastName}}</td>
-                    <td><img class="doctor-avatar" [src]="doctor.avatarFilePath" alt=""></td>
-                    <td>{{doctor.gender ? 'Male': 'Female'}}</td>
-                    <td>{{doctor.address}}</td>
-                    <td>{{doctor.specialty.specialtyName}}</td>
-                    <td style="display: flex; flex-direction: column; justify-content: center;">
-                        <p-rating [(ngModel)]= "doctor.averageRating"[readonly]="true" [cancel]="false" />
-                        <div style="display: flex;">
-                            Based on <p style="margin: 0 5px; color: #3B82F6; font-weight: bold;">{{doctor.numberOfFeedbacks}}</p>  reviews
-                        </div>
-                    
+                    <td>{{specialty.id}}</td>
+                    <td>{{specialty.specialtyName}}</td>
+                    <td>{{specialty.specialtyHead}}</td>
+                    <td>
+                        <p-avatarGroup styleClass="mb-3">
+                            <p-avatar  *ngFor="let doctor of specialty.doctorList"
+                                [image]="doctor.profile.avatarFilePath" 
+                                size="large" 
+                                shape="circle" />
+                        </p-avatarGroup>
                     </td>
-                    <td>{{doctor.phone}}</td>
-                    <td>{{doctor.email}}</td>
-                    <td>{{doctor.dateOfBirth | date: 'dd-MM-yyyy'}}</td>
                     <td style="display: flex; justify-content: space-evenly;">
-                        <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" severity="success" (onClick)="openEditDialog(doctor)" />
-                        <p-button  icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"  (onClick)="deleteSelectedDoctor(doctor)"  />
+                        <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" severity="success" (onClick)="openEditDialog(specialty)" />
+                        <p-button  icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"  (onClick)="deleteSelectedSpecialty(specialty)"  />
                     </td>
+
                 </tr>
                 <tr *ngIf="loadingFetchingData">
                     <td><p-skeleton/></td>

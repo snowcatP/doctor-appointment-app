@@ -13,5 +13,6 @@ import java.util.List;
 public class SpecialtyResponse {
     private Long id;
     private String specialtyName;
+    private Doctor headDoctor;
     private List<Doctor> doctorList;
 }

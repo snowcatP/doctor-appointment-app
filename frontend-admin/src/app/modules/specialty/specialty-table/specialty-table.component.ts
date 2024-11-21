@@ -1,0 +1,102 @@
+import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { Specialty } from '../../../core/models/speciality';
+import { SpecialtyService } from '../../../core/services/specialty.service';
+import {
+  ConfirmationService,
+  MessageService,
+  PrimeNGConfig,
+} from 'primeng/api';
+import { Doctor } from '../../../core/models/doctor';
+import { DoctorService } from '../../../core/services/doctor.service';
+import { forkJoin } from 'rxjs';
+
+@Component({
+  selector: 'app-specialty-table',
+  templateUrl: './specialty-table.component.html',
+  styleUrl: './specialty-table.component.css',
+})
+export class SpecialtyTableComponent implements OnInit {
+
+  specialties: Specialty[];
+  doctors: Doctor[];
+  loadingFetchingData: any;
+  formAddNewSpecialty: FormGroup;
+  addNewSpecialtyVisible: boolean = false;
+  selectedSpecialty: Specialty[];
+  viewSpecilatyDetailsVisible: any;
+  formEditDoctor: FormGroup<any>;
+  constructor(
+    private specialtyService: SpecialtyService,
+    private doctorService: DoctorService,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
+    private config: PrimeNGConfig
+  ) {}
+  ngOnInit(): void {
+    this.getListSpecialty();
+
+  }
+  getListSpecialty() {
+    this.specialtyService.getListSpecialty().subscribe((resp) => {
+      this.specialties = resp;
+      console.log(this.specialties)
+    });
+  }
+  getListDoctor(){
+    this.doctorService.getListDoctor()
+
+  }
+  showAddSpecialty() {}
+  addNewSpecialty() {}
+  editSpecialty() {}
+  deleteMultipleSpecialty() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete the selected specialtys?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        if (this.selectedSpecialty != null) {
+          const deleteRequests = this.selectedSpecialty.map((specialty) =>
+            this.specialtyService.deleteSpecialty(specialty.id)
+          );
+          forkJoin(deleteRequests).subscribe({
+            next: () => {
+              this.messageService.add({
+                key: 'messageToast',
+                severity: 'success',
+                summary: 'Success',
+                detail: 'All selected specialtys have been deleted successfully.',
+              });
+              this.getListSpecialty();
+            },
+            error: (error) => {
+              console.error('Error occurred while deleting doctors:', error);
+            },
+          });
+        }
+      },
+    });
+  }
+  deleteSelectedSpecialty(specialty: Specialty) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete the selected specialty?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.specialtyService.deleteSpecialty(specialty.id).subscribe({
+          next: (res) => {
+            this.messageService.add({
+              key: 'messageToast',
+              severity: 'success',
+              summary: 'Success',
+              detail: `Delete Specialy '${specialty.specialtyName}' successfully`,
+            });
+            this.getListSpecialty();
+          },
+        });
+      },
+    });
+  }
+  openEditDialog(_t94: any) {}
+}

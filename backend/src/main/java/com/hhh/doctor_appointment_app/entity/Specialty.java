@@ -11,8 +11,9 @@ import java.util.List;
 
 @Entity
 @Builder
-@Data
 @NoArgsConstructor
+@Setter
+@Getter
 @AllArgsConstructor
 public class Specialty {
     @Id
@@ -23,4 +24,8 @@ public class Specialty {
     @OneToMany(mappedBy = "specialty",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Doctor> doctorList = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "head_doctor_id")
+    private Doctor headDoctor;
 }

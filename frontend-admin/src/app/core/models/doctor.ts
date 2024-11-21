@@ -3,11 +3,12 @@ import { Specialty } from "./speciality"
 
 export class Doctor{
     @prop()
-    id:string
+    id:number
     @prop()
     firstName:string
     @prop()
     lastName:string
+    
     @prop()
     gender:boolean
     @prop()

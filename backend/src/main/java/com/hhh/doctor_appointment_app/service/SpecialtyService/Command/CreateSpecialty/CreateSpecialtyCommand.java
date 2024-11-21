@@ -6,9 +6,11 @@ import com.hhh.doctor_appointment_app.dto.request.SpecialtyRequest.EditSpecialty
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.dto.response.SpecialtyResponse.SpecialtyResponse;
+import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Specialty;
 import com.hhh.doctor_appointment_app.exception.ApplicationException;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
+import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.SpecialtyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,14 +19,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.print.Doc;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class CreateSpecialtyCommand {
     @Autowired
     private SpecialtyRepository specialtyRepository;
-
+    @Autowired
+    private DoctorRepository doctorRepository;
     @Autowired
     private SpecialtyMapper specialtyMapper;
 
@@ -63,6 +69,17 @@ public class CreateSpecialtyCommand {
                 apiResponse.duplicatedCode();
                 return apiResponse;
             }
+            Doctor headDoctor = doctorRepository.findById(addSpecialtyRequest.getHeadDoctorId()).orElseThrow(() -> new NotFoundException("Specialty Not Found") );
+            headDoctor.setSpecialty(newSpecialty);
+            List<Doctor> doctorList = doctorRepository.findAllById(addSpecialtyRequest.getListDoctorId());
+            newSpecialty.setDoctorList(doctorList);
+            newSpecialty.setHeadDoctor(headDoctor);
+            newSpecialty.setDoctorList(doctorList);
+
+            for (Doctor doctor: doctorList){
+                doctor.setSpecialty(newSpecialty);
+            }
+
 
             specialtyRepository.saveAndFlush(newSpecialty);
             SpecialtyResponse specialtyResponse = specialtyMapper.toResponse(newSpecialty);

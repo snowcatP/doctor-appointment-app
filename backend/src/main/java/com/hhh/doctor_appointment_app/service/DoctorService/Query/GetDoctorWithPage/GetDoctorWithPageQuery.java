@@ -41,6 +41,7 @@ public class GetDoctorWithPageQuery {
                     response.setId(doctor.getId());
                     response.setFirstName(doctor.getProfile().getFirstName());
                     response.setLastName(doctor.getProfile().getLastName());
+                    response.setFullName(doctor.getProfile().getFirstName() + doctor.getProfile().getLastName());
                     response.setGender(doctor.getProfile().isGender());
                     response.setPhone(doctor.getProfile().getPhone());
                     response.setEmail(doctor.getProfile().getEmail());
