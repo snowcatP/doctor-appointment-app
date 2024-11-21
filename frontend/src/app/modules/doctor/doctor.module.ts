@@ -13,7 +13,7 @@ import { DoctorComponent } from './doctor.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { DoctorReviewComponent } from './pages/doctor-review/doctor-review.component';
 import { ReplyDialogComponent } from './pages/doctor-review/reply-dialog/reply-dialog.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PaginatorModule } from 'primeng/paginator';
 import { DoctorMypatientComponent } from './pages/doctor-mypatient/doctor-mypatient.component';
@@ -38,6 +38,11 @@ import { SharedModule } from '../../shared/shared.module';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { DoctorChangePasswordComponent } from './pages/doctor-change-password/doctor-change-password.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { PasswordModule } from 'primeng/password';
+import {MatSelectModule} from '@angular/material/select';
+import {MatInputModule} from '@angular/material/input';
 @NgModule({
   declarations: [
     DoctorAppointmentComponent,
@@ -52,6 +57,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
     ReplyDialogComponent,
     DoctorMypatientComponent,
     DoctorPatientProfileComponent,
+    DoctorChangePasswordComponent,
   ],
   imports: [
     CommonModule,
@@ -79,7 +85,12 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
     SharedModule,
     DropdownModule,
     InputGroupModule,
-    InputGroupAddonModule
+    InputGroupAddonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    PasswordModule,
+    MatSelectModule,
+    MatInputModule
   ],
   providers: [ConfirmationService],
 })

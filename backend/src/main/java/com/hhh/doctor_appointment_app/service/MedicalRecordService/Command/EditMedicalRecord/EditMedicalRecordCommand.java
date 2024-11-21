@@ -56,7 +56,7 @@ public class EditMedicalRecordCommand {
             Doctor doctor = doctorRepository.findDoctorByProfile_Email(usernameDoctor)
                     .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
 
-            if (!existingMedicalRecord.getDoctorModified().getId().equals(doctor.getId())) {
+            if (!existingMedicalRecord.getAppointment().getDoctor().getId().equals(doctor.getId())) {
                 throw new ApplicationException("You are not allowed to edit medical record for this appointment.");
             }
 
@@ -76,8 +76,14 @@ public class EditMedicalRecordCommand {
             if(editMedicalRecordRequest.getFilePath()!=null){
                 existingMedicalRecord.setFilePath(editMedicalRecordRequest.getFilePath());
             }
+            existingMedicalRecord.setBloodType(editMedicalRecordRequest.getBloodType());
+            existingMedicalRecord.setHeartRate(editMedicalRecordRequest.getHeartRate());
+            existingMedicalRecord.setDiagnosis(editMedicalRecordRequest.getDiagnosis());
+            existingMedicalRecord.setAllergies(editMedicalRecordRequest.getAllergies());
+            existingMedicalRecord.setPrescription(editMedicalRecordRequest.getPrescription());
+            existingMedicalRecord.setTreatmentPlan(editMedicalRecordRequest.getTreatmentPlan());
+            existingMedicalRecord.setNote(editMedicalRecordRequest.getNote());
             existingMedicalRecord.setDescription(editMedicalRecordRequest.getDescription());
-            existingMedicalRecord.setPatient(patient);
             existingMedicalRecord.setDoctorModified(doctor);
 
             medicalRecordRepository.saveAndFlush(existingMedicalRecord);

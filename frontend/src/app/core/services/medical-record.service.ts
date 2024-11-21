@@ -34,6 +34,8 @@ export class MedicalRecordService {
       formData.append('file', new Blob(),'');  // Append null if no file is selected
     }
 
+    formData.append('bloodType', addMedicalRecordRequest.bloodType.toString());
+    formData.append('heartRate', addMedicalRecordRequest.heartRate.toString());
     formData.append('description', addMedicalRecordRequest.description || '');
     formData.append('patientId', addMedicalRecordRequest.patientId.toString());
     formData.append('appointmentId', addMedicalRecordRequest.appointmentId.toString());
@@ -51,8 +53,14 @@ export class MedicalRecordService {
     } else {
       formData.append('file', new Blob(),'');  // Append null if no file is selected
     }
-
+    formData.append('bloodType', editMedicalRecordRequest.bloodType.toString());
+    formData.append('heartRate', editMedicalRecordRequest.heartRate.toString());
     formData.append('description', editMedicalRecordRequest.description || '');
+    formData.append('diagnosis', editMedicalRecordRequest.diagnosis || '');
+    formData.append('allergies', editMedicalRecordRequest.allergies || '');
+    formData.append('prescription', editMedicalRecordRequest.prescription || '');
+    formData.append('treatmentPlan', editMedicalRecordRequest.treatmentPlan || '');
+    formData.append('note', editMedicalRecordRequest.note || '');
     formData.append('patientId', editMedicalRecordRequest.patientId.toString());
     formData.append('medicalRecordId', editMedicalRecordRequest.medicalRecordId.toString());
     return this.http.put(url, formData);

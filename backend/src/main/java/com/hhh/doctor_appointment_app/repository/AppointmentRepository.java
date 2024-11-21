@@ -46,4 +46,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
     Page<Appointment> findByPatient_Id(Long id, Pageable pageable);
 
     Optional<Appointment> findAppointmentByReferenceCode(String referenceCode);
+
+    @Query("SELECT a FROM Appointment a WHERE FUNCTION('DATE', a.dateBooking) = CURRENT_DATE")
+    Page<Appointment> getAppointmentsByToday(Pageable pageable);
 }

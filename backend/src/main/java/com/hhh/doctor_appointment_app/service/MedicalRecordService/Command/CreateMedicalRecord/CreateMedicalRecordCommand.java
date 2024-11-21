@@ -8,10 +8,7 @@ import com.hhh.doctor_appointment_app.dto.response.MedicalRecordResponse.Medical
 import com.hhh.doctor_appointment_app.entity.*;
 import com.hhh.doctor_appointment_app.exception.ApplicationException;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
-import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
-import com.hhh.doctor_appointment_app.repository.DoctorRepository;
-import com.hhh.doctor_appointment_app.repository.MedicalRecordRepository;
-import com.hhh.doctor_appointment_app.repository.PatientRepository;
+import com.hhh.doctor_appointment_app.repository.*;
 import com.hhh.doctor_appointment_app.service.FirebaseStorageService;
 import com.hhh.doctor_appointment_app.service.UserService.Query.FindUserByEmail.FindUserByEmailQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,24 +43,27 @@ public class CreateMedicalRecordCommand {
 
     @Autowired
     private AppointmentRepository appointmentRepository;
-    @PreAuthorize("hasRole('DOCTOR')")
+
+    @Autowired
+    private NurseRepository nurseRepository;
+    @PreAuthorize("hasRole('NURSE')")
     public ApiResponse<Object> addMedicalRecordByDoctor(MultipartFile file, AddMedicalRecordRequest addRequest){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
             var context = SecurityContextHolder.getContext();
-            String usernameDoctor = context.getAuthentication().getName();
-            User userDoctor = findUserByEmailQuery.findUserByEmail(usernameDoctor)
-                    .orElseThrow(() -> new NotFoundException("Doctor not found"));
+            String usernameNurse = context.getAuthentication().getName();
+            User userNurse = findUserByEmailQuery.findUserByEmail(usernameNurse)
+                    .orElseThrow(() -> new NotFoundException("Nurse not found"));
 
             Appointment appointment = appointmentRepository.findById(addRequest.getAppointmentId())
                     .orElseThrow(() -> new NotFoundException("Appointment Not Found"));
 
-            Doctor doctor = doctorRepository.findDoctorByProfile_Email(usernameDoctor)
-                    .orElseThrow(() -> new NotFoundException("Doctor Not Found"));
+            Nurse nurse = nurseRepository.findNurseByProfile_Email(usernameNurse)
+                    .orElseThrow(() -> new NotFoundException("Nurse Not Found"));
 
-            if (!appointment.getDoctor().getId().equals(doctor.getId())) {
-                throw new ApplicationException("You are not allowed to add medical record for this appointment.");
-            }
+//            if (!appointment.getDoctor().getId().equals(doctor.getId())) {
+//                throw new ApplicationException("You are not allowed to add medical record for this appointment.");
+//            }
 
             //Check file has null ?
             if (!file.isEmpty()) {
@@ -77,10 +77,13 @@ public class CreateMedicalRecordCommand {
 
             MedicalRecord medicalRecord = new MedicalRecord();
 
+            medicalRecord.setBloodType(addRequest.getBloodType());
+            medicalRecord.setHeartRate(addRequest.getHeartRate());
             medicalRecord.setDescription(addRequest.getDescription());
+
             medicalRecord.setFilePath(addRequest.getFilePath());
             medicalRecord.setPatient(patient);
-            medicalRecord.setDoctorModified(doctor);
+            medicalRecord.setNurse(nurse);
 
             appointment.setMedicalRecord(medicalRecord);
 //            appointmentRepository.saveAndFlush(appointment);

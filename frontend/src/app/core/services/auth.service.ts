@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import { host } from '../../../environments/environment';
 import { Store } from '@ngrx/store';
 import * as AuthActions from '../states/auth/auth.actions';
+import { ApiResponse } from '../models/doctor.model';
 
 @Injectable({
   providedIn: 'root',
@@ -75,4 +76,23 @@ export class AuthService {
   onSignupPatient(data: RegisterRequest): Observable<RegisterRequest> {
     return this.http.post<RegisterRequest>(host + '/api/auth/signup', data);
   }
+
+  resetPassword(token: string, newPassword: string, confirmNewPassword: string): Observable<ApiResponse> {
+    const url = `${host}/api/auth/reset-password`; // Endpoint của API
+    const body = {
+      newPassword: newPassword,
+      confirmNewPassword: confirmNewPassword
+    };
+  
+    return this.http.post<ApiResponse>(url, body, { params: { token } }).pipe(
+      tap(() => {
+        console.log('Password reset successful');
+      }),
+      catchError((error) => {
+        console.error('Error resetting password:', error);
+        return throwError(() => new Error('Failed to reset password. Please try again.'));
+      })
+    );
+  }
+  
 }

@@ -3,6 +3,7 @@ package com.hhh.doctor_appointment_app.service.MedicalRecordService.Query.GetMed
 import com.hhh.doctor_appointment_app.dto.mapper.AppointmentMapper;
 import com.hhh.doctor_appointment_app.dto.mapper.DoctorMapper;
 import com.hhh.doctor_appointment_app.dto.mapper.MedicalRecordMapper;
+import com.hhh.doctor_appointment_app.dto.mapper.NurseMapper;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.MedicalRecordResponse.MedicalRecordResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
@@ -41,6 +42,9 @@ public class GetMedicalRecordWithPageByPatientQuery {
     @Autowired
     private AppointmentMapper appointmentMapper;
 
+    @Autowired
+    private NurseMapper nurseMapper;
+
     public PageResponse<List<MedicalRecordResponse>> getMedicalRecordsWithPageByPatientId(int page, int size, Long id) {
         Pageable pageable = PageRequest.of(page-1, size);
         Page<MedicalRecord> medicalRecordPage = medicalRecordRepository.findMedicalRecordByPatient_Id(id, pageable);
@@ -54,8 +58,16 @@ public class GetMedicalRecordWithPageByPatientQuery {
                     response.setFilePath(medicalRecord.getFilePath());
                     response.setDateCreated(medicalRecord.getDateCreated());
                     response.setLastModified(medicalRecord.getLastModified());
+                    response.setBloodType(medicalRecord.getBloodType());
+                    response.setHeartRate(medicalRecord.getHeartRate());
+                    response.setDiagnosis(medicalRecord.getDiagnosis());
+                    response.setAllergies(medicalRecord.getAllergies());
+                    response.setPrescription(medicalRecord.getPrescription());
+                    response.setTreatmentPlan(medicalRecord.getTreatmentPlan());
+                    response.setNote(medicalRecord.getNote());
                     response.setDoctorResponse(doctorMapper.toResponse(medicalRecord.getDoctorModified()));
                     response.setAppointmentResponse(appointmentMapper.toResponse(medicalRecord.getAppointment()));
+                    response.setNurseResponse(nurseMapper.toResponse(medicalRecord.getNurse()));
                     return response;
                 })
                 .collect(Collectors.toList());

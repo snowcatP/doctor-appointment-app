@@ -93,6 +93,7 @@ export class DoctorPatientProfileComponent {
     this.medicalRecordService.getMedicalRecordsOfPatientByPatientId(id, page, pageSize).subscribe(
       (response) => {
         if (response.statusCode === 200) {
+          console.log(response.data)
           this.medicalRecords = response.data;
           this.totalMedicalRecords = response.totalPage * pageSize;
         }
@@ -161,7 +162,6 @@ export class DoctorPatientProfileComponent {
     this.loading = true; // Start loading
     this.medicalRecordRequest.patientId = this.patientId; //Set id of patient
     this.medicalRecordRequest.appointmentId = this.selectedAppointment.id;
-    console.log(this.medicalRecordRequest)
     this.medicalRecordService.addMedicalRecordForPatient(this.medicalRecordRequest, this.selectedFile).subscribe(
       (response: ApiResponse) => {
         this.loading = false; // Stop loading

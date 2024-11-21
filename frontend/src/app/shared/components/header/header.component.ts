@@ -38,6 +38,8 @@ export class HeaderComponent implements OnInit {
         this.router.navigate(['/patient']);
       } else if (user?.role.roleName === 'DOCTOR') {
         this.router.navigate(['/doctor']);
+      } else if (user?.role.roleName === 'NURSE') {
+        this.router.navigate(['/nurse']);
       } else {
         console.warn('Unknown role, unable to redirect');
       }
@@ -50,6 +52,8 @@ export class HeaderComponent implements OnInit {
         this.router.navigate(['/patient/profile']);
       } else if (user?.role.roleName === 'DOCTOR') {
         this.router.navigate(['/doctor/profile']);
+      } else if (user?.role.roleName === 'NURSE') {
+        this.router.navigate(['/nurse/profile']);
       } else {
         console.warn('Unknown role, unable to redirect');
       }

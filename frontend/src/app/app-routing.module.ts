@@ -45,6 +45,16 @@ const routes: Routes = [
     // }
   },
   {
+    path: 'nurse',
+    loadChildren: () =>
+      import('./modules/nurse/nurse.module').then((m) => m.NurseModule),
+    // canActivate: [authGuard],
+    // data: {
+    //   permission: 'doctor',
+    //   redirectTo: '/error-404'
+    // }
+  },
+  {
     path: 'error404',
     component: Page404Component,
     title: 'Page 404 - Not Found',
