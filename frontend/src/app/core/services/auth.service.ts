@@ -39,7 +39,7 @@ export class AuthService {
     if (token) {
       const decodedToken = jwtDecode<any>(token);
       const scope: string = decodedToken?.scope;
-      if (scope.includes(permission))  return true;
+      if (permission.includes(scope))  return true;
     }
     return false;
   }

@@ -9,7 +9,6 @@ export const authGuard: CanActivateFn = (route, state) => {
   return authService.isAuthenticated().pipe(
     map((isAuthenticated: boolean) => {
       const requiredPermission = route.data?.permission;
-      const redirectTo = route.data?.redirectTo || '/';
       if (!isAuthenticated) {
         router.navigate(['/auth']);
         return false;
@@ -18,7 +17,7 @@ export const authGuard: CanActivateFn = (route, state) => {
         requiredPermission &&
         !authService.hasPermission(requiredPermission)
       ) {
-        router.navigate([redirectTo]);
+        router.navigate(['/error404']);
         return false;
       }
       return true;

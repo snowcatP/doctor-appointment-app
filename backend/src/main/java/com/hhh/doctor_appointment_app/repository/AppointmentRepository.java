@@ -42,8 +42,12 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
             Pageable pageable
     );
 
-
     Page<Appointment> findByPatient_Id(Long id, Pageable pageable);
 
     Optional<Appointment> findAppointmentByReferenceCode(String referenceCode);
+
+    @Query(
+            "SELECT DISTINCT a.doctor from Appointment a WHERE a.patient.profile.email = :email"
+    )
+    List<Doctor> getDoctorsBookedByPatientEmail(String email);
 }

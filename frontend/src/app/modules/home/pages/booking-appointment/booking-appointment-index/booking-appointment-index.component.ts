@@ -35,7 +35,6 @@ import { Store } from '@ngrx/store';
 import * as fromAuth from '../../../../../core/states/auth/auth.reducer';
 import * as AuthActions from '../../../../../core/states/auth/auth.actions';
 import { User } from '../../../../../core/models/authentication.model';
-import { BookingNotification } from '../../../../../core/models/notification.model';
 import { WebSocketService } from '../../../../../core/services/webSocket.service';
 import { Actions, ofType } from '@ngrx/effects';
 
@@ -212,7 +211,6 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
       this.appointmentService.createAppointmentByPatient(bookingData).subscribe({
         next: (res) => {
           if (res.statusCode === 200) {
-            this.loading = false; // Stop loading
             this.setAppointmentForSuccess(null, res?.data);
             this.messageService.add({
               key: 'messageToast',
@@ -221,29 +219,30 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
               detail: 'Booked appointment successfully!'
             });
             setTimeout(() => {
+              this.loading = false; // Stop loading
               this.router.navigate([
                 '/booking/success',
                 { bookingSuccess: true },
               ]);
             }, 2000);
           } else {
-            this.loading = false; // Stop loading
             this.messageService.add({
               key: 'messageToast',
               severity: 'error',
               summary: 'Error',
               detail: 'Booked appointment unsuccessfully!'
             });
+            this.loading = false; // Stop loading
           }
         },
         error: (err) => {
-          this.loading = false; // Stop loading
           this.messageService.add({
             key: 'messageToast',
             severity: 'error',
             summary: 'Error',
             detail: 'Booked appointment unsuccessfully!'
           });
+          this.loading = false; // Stop loading
           console.log(err);
         },
       })
@@ -266,7 +265,6 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (res) => {
             if (res.statusCode === 200) {
-              this.loading = false; // Stop loading
               this.setAppointmentForSuccess(res?.data);
               this.messageService.add({
                 key: 'messageToast',
@@ -275,29 +273,30 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
                 detail: 'Booked appointment successfully!'
               });
               setTimeout(() => {
+                this.loading = false; // Stop loading
                 this.router.navigate([
                   '/booking/success',
                   { bookingSuccess: true },
                 ]);
               }, 2000);
             }else {
-              this.loading = false; // Stop loading
               this.messageService.add({
                 key: 'messageToast',
                 severity: 'error',
                 summary: 'Error',
                 detail: 'Booked appointment unsuccessfully!'
               });
+              this.loading = false; // Stop loading
             }
           },
           error: (err) => {
-            this.loading = false; // Stop loading
             this.messageService.add({
               key: 'messageToast',
               severity: 'error',
               summary: 'Error',
               detail: 'Booked appointment unsuccessfully!'
             });
+            this.loading = false; // Stop loading
             console.log(err);
           },
         });

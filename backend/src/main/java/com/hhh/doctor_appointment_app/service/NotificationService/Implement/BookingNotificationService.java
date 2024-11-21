@@ -13,6 +13,8 @@ public class BookingNotificationService {
     private SimpMessagingTemplate messagingTemplate;
 
     public void sendBookingMessage(BookingNotificationResponse bookingNotificationResponse) {
-        messagingTemplate.convertAndSend("/app-ws/booking/notifications", bookingNotificationResponse);
+        messagingTemplate.convertAndSend(
+                "/app-ws/booking/notifications",
+                bookingNotificationResponse);
     }
 }
