@@ -43,6 +43,7 @@ public class ApplicationInitConfig implements ApplicationRunner{
             }
         }
 
+
         if (!userRepository.existsByEmail("admin@gmail.com")) {
             UserCreateRequest request = UserCreateRequest.builder()
                     .email("admin@gmail.com")

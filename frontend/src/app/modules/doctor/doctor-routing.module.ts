@@ -9,6 +9,7 @@ import { DoctorAppointmentComponent } from './pages/doctor-appointment/doctor-ap
 import { DoctorReviewComponent } from './pages/doctor-review/doctor-review.component';
 import { DoctorMypatientComponent } from './pages/doctor-mypatient/doctor-mypatient.component';
 import { DoctorPatientProfileComponent } from './pages/doctor-patient-profile/doctor-patient-profile.component';
+import { DoctorChangePasswordComponent } from './pages/doctor-change-password/doctor-change-password.component';
 const routes: Routes = [
   {
     // doctor
@@ -59,7 +60,12 @@ const routes: Routes = [
         path: 'patient-profile/:id',
         component: DoctorPatientProfileComponent,
         title: 'Doctor Patient Profile'
-      }
+      },
+      {
+        path: 'change-password',
+        component: DoctorChangePasswordComponent,
+        title: 'Doctor Change Password'
+      },
     ],
   },
 ];

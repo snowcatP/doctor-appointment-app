@@ -21,7 +21,6 @@ export class ReplyDialogComponent implements OnInit{
 
   ngOnInit(): void {
     this.visible = true;
-    console.log('Received feedback data:', this.data);
     this.replyFeedback.doctorId = this.data.doctorResponse.id;
     this.replyFeedback.patientId = this.data.patientResponse.id;
     this.replyFeedback.replyCommentID = this.data.id;

@@ -22,6 +22,7 @@ import { SharedModule } from "../../shared/shared.module";
 import { MatButtonModule } from '@angular/material/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     PatientComponent,
@@ -47,7 +48,8 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
     SharedModule,
     MatButtonModule,
     DropdownModule,
-    ScrollPanelModule
+    ScrollPanelModule,
+    ReactiveFormsModule
 ]
 })
 export class PatientModule { }

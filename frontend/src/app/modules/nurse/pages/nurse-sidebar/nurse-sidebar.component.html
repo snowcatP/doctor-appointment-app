@@ -1,0 +1,54 @@
+<!-- Profile Sidebar -->
+<div class="profile-sidebar">
+    <div class="widget-profile pro-widget-content">
+      <div class="profile-info-widget">
+        <div class="booking-doc-img">
+          <p-image [src]="nurseProfile?.avatarFilePath || 'assets/images/user.png'"
+          alt="Doctor Image" width="100%"  [preview]="true"/>
+        </div>
+
+        <div class="profile-det-info">
+          <a class="external-link" routerLink="/doctor/profile">
+            <h3 class="d-flex align-items-center justify-content-center">
+              {{nurseProfile?.firstName}} {{nurseProfile?.lastName}} &nbsp;
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </h3>
+          </a>
+          <div class="patient-details">
+            <h5><i class="fas fa-birthday-cake"></i> {{nurseProfile?.dateOfBirth | dateFormat}}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dashboard-widget">
+      <nav class="dashboard-menu">
+        <ul>
+          <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <a routerLink="/nurse/dashboard">
+              <i class="fas fa-columns"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li routerLinkActive="active">
+            <a routerLink="/nurse/profile">
+              <i class="fas fa-user-cog"></i>
+              <span>Profile Settings</span>
+            </a>
+          </li>
+          <li routerLinkActive="active">
+            <a routerLink="/nurse/change-password">
+              <i class="fas fa-lock"></i>
+              <span>Change Password</span>
+            </a>
+          </li>
+          <li routerLinkActive="active">
+            <a (click)="logout()">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <!-- /Profile Sidebar -->
