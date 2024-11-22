@@ -54,11 +54,32 @@
             </mat-list-item>
           </mat-list>
         </div>
+        <div class="pt-2" *ngIf="(role$ | async) === 'NURSE'">
+          <h5>Nurse</h5>
+          <mat-list>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/nurse/dashboard" (click)="closeSideBar()">Dashboard</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/nurse/profile" (click)="closeSideBar()"
+                >Profile Settings</a
+              >
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/nurse/change-password" (click)="closeSideBar()"
+                >Change Password</a
+              >
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle (click)="logout()" (click)="closeSideBar()">Logout</a>
+            </mat-list-item>
+          </mat-list>
+        </div>
       </p-sidebar>
       <button mat-icon-button (click)="sidebarVisible = true">
         <mat-icon>menu</mat-icon>
       </button>
-      <a routerLink="/" routerLinkActive="active" class="navbar-brand logo">
+      <a (click)="goToHome()" routerLinkActive="active" class="navbar-brand logo">
         <img src="assets/images/logo.png" class="img-fluid" alt="Logo" />
       </a>
     </div>
@@ -72,24 +93,24 @@
         </a>
       </div>
       <ul class="main-nav">
-        <li class="active">
+        <li class="active" *ngIf="(role$ | async) !== 'NURSE'">
           <a routerLink="/" routerLinkActive="active">Home</a>
         </li>
         <li class="has-submenu" *ngIf="(role$ | async) === 'DOCTOR'">
           <a href="#">Doctors <i class="fas fa-chevron-down"></i></a>
           <ul class="submenu">
-            <li><a routerLink="/doctor">Doctor Dashboard</a></li>
+            <!-- <li><a routerLink="/doctor">Doctor Dashboard</a></li> -->
             <li><a routerLink="/doctor/appointment">Appointments</a></li>
             <li><a routerLink="/doctor/calendar">My Calendar</a></li>
             <li><a routerLink="/doctor/profile">Profile Settings</a></li>
             <li><a routerLink="/doctor/review">Reviews</a></li>
           </ul>
         </li>
-        <li class="has-submenu"*ngIf="(role$ | async) !== 'DOCTOR'">
+        <li class="has-submenu"*ngIf="(role$ | async) !== 'DOCTOR' && (role$ | async) !== 'NURSE'">
           <a href="#">Patients <i class="fas fa-chevron-down"></i></a>
           <ul class="submenu">
             <li><a [routerLink]="['/search-doctor']">Search Doctor</a></li>
-            <li><a [routerLink]="['/doctor-profile']">Doctor Profile</a></li>
+            <!-- <li><a [routerLink]="['/doctor-profile']">Doctor Profile</a></li> -->
             <li><a [routerLink]="['/booking']">Booking</a></li>
             <li>
               <a
@@ -109,6 +130,33 @@
               <a
                 [routerLink]="['/patient/change-password']"
                 *ngIf="(role$ | async) === 'PATIENT'"
+                >Change Password</a
+              >
+            </li>
+            <!-- </div> -->
+          </ul>
+        </li>
+        <li class="has-submenu"*ngIf="(role$ | async) === 'NURSE'">
+          <a href="#">Nurse <i class="fas fa-chevron-down"></i></a>
+          <ul class="submenu">
+            <li>
+              <a
+                [routerLink]="['/nurse']"
+                *ngIf="(role$ | async) === 'NURSE'"
+                >Nurse Dashboard</a
+              >
+            </li>
+            <li>
+              <a
+                [routerLink]="['/nurse/profile']"
+                *ngIf="(role$ | async) === 'NURSE'"
+                >Profile Settings</a
+              >
+            </li>
+            <li>
+              <a
+                [routerLink]="['/nurse/change-password']"
+                *ngIf="(role$ | async) === 'NURSE'"
                 >Change Password</a
               >
             </li>

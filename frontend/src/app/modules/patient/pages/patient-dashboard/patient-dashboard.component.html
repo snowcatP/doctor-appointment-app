@@ -210,31 +210,31 @@
                             }}
                           </span>
                         </td>
-                        <td>{{ medicalRecord.description }}</td>
+                        <td>{{ medicalRecord?.description }}</td>
                         <td>
-                          <a [href]="medicalRecord.filePath" target="_blank">File</a>
+                          <a [href]="medicalRecord?.filePath" target="_blank">File</a>
                         </td>
                         <td>
                           <h2 class="table-avatar">
                             <a (click)="
                                 viewDoctorProfile(
-                                  medicalRecord.doctorResponse.id
+                                  medicalRecord.doctorResponse?.id
                                 )
                               " class="avatar avatar-sm mr-3">
                               <img class="avatar-img rounded-circle" [src]="
-                                  medicalRecord.doctorResponse.avatarFilePath ||
+                                  medicalRecord.doctorResponse?.avatarFilePath ||
                                   'assets/images/user.png'
                                 " alt="User Image" />
                             </a>
                             <a (click)="
                                 viewDoctorProfile(
-                                  medicalRecord.doctorResponse.id
+                                  medicalRecord.doctorResponse?.id
                                 )
-                              ">Dr. {{ medicalRecord.doctorResponse.firstName }}
-                              {{ medicalRecord.doctorResponse.lastName }}
+                              ">Dr. {{ medicalRecord.doctorResponse?.firstName }}
+                              {{ medicalRecord.doctorResponse?.lastName }}
                               <span>{{
-                                medicalRecord.doctorResponse.specialty
-                                .specialtyName
+                                medicalRecord.doctorResponse?.specialty
+                                ?.specialtyName
                                 }}</span>
                             </a>
                           </h2>

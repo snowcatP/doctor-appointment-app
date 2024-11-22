@@ -61,7 +61,7 @@ public class GetAllPatientOfDoctorQuery {
                     if (appointment.getPatient() != null) {
                         // Case: Patient exists
                         response.setId(appointment.getPatient().getId());
-                        response.setFullName(appointment.getPatient().getProfile().getFullName());
+                        response.setFullName(appointment.getFullName());
                         response.setEmail(appointment.getPatient().getProfile().getEmail());
                         response.setAddress(appointment.getPatient().getProfile().getAddress());
                         response.setDateOfBirth(appointment.getPatient().getProfile().getDateOfBirth());

@@ -33,6 +33,20 @@ export class HeaderComponent implements OnInit {
     this.role$ = this.store.select(fromAuth.selectRole);
   }
 
+  goToHome(){
+    this.user$.subscribe(user => {
+      if (user?.role.roleName === 'PATIENT') {
+        this.router.navigate(['/']);
+      } else if (user?.role.roleName === 'DOCTOR') {
+        this.router.navigate(['/doctor']);
+      } else if (user?.role.roleName === 'NURSE') {
+        this.router.navigate(['/nurse']);
+      } else {
+        this.router.navigate(['/']);
+      }
+    });
+  }
+
   goToDashboard() {
     this.user$.subscribe(user => {
       if (user?.role.roleName === 'PATIENT') {

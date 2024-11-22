@@ -18,13 +18,8 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '/doctor/dashboard',
+        redirectTo: '/doctor/calendar',
         pathMatch: 'full'
-      },
-      {
-        path: 'dashboard',
-        component: DoctorDashboardComponent,
-        title: 'Doctor Dashboard',
       },
       {
         path: 'profile',

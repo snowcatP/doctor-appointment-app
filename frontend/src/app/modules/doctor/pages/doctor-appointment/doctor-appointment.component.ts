@@ -247,4 +247,9 @@ export class DoctorAppointmentComponent implements OnInit {
         },
       });
   }
+
+  // Click view Patient Profile
+  viewPatientProfile(patientId: string): void {
+    this.router.navigate([`/doctor/patient-profile`, patientId]);
+  }
 }

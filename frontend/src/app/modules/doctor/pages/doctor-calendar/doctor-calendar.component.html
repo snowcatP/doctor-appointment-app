@@ -39,7 +39,7 @@
           [ngClass]="{
             'badge-primary': acceptLabel?.acceptLabel === 'COMPLETED',
             'badge-warning': acceptLabel?.acceptLabel === 'PENDING',
-            'badge-secondary': acceptLabel?.acceptLabel === 'RESCHEDULED',
+            'bg-secondary': acceptLabel?.acceptLabel === 'RESCHEDULED',
             'badge-danger': acceptLabel?.acceptLabel === 'CANCELLED',
             'badge-success': acceptLabel?.acceptLabel === 'ACCEPT',
           }"
@@ -87,7 +87,7 @@
           [ngClass]="{
             'badge-primary': selectedAppointment?.appointmentStatus === 'COMPLETED',
             'badge-warning': selectedAppointment?.appointmentStatus === 'PENDING',
-            'badge-secondary': selectedAppointment?.appointmentStatus === 'RESCHEDULED',
+            'bg-secondary': selectedAppointment?.appointmentStatus === 'RESCHEDULED',
             'badge-danger': selectedAppointment?.appointmentStatus === 'CANCELLED',
             'badge-success': selectedAppointment?.appointmentStatus === 'ACCEPT',
           }"
