@@ -50,7 +50,14 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
     Page<Appointment> getAppointmentsByToday(Pageable pageable);
 
     @Query(
-            "SELECT DISTINCT a.doctor from Appointment a WHERE a.patient.profile.email = :email"
+            "SELECT DISTINCT a.doctor " +
+            "FROM Appointment a " +
+            "WHERE a.patient.id = :patientId " +
+            "AND a.doctor.id NOT IN (" +
+                "SELECT c.doctor.id " +
+                "FROM Conversation c " +
+                "WHERE c.patient.id = :patientId" +
+                    ")"
     )
-    List<Doctor> getDoctorsBookedByPatientEmail(String email);
+    List<Doctor> getDoctorsBookedByPatientId(Long patientId);
 }
