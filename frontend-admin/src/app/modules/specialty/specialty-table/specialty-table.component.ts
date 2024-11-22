@@ -10,6 +10,7 @@ import {
 import { Doctor } from '../../../core/models/doctor';
 import { DoctorService } from '../../../core/services/doctor.service';
 import { forkJoin } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-specialty-table',
@@ -31,7 +32,8 @@ export class SpecialtyTableComponent implements OnInit {
     private doctorService: DoctorService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private config: PrimeNGConfig
+    private config: PrimeNGConfig,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.getListSpecialty();
@@ -47,7 +49,9 @@ export class SpecialtyTableComponent implements OnInit {
     this.doctorService.getListDoctor()
 
   }
-  showAddSpecialty() {}
+  showAddSpecialty() {
+    this.router.navigateByUrl('specialty/add-specialty');
+  }
   addNewSpecialty() {}
   editSpecialty() {}
   deleteMultipleSpecialty() {
@@ -98,5 +102,7 @@ export class SpecialtyTableComponent implements OnInit {
       },
     });
   }
-  openEditDialog(_t94: any) {}
+  openEditDialog(specialty: Specialty) {
+    this.router.navigate(['/edit-specialty'], { queryParams: { id: specialty.id, specialtyName: specialty.specialtyName, headDoctorId: specialty.headDoctorId, listDoctorId: specialty.listDoctorId  } });
+  }
 }
