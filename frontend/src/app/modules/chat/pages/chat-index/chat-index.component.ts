@@ -4,7 +4,6 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import {
@@ -27,7 +26,6 @@ import { ConversationService } from '../../../../core/services/conversation.serv
 import { Store } from '@ngrx/store';
 import * as fromAuth from '../../../../core/states/auth/auth.reducer';
 import { User } from '../../../../core/models/authentication.model';
-import { ConnectedOverlayScrollHandler } from 'primeng/dom';
 import { MessageService } from 'primeng/api';
 
 @Component({
@@ -53,6 +51,7 @@ export class ChatIndexComponent implements OnInit, OnDestroy {
   isLoadingConversations: boolean = false;
   isLoadingDataConversation: boolean = false;
   currentUser: User;
+  searchConv: string;
   private chatSubscription: Subscription;
   private unsubscribe$ = new Subject<void>();
 
