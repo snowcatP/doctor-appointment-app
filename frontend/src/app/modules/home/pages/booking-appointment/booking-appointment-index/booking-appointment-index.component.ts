@@ -35,7 +35,6 @@ import { Store } from '@ngrx/store';
 import * as fromAuth from '../../../../../core/states/auth/auth.reducer';
 import * as AuthActions from '../../../../../core/states/auth/auth.actions';
 import { User } from '../../../../../core/models/authentication.model';
-import { BookingNotification } from '../../../../../core/models/notification.model';
 import { WebSocketService } from '../../../../../core/services/webSocket.service';
 import { Actions, ofType } from '@ngrx/effects';
 
@@ -47,6 +46,7 @@ import { Actions, ofType } from '@ngrx/effects';
 export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
   @ViewChild('emailInput') emailInput: ElementRef;
   isLoading: boolean = false;
+  loading: boolean = false;
   formBooking: FormGroup;
   formBookingDate: FormGroup;
   formLogin: FormGroup;
@@ -145,19 +145,6 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
     this.store.dispatch(AuthActions.loginRequest({ credential }));
   }
 
-  webSocketInit() {
-    this.webSocketService
-      .connectSocket()
-      .pipe(filter((state) => state))
-      .subscribe(() => {
-        this.bookingSubscription = this.webSocketService
-          .on('/app-ws/booking/notifications')
-          .subscribe((notification: BookingNotification) => {
-            this.handleAppointmentSendFromWs(notification);
-          });
-      });
-  }
-
   getObservables() {
     this.isLogged$ = this.store.select(fromAuth.selectIsLogged);
     this.isLogged$.subscribe((res) => (this.isLogged = res as boolean));
@@ -179,6 +166,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
 
   selectBookingDate(slot: TimeSlot) {
     this.timeSlotSelected = slot;
+    console.log(this.timeSlotSelected)
     this.formBookingDate.controls['bookingDate'].setValue(
       this.timeSlotSelected.date
     );
@@ -194,6 +182,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         .getAppointmentsForBooking(this.doctorSelected.id)
         .subscribe({
           next: (res) => {
+            console.log(res)
             this.appointmentsBooked = res;
             this.isLoading = false;
             setTimeout(() => {
@@ -210,6 +199,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
 
   submitAppointment() {
     if (this.isLogged) {
+      this.loading = true; // Start loading
       const bookingData: BookingDataPatient = {
         doctorId: this.doctorSelected.id,
         patientId: this.user.id,
@@ -229,19 +219,20 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
               detail: 'Booked appointment successfully!'
             });
             setTimeout(() => {
+              this.loading = false; // Stop loading
               this.router.navigate([
                 '/booking/success',
                 { bookingSuccess: true },
               ]);
             }, 2000);
           } else {
-            console.log(res)
             this.messageService.add({
               key: 'messageToast',
               severity: 'error',
               summary: 'Error',
               detail: 'Booked appointment unsuccessfully!'
             });
+            this.loading = false; // Stop loading
           }
         },
         error: (err) => {
@@ -251,10 +242,12 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
             summary: 'Error',
             detail: 'Booked appointment unsuccessfully!'
           });
+          this.loading = false; // Stop loading
           console.log(err);
         },
       })
     } else {
+      this.loading = true; // Start loading
       const bookingData: BookingDataGuest = {
         doctorId: this.doctorSelected.id,
         doctorName: this.doctorSelected.fullName,
@@ -280,19 +273,20 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
                 detail: 'Booked appointment successfully!'
               });
               setTimeout(() => {
+                this.loading = false; // Stop loading
                 this.router.navigate([
                   '/booking/success',
                   { bookingSuccess: true },
                 ]);
               }, 2000);
             }else {
-              console.log(res)
               this.messageService.add({
                 key: 'messageToast',
                 severity: 'error',
                 summary: 'Error',
                 detail: 'Booked appointment unsuccessfully!'
               });
+              this.loading = false; // Stop loading
             }
           },
           error: (err) => {
@@ -302,6 +296,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
               summary: 'Error',
               detail: 'Booked appointment unsuccessfully!'
             });
+            this.loading = false; // Stop loading
             console.log(err);
           },
         });
@@ -322,37 +317,6 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
 
   closeBooking() {
     this.router.navigate(['/']);
-  }
-
-  handleAppointmentSendFromWs(app: BookingNotification) {
-    if (!this.doctorSelected || app.doctor.id !== this.doctorSelected.id) {
-      return;
-    }
-    const bookingDate = this.formatDate(app.dateBooking);
-    if (
-      this.formatDate(this.timeSlotSelected.date) == bookingDate &&
-      app.bookingHour == this.timeSlotSelected.time
-    ) {
-      this.timeSlotSelected = null;
-    }
-    this.schedules.forEach((week: AppointmentSlot[]) => {
-      week.forEach((day: AppointmentSlot) => {
-        day.timeSlotsMorning.forEach((timeSlot: TimeSlot) => {
-          const tsDate = this.formatDate(timeSlot.date);
-          if (tsDate == bookingDate && timeSlot.time == app.bookingHour) {
-            timeSlot.isBooked = true;
-            return;
-          }
-        });
-        day.timeSlotsAfternoon.forEach((timeSlot: TimeSlot) => {
-          const tsDate = this.formatDate(timeSlot.date);
-          if (tsDate == bookingDate && timeSlot.time == app.bookingHour) {
-            timeSlot.isBooked = true;
-            return;
-          }
-        });
-      });
-    });
   }
 
   handleAppointmentsBooked() {

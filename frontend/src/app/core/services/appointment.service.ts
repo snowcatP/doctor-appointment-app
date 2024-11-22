@@ -119,4 +119,19 @@ export class AppointmentService {
     const url = `${host}/api/appointment/search/reference-code`;
     return this.http.post<ApiResponse>(url, referenceCodeRequest);
   }
+
+  getAppointmentsForNurse(page: number, size: number): Observable<any> {
+    const url = `${host}/api/appointment/list/nurse?page=${page}&size=${size}`;
+    return this.http.get<any>(url);
+  }
+  
+  private selectedAppointment: any;
+
+  setAppointment(appointment: any): void {
+    this.selectedAppointment = appointment;
+  }
+
+  getAppointment(): any {
+    return this.selectedAppointment;
+  }
 }

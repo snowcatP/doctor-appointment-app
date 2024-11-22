@@ -61,7 +61,8 @@ public class GetAllPatientOfDoctorQuery {
                     if (appointment.getPatient() != null) {
                         // Case: Patient exists
                         response.setId(appointment.getPatient().getId());
-                        response.setFullname(appointment.getPatient().getProfile().getFullName());
+                        response.setFullName(appointment.getPatient().getProfile().getFullName());
+                        response.setEmail(appointment.getPatient().getProfile().getEmail());
                         response.setAddress(appointment.getPatient().getProfile().getAddress());
                         response.setDateOfBirth(appointment.getPatient().getProfile().getDateOfBirth());
                         response.setAvatarFilePath(appointment.getPatient().getProfile().getAvatarFilePath());
@@ -69,7 +70,7 @@ public class GetAllPatientOfDoctorQuery {
                     } else {
                         // Case: Guest
                         response.setId(null); // Guest has no patient ID
-                        response.setFullname(appointment.getFullName());
+                        response.setFullName(appointment.getFullName());
                         response.setEmail(appointment.getEmail());
                     }
 

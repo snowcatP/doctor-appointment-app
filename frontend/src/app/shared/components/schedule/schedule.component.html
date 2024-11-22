@@ -21,12 +21,12 @@
         dateFormat="dd/mm/yy"
       />
     </div>
-    <a
+    <!-- <a
       class="col d-flex justify-content-end p-0 pt-1"
       (click)="showDialog()"
-      *ngIf="!(isLogged$ | async) && !isReschedule"
+      *ngIf="!isReschedule! || (isLogged$ | async)"
       >Login as patient</a
-    >
+    > -->
   </div>
   <p-carousel [value]="schedules" [numVisible]="1" [numScroll]="1">
     <ng-template pTemplate="item" let-schedule>

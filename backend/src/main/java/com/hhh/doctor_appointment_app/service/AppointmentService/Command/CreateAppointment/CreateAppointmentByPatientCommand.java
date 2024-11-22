@@ -13,6 +13,7 @@ import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
+import com.hhh.doctor_appointment_app.service.EmailService.Command.SendAppointmentNotification.SendAppointmentNotificationCommand;
 import com.hhh.doctor_appointment_app.service.NotificationService.Implement.BookingNotificationService;
 import com.hhh.doctor_appointment_app.service.UserService.Query.FindUserByEmail.FindUserByEmailQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,9 @@ public class CreateAppointmentByPatientCommand {
 
     @Autowired
     private BookingNotificationService bookingNotificationService;
+
+    @Autowired
+    private SendAppointmentNotificationCommand sendAppointmentNotificationCommand;
 
     public ApiResponse<Object> createAppointmentByPatient(AppointmentByPatientRequest appointmentByPatientRequest) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
@@ -100,6 +104,16 @@ public class CreateAppointmentByPatientCommand {
                     appointmentMapper.toBookingNotificationResponse(appointment)
             );
 
+            sendAppointmentNotificationCommand.sendAppointmentNotification(
+                    appointment.getEmail(),
+                    appointment.getFullName(),
+                    appointment.getPhone(),
+                    appointment.getAppointmentStatus().toString(),
+                    appointment.getReferenceCode(),
+                    appointment.getDateBooking().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                    appointment.getBookingHour(),
+                    appointment.getDoctor().getProfile().getFullName()
+            );
             apiResponse.setMessage("Appointment Created Successfully !");
             apiResponse.ok(appointmentResponse);
             return apiResponse;

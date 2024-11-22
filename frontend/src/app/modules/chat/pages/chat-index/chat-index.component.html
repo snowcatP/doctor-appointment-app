@@ -1,0 +1,243 @@
+<div>
+  <div class="col-xl-12">
+    <div class="card m-1 pb-2">
+      <div class="chat-window pb-1">
+        <!-- Chat Left -->
+        <div class="chat-cont-left">
+          <div class="chat-header">
+            <span>Chat</span>
+            <a
+              class="chat-compose"
+              (click)="openCreateNewChatDialog()"
+              *ngIf="currentUser.role.roleName === 'PATIENT'"
+            >
+              <i class="material-icons">control_point</i>
+            </a>
+          </div>
+          <div class="chat-search">
+            <div class="input-group">
+              <input
+                type="text"
+                pInputText
+                class="full-width"
+                placeholder="Search"
+                style="border-radius: 50px"
+                [(ngModel)]="searchConv"
+              />
+            </div>
+          </div>
+          <div class="chat-users-list">
+            <div
+              class="d-flex justify-content-between align-items-center"
+              *ngIf="isLoadingConversations"
+            >
+              <mat-spinner diameter="40"></mat-spinner>
+            </div>
+            <div class="chat-scroll" *ngIf="!isLoadingConversations">
+              <a
+                class="media row d-flex justify-content-between"
+                *ngFor="let conversation of conversations"
+                (click)="selectConversation(conversation)"
+                [ngClass]="{ active: selectedConversation === conversation }"
+              >
+                <div
+                  class="media-img-wrap col-xl-2 col-lg-2 col-md-3 col-sm-2 col-2 p-0"
+                >
+                  <div class="avatar">
+                    <img
+                      [src]="
+                        currentUser.role.roleName == 'PATIENT'
+                          ? conversation.doctor.avatarFilePath
+                          : conversation.patient.avatarFilePath
+                      "
+                      class="avatar-img rounded-circle"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="media-body user-name-chat-left col-xl-10 col-lg-10 col-md-9 col-sm-10 col-10 p-0"
+                >
+                  <div>
+                    <div class="user-name">
+                      {{
+                        currentUser.role.roleName == "PATIENT"
+                          ? "Dr. " + conversation.doctor.fullName
+                          : conversation.patient.fullName
+                      }}
+                    </div>
+                    <div class="user-last-chat">
+                      {{
+                        currentUser.role.roleName == "PATIENT"
+                          ? "Dr. " + conversation.doctor.fullName
+                          : conversation.patient.fullName
+                      }}
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="more-icon"> more_vert </mat-icon>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- Chat Right -->
+        <div class="chat-cont-right">
+          <div class="chat-header d-flex justify-content-between">
+            <div class="media">
+              <div class="media-img-wrap">
+                <div class="avatar">
+                  <img
+                    [src]="
+                      currentUser?.email ===
+                      selectedConversation?.patient?.email
+                        ? selectedConversation?.doctor?.avatarFilePath
+                        : selectedConversation?.patient?.avatarFilePath
+                    "
+                    class="avatar-img rounded-circle"
+                  />
+                </div>
+                <div class="user-name ps-2">
+                  {{
+                    currentUser.email === selectedConversation?.patient?.email
+                      ? "Dr. " + selectedConversation?.doctor?.fullName
+                      : selectedConversation?.patient?.fullName
+                  }}
+                </div>
+              </div>
+            </div>
+            <div class="chat-options">
+              <a data-toggle="modal" data-target="#voice_call">
+                <i class="material-icons">local_phone</i>
+              </a>
+              <a data-toggle="modal" data-target="#video_call">
+                <i class="material-icons">videocam</i>
+              </a>
+              <a>
+                <i class="material-icons">more_vert</i>
+              </a>
+            </div>
+          </div>
+          <div class="chat-body">
+            <div class="chat-scroll" #chatScroll>
+              <ul class="list-unstyled" *ngIf="selectedConversation">
+                <li
+                  class="media"
+                  *ngFor="
+                    let message of selectedConversationData;
+                    let i = index
+                  "
+                  [ngClass]="{
+                    sent: isSentByCurrentUser(message),
+                    received: !isSentByCurrentUser(message),
+                  }"
+                >
+                  <div class="media-body" *ngIf="isSentByCurrentUser(message)">
+                    <div class="msg-box">
+                      <div
+                        [matTooltip]="message.timeStamp | date : 'medium'"
+                        matTooltipPosition="left"
+                      >
+                        <p>{{ message.message }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="!isSentByCurrentUser(message)"
+                    [ngClass]="{ row: !isSentByCurrentUser(message) }"
+                  >
+                    <div class="avatar col-4">
+                      <img
+                        [src]="
+                          currentUser?.email ===
+                          selectedConversation?.patient?.email
+                            ? selectedConversation?.doctor?.avatarFilePath
+                            : selectedConversation?.patient?.avatarFilePath
+                        "
+                        class="avatar-img rounded-circle"
+                        style="width: 30px !important"
+                        *ngIf="shouldShowAvatar(i)"
+                      />
+                    </div>
+                    <div class="media-body col-8">
+                      <div class="msg-box">
+                        <div
+                          [matTooltip]="message.timeStamp | date : 'medium'"
+                          matTooltipPosition="right"
+                        >
+                          <p>{{ message.message }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="chat-footer">
+            <div class="d-flex justify-content-between align-items-center">
+              <input
+                type="text"
+                pInputText
+                class="full-width"
+                placeholder="Type something"
+                [(ngModel)]="message"
+                #messageInput
+                (keyup.enter)="sendMessage()"
+              />
+              <button
+                mat-mini-fab
+                class="ms-3"
+                color="success"
+                type="button"
+                (click)="sendMessage()"
+              >
+                <mat-icon *ngIf="!isSending">send</mat-icon>
+                <mat-icon *ngIf="isSending"
+                  ><mat-spinner diameter="20"></mat-spinner
+                ></mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- /Chat Right -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  header="Start New Chat"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '25rem' }"
+>
+  <div class="d-flex align-items-center justify-content-between mb-5">
+    <label class="font-semibold w-6rem">Doctor</label>
+    <p-dropdown
+      [options]="doctors"
+      [(ngModel)]="doctor"
+      optionLabel="fullName"
+      placeholder="Select Doctor"
+    />
+  </div>
+  <div class="d-flex justify-content-between gap-2">
+    <button
+      mat-raised-button
+      (click)="visible = !visible"
+      [disabled]="isLoading"
+    >
+      Cancel
+    </button>
+    <button
+      mat-flat-button
+      [disabled]="!doctor || isLoading"
+      (click)="createNewConversation()"
+    >
+      @if (!isLoading) { Create } @else {
+      <mat-spinner diameter="20"></mat-spinner>
+      }
+    </button>
+  </div>
+</p-dialog>
+<p-toast position="bottom-left" [life]="2000" />

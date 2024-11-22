@@ -7,11 +7,12 @@ import {
   RegisterRequest,
   User,
 } from '../models/authentication.model';
-import { catchError, Observable, tap, throwError,BehaviorSubject } from 'rxjs';
+import { catchError, Observable, tap, throwError, BehaviorSubject, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { host } from '../../../environments/environment';
 import { Store } from '@ngrx/store';
 import * as AuthActions from '../states/auth/auth.actions';
+import { ApiResponse } from '../models/doctor.model';
 
 @Injectable({
   providedIn: 'root',
@@ -23,16 +24,25 @@ export class AuthService {
     private jwtHelper: JwtHelperService,
     private http: HttpClient,
     private store: Store
-  ) { 
-    }
+  ) { }
 
 
-  isAuthenticated(): boolean {
+  isAuthenticated(): Observable<boolean> {
     const token = localStorage.getItem('token');
     if (this.jwtHelper.decodeToken(token) == null) {
-      return false;
+      return of(false);
     }
-    return !this.jwtHelper.isTokenExpired(token);
+    return of(!this.jwtHelper.isTokenExpired(token));
+  }
+
+  hasPermission(permission: string): boolean {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = jwtDecode<any>(token);
+      const scope: string = decodedToken?.scope;
+      if (permission.includes(scope))  return true;
+    }
+    return false;
   }
 
   refreshToken(): Observable<LoginSucessResponse> {
@@ -75,4 +85,23 @@ export class AuthService {
   onSignupPatient(data: RegisterRequest): Observable<RegisterRequest> {
     return this.http.post<RegisterRequest>(host + '/api/auth/signup', data);
   }
+
+  resetPassword(token: string, newPassword: string, confirmNewPassword: string): Observable<ApiResponse> {
+    const url = `${host}/api/auth/reset-password`; // Endpoint của API
+    const body = {
+      newPassword: newPassword,
+      confirmNewPassword: confirmNewPassword
+    };
+  
+    return this.http.post<ApiResponse>(url, body, { params: { token } }).pipe(
+      tap(() => {
+        console.log('Password reset successful');
+      }),
+      catchError((error) => {
+        console.error('Error resetting password:', error);
+        return throwError(() => new Error('Failed to reset password. Please try again.'));
+      })
+    );
+  }
+  
 }

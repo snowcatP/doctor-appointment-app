@@ -10,6 +10,7 @@ import com.hhh.doctor_appointment_app.enums.AppointmentStatus;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
+import com.hhh.doctor_appointment_app.service.EmailService.Command.SendAppointmentNotification.SendAppointmentNotificationCommand;
 import com.hhh.doctor_appointment_app.service.NotificationService.Implement.BookingNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,9 @@ public class CreateAppointmentByGuestCommand {
 
     @Autowired
     private AppointmentMapper appointmentMapper;
+
+    @Autowired
+    private SendAppointmentNotificationCommand sendAppointmentNotificationCommand;
 
     @Transactional
     public ApiResponse<Object> createAppointmentByGuest(AppointmentByGuestRequest appointmentByGuestRequest){
@@ -79,6 +83,17 @@ public class CreateAppointmentByGuestCommand {
 
             bookingNotificationService.sendBookingMessage(
                     appointmentMapper.toBookingNotificationResponse(appointment)
+            );
+
+            sendAppointmentNotificationCommand.sendAppointmentNotification(
+                    appointment.getEmail(),
+                    appointment.getFullName(),
+                    appointment.getPhone(),
+                    appointment.getAppointmentStatus().toString(),
+                    appointment.getReferenceCode(),
+                    appointment.getDateBooking().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                    appointment.getBookingHour(),
+                    appointment.getDoctor().getProfile().getFullName()
             );
 
             apiResponse.setMessage("Appointment Created Successfully !");

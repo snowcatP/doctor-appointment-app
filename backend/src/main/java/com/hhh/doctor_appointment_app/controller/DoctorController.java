@@ -6,7 +6,9 @@ import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.SearchDoctorRequ
 import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.UpdateDoctorProfileRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorBookingResponse;
+import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorChatResponse;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
+import com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetAllDoctorsHaveBookedOfAPatient;
 import com.hhh.doctor_appointment_app.service.DoctorService.Command.CreateDoctor.CreateDoctorByAdminCommand;
 import com.hhh.doctor_appointment_app.service.DoctorService.Command.DeleteDoctor.DeleteDoctorCommand;
 import com.hhh.doctor_appointment_app.service.DoctorService.Command.EditDoctor.EditDoctorCommand;
@@ -74,6 +76,9 @@ public class DoctorController {
 
     @Autowired
     private GetAllPatientOfDoctorQuery getAllPatientOfDoctorQuery;
+
+    @Autowired
+    private GetAllDoctorsHaveBookedOfAPatient getAllDoctorsHaveBookedOfAPatient;
 
     @GetMapping("/list-doctor")
     public ResponseEntity<?> getDoctors(@RequestParam(defaultValue = "1") int page,
@@ -304,6 +309,16 @@ public class DoctorController {
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+    }
+
+    @GetMapping("/get-all-doctors-booked-of-patient")
+    public ResponseEntity<?> getAllDoctorsBookedOfAPatient() {
+        try{
+            var result = getAllDoctorsHaveBookedOfAPatient.getAllDoctorsHaveBookedOfAPatient();
+            return ResponseEntity.ok(result);
+        }catch (Exception ex){
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 }

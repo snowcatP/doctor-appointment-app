@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from './core/guard/auth.guard';
-import { Page404Component } from './core/components/page-404/page-404.component';
+import { Page404Component } from './shared/components/page-404/page-404.component';
 
 const routes: Routes = [
   {
@@ -25,19 +25,38 @@ const routes: Routes = [
       ).then((m) => m.BookingAppointmentModule),
   },
   {
+    path: 'chat',
+    loadChildren: () =>
+      import(
+        './modules/chat/chat.module'
+      ).then((m) => m.ChatModule),
+    canActivate: [authGuard],
+    data: {
+      permission: ['PATIENT', 'DOCTOR']
+    }
+  },
+  {
     path: 'patient',
     loadChildren: () =>
       import('./modules/patient/patient.module').then((m) => m.PatientModule),
-    // canActivate: [authGuard],
-    // data: {
-    //   permission: 'patient',
-    //   redirectTo: '/error-404'
-    // }
+    canActivate: [authGuard],
+    data: {
+      permission: ['PATIENT']
+    }
   },
   {
     path: 'doctor',
     loadChildren: () =>
       import('./modules/doctor/doctor.module').then((m) => m.DoctorModule),
+    canActivate: [authGuard],
+    data: {
+      permission: ['DOCTOR']
+    }
+  },
+  {
+    path: 'nurse',
+    loadChildren: () =>
+      import('./modules/nurse/nurse.module').then((m) => m.NurseModule),
     // canActivate: [authGuard],
     // data: {
     //   permission: 'doctor',

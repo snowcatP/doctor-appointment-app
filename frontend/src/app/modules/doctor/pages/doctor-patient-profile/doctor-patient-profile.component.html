@@ -1,4 +1,9 @@
 <div class="content">
+  <button mat-flat-button extended matStepperNext routerLink="/doctor/myPatient" [disabled]="loading"
+    style="margin-bottom: 10px;">
+    <mat-icon iconPositionEnd>arrow_back</mat-icon>
+    Back
+  </button>
   <div class="d-flex">
     <!-- Sidebar Component -->
     <div class="col-md-3 col-lg-3 col-xl-3 theiaStickySidebar dct-dashbd-lft">
@@ -11,8 +16,8 @@
                 <img src="../../../../../assets/images/patients/patient3.jpg" alt="User Image" />
               </a> -->
               <div class="booking-doc-img">
-                <p-image  [src]="patientDetail?.avatarFilePath || 'assets/images/doctors/doctor-thumb-01.jpg'"
-                          class="img-fluid" alt="User Image" width="100%" [preview]="true" />
+                <p-image [src]="patientDetail?.avatarFilePath || 'assets/images/doctors/doctor-thumb-01.jpg'"
+                  class="img-fluid" alt="User Image" width="100%" [preview]="true" />
               </div>
               <div class="profile-det-info">
                 <h3>
@@ -149,14 +154,14 @@
                                   (click)="viewAppointmentDetails(appointment)">
                                   <i class="far fa-eye"></i> View
                                 </a>
-                                <a *ngIf="!appointment.medicalRecordResponse 
+                                <!-- <a *ngIf="!appointment.medicalRecordResponse 
                                 && (appointment.appointmentStatus === 'ACCEPT' || 
                                   appointment.appointmentStatus === 'RESCHEDULED' ||
                                   appointment.appointmentStatus === 'COMPLETED'
-                                )" href="javascript:void(0);" class="btn btn-sm bg-primary-light" data-toggle="modal"
+                                )" class="btn btn-sm bg-primary-light" data-toggle="modal"
                                   data-target="#add_medical_records" (click)="openForm(appointment)">
                                   <i class="far fa-eye"></i> Add Medical Record
-                                </a>
+                                </a> -->
                               </div>
                             </td>
                             <!-- <td class="text-right">
@@ -181,49 +186,62 @@
               </div>
 
               <!-- Appointment Detail Dialog -->
-              <p-dialog header="Appointment Details" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
-                <div *ngIf="selectedAppointment">
-                  <p>
-                    <strong>Doctor:</strong>Dr.
-                    {{ selectedAppointment.doctor.firstName }}
-                    {{ selectedAppointment.doctor.lastName }}
-                  </p>
-                  <p>
-                    <strong>Appointment Date:</strong>
-                    {{
-                    selectedAppointment.dateBooking
-                    | date
-                    : "dd
-                    MMM yyyy"
-                    }}, {{selectedAppointment.bookingHour}}
-                  </p>
-                  <p>
-                    <strong>Status:</strong>
-                    <span class="badge badge-pill" [ngClass]="{
-                        'bg-primary-light':
-                          selectedAppointment.appointmentStatus === 'ACCEPT',
-                        'bg-info-light':
-                          selectedAppointment.appointmentStatus ===
-                          'RESCHEDULED',
-                        'bg-success-light':
-                          selectedAppointment.appointmentStatus === 'COMPLETED',
-                        'bg-warning-light':
-                          selectedAppointment.appointmentStatus === 'PENDING',
-                        'bg-danger-light':
-                          selectedAppointment.appointmentStatus === 'CANCELLED'
-                      }">
-                      {{ selectedAppointment.appointmentStatus }}
-                    </span>
-                  </p>
-
-                  <p>
-                    <strong>Reason:</strong> {{ selectedAppointment.reason }}
-                  </p>
-                  <p>
-                    <strong>Patient Name:</strong>
-                    {{ selectedAppointment.fullName }}
-                  </p>
-                  <p><strong>Phone:</strong> {{ selectedAppointment.phone }}</p>
+              <p-dialog header="Appointment Details" [modal]="true" [(visible)]="visible" [style]="{ width: '30rem' }">
+                <div class="row" *ngIf="selectedAppointment">
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Doctor:</p>
+                    <p>Dr. {{ selectedAppointment?.doctor?.firstName }} {{ selectedAppointment?.doctor?.lastName }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Patient Name:</p>
+                    <p>{{ selectedAppointment?.fullName }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Phone:</p>
+                    <p>{{ selectedAppointment?.phone }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Email:</p>
+                    <p>{{ selectedAppointment?.email }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Date Booking:</p>
+                    <p>{{ selectedAppointment?.dateBooking | date }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Booking Hour:</p>
+                    <p>{{ selectedAppointment?.bookingHour }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Status:</p>
+                    <p>
+                      <span class="badge badge-pill" [ngClass]="{
+            'bg-primary-light':
+              selectedAppointment.appointmentStatus === 'ACCEPT',
+            'bg-info-light':
+              selectedAppointment.appointmentStatus === 'RESCHEDULED',
+            'bg-success-light':
+              selectedAppointment.appointmentStatus === 'COMPLETED',
+            'bg-warning-light':
+              selectedAppointment.appointmentStatus === 'PENDING',
+            'bg-danger-light':
+              selectedAppointment.appointmentStatus === 'CANCELLED'
+          }">
+                        {{ selectedAppointment?.appointmentStatus }}
+                      </span>
+                    </p>
+                  </div>
+                  <div class="row d-flex justify-content-between pe-0">
+                    <p class="col-4">Reason:</p>
+                    <div class="col-8 pe-0 d-flex justify-content-end" style="text-align: justify">
+                      <p-scrollPanel [style]="{ width: '100%', height: '100%' }" class="mh-25">
+                        {{ selectedAppointment?.reason }}
+                      </p-scrollPanel>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between pt-4">
+                    <button mat-raised-button (click)="visible = !visible">Close</button>
+                  </div>
                 </div>
               </p-dialog>
             </mat-tab>
@@ -259,10 +277,10 @@
                         </thead>
                         <tbody>
                           <tr *ngFor="let medicalRecord of medicalRecords">
-                            <td>{{ medicalRecord.id }}</td>
+                            <td>{{ medicalRecord?.id }}</td>
                             <td>
                               {{
-                              medicalRecord.dateCreated
+                              medicalRecord?.dateCreated
                               | date : "dd MMM yyyy, hh:mm a"
                               }}
                             </td>
@@ -293,26 +311,24 @@
                                 {{ medicalRecord.appointmentResponse?.appointmentStatus }}
                               </span>
                             </td>
-                            <td>{{ medicalRecord.description }}</td>
-                            <td>
-                              <a href="{{ medicalRecord.filePath }}" target="_blank">File</a>
+                            <td>{{ medicalRecord?.description }}</td>
+                            <td *ngIf="medicalRecord?.filePath">
+                              <a href="{{ medicalRecord?.filePath }}" target="_blank">File</a>
+                            </td>
+                            <td *ngIf="!medicalRecord?.filePath">
+                              <a>None</a>
                             </td>
                             <td>
                               <h2 class="table-avatar">
                                 <a class="avatar avatar-sm mr-3">
                                   <img class="avatar-img rounded-circle" [src]="
-                                      medicalRecord.doctorResponse
-                                        .avatarFilePath ||
+                                      medicalRecord?.nurseResponse
+                                        ?.avatarFilePath ||
                                       'assets/images/doctors/doctor-thumb-01.jpg'
                                     " alt="User Image" />
                                 </a>
-                                <a>Dr.
-                                  {{ medicalRecord.doctorResponse.firstName }}
-                                  {{ medicalRecord.doctorResponse.lastName }}
-                                  <span>{{
-                                    medicalRecord.doctorResponse.specialty
-                                    .specialtyName
-                                    }}</span>
+                                <a>Nurse.
+                                  {{ medicalRecord?.nurseResponse?.fullName }}
                                 </a>
                               </h2>
                             </td>
@@ -347,39 +363,45 @@
               <!-- Medical Record Detail Dialog -->
               <p-dialog header="Medical Record Details" [modal]="true" [(visible)]="visibleMedicalRecord"
                 [style]="{ width: '25rem' }">
-                <div *ngIf="selectedMedicalRecord">
-                  <p>
-                    <strong>Doctor:</strong>Dr.
-                    {{ selectedMedicalRecord.doctorResponse.firstName }}
-                    {{ selectedMedicalRecord.doctorResponse.lastName }}
-                  </p>
-
-                  <p>
-                    <strong>Created Date:</strong>
-                    {{
-                    selectedMedicalRecord.dateCreated
-                    | date
-                    : "dd
-                    MMM yyyy, hh:mm a"
-                    }}
-                  </p>
-                  <p>
-                    <strong>Last Modified:</strong>
-                    {{
-                    selectedMedicalRecord.lastModified
-                    | date
-                    : "dd
-                    MMM yyyy, hh:mm a"
-                    }}
-                  </p>
-                  <p>
-                    <strong>Description:</strong>
-                    {{ selectedMedicalRecord.description }}
-                  </p>
-                  <p><strong>File:</strong></p>
-                  <div class="doctor-img">
+                <div class="row" *ngIf="selectedMedicalRecord">
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Created By:</p>
+                    <p>Nurse. {{ selectedMedicalRecord?.nurseResponse?.fullName }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Created Date:</p>
+                    <p>{{selectedMedicalRecord.dateCreated | date: "dd MMM yyyy, hh:mm a"}}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Last Modified:</p>
+                    <p>{{selectedMedicalRecord.lastModified | date : "dd MMM yyyy, hh:mm a"}}</p>
+                  </div>
+                  <div *ngIf="selectedMedicalRecord?.doctorResponse" class="d-flex justify-content-between pe-2">
+                    <p>Edited By:</p>
+                    <p>Dr. {{ selectedMedicalRecord?.doctorResponse?.fullName }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Blood Group:</p>
+                    <p>{{ selectedMedicalRecord?.bloodType }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Heart Rate:</p>
+                    <p>{{ selectedMedicalRecord?.heartRate }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Description:</p>
+                    <p>{{ selectedMedicalRecord.description }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>File:</p>
+                    <P *ngIf="!selectedMedicalRecord?.filePath">None</P>
+                  </div>
+                  <div class="doctor-img" *ngIf="selectedMedicalRecord?.filePath">
                     <p-image [src]="selectedMedicalRecord?.filePath" class="img-fluid" alt="Doctor Image" width="150"
                       [preview]="true" />
+                  </div>
+                  <div class="d-flex justify-content-between pt-4">
+                    <button mat-raised-button (click)="visibleMedicalRecord = !visibleMedicalRecord">Close</button>
                   </div>
                 </div>
               </p-dialog>
@@ -453,9 +475,102 @@
       (onUpdated)="fetchMedicalRecords()">
       <div class="card">
         <div class="card-body" style="min-height: 60vh">
-          <h2 mat-dialog-title>Edit Medical Record For Patient</h2>
+          <h2 class="card-tittle" style="margin-bottom: 20px;">Edit Medical Record For Patient</h2>
+          <div class="row form-row">
+            <form #reviewForm="ngForm" (ngSubmit)="onUpdate()">
+              <mat-dialog-content>
+                <mat-form-field appearance="outline" class="col-sm-5 col-md-3 col-lg-3 col-xl-4"
+                  style="margin-right: 85px;">
+                  <mat-label>Blood Group</mat-label>
+                  <mat-select required [(ngModel)]="editingMedicalRecord.bloodType" name="bloodType">
+                    <mat-option value="A">A</mat-option>
+                    <mat-option value="B">B</mat-option>
+                    <mat-option value="O">O</mat-option>
+                    <mat-option value="AB">AB</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-sm-5 col-md-3 col-lg-3 col-xl-4">
+                  <mat-label>Heart Rate</mat-label>
+                  <input matInput placeholder="Ex. 80" name="heartRate" [(ngModel)]="editingMedicalRecord.heartRate"
+                    required type="number" />
 
-          <form #editForm="ngForm" (ngSubmit)="onUpdate()">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
+                  <mat-label>Description</mat-label>
+                  <textarea matInput placeholder="Ex. Symptoms recorded from the patient" name="description"
+                    [(ngModel)]="editingMedicalRecord.description"></textarea>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
+                  <mat-label>Diagnosis</mat-label>
+                  <textarea matInput placeholder="Ex. Diagnoses of the patient's condition" name="diagnosis"
+                    [(ngModel)]="editingMedicalRecord.diagnosis"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
+                  <mat-label>Allergies</mat-label>
+                  <input matInput placeholder="Ex. Allergy symptoms" name="allergies" [(ngModel)]="editingMedicalRecord.allergies"/>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
+                  <mat-label>Prescription</mat-label>
+                  <textarea matInput placeholder="Ex. Vitamin .." name="prescription"
+                    [(ngModel)]="editingMedicalRecord.prescription"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
+                  <mat-label>Treatment Plan</mat-label>
+                  <input matInput placeholder="Ex. 4 days" name="treatmentPlan" [(ngModel)]="editingMedicalRecord.treatmentPlan"/>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
+                  <mat-label>Note</mat-label>
+                  <input matInput placeholder="" name="note" [(ngModel)]="editingMedicalRecord.note"/>
+                </mat-form-field>
+                <div class="change-avatar">
+                  <div class="profile-img">
+                    <p-image *ngIf="imagePreview" [src]="imagePreview" alt="Doctor Image" width="100%"
+                      [preview]="true"></p-image>
+                    <div *ngIf="fileName" class="file-name">
+                      {{ fileName }}
+                    </div>
+                  </div>
+                  <div class="upload-img">
+                    <div class="change-photo-btn">
+                      <span><i class="fa fa-upload"></i> Upload File</span>
+                      <input type="file" class="upload" (change)="onFileSelected($event)" />
+                    </div>
+                    <small class="form-text text-muted" style="margin-top: 15px;">Allowed DOC, DOCX, PDF,
+                      JPG, PNG. Max
+                      size of 5MB</small>
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 15px">
+                  <div class="terms-accept">
+                    <div class="custom-checkbox">
+                      <input type="checkbox" id="terms_accept" required />
+                      <label for="terms_accept">I have read and accept
+                        <a href="#">Terms & Conditions</a></label>
+                    </div>
+                  </div>
+                </div>
+              </mat-dialog-content>
+
+              <mat-dialog-actions>
+                <button type="button" class="btn btn-cancel" (click)="closeEditForm()">
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-primary submit-btn" [disabled]="loading">
+                  Edit
+                </button>
+
+                <div *ngIf="loading" class="spinner-container">
+                  <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="5" fill="var(--surface-ground)"
+                    animationDuration=".5s">
+                  </p-progressSpinner>
+                </div>
+              </mat-dialog-actions>
+            </form>
+          </div>
+          <!-- <form #editForm="ngForm" (ngSubmit)="onUpdate()">
             <mat-dialog-content>
               <div class="form-group">
                 <label>Description</label>
@@ -500,14 +615,14 @@
               <button type="submit" class="btn btn-primary submit-btn" [disabled]="loading">
                 Edit
               </button>
-              <!-- Spinner -->
               <div *ngIf="loading" class="spinner-container">
                 <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="5" fill="var(--surface-ground)"
                   animationDuration=".5s">
                 </p-progressSpinner>
               </div>
             </mat-dialog-actions>
-          </form>
+          </form> -->
+
         </div>
       </div>
     </div>

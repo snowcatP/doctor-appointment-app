@@ -1,6 +1,7 @@
 package com.hhh.doctor_appointment_app.dto.mapper;
 
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorBookingResponse;
+import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorChatResponse;
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
 import com.hhh.doctor_appointment_app.entity.Doctor;
 import org.mapstruct.Mapper;
@@ -36,4 +37,13 @@ public interface DoctorMapper {
             @Mapping(source = "profile.avatarFilePath", target = "avatarFilePath"),
     })
     List<DoctorBookingResponse> toListDoctorBookingResponse(List<Doctor> doctors);
+
+    @Mappings({
+            @Mapping(source = "doctor.profile.fullName", target = "fullName"),
+            @Mapping(source = "doctor.profile.avatarFilePath", target = "avatarFilePath"),
+            @Mapping(source = "doctor.profile.email", target = "email"),
+    })
+    DoctorChatResponse toChatResponse(Doctor doctor);
+
+    List<DoctorChatResponse> toListDoctorChatResponse(List<Doctor> doctors);
 }

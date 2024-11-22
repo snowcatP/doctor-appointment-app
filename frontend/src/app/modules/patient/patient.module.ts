@@ -21,6 +21,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SharedModule } from "../../shared/shared.module";
 import { MatButtonModule } from '@angular/material/button';
 import { DropdownModule } from 'primeng/dropdown';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     PatientComponent,
@@ -45,7 +47,9 @@ import { DropdownModule } from 'primeng/dropdown';
     ProgressSpinnerModule,
     SharedModule,
     MatButtonModule,
-    DropdownModule
+    DropdownModule,
+    ScrollPanelModule,
+    ReactiveFormsModule
 ]
 })
 export class PatientModule { }

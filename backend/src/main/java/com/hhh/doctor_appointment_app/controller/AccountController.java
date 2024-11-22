@@ -1,16 +1,17 @@
 package com.hhh.doctor_appointment_app.controller;
 
 import com.hhh.doctor_appointment_app.dto.request.DoctorRequest.AddDoctorRequest;
+import com.hhh.doctor_appointment_app.dto.request.NurseRequest.AddNurseRequest;
 import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserChangePasswordRequest;
 import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserCreateRequest;
 import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserForgotPasswordRequest;
 import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserSignupRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.entity.Admin;
-import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Patient;
+import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.service.DoctorService.Command.CreateDoctor.CreateDoctorByAdminCommand;
-import com.hhh.doctor_appointment_app.service.FirebaseStorageService;
+import com.hhh.doctor_appointment_app.service.NurseService.Command.CreateNurseByAdmin.CreateNurseByAdminCommand;
 import com.hhh.doctor_appointment_app.service.UserService.Command.CreateAdmin.CreateAdminCommand;
 import com.hhh.doctor_appointment_app.service.UserService.Command.CreateDoctor.CreateDoctorCommand;
 import com.hhh.doctor_appointment_app.service.UserService.Command.CreatePatient.CreatePatientCommand;
@@ -27,8 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -56,6 +56,9 @@ public class AccountController {
     @Autowired
     private CreateDoctorByAdminCommand createDoctorByAdminCommand;
 
+    @Autowired
+    private CreateNurseByAdminCommand createNurseByAdminCommand;
+
 
 
     @PostMapping("/forgot-password")
@@ -67,14 +70,26 @@ public class AccountController {
     }
 
     @PostMapping("/reset-password")
-    public ApiResponse<String> resetPassword(
+    public ResponseEntity<?> resetPassword(
             @RequestParam String token,
             @RequestBody UserChangePasswordRequest request)
             throws ParseException, JOSEException {
-        return ApiResponse.<String>builder()
-                .data(resetUserPasswordCommand.resetUserPassword(token, request))
-                .statusCode(HttpStatus.OK.value())
-                .build();
+        ApiResponse<Object> apiResponse = new ApiResponse<>();
+        try {
+            apiResponse = resetUserPasswordCommand.resetUserPassword(token,request);
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
+        }
+        catch (NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+        catch (Exception ex) {
+
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
     }
 
     @PostMapping("/signup")
@@ -117,11 +132,12 @@ public class AccountController {
 
         // Check validation
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(fieldError -> fieldError.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
-            apiResponse.setMessage("Validation errors: " + errors);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse); // Return 400 to validation
+            apiResponse.setMessage(errorMessage);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
 
         try {
@@ -141,6 +157,36 @@ public class AccountController {
         } catch (Exception ex) {
             apiResponse.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
             apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResponse);
+        }
+    }
+
+    @PostMapping("/register/nurse")
+    public ResponseEntity<?> registerNurseAndUploadFileByAdmin(
+            @RequestParam("file") MultipartFile file,
+            @ModelAttribute @Valid AddNurseRequest addNurseRequest, // use ModelAttribute to bind data
+            BindingResult bindingResult) {
+
+        ApiResponse<Object> apiResponse = new ApiResponse<>();
+
+        // Check validation
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(fieldError -> fieldError.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage(errorMessage);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+
+        try {
+            // Save
+            apiResponse = createNurseByAdminCommand.addNurseByAdmin(file,addNurseRequest);
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            apiResponse.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            apiResponse.setMessage(ex.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResponse);
         }
     }

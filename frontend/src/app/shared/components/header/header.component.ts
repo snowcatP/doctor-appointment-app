@@ -1,14 +1,13 @@
 import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { NbAccessChecker } from '@nebular/security';
 import { Store } from '@ngrx/store';
-import * as fromAuth from '../../states/auth/auth.reducer';
+import * as fromAuth from '../../../core/states/auth/auth.reducer';
 import { map, Observable, of } from 'rxjs';
-import { User } from '../../models/authentication.model';
+import { User } from '../../../core/models/authentication.model';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import * as AuthActions from '../../states/auth/auth.actions';
+import { AuthService } from '../../../core/services/auth.service';
+import * as AuthActions from '../../../core/states/auth/auth.actions';
 import { MessageService } from 'primeng/api';
-import { MediaMatcher } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-header',
@@ -18,6 +17,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 export class HeaderComponent implements OnInit {
   token$: Observable<string>;
   user$: Observable<User>;
+  role$: Observable<string>;
   sidebarVisible: boolean = false;
   constructor(
     public accessChecker: NbAccessChecker,
@@ -30,6 +30,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.token$ = this.store.select(fromAuth.selectToken);
     this.user$ = this.store.select(fromAuth.selectUser);
+    this.role$ = this.store.select(fromAuth.selectRole);
   }
 
   goToDashboard() {
@@ -38,6 +39,8 @@ export class HeaderComponent implements OnInit {
         this.router.navigate(['/patient']);
       } else if (user?.role.roleName === 'DOCTOR') {
         this.router.navigate(['/doctor']);
+      } else if (user?.role.roleName === 'NURSE') {
+        this.router.navigate(['/nurse']);
       } else {
         console.warn('Unknown role, unable to redirect');
       }
@@ -50,6 +53,8 @@ export class HeaderComponent implements OnInit {
         this.router.navigate(['/patient/profile']);
       } else if (user?.role.roleName === 'DOCTOR') {
         this.router.navigate(['/doctor/profile']);
+      } else if (user?.role.roleName === 'NURSE') {
+        this.router.navigate(['/nurse/profile']);
       } else {
         console.warn('Unknown role, unable to redirect');
       }
@@ -72,5 +77,9 @@ export class HeaderComponent implements OnInit {
         });
       },
     });
+  }
+
+  closeSideBar() {
+    this.sidebarVisible = false;
   }
 }

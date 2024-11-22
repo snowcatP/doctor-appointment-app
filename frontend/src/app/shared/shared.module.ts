@@ -10,11 +10,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { BadgeModule } from 'primeng/badge';
-
+import { PanelMenuModule } from 'primeng/panelmenu';
+import { FooterComponent } from './components/footer/footer.component';
+import { HeaderComponent } from './components/header/header.component';
+import { Page404Component } from './components/page-404/page-404.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { SidebarModule } from 'primeng/sidebar';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
-    ScheduleComponent
+    ScheduleComponent,
+    FooterComponent,
+    HeaderComponent,
+    Page404Component,
   ],
   imports: [
     CommonModule,
@@ -27,9 +36,17 @@ import { BadgeModule } from 'primeng/badge';
     FormsModule,
     MatButtonModule,
     BadgeModule,
+    PanelMenuModule,
+    MatMenuModule,
+    SidebarModule,
+    MatButtonModule,
+    MatListModule,
   ],
   exports: [
-    ScheduleComponent
-  ]
+    ScheduleComponent,
+    FooterComponent,
+    HeaderComponent,
+    Page404Component,
+  ],
 })
-export class SharedModule { }
+export class SharedModule {}

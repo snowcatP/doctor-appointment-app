@@ -16,7 +16,7 @@ import {
 } from '../../../core/models/booking.model';
 import { filter, Observable, Subject, Subscription } from 'rxjs';
 import { User } from '../../../core/models/authentication.model';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { BookingNotification } from '../../../core/models/notification.model';
 import { WebSocketService } from '../../../core/services/webSocket.service';
@@ -26,6 +26,7 @@ import {
 } from '../../../core/models/appointment.model';
 import * as fromAuth from '../../../core/states/auth/auth.reducer';
 import { Store } from '@ngrx/store';
+import { RxwebValidators } from '@rxweb/reactive-form-validators';
 
 @Component({
   selector: 'app-schedule',
@@ -34,10 +35,10 @@ import { Store } from '@ngrx/store';
 })
 export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
   @Input() isReschedule: boolean;
-  @Input() formLogin: FormGroup;
   @Input() doctorSelected: DoctorBooking;
   @Input() selectedApp: AppointmentResponse;
   @Output() selectedSlot = new EventEmitter<TimeSlot>();
+  formLogin: FormGroup;
   isLogged$: Observable<boolean>;
   isLogged: boolean;
   user$: Observable<User>;
@@ -68,56 +69,66 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.generateAppointmentSlots();
-    this.getAppointmentsBooked();
     this.webSocketInit();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     // Handle patient and guest booking
     this.isLoading = true;
-    if (this.isReschedule && changes.selectedApp?.currentValue != undefined) {
-      const request: GetAppointmentForReschedulingRequest = {
-        doctorEmail: changes.selectedApp?.currentValue.doctor.email,
-      };
-      this.appointmentService
-        .getAppointmentsForReschedulingByPatient(request)
-        .subscribe({
-          next: (res) => {
-            this.appointmentsBooked = res;
-            this.isLoading = false;
-            setTimeout(() => {
-              this.handleAppointmentsBooked();
-            }, 100);
-          },
-          error: (err) => {
-            console.log(err);
-            this.isLoading = false;
-          },
-        });
-    }
-    if (
-      !this.isReschedule &&
-      changes.doctorSelected?.currentValue != undefined
-    ) {
-      this.appointmentService
-        .getAppointmentsForBooking(this.doctorSelected.id)
-        .subscribe({
-          next: (res) => {
-            this.appointmentsBooked = res;
-            this.isLoading = false;
-            setTimeout(() => {
-              this.handleAppointmentsBooked();
-            }, 100);
-          },
-          error: (err) => {
-            console.log(err);
-            this.isLoading = false;
-          },
-        });
-    }
-    if (changes.selectedApp.currentValue != undefined) {
+    this.store.select(fromAuth.selectRole).subscribe((r) => {
+      if (r === 'PATIENT') {
+        if (
+          this.isReschedule &&
+          changes.selectedApp?.currentValue != undefined
+        ) {
+          const request: GetAppointmentForReschedulingRequest = {
+            doctorEmail: changes.selectedApp?.currentValue?.doctor?.email,
+          };
+          this.appointmentService
+            .getAppointmentsForReschedulingByPatient(request)
+            .subscribe({
+              next: (res) => {
+                this.appointmentsBooked = res;
+                this.isLoading = false;
+                setTimeout(() => {
+                  this.handleAppointmentsBooked();
+                }, 100);
+              },
+              error: (err) => {
+                console.log(err);
+                this.isLoading = false;
+              },
+            });
+        }
+      } else {
+        if (
+          !this.isReschedule &&
+          changes.doctorSelected?.currentValue != undefined
+        ) {
+          this.appointmentService
+            .getAppointmentsForBooking(this.doctorSelected.id)
+            .subscribe({
+              next: (res) => {
+                this.appointmentsBooked = res;
+                this.isLoading = false;
+                setTimeout(() => {
+                  this.handleAppointmentsBooked();
+                }, 100);
+              },
+              error: (err) => {
+                console.log(err);
+                this.isLoading = false;
+              },
+            });
+        }
+      }
+    });
+
+    if (changes.selectedApp?.currentValue != undefined) {
       this.handleAppointmentsBooked();
     }
+    this.isLoading = false;
+
   }
 
   ngOnDestroy(): void {
@@ -135,7 +146,7 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(filter((state) => state))
       .subscribe(() => {
         this.bookingSubscription = this.webSocketService
-          .on('/app-ws/booking/notifications')
+          .on('/topic/booking/notifications')
           .subscribe((notification: BookingNotification) => {
             this.handleAppointmentSendFromWs(notification);
           });
@@ -147,12 +158,12 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
     const bookingDate = this.formatDate(app.dateBooking);
-    if (
-      this.formatDate(this.timeSlotSelected.date) == bookingDate &&
-      app.bookingHour == this.timeSlotSelected.time
-    ) {
-      this.timeSlotSelected = null;
-    }
+    // if (
+    //   this.formatDate(this.timeSlotSelected.date) == bookingDate &&
+    //   app.bookingHour == this.timeSlotSelected.time
+    // ) {
+    //   this.timeSlotSelected = null;
+    // }
     this.schedules.forEach((week: AppointmentSlot[]) => {
       week.forEach((day: AppointmentSlot) => {
         day.timeSlotsMorning.forEach((timeSlot: TimeSlot) => {
@@ -173,28 +184,6 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  getAppointmentsBooked() {
-    this.isLoading = true;
-    this.store.select(fromAuth.selectRole).subscribe((role) => {
-      if (role == 'DOCTOR') {
-        if (this.isReschedule) {
-          this.appointmentService.getAppointmentsForRescheduling().subscribe({
-            next: (res) => {
-              this.appointmentsBooked = res;
-              this.handleAppointmentsBooked();
-              this.isLoading = false;
-            },
-            error: (err) => {
-              console.log(err);
-              this.isLoading = false;
-            },
-          });
-        }
-      }
-    });
-    this.isLoading = false;
-  }
-
   handleAppointmentsBooked() {
     this.schedules.forEach((week: AppointmentSlot[]) => {
       week.forEach((day: AppointmentSlot) => {
@@ -212,6 +201,8 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
               timeSlot.time == this.selectedApp.bookingHour
             ) {
               timeSlot.isPassedIn = true;
+            } else {
+              timeSlot.isPassedIn = false;
             }
           });
           day.timeSlotsAfternoon.forEach((timeSlot: TimeSlot) => {
@@ -227,11 +218,14 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
               timeSlot.time == this.selectedApp.bookingHour
             ) {
               timeSlot.isPassedIn = true;
+            } else {
+              timeSlot.isPassedIn = false;
             }
           });
         });
       });
     });
+    this.isLoading = false;
   }
 
   generateAppointmentSlots() {
@@ -288,6 +282,7 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
 
   closeDialog() {
     this.modalVisible = false;
+    this.timeSlotSelected = null;
     this.formLogin.reset();
   }
 

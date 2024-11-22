@@ -7,6 +7,7 @@ import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.Appointme
 import com.hhh.doctor_appointment_app.entity.Appointment;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
+import com.hhh.doctor_appointment_app.service.EmailService.Command.SendEmailWhenAppointmentStatusChange.SendEmailWhenAppointmentStatusChangeCommand;
 import com.hhh.doctor_appointment_app.state.AcceptState;
 import com.hhh.doctor_appointment_app.state.RescheduledState;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class RescheduleAppointmentByDoctorOrPatient {
 
     @Autowired
     private AppointmentMapper appointmentMapper;
+
+    @Autowired
+    private SendEmailWhenAppointmentStatusChangeCommand sendEmailWhenAppointmentStatusChangeCommand;
 
     @PreAuthorize("hasAnyRole('DOCTOR', 'PATIENT')")
     public ApiResponse<Object> rescheduleAppointmentByDoctorOrPatient(Long id, RescheduleWithDateRequest rescheduleWithDateRequest) {
@@ -62,6 +66,17 @@ public class RescheduleAppointmentByDoctorOrPatient {
             appointment.setBookingHour(rescheduleWithDateRequest.getBookingHour());
             appointmentRepository.saveAndFlush(appointment);
 
+            sendEmailWhenAppointmentStatusChangeCommand.sendAppointmentNotificationWhenChangeStatus(
+                    appointment.getEmail(),
+                    appointment.getFullName(),
+                    appointment.getPhone(),
+                    appointment.getAppointmentStatus().toString(),
+                    appointment.getReferenceCode(),
+                    appointment.getDateBooking().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                    appointment.getBookingHour(),
+                    appointment.getDoctor().getProfile().getFullName()
+            );
+
             // Tạo phản hồi từ Appointment sau khi thay đổi
             AppointmentResponse appointmentResponse = appointmentMapper.toResponse(appointment);
             apiResponse.setMessage("Appointment Rescheduled Successfully!");
@@ -81,7 +96,7 @@ public class RescheduleAppointmentByDoctorOrPatient {
         } catch (Exception ex) {
             return ApiResponse.builder()
                     .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                    .message("Appointment Reschedule Failed!")
+                    .message(ex.getMessage())
                     .build();
         }
     }

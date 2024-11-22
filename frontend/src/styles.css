@@ -288,7 +288,9 @@ table.table td h2 span {
 }
 .card-table .card-body {
     padding: 0;
+	
 }
+
 .card-table .card-body .table > thead > tr > th {
     border-top: 0;
 }
@@ -1666,7 +1668,7 @@ button.bg-danger:hover {
 	-webkit-justify-content: space-between;
 	-ms-flex-pack: space-between;
     position: relative;
-	height: 85px;
+	height: 58px;
 	padding: 0 30px;
 	margin-bottom: 0;
 }
@@ -1918,7 +1920,7 @@ button.bg-danger:hover {
 	display: -ms-inline-flexbox;
 	display: inline-flex;
     font-size: 14px;
-	line-height: 85px;
+	line-height: 58px;
 	padding: 0 10px;
 }
 
@@ -4047,7 +4049,6 @@ html.menu-opened body {
     font-size: .875rem;
     font-weight: 500;
     color: #272b41;
-    text-transform: capitalize;
 }
 .patient-info ul li + li {
 	margin-top: 15px;
@@ -4095,7 +4096,7 @@ html.menu-opened body {
 	justify-content: center;
 	-webkit-justify-content: center;
 	-ms-flex-pack: center;
-    height: 85px;
+    height: 58px;
 	margin-bottom: 15px;
     width: 100%;
 }
@@ -4139,10 +4140,10 @@ html.menu-opened body {
 }
 .chat-cont-left {
     border-right: 1px solid #f0f0f0;
-    -ms-flex: 0 0 35%;
-    flex: 0 0 35%;
+    -ms-flex: 0 0 30%;
+    flex: 0 0 30%;
     left: 0;
-    max-width: 35%;
+    max-width: 30%;
     position: relative;
     z-index: 4;
 }
@@ -4156,7 +4157,7 @@ html.menu-opened body {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
-    height: 72px;
+    height: 56px;
 	justify-content: space-between;
 	-webkit-justify-content: space-between;
 	-ms-flex-pack: space-between;
@@ -4174,9 +4175,9 @@ html.menu-opened body {
 	display: inline-flex;
 }
 .chat-cont-left .chat-search {
-    background-color: #f5f5f6;
+    background-color: #fff;
     border-bottom: 1px solid #e5e5e5;
-    padding: 10px 15px;
+    padding: 6px 10px;
     width: 100%;
 }
 .chat-cont-left .chat-search .input-group {
@@ -4207,9 +4208,10 @@ html.menu-opened body {
     z-index: 4;
 }
 .chat-window .chat-scroll {
-	min-height: 300px;
+	min-height: 75vh;
     max-height: calc(100vh - 224px);
     overflow-y: auto;
+	overflow-x: hidden;
 }
 .chat-cont-left .chat-users-list {
     background-color: #fff;
@@ -4218,12 +4220,15 @@ html.menu-opened body {
     border-bottom: 1px solid #f0f0f0;
     padding: 10px 15px;
     transition: all 0.2s ease 0s;
+	cursor: pointer;
+	border-radius: 10px;
+	margin: 0 4px;
 }
 .chat-cont-left .chat-users-list a.media:last-child {
 	border-bottom: 0;
 }
 .chat-cont-left .chat-users-list a.media .media-img-wrap {
-    margin-right: 15px;
+    /* margin-right: 30px; */
     position: relative;
 }
 .chat-cont-left .chat-users-list a.media .media-img-wrap .avatar {
@@ -4279,9 +4284,9 @@ html.menu-opened body {
 	background-color: #f5f5f6;
 }
 .chat-cont-right {
-    -ms-flex: 0 0 65%;
-    flex: 0 0 65%;
-    max-width: 65%;
+    -ms-flex: 0 0 70%;
+    flex: 0 0 70%;
+    max-width: 70%;
 }
 .chat-cont-right .chat-header {
 	-webkit-box-align: center;
@@ -4292,7 +4297,7 @@ html.menu-opened body {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
-    height: 72px;
+    height: 56px;
 	justify-content: space-between;
 	-webkit-justify-content: space-between;
 	-ms-flex-pack: space-between;
@@ -4319,8 +4324,8 @@ html.menu-opened body {
 	margin-right: 15px;
 }
 .chat-cont-right .chat-header .media .media-img-wrap .avatar {
-	height: 50px;
-	width: 50px;
+	height: 40px;
+	width: 40px;
 }
 .chat-cont-right .chat-header .media .media-img-wrap .status {
     border: 2px solid #fff;
@@ -4362,7 +4367,7 @@ html.menu-opened body {
     width: 30px;
 }
 .chat-cont-right .chat-body {
-    background-color: #f5f5f6;
+    background-color: #fff;
 }
 .chat-cont-right .chat-body ul.list-unstyled {
     margin: 0 auto;
@@ -4374,7 +4379,7 @@ html.menu-opened body {
     width: 30px;
 }
 .chat-cont-right .chat-body .media .media-body {
-	margin-left: 20px;
+	margin-left: 10px;
 }
 .chat-cont-right .chat-body .media .media-body .msg-box > div {
 	padding: 10px 15px;
@@ -4390,16 +4395,16 @@ html.menu-opened body {
 	margin-top: 5px;
 }
 .chat-cont-right .chat-body .media.received {
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 }
 .chat-cont-right .chat-body .media:last-child {
 	margin-bottom: 0;
 }
 .chat-cont-right .chat-body .media.received .media-body .msg-box > div {
-	background-color: #fff;
+	background-color: #f5f5f6;
 }
 .chat-cont-right .chat-body .media.sent {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 .chat-cont-right .chat-body .media.sent .media-body {
 	-webkit-box-align: flex-end;
@@ -5745,7 +5750,7 @@ html.menu-opened body {
 		position: relative;
 	}
 	.main-nav > li > a {
-		line-height: 85px;
+		line-height: 58px;
 		padding: 0 !important;
 	}
 	.main-nav > li > a > i {
@@ -5999,22 +6004,23 @@ html.menu-opened body {
 	.footer-widget {
 		margin-bottom: 30px;
 	}
-	.chat-cont-left, .chat-cont-right {
-		-ms-flex: 0 0 100%;
-		flex: 0 0 100%;
-		max-width: 100%;
+	.chat-cont-left {
+		-ms-flex: 0 0 30%;
+		flex: 0 0 30%;
+		max-width: 30%;
 		transition: left 0.3s ease-in-out 0s, right 0.3s ease-in-out 0s;
-		width: 100%;
+		width: 30%;
+		border-right: 1px solid #f0f0f0 !important;
+	}
+	.chat-cont-right {
+		-ms-flex: 0 0 69%;
+		flex: 0 0 69%;
+		max-width: 69%;
+		transition: left 0.3s ease-in-out 0s, right 0.3s ease-in-out 0s;
+		width: 69%;
 	}
 	.chat-cont-left {
 		border-right: 0;
-	}
-	.chat-cont-right {
-		position: absolute;
-		right: -100%;
-		top: 0;
-		opacity: 0;
-		visibility: hidden;
 	}
 	.chat-cont-right .chat-header {
 		justify-content: start;
@@ -6445,6 +6451,24 @@ html.menu-opened body {
 	.service-list ul li {
 		width: 50%;
 	}
+	.user-name-chat-left {
+		visibility: hidden;
+	}
+	.chat-cont-left {
+		transition: left 0.3s ease-in-out 0s, right 0.3s ease-in-out 0s;
+		-ms-flex: 0 0 88px;
+		flex: 0 0 88px;
+		min-width: 88px;
+		width: 88px;
+		border-right: 1px solid #f0f0f0;
+	}
+	.chat-cont-right {
+		transition: left 0.3s ease-in-out 0s, right 0.3s ease-in-out 0s;
+		-ms-flex: 0 0 calc(100% - 90px);
+		flex: 0 0 calc(100% - 90px);
+		max-width: calc(100% - 90px);
+		width: calc(100% - 90px);
+	}
 }
 
 @media only screen and (max-width: 575.98px) {
@@ -6474,6 +6498,7 @@ html.menu-opened body {
 	}
 	.card-body {
 		padding: 1.25rem;
+
 	}
 	.card-header {
 		padding: .75rem 1.25rem;
