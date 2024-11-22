@@ -41,6 +41,8 @@ public class ApplicationInitConfig implements ApplicationRunner{
             if (!roleRepository.existsByRoleName(role)) {
                 roleRepository.save(Role.builder().roleName(role).build());
             }
+            // Please run above code in database system if you add more role
+            // ALTER TABLE role MODIFY role_name enum('ADMIN','DOCTOR','PATIENT','NURSE' .....)
         }
 
 
