@@ -88,7 +88,7 @@
     <div class="col-md-7 col-lg-8 col-xl-9 dct-appoinment" *ngIf="!isFormVisible && !isEditFormVisible">
       <div class="card">
         <div class="card-body">
-          <mat-tab-group>
+          <mat-tab-group (selectedTabChange)="onTabChange($event)">
             <mat-tab label="Appointments">
               <div id="pat_appointments">
                 <div class="card card-table mb-3">
@@ -245,20 +245,9 @@
                 </div>
               </p-dialog>
             </mat-tab>
-            <mat-tab label="Medical Records">
+            <mat-tab label="Medical Records" >
               <!-- Medical Records Tab -->
               <div id="pat_medical_records">
-                <!-- <div class="text-right">
-                  <a
-                    href="javascript:void(0);"
-                    class="add-new-btn"
-                    data-toggle="modal"
-                    data-target="#add_medical_records"
-                    (click)="openForm()"
-                    >Add Medical Records</a
-                  >
-                </div> 
-                -->
                 <div class="card card-table mb-0">
                   <div class="card-body">
                     <div class="table-responsive" style="min-height: 60vh">
@@ -509,7 +498,8 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
                   <mat-label>Allergies</mat-label>
-                  <input matInput placeholder="Ex. Allergy symptoms" name="allergies" [(ngModel)]="editingMedicalRecord.allergies"/>
+                  <input matInput placeholder="Ex. Allergy symptoms" name="allergies"
+                    [(ngModel)]="editingMedicalRecord.allergies" />
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
                   <mat-label>Prescription</mat-label>
@@ -518,11 +508,12 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
                   <mat-label>Treatment Plan</mat-label>
-                  <input matInput placeholder="Ex. 4 days" name="treatmentPlan" [(ngModel)]="editingMedicalRecord.treatmentPlan"/>
+                  <input matInput placeholder="Ex. 4 days" name="treatmentPlan"
+                    [(ngModel)]="editingMedicalRecord.treatmentPlan" />
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
                   <mat-label>Note</mat-label>
-                  <input matInput placeholder="" name="note" [(ngModel)]="editingMedicalRecord.note"/>
+                  <input matInput placeholder="" name="note" [(ngModel)]="editingMedicalRecord.note" />
                 </mat-form-field>
                 <div class="change-avatar">
                   <div class="profile-img">
@@ -570,59 +561,6 @@
               </mat-dialog-actions>
             </form>
           </div>
-          <!-- <form #editForm="ngForm" (ngSubmit)="onUpdate()">
-            <mat-dialog-content>
-              <div class="form-group">
-                <label>Description</label>
-                <textarea id="review_desc" maxlength="100" class="form-control" name="comment"
-                  [(ngModel)]="editingMedicalRecord.description" name="description"></textarea>
-                <small class="text-muted"><span id="chars">255</span> characters remaining</small>
-              </div>
-              <div class="change-avatar">
-                <div class="profile-img">
-                  <p-image *ngIf="imagePreview" [src]="imagePreview" alt="Doctor Image" width="100%"
-                    [preview]="true"></p-image>
-
-                  <div *ngIf="fileName" class="file-name">
-                    {{ fileName }}
-                  </div>
-                </div>
-                <div class="upload-img">
-                  <div class="change-photo-btn">
-                    <span><i class="fa fa-upload"></i> Upload File</span>
-                    <input type="file" class="upload" (change)="onFileSelected($event)" />
-                  </div>
-                  <small class="form-text text-muted" style="margin-top: 15px;">Allowed DOC, DOCX, PDF, JPG, PNG. Max
-                    size of 5MB</small>
-                </div>
-              </div>
-
-              <div class="form-group" style="margin-top: 15px;">
-                <div class="terms-accept">
-                  <div class="custom-checkbox">
-                    <input type="checkbox" id="terms_accept" required />
-                    <label for="terms_accept">I have read and accept
-                      <a href="#">Terms & Conditions</a></label>
-                  </div>
-                </div>
-              </div>
-            </mat-dialog-content>
-
-            <mat-dialog-actions>
-              <button type="button" class="btn btn-cancel" (click)="closeEditForm()">
-                Cancel
-              </button>
-              <button type="submit" class="btn btn-primary submit-btn" [disabled]="loading">
-                Edit
-              </button>
-              <div *ngIf="loading" class="spinner-container">
-                <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="5" fill="var(--surface-ground)"
-                  animationDuration=".5s">
-                </p-progressSpinner>
-              </div>
-            </mat-dialog-actions>
-          </form> -->
-
         </div>
       </div>
     </div>

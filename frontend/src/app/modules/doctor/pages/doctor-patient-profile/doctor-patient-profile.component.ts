@@ -6,6 +6,7 @@ import { MedicalRecordService } from '../../../../core/services/medical-record.s
 import { MatDialog } from '@angular/material/dialog';
 import { AddMedicalRecordRequest, ApiResponse, EditMedicalRecordRequest } from '../../../../core/models/medical-record.model';
 import { MessageService } from 'primeng/api';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 @Component({
   selector: 'app-doctor-patient-profile',
   templateUrl: './doctor-patient-profile.component.html',
@@ -35,7 +36,6 @@ export class DoctorPatientProfileComponent {
       this.patientId = +params.get('id')!;
       this.fetchPatientDetails(this.patientId);
       this.fetchAppointmentsOfPatientByPatientID(this.patientId, 1, this.pageSize);
-      this.fetchMedicalRecordsOfPatientByPatientID(this.patientId, 1, this.pageSizeMR)
     });
   }
 
@@ -93,7 +93,6 @@ export class DoctorPatientProfileComponent {
     this.medicalRecordService.getMedicalRecordsOfPatientByPatientId(id, page, pageSize).subscribe(
       (response) => {
         if (response.statusCode === 200) {
-          console.log(response.data)
           this.medicalRecords = response.data;
           this.totalMedicalRecords = response.totalPage * pageSize;
         }
@@ -103,6 +102,15 @@ export class DoctorPatientProfileComponent {
       }
     );
   }
+
+  onTabChange(event: MatTabChangeEvent): void {
+    if (event.index === 0) {
+      this.fetchAppointmentsOfPatientByPatientID(this.patientId, 1, this.pageSize);
+    } else if (event.index === 1) {
+      this.fetchMedicalRecords();
+    }
+  }
+  
 
   visible: boolean = false; // Control dialog visibility
   selectedAppointment: any = null; // Store selected appointment for dialog

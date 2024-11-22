@@ -74,7 +74,7 @@ export class DoctorChangePasswordComponent {
           this.formChangePassword.reset(); // Reset form
 
           setTimeout(() => {
-            this.router.navigate([`/doctor/dashboard`]);
+            this.router.navigate([`/doctor`]);
           }, 1000);
         } else {
           this.messageService.add({

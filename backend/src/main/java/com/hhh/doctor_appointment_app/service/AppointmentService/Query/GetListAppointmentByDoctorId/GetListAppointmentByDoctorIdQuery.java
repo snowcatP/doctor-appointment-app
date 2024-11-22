@@ -3,6 +3,7 @@ package com.hhh.doctor_appointment_app.service.AppointmentService.Query.GetListA
 import com.hhh.doctor_appointment_app.dto.mapper.AppointmentMapper;
 import com.hhh.doctor_appointment_app.dto.mapper.DoctorMapper;
 import com.hhh.doctor_appointment_app.dto.mapper.MedicalRecordMapper;
+import com.hhh.doctor_appointment_app.dto.mapper.PatientMapper;
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.entity.Appointment;
@@ -44,6 +45,9 @@ public class GetListAppointmentByDoctorIdQuery {
     @Autowired
     private MedicalRecordMapper medicalRecordMapper;
 
+    @Autowired
+    private PatientMapper patientMapper;
+
     @PreAuthorize("hasRole('DOCTOR')")
     public PageResponse<List<AppointmentResponse>> getAppointmentsWithPageByDoctorId(int page, int size) {
         var context = SecurityContextHolder.getContext();
@@ -73,6 +77,7 @@ public class GetListAppointmentByDoctorIdQuery {
                     response.setDoctor(doctorMapper.toResponse(appointment.getDoctor()));
                     response.setBookingHour(appointment.getBookingHour());
                     response.setMedicalRecordResponse(medicalRecordMapper.toResponse(appointment.getMedicalRecord()));
+                    response.setPatientResponse(patientMapper.toResponse(appointment.getPatient()));
                     if(appointment.getPatient()!=null){
                         response.setAvatarFilePath(appointment.getPatient().getProfile().getAvatarFilePath());
                     }

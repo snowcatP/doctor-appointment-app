@@ -16,7 +16,9 @@ import * as AuthActions from '../../../../core/states/auth/auth.actions';
 import { selectErrorMessage } from '../../../../core/states/auth/auth.reducer';
 import { Actions, ofType } from '@ngrx/effects';
 import { Subject, takeUntil } from 'rxjs';
-
+import { User } from '../../../../core/models/authentication.model';
+import { Observable } from 'rxjs';
+import * as fromAuth from '../../../../core/states/auth/auth.reducer';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -29,6 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   @ViewChild('email') emailInput: ElementRef;
   private unsubscribe$ = new Subject<void>();
   isLoading: boolean = false;
+  user$: Observable<User>;
   constructor(
     private fb: FormBuilder,
     private store: Store,
@@ -55,6 +58,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.action$
       .pipe(ofType(AuthActions.loginSuccess), takeUntil(this.unsubscribe$))
       .subscribe(() => {
+        this.user$ = this.store.select(fromAuth.selectUser);
         this.messageService.add({
           key: 'messageToast',
           severity: 'success',
@@ -62,9 +66,17 @@ export class LoginComponent implements OnInit, OnDestroy {
           detail: 'Login successfully',
         });
         setTimeout(() => {
-          this.router.navigateByUrl('/');
+          this.user$.subscribe(user => {
+            if(user?.role.roleName === "NURSE"){
+              this.router.navigate(['/nurse/dashboard']);
+            } else if (user?.role.roleName === "DOCTOR"){
+              this.router.navigate(['/doctor']);
+            }else{
+              this.router.navigateByUrl('/');
+            }
+          })
           this.isLoading = false;
-        }, 1500);
+        }, 1000);
       });
   }
   showPassword() {
