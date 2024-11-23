@@ -13,6 +13,10 @@ export class DoctorService {
   getListDoctor(): Observable<any>{
     return this.http.get(environment.apiEndpoint +'/api/doctor/list-doctor');
   }
+  getDoctorDetail(id: number): Observable<any>{
+    return this.http.get(environment.apiEndpoint +`/api/doctor/detail/${id}`);
+
+  }
   addNewDoctor(doctor: Doctor, file: File): Observable<any> {
     const formData = new FormData();
     if(file){

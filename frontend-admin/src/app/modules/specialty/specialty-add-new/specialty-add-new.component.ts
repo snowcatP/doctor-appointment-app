@@ -52,7 +52,7 @@ export class SpecialtyAddNewComponent implements OnInit {
           // Check if avatarFilePath is null or empty, and set default if needed
           doctor.avatarFilePath = doctor.avatarFilePath ?? defaultAvatarPath;
           return doctor;
-        });
+        })
       },
     });
   }

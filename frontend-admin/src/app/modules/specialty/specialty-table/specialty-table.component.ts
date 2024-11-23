@@ -56,7 +56,7 @@ export class SpecialtyTableComponent implements OnInit {
   editSpecialty() {}
   deleteMultipleSpecialty() {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete the selected specialtys?',
+      message: 'Are you sure you want to delete the selected specialties?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
@@ -70,7 +70,7 @@ export class SpecialtyTableComponent implements OnInit {
                 key: 'messageToast',
                 severity: 'success',
                 summary: 'Success',
-                detail: 'All selected specialtys have been deleted successfully.',
+                detail: 'All selected specialties have been deleted successfully.',
               });
               this.getListSpecialty();
             },
@@ -103,6 +103,6 @@ export class SpecialtyTableComponent implements OnInit {
     });
   }
   openEditDialog(specialty: Specialty) {
-    this.router.navigate(['/edit-specialty'], { queryParams: { id: specialty.id, specialtyName: specialty.specialtyName, headDoctorId: specialty.headDoctorId, listDoctorId: specialty.listDoctorId  } });
+    this.router.navigate(['specialty/edit-specialty'], { queryParams: { id: specialty.id} });
   }
 }

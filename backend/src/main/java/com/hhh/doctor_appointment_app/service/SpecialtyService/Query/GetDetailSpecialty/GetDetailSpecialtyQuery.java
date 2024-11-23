@@ -22,7 +22,11 @@ public class GetDetailSpecialtyQuery {
         try {
             Specialty specialty = specialtyRepository.findById(id).orElseThrow(() -> new NotFoundException("Specialty Not Found"));
             // Update
+
             SpecialtyResponse specialtyResponse = specialtyMapper.toResponse(specialty);
+            specialtyResponse.setSpecialtyName(specialty.getSpecialtyName());
+            specialtyResponse.setHeadDoctor(specialty.getHeadDoctor());
+            specialtyResponse.setDoctorList(specialty.getDoctorList());
             apiResponse.ok(specialtyResponse);
             apiResponse.setMessage("Get Specialty's Information Successfully");
         }catch(NotFoundException ex){

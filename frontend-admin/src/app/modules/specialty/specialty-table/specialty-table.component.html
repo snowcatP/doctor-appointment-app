@@ -34,7 +34,7 @@
                 <th style="width: 4rem">
                     <p-tableHeaderCheckbox />
                 </th>
-                <th pSortableColumn="id" style="min-width:10rem">
+                <th pSortableColumn="id" style="width:5rem">
                     <div class="flex justify-content-between align-items-center">
                         Specialty Id <p-sortIcon field="id" />
                         <p-columnFilter type="text" field="id" display="menu" class="ml-auto" />
@@ -73,7 +73,14 @@
                     </td>
                     <td>{{specialty.id}}</td>
                     <td>{{specialty.specialtyName}}</td>
-                    <td>{{specialty.specialtyHead}}</td>
+                    <td>
+                        <p-avatar 
+                                [image]="specialty.headDoctor.profile.avatarFilePath" 
+                                size="large" 
+                                shape="circle" />
+                        {{specialty.headDoctor.profile.fullName}}
+                    
+                    </td>
                     <td>
                         <p-avatarGroup styleClass="mb-3">
                             <p-avatar  *ngFor="let doctor of specialty.doctorList"

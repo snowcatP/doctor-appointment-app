@@ -32,12 +32,14 @@ import { ChipsModule } from 'primeng/chips';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
+import { SpecialtyEditComponent } from './specialty-edit/specialty-edit.component';
 
 @NgModule({
   declarations: [
     SpecialtyComponent,
     SpecialtyTableComponent,
-    SpecialtyAddNewComponent
+    SpecialtyAddNewComponent,
+    SpecialtyEditComponent
   ],
   imports: [
     CommonModule,

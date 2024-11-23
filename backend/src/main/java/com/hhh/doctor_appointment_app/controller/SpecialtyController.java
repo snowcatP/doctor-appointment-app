@@ -162,4 +162,6 @@ public class SpecialtyController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
     }
+    @GetMapping("detail/{id}/admin")
+    public ResponseEntity<?> getDoctorDetail(@PathVariable Long id)
 }
