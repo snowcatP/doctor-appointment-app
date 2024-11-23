@@ -57,11 +57,10 @@ const routes: Routes = [
     path: 'nurse',
     loadChildren: () =>
       import('./modules/nurse/nurse.module').then((m) => m.NurseModule),
-    // canActivate: [authGuard],
-    // data: {
-    //   permission: 'doctor',
-    //   redirectTo: '/error-404'
-    // }
+    canActivate: [authGuard],
+    data: {
+      permission: ['NURSE']
+    }
   },
   {
     path: 'error404',
