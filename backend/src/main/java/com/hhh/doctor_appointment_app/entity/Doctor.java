@@ -26,7 +26,7 @@ public class Doctor{
 
     private String schedule;    // MONDAY,TUESDAY
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "specialty_id")
     @JsonIgnore
     private Specialty specialty;

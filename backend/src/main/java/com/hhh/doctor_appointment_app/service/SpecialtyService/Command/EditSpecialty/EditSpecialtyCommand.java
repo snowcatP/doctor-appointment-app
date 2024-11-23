@@ -4,19 +4,24 @@ import com.hhh.doctor_appointment_app.dto.mapper.SpecialtyMapper;
 import com.hhh.doctor_appointment_app.dto.request.SpecialtyRequest.EditSpecialtyRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.SpecialtyResponse.SpecialtyResponse;
+import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Specialty;
 import com.hhh.doctor_appointment_app.exception.ApplicationException;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
+import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.SpecialtyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EditSpecialtyCommand {
     @Autowired
     private SpecialtyRepository specialtyRepository;
-
+    @Autowired
+    private DoctorRepository doctorRepository;
     @Autowired
     private SpecialtyMapper specialtyMapper;
     public ApiResponse<Object> editSpecialty(Long id, EditSpecialtyRequest editSpecialtyRequest){
@@ -37,6 +42,14 @@ public class EditSpecialtyCommand {
             }
 
             existingSpecialty.setSpecialtyName(editSpecialtyRequest.getSpecialtyName());
+            Doctor headDoctor = doctorRepository.findById(editSpecialtyRequest.getHeadDoctorId()).orElseThrow(() -> new NotFoundException("Specialty Not Found") );
+            List<Doctor> doctorList = doctorRepository.findAllById(editSpecialtyRequest.getListDoctorId());
+            for(Doctor doctor: doctorList){
+                doctor.setSpecialty(existingSpecialty);
+            }
+
+            existingSpecialty.setHeadDoctor(headDoctor);
+            existingSpecialty.setDoctorList(doctorList);
 
             specialtyRepository.saveAndFlush(existingSpecialty);
 

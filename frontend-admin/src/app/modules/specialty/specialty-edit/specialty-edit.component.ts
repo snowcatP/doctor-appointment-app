@@ -19,16 +19,16 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './specialty-edit.component.css',
 })
 export class SpecialtyEditComponent implements OnInit {
-  doctors: Doctor[] | undefined;
+  doctors: Doctor[] = [];
   doctor: Doctor;
   specialty: Specialty;
   selectedDoctor: Doctor;
-  selectedListDoctor: Doctor[];
+  selectedListDoctor: Doctor[] = [];
   selectedListDoctorId: number[] = [];
   filterValue: string | undefined = '';
   formEditSpecialty: FormGroup;
   headDoctor: any;
-
+  specialtyId: number;
   constructor(
     private specialtyService: SpecialtyService,
     private doctorService: DoctorService,
@@ -39,12 +39,12 @@ export class SpecialtyEditComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
   ngOnInit(): void {
-    let specialtyId;
     this.route.queryParams.subscribe((params) => {
-      specialtyId = params['id'];
+      this.specialtyId = params['id'];
     });
-    this.getSpecialtyDetail(specialtyId);
+    this.getSpecialtyDetail(this.specialtyId);
     this.getListDoctor();
+    
     this.formEditSpecialty = this.fb.group({
       specialtyName: ['', RxwebValidators.required()],
       specialtyHeadDoctor: ['', RxwebValidators.required()],
@@ -61,6 +61,7 @@ export class SpecialtyEditComponent implements OnInit {
         });
         this.headDoctor = resp.data.headDoctor;
         this.selectedListDoctor = resp.data.doctorList;
+        console.log(this.selectedListDoctor)
       },
     });
   }
@@ -74,6 +75,7 @@ export class SpecialtyEditComponent implements OnInit {
           doctor.avatarFilePath = doctor.avatarFilePath ?? defaultAvatarPath;
           return doctor;
         });
+        console.log(resp)
       },
     });
   }
@@ -94,27 +96,30 @@ export class SpecialtyEditComponent implements OnInit {
         doctor.id.toString().includes(query)
     );
   }
-  addNewSpecialty() {
-    // console.log(this.selectedListDoctor)
-    // const listDoctorId = this.selectedListDoctor.map(listDoctor =>
-    //    listDoctor.id
-    // )
-    // let newSpecialty: Specialty = {
-    //   id: null,
-    //   specialtyName: this.formAddSpecialty.controls['specialtyName'].value,
-    //   headDoctorId: this.formAddSpecialty.controls['specialtyHeadDoctor'].value.id,
-    //   listDoctorId: listDoctorId
-    // };
-    // this.specialtyService.addNewSpecialty(newSpecialty).subscribe({
-    //   next: (res) => {
-    //     this.messageService.add({
-    //       key: 'messageToast',
-    //       severity: 'success',
-    //       summary: 'Success',
-    //       detail: 'Add new Specialty successfully',
-    //     });
-    //     this.formAddSpecialty.reset();
-    //   },
-    // })
+  editSpecialty() {
+    console.log(this.selectedListDoctor);
+    const listDoctorId = this.selectedListDoctor.map(
+      (listDoctor) => listDoctor.id
+    );
+    let editSpecialty: Specialty = {
+      id: null,
+      specialtyName: this.formEditSpecialty.controls['specialtyName'].value,
+      headDoctorId:
+        this.formEditSpecialty.controls['specialtyHeadDoctor'].value.id,
+      listDoctorId: listDoctorId,
+    };
+    this.specialtyService
+      .editSpecialty(this.specialtyId, editSpecialty)
+      .subscribe({
+        next: (res) => {
+          this.messageService.add({
+            key: 'messageToast',
+            severity: 'success',
+            summary: 'Success',
+            detail: `Edit Specialty successfully${editSpecialty.specialtyName}`,
+          });
+          this.formEditSpecialty.reset();
+        },
+      });
   }
 }

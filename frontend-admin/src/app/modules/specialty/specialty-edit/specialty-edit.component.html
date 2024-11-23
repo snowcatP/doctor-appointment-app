@@ -1,21 +1,23 @@
 <div class="card flex flex-column md:flex-row gap-3" id="specialty-section">
-    <h1 class="heading" style="color: #116aef; font-family: var(--font-family);" >
+    <h1 class="heading" style="color: #116aef; font-family: var(--font-family)">
         Edit Specialty
     </h1>
-    <form [formGroup]="formEditSpecialty" (ngSubmit)="addNewSpecialty()">
-
+    <form [formGroup]="formEditSpecialty" (ngSubmit)="editSpecialty()">
         <p-inputGroup>
             <p-inputGroupAddon><i class="fas fa-heading"></i></p-inputGroupAddon>
-            <input pInputText  formControlName="specialtyName" placeholder="Speciality Name" />
+            <input pInputText formControlName="specialtyName" placeholder="Speciality Name" />
         </p-inputGroup>
         <p-inputGroup>
             <p-inputGroupAddon><i class="fa-solid fa-user-doctor"></i></p-inputGroupAddon>
-            <p-dropdown [options]="doctors" formControlName="specialtyHeadDoctor" [(ngModel)]="selectedDoctor" [filter]="true" filterBy="fullName, id"
-                [showClear]="true" [loading]="false" [placeholder]="headDoctor.profile.fullName" styleClass="w-20rem">
+            <p-dropdown [options]="doctors" formControlName="specialtyHeadDoctor" [(ngModel)]="selectedDoctor"
+                [filter]="true" filterBy="fullName, id" [showClear]="true" [loading]="false"
+                [placeholder]="headDoctor.profile.fullName" styleClass="w-20rem">
                 <ng-template pTemplate="selectedItem">
                     <div class="flex align-items-center gap-2" *ngIf="selectedDoctor">
                         <p-avatar [image]="selectedDoctor.avatarFilePath" styleClass="mr-2" shape="circle" />
-                        <div>{{ selectedDoctor.firstName }} {{ selectedDoctor.lastName }} - Id: {{selectedDoctor.id}}
+                        <div>
+                            {{ selectedDoctor.firstName }} {{ selectedDoctor.lastName }} - Id:
+                            {{ selectedDoctor.id }}
                         </div>
                     </div>
                 </ng-template>
@@ -31,28 +33,35 @@
                 </ng-template>
                 <ng-template let-doctor pTemplate="item">
                     <div class="flex align-items-center gap-2">
-                        <div>{{ doctor.firstName }} {{ doctor.lastName }} - Id: {{doctor.id}} </div>
+                        <div>
+                            {{ doctor.firstName }} {{ doctor.lastName }} - Id: {{ doctor.id }}
+                        </div>
                     </div>
                 </ng-template>
-
             </p-dropdown>
         </p-inputGroup>
         <p-inputGroup>
             <p-inputGroupAddon><i class="fas fa-users"></i></p-inputGroupAddon>
-            <p-multiSelect formControlName="specialtyListDoctors" [options]="doctors" [(ngModel)]="selectedListDoctor" placeholder="Select doctors who will belong to this Specialty"
-                 display="chip" [showClear]="true" >
+            <p-multiSelect formControlName="specialtyListDoctors" [options]="doctors" [(ngModel)]="selectedListDoctor"
+                placeholder="Select doctors who will belong to this Specialty" display="chip" [showClear]="true">
                 <ng-template let-doctor pTemplate="selectedItems">
                     <div class="inline-flex align-items-center gap-2 px-1" *ngFor="let option of doctor">
-                        <p-avatar *ngIf="selectedListDoctor!=null" [image]="option.profile.avatarFilePath" styleClass="mr-2" shape="circle" />
-                        <div *ngIf="selectedListDoctor!=null"> {{ option.profile.firstName }} {{ option.profile.lastName }} - Id: {{option.id}},</div>
-                        <p-avatar *ngIf="selectedListDoctor" [image]="option.avatarFilePath" styleClass="mr-2" shape="circle" />
-                        <div *ngIf="selectedListDoctor"> {{ option.firstName }} {{ option.lastName }} - Id: {{option.id}},</div>
+                        <p-avatar *ngIf="selectedListDoctor" [image]="option.avatarFilePath" styleClass="mr-2"
+                            shape="circle" />
+                        <div *ngIf="selectedListDoctor">
+                            {{ option.firstName }} {{ option.lastName }} - Id:
+                            {{ option.id }},
+                        </div>
                     </div>
-                    <div *ngIf="!doctor || doctor.length === 0">Select doctors who will belong to this Specialty</div>
+                    <div *ngIf="!doctor || doctor.length === 0">
+                        Select doctors who will belong to this Specialty
+                    </div>
                 </ng-template>
                 <ng-template let-doctor pTemplate="item">
-                    <div class="flex align-items-center gap-2">
-                        <div>{{ doctor.firstName }} {{ doctor.lastName }} - Id: {{doctor.id}} </div>
+                    <div class="p-multiselect-label">
+                        <div>
+                            {{ doctor.firstName }} {{ doctor.lastName }} - Id: {{ doctor.id }}
+                        </div>
                     </div>
                 </ng-template>
                 <ng-template let-doctor pTemplate="footer">
@@ -60,7 +69,12 @@
                         <b>
                             {{ selectedListDoctor ? selectedListDoctor.length : 0 }}
                         </b>
-                        item{{ (selectedListDoctor ? selectedListDoctor.length : 0) > 1 ? 's' : '' }} selected.
+                        item{{
+                        (selectedListDoctor ? selectedListDoctor.length : 0) > 1
+                        ? "s"
+                        : ""
+                        }}
+                        selected.
                     </div>
                 </ng-template>
             </p-multiSelect>
@@ -71,4 +85,4 @@
         </div>
     </form>
 </div>
-<p-confirmDialog/>
+<p-confirmDialog />

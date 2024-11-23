@@ -8,7 +8,6 @@ export class Doctor{
     firstName:string
     @prop()
     lastName:string
-    
     @prop()
     gender:boolean
     @prop()

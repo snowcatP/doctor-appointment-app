@@ -21,5 +21,8 @@ export class SpecialtyService {
   deleteSpecialty(id:number): Observable<any>{
     return this.http.delete<any>(environment.apiEndpoint + `/api/specialty/delete-specialty/${id}`);
   }
+  editSpecialty(id:number,specialtyReqeust: Specialty): Observable<any> {
+    return this.http.put<any>(environment.apiEndpoint + `/api/specialty/edit-specialty/${id}`, specialtyReqeust);
+  }
 
 }
