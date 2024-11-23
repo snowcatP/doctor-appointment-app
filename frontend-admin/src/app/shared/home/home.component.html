@@ -3,9 +3,9 @@
     <!-- Vertical Sidebar -->
     <!-- ============================================================== -->
   
-    <mat-sidenav #leftsidenav [mode]="isOver ? 'over' : 'side'" [opened]="!isOver"
+    <mat-sidenav #leftsidenav [mode]="isOver ? 'over' : 'side'" [opened]="!isOver" style="padding: 15px; display: flex; flex-direction: column; text-align: center;"
       (openedChange)="onSidenavOpenedChange($event)" (closedStart)="onSidenavClosedStart()" class="sidebarNav">
-      <div class="flex-layout">
+      <!-- <div class="flex-layout">
         <app-sidebar (toggleMobileNav)="sidenav.toggle()" [showToggle]="isOver"></app-sidebar>
         <ng-scrollbar class="position-relative" style="height: 100%">
           <mat-nav-list class="sidebar-list">
@@ -15,14 +15,37 @@
             }
           </mat-nav-list>
         </ng-scrollbar>
-        <!-- <div class="p-16 m-t-16">
+         <div class="p-16 m-t-16">
           <a mat-flat-button color="primary"
             href="https://www.wrappixel.com/templates/spike-angular-admin-template/?ref=33" target="_blank"
             class="d-flex justify-content-center w-100">
             Upgrade to Pro
           </a>
-        </div> -->
-      </div>
+        </div>
+      </div> -->
+      <img src="/assets/images/logos/logo.png" alt="" style="margin: 20px">
+
+      <p-panelMenu [model]="items" [style]="{width: '100% !important'}" [multiple]="true">
+        <ng-template pTemplate="item" let-item [style]="{margin: '10px 0;', border: 'none;' }">
+          <ng-container *ngIf="item.item==null" >
+            <div class="container">
+              <div class="row" >
+                <div class="rol-12" style="display: flex; align-items: center; justify-content: space-between;">
+                  <a [routerLink]="item.route" class="flex align-items-center  
+                      cursor-pointer text-color px-3 py-2" style="text-decoration: none;">
+                      <span [class]="item.icon"></span>
+                      <span class="ml-2">{{ item.label }}</span>
+                  </a>
+                  <i *ngIf="item.topmenu" class="fas fa-angle-down"></i>
+                </div>
+
+              </div>
+            </div>
+          </ng-container>
+        </ng-template>
+      </p-panelMenu>
+
+
     </mat-sidenav>
   
   

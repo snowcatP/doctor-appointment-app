@@ -40,15 +40,13 @@ export class SpecialtyTableComponent implements OnInit {
 
   }
   getListSpecialty() {
-    this.specialtyService.getListSpecialty().subscribe((resp) => {
+    this.specialtyService.getListSpecialty().subscribe({
+      next: (resp) => {
       this.specialties = resp;
       console.log(this.specialties)
-    });
+    }});
   }
-  getListDoctor(){
-    this.doctorService.getListDoctor()
-
-  }
+  
   showAddSpecialty() {
     this.router.navigateByUrl('specialty/add-specialty');
   }

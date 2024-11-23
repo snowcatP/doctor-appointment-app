@@ -27,6 +27,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PanelMenuModule } from 'primeng/panelmenu';
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,7 +53,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     IconFieldModule,
     InputIconModule,
     InputTextModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PanelMenuModule,
     
 
     ],
