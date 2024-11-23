@@ -22,6 +22,7 @@ export class SpecialtyEditComponent implements OnInit {
   doctors: Doctor[] = [];
   doctor: Doctor;
   specialty: Specialty;
+  specialties: Specialty[];
   selectedDoctor: Doctor;
   selectedListDoctor: Doctor[] = [];
   selectedListDoctorId: number[] = [];
@@ -39,10 +40,14 @@ export class SpecialtyEditComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.specialtyId = params['id'];
-    });
-    this.getSpecialtyDetail(this.specialtyId);
+    if(this.route.snapshot.queryParamMap.get('id')!=null){
+      this.route.queryParams.subscribe((params) => {
+        this.specialtyId = params['id'];
+      });
+      this.getSpecialtyDetail(this.specialtyId);
+    }else{
+      this.getTheFirtsSpecialtyId();
+    }
     this.getListDoctor();
     
     this.formEditSpecialty = this.fb.group({
@@ -50,6 +55,14 @@ export class SpecialtyEditComponent implements OnInit {
       specialtyHeadDoctor: ['', RxwebValidators.required()],
       specialtyListDoctors: ['', RxwebValidators.required()],
     });
+  }
+  getTheFirtsSpecialtyId() {
+    this.specialtyService.getListSpecialty().subscribe({
+      next: (resp) =>{
+        this.getSpecialtyDetail(resp[0].id);
+      }
+    }
+  );
   }
   getSpecialtyDetail(id: any) {
     const defaultAvatarPath =
