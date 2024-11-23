@@ -5,15 +5,14 @@ import com.hhh.doctor_appointment_app.entity.Doctor;
 import lombok.*;
 
 import java.util.List;
-
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SpecialtyResponse {
+public class SpecialResponeWithDoctorList {
     private Long id;
     private String specialtyName;
-    private List<Doctor> doctorList;
+    private List<DoctorResponse> doctorList;
     private Doctor headDoctor;
 }

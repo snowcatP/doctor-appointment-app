@@ -1,9 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* font awesome */
+
 .mat-drawer.mat-drawer-side{
     z-index: 1 !important;
 }
-p-inputMask {
+p-inputMask, p-chips, p-multiselect {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -29,4 +31,5 @@ p-radiobutton{
 }
 ol, ul{
     padding-left: 0;
+    margin: 0;
 }

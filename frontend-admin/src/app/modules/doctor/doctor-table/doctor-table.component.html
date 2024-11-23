@@ -1,3 +1,4 @@
+
 <div class="card">
     <p-toolbar>
     </p-toolbar>
@@ -178,9 +179,9 @@
                 <th style="width: 4rem">
                     <p-tableHeaderCheckbox />
                 </th>
-                <th pSortableColumn="id" style="min-width:10rem">
+                <th pSortableColumn="id" style="width:5rem">
                     <div class="flex justify-content-between align-items-center">
-                        Doctor Id <p-sortIcon field="id" />
+                        Id <p-sortIcon field="id" />
                         <p-columnFilter type="text" field="id" display="menu" class="ml-auto" />
                     </div>
                 </th>
@@ -202,14 +203,14 @@
                 <th pSortableColumn="gender" style="min-width:15rem">
                     Gender <p-sortIcon field="gender" />
                 </th>
-                <th pSortableColumn="address" style="min-width:15rem">
-                    Address <p-sortIcon field="address" />
-                    <p-columnFilter type="text" field="address" display="menu" class="ml-auto" />
-
-                </th>
                 <th pSortableColumn="specialty.specialtyName" style="min-width:15rem">
                     Speciality <p-sortIcon field="specialty.specialtyName" />
                     <p-columnFilter type="text" field="specialty.specialtyName" display="menu" class="ml-auto" />
+
+                </th>
+                <th pSortableColumn="address" style="min-width:15rem">
+                    Address <p-sortIcon field="address" />
+                    <p-columnFilter type="text" field="address" display="menu" class="ml-auto" />
 
                 </th>
                 <th pSortableColumn="averageRating" style="min-width:15rem">
@@ -246,8 +247,8 @@
                     <td>{{doctor.lastName}}</td>
                     <td><img class="doctor-avatar" [src]="doctor.avatarFilePath" alt=""></td>
                     <td>{{doctor.gender ? 'Male': 'Female'}}</td>
-                    <td>{{doctor.address}}</td>
                     <td>{{doctor.specialty.specialtyName}}</td>
+                    <td>{{doctor.address}}</td>
                     <td style="display: flex; flex-direction: column; justify-content: center;">
                         <p-rating [(ngModel)]= "doctor.averageRating"[readonly]="true" [cancel]="false" />
                         <div style="display: flex;">

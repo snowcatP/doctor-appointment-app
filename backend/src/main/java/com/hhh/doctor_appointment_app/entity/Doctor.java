@@ -9,9 +9,10 @@ import java.util.List;
 
 @Entity
 @Builder
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Doctor{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +26,9 @@ public class Doctor{
 
     private String schedule;    // MONDAY,TUESDAY
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "specialty_id")
+    @JsonIgnore
     private Specialty specialty;
 
     @OneToMany(mappedBy = "doctorModified",cascade = CascadeType.ALL)

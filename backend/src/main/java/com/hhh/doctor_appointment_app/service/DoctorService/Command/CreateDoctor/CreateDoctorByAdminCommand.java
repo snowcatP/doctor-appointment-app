@@ -57,7 +57,7 @@ public class CreateDoctorByAdminCommand {
             User user = new User();
             user.setFirstName(addDoctorRequest.getFirstName());
             user.setLastName(addDoctorRequest.getLastName());
-            user.setFullName(user.getFirstName() + " " + user.getLastName());
+            user.setFullName(addDoctorRequest.getFirstName() + " " + addDoctorRequest.getLastName());
             user.setGender(addDoctorRequest.isGender());
             user.setPhone(addDoctorRequest.getPhone());
             user.setEmail(addDoctorRequest.getEmail());

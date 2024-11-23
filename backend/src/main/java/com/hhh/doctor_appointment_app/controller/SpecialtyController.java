@@ -44,10 +44,10 @@ public class SpecialtyController {
     private GetListSpecialtyQuery getListSpecialtyQuery;
 
     @GetMapping("/list-specialty")
-    public ResponseEntity<?> getSpecialtyWithPage(@RequestParam(defaultValue = "1") int page,
+    public ResponseEntity<?> getSpecialty(@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "10") int size){
         try{
-            return new ResponseEntity<>(getSpecialtiesWithPage.getSpecialtiesWithPage(page, size), HttpStatus.OK);
+            return new ResponseEntity<>(getSpecialtiesWithPage.getSpecialties(), HttpStatus.OK);
         }catch (Exception ex){
             ApiResponse<Object> apiResponse = new ApiResponse<>();
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
@@ -162,4 +162,5 @@ public class SpecialtyController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
     }
+
 }

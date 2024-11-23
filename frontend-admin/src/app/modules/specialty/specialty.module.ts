@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { DoctorRoutingModule } from './doctor-routing.module';
-import { DoctorComponent } from './doctor.component';
-import { DoctorTableComponent } from './doctor-table/doctor-table.component';
+import { SpecialtyRoutingModule } from './specialty-routing.module';
+import { SpecialtyComponent } from './specialty.component';
+import { SpecialtyTableComponent } from './specialty-table/specialty-table.component';
 import { RouterOutlet } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -28,14 +27,23 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { ImageModule } from 'primeng/image';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SpecialtyAddNewComponent } from './specialty-add-new/specialty-add-new.component';
+import { ChipsModule } from 'primeng/chips';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { AvatarModule } from 'primeng/avatar';
+import { AvatarGroupModule } from 'primeng/avatargroup';
+import { SpecialtyEditComponent } from './specialty-edit/specialty-edit.component';
+
 @NgModule({
   declarations: [
-    DoctorComponent,
-    DoctorTableComponent
+    SpecialtyComponent,
+    SpecialtyTableComponent,
+    SpecialtyAddNewComponent,
+    SpecialtyEditComponent
   ],
   imports: [
     CommonModule,
-    DoctorRoutingModule,
+    SpecialtyRoutingModule,
     ConfirmDialogModule,
     RouterOutlet,
     TableModule, 
@@ -62,7 +70,12 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     SkeletonModule,
     ImageModule,
     ProgressBarModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    ChipsModule,
+    MultiSelectModule,
+    AvatarModule,
+    AvatarGroupModule,
+    InputTextModule
   ]
 })
-export class DoctorModule { }
+export class SpecialtyModule { }

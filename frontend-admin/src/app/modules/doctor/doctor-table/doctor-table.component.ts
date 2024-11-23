@@ -103,13 +103,14 @@ export class DoctorTableComponent {
           doctor.avatarFilePath = doctor.avatarFilePath ?? defaultAvatarPath;
           return doctor;
         });
+        console.log(resp)
         this.loadingFetchingData = false;
       },
     });
   }
   getListSpecialty() {
     this.specialtyService.getListSpecialty().subscribe((resp) => {
-      this.listSpecialty = resp.data;
+      this.listSpecialty = resp;
     });
   }
   formatSize(bytes: any) {
@@ -138,7 +139,7 @@ export class DoctorTableComponent {
   }
   addNewDoctor() {
     let doctor: Doctor = {
-      id: '',
+      id: null,
       firstName: this.formAddNewDoctor.controls['firstName'].value,
       lastName: this.formAddNewDoctor.controls['lastName'].value,
       password: this.formAddNewDoctor.controls['password'].value,
@@ -150,6 +151,7 @@ export class DoctorTableComponent {
       specialtyId: this.formAddNewDoctor.controls['specialtyId'].value,
       avatarFilePath: this.formAddNewDoctor.controls['avatarFilePath'].value,
     };
+    this.loadingFetchingData = true;
 
     this.doctorService.addNewDoctor(doctor, this.selectedFile).subscribe({
       next: (res) => {
@@ -161,6 +163,7 @@ export class DoctorTableComponent {
         });
         this.formAddNewDoctor.reset();
         this.getListDoctor();
+        this.loadingFetchingData = true;
       },
     });
   }
@@ -201,7 +204,6 @@ export class DoctorTableComponent {
       specialtyId: this.formEditDoctor.controls['specialtyId'].value,
       avatarFilePath: this.formEditDoctor.controls['avatarFilePath'].value,
     };
-    console.log(doctorInfoForm);
     this.loadingFetchingData = true;
     this.doctorService.editDoctor(
         doctorInfoForm,
@@ -217,6 +219,8 @@ export class DoctorTableComponent {
             detail: `Edit Doctor ${this.formEditDoctor.controls['firstName'].value} successfully`,
           });
           this.getListDoctor();
+          this.loadingFetchingData = false;
+
         },
         error: (res) =>{
           this.messageService.add({
@@ -230,12 +234,13 @@ export class DoctorTableComponent {
       });
   }
   deleteSelectedDoctor(doctor: Doctor) {
+
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the selected doctor?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.doctorService.deleteDoctor(doctor.id).subscribe({
+        this.doctorService.deleteDoctor(doctor.id.toString()).subscribe({
           next: (res) => {
             this.messageService.add({
               key: 'messageToast',
@@ -244,6 +249,7 @@ export class DoctorTableComponent {
               detail: `Delete Doctor '${doctor.firstName}' successfully`,
             });
             this.getListDoctor();
+
           },
         });
       },
@@ -257,7 +263,7 @@ export class DoctorTableComponent {
       accept: () => {
         if (this.selectedDoctors != null) {
           const deleteRequests = this.selectedDoctors.map((doctor) =>
-            this.doctorService.deleteDoctor(doctor.id)
+            this.doctorService.deleteDoctor(doctor.id.toString())
           );
           forkJoin(deleteRequests).subscribe({
             next: () => {

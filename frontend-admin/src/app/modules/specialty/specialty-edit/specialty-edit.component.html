@@ -1,0 +1,88 @@
+<div class="card flex flex-column md:flex-row gap-3" id="specialty-section">
+    <h1 class="heading" style="color: #116aef; font-family: var(--font-family)">
+        Edit Specialty
+    </h1>
+    <form [formGroup]="formEditSpecialty" (ngSubmit)="editSpecialty()">
+        <p-inputGroup>
+            <p-inputGroupAddon><i class="fas fa-heading"></i></p-inputGroupAddon>
+            <input pInputText formControlName="specialtyName" placeholder="Speciality Name" />
+        </p-inputGroup>
+        <p-inputGroup>
+            <p-inputGroupAddon><i class="fa-solid fa-user-doctor"></i></p-inputGroupAddon>
+            <p-dropdown [options]="doctors" formControlName="specialtyHeadDoctor" [(ngModel)]="selectedDoctor"
+                [filter]="true" filterBy="fullName, id" [showClear]="true" [loading]="false"
+                [placeholder]="headDoctor.profile.fullName" styleClass="w-20rem">
+                <ng-template pTemplate="selectedItem">
+                    <div class="flex align-items-center gap-2" *ngIf="selectedDoctor">
+                        <p-avatar [image]="selectedDoctor.avatarFilePath" styleClass="mr-2" shape="circle" />
+                        <div>
+                            {{ selectedDoctor.firstName }} {{ selectedDoctor.lastName }} - Id:
+                            {{ selectedDoctor.id }}
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="filter" let-options="options">
+                    <div class="flex gap-1">
+                        <div class="p-inputgroup" (click)="$event.stopPropagation()">
+                            <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
+                            <input type="text" pInputText placeholder="Filter" [(ngModel)]="filterValue"
+                                (keyup)="customFilterFunction($event, options)" />
+                        </div>
+                        <button pButton icon="pi pi-times" (click)="resetFunction(options)"></button>
+                    </div>
+                </ng-template>
+                <ng-template let-doctor pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                        <div>
+                            {{ doctor.firstName }} {{ doctor.lastName }} - Id: {{ doctor.id }}
+                        </div>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </p-inputGroup>
+        <p-inputGroup>
+            <p-inputGroupAddon><i class="fas fa-users"></i></p-inputGroupAddon>
+            <p-multiSelect formControlName="specialtyListDoctors" [options]="doctors" [(ngModel)]="selectedListDoctor"
+                placeholder="Select doctors who will belong to this Specialty" display="chip" [showClear]="true">
+                <ng-template let-doctor pTemplate="selectedItems">
+                    <div class="inline-flex align-items-center gap-2 px-1" *ngFor="let option of doctor">
+                        <p-avatar *ngIf="selectedListDoctor" [image]="option.avatarFilePath" styleClass="mr-2"
+                            shape="circle" />
+                        <div *ngIf="selectedListDoctor">
+                            {{ option.firstName }} {{ option.lastName }} - Id:
+                            {{ option.id }},
+                        </div>
+                    </div>
+                    <div *ngIf="!doctor || doctor.length === 0">
+                        Select doctors who will belong to this Specialty
+                    </div>
+                </ng-template>
+                <ng-template let-doctor pTemplate="item">
+                    <div class="p-multiselect-label">
+                        <div>
+                            {{ doctor.firstName }} {{ doctor.lastName }} - Id: {{ doctor.id }}
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template let-doctor pTemplate="footer">
+                    <div class="py-2 px-3">
+                        <b>
+                            {{ selectedListDoctor ? selectedListDoctor.length : 0 }}
+                        </b>
+                        item{{
+                        (selectedListDoctor ? selectedListDoctor.length : 0) > 1
+                        ? "s"
+                        : ""
+                        }}
+                        selected.
+                    </div>
+                </ng-template>
+            </p-multiSelect>
+        </p-inputGroup>
+        <div class="save-cancel-container">
+            <p-button class="save-btn" label="Save" icon="pi pi-check" severity="success" type="submit" />
+            <p-button class="cancel-btn" label="Cancel" icon="pi pi-times" severity="danger" />
+        </div>
+    </form>
+</div>
+<p-confirmDialog />

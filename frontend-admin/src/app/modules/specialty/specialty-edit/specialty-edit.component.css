@@ -1,0 +1,19 @@
+#specialty-section{
+    padding: 20px;
+}
+.save-cancel-container {
+    position: relative;
+}
+
+.save-btn,
+.cancel-btn {
+    margin: 0 5px;
+    float: right;
+}
+p-inputGroup{
+    margin: 20px 0;
+}
+p-dropdown{
+    position: relative;
+    z-index: 1;
+}

@@ -19,26 +19,24 @@ public class GetSpecialtyWithPageQuery {
     @Autowired
     private SpecialtyRepository specialtyRepository;
 
-    public PageResponse<List<SpecialtyResponse>> getSpecialtiesWithPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
-        Page<Specialty> specialtyPage = specialtyRepository.getSpecialtiesWithPage(pageable);
+    public List<SpecialtyResponse> getSpecialties() {
+        List<Specialty> specialtyPage = specialtyRepository.findAll();
 
         //Convert entities to responses
-        List<SpecialtyResponse> specialtyResponses = specialtyPage.getContent().stream()
+        List<SpecialtyResponse> specialtyResponses = specialtyPage.stream()
                 .map(specialty -> {
                     SpecialtyResponse response = new SpecialtyResponse();
                     response.setId(specialty.getId());
                     response.setSpecialtyName(specialty.getSpecialtyName());
+                    response.setDoctorList(specialty.getDoctorList());
+                    response.setHeadDoctor(specialty.getHeadDoctor());
+
                     return response;
                 })
                 .collect(Collectors.toList());
 
-        //Create PageResponse Object
-        PageResponse<List<SpecialtyResponse>> pageResponse = new PageResponse<>();
-        pageResponse.ok(specialtyResponses);
-        double total = Math.ceil((double) specialtyPage.getTotalElements() / size);
-        pageResponse.setTotalPage((int) total);
 
-        return pageResponse;
+
+        return specialtyResponses;
     }
 }
