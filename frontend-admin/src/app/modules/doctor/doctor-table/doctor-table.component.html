@@ -1,5 +1,8 @@
 
-<div class="card">
+<div class="card flex justify-content-center">
+    <p-progressSpinner *ngIf="loadingFetchingData" ariaLabel="loading" [style]="{display: 'flex;'}" />
+</div>
+<div class="card" *ngIf="!loadingFetchingData">
     <p-toolbar>
     </p-toolbar>
     <p-toolbar styleClass="mb-4 gap-2">

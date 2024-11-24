@@ -41,7 +41,7 @@ export class DoctorTableComponent {
   selectedFile: File | null = null;
   defaultDate: string;
   specialtyName: string;
-  loadingFetchingData: boolean;
+  loadingFetchingData: boolean = true;
   totalSize: number = 0;
   totalSizePercent: number = 0;
   constructor(

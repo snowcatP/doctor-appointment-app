@@ -21,7 +21,7 @@ export class SpecialtyTableComponent implements OnInit {
 
   specialties: Specialty[];
   doctors: Doctor[];
-  loadingFetchingData: any;
+  loadingFetchingData: boolean = true;
   formAddNewSpecialty: FormGroup;
   addNewSpecialtyVisible: boolean = false;
   selectedSpecialty: Specialty[];
@@ -43,7 +43,7 @@ export class SpecialtyTableComponent implements OnInit {
     this.specialtyService.getListSpecialty().subscribe({
       next: (resp) => {
       this.specialties = resp;
-      console.log(this.specialties)
+      this.loadingFetchingData = false;
     }});
   }
   

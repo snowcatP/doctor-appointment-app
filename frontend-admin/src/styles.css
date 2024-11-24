@@ -5,7 +5,7 @@
 .mat-drawer.mat-drawer-side{
     z-index: 1 !important;
 }
-p-inputMask, p-chips, p-multiselect {
+p-inputMask, p-chips, p-multiselect, p-progressSpinner {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,4 +41,7 @@ p-panelmenu .p-panelmenu-panel{
 }
 .p-calendar{
     display: flex;
+}
+.mat-drawer-inner-container{
+    overflow-x: hidden !important;
 }
