@@ -15,7 +15,6 @@ export class DoctorService {
   }
   getDoctorDetail(id: number): Observable<any>{
     return this.http.get(environment.apiEndpoint +`/api/doctor/detail/${id}`);
-
   }
   addNewDoctor(doctor: Doctor, file: File): Observable<any> {
     const formData = new FormData();

@@ -46,7 +46,7 @@ export class SpecialtyEditComponent implements OnInit {
       });
       this.getSpecialtyDetail(this.specialtyId);
     }else{
-      this.getTheFirtsSpecialtyId();
+      this.getTheFirtsSpecialty();
     }
     this.getListDoctor();
     
@@ -56,7 +56,7 @@ export class SpecialtyEditComponent implements OnInit {
       specialtyListDoctors: ['', RxwebValidators.required()],
     });
   }
-  getTheFirtsSpecialtyId() {
+  getTheFirtsSpecialty() {
     this.specialtyService.getListSpecialty().subscribe({
       next: (resp) =>{
         this.getSpecialtyDetail(resp[0].id);
@@ -74,7 +74,7 @@ export class SpecialtyEditComponent implements OnInit {
         });
         this.headDoctor = resp.data.headDoctor;
         this.selectedListDoctor = resp.data.doctorList;
-        console.log(this.selectedListDoctor)
+        console.log(resp.data)
       },
     });
   }
@@ -110,7 +110,7 @@ export class SpecialtyEditComponent implements OnInit {
     );
   }
   editSpecialty() {
-    console.log(this.selectedListDoctor);
+    console.log(  this.formEditSpecialty.controls['specialtyHeadDoctor'].value.id);
     const listDoctorId = this.selectedListDoctor.map(
       (listDoctor) => listDoctor.id
     );

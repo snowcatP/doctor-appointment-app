@@ -69,7 +69,7 @@ public class CreateSpecialtyCommand {
                 apiResponse.duplicatedCode();
                 return apiResponse;
             }
-            Doctor headDoctor = doctorRepository.findById(addSpecialtyRequest.getHeadDoctorId()).orElseThrow(() -> new NotFoundException("Specialty Not Found") );
+            Doctor headDoctor = doctorRepository.findById(addSpecialtyRequest.getHeadDoctorId()).orElseThrow(() -> new NotFoundException("Doctor Not Found") );
             headDoctor.setSpecialty(newSpecialty);
             List<Doctor> doctorList = doctorRepository.findAllById(addSpecialtyRequest.getListDoctorId());
             newSpecialty.setDoctorList(doctorList);

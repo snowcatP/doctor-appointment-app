@@ -8,12 +8,17 @@ import {
   password,
   RxwebValidators,
 } from '@rxweb/reactive-form-validators';
-import { ConfirmationService, MessageService, PrimeNGConfig } from 'primeng/api';
+import {
+  ConfirmationService,
+  MessageService,
+  PrimeNGConfig,
+} from 'primeng/api';
 import { FileUploadErrorEvent, UploadEvent } from 'primeng/fileupload';
 import { Specialty } from '../../../core/models/speciality';
 import { SpecialtyService } from '../../../core/services/specialty.service';
 import { first, forkJoin } from 'rxjs';
 import { DatePipe } from '@angular/common';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-doctor-table',
@@ -36,9 +41,9 @@ export class DoctorTableComponent {
   selectedFile: File | null = null;
   defaultDate: string;
   specialtyName: string;
-  loadingFetchingData: boolean;
-  totalSize : number = 0;
-  totalSizePercent : number = 0;
+  loadingFetchingData: boolean = true;
+  totalSize: number = 0;
+  totalSizePercent: number = 0;
   constructor(
     private doctorService: DoctorService,
     private specialtyService: SpecialtyService,
@@ -46,10 +51,11 @@ export class DoctorTableComponent {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private datePipe: DatePipe,
-    private config: PrimeNGConfig
+    private config: PrimeNGConfig,
+    private route: Router
   ) {}
   ngOnInit(): void {
-    this.loadingFetchingData= true;
+    this.loadingFetchingData = true;
     this.getListDoctor();
     this.getListSpecialty();
     this.formAddNewDoctor = this.fb.group({
@@ -91,7 +97,10 @@ export class DoctorTableComponent {
     });
   }
   showAddNewDoctorDialog() {
-    this.addNewDoctorVisible = !this.addNewDoctorVisible;
+    this.route.navigateByUrl('doctor/add-doctor');
+  }
+  openEditDialog(doctor: any) {
+    this.route.navigate(['doctor/edit-doctor'], {queryParams: {id:doctor.id}});
   }
   getListDoctor() {
     const defaultAvatarPath =
@@ -103,7 +112,7 @@ export class DoctorTableComponent {
           doctor.avatarFilePath = doctor.avatarFilePath ?? defaultAvatarPath;
           return doctor;
         });
-        console.log(resp)
+        console.log(resp);
         this.loadingFetchingData = false;
       },
     });
@@ -118,14 +127,14 @@ export class DoctorTableComponent {
     const dm = 3;
     const sizes = this.config.translation.fileSizeTypes;
     if (bytes === 0) {
-        return `0 ${sizes[0]}`;
+      return `0 ${sizes[0]}`;
     }
 
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
 
     return `${formattedSize} ${sizes[i]}`;
-}
+  }
   onUpload($event: FileUploadErrorEvent) {
     this.selectedFile = $event.files[0];
     this.totalSize += parseInt(this.formatSize(this.selectedFile.size));
@@ -137,104 +146,9 @@ export class DoctorTableComponent {
       detail: 'File uploaded successfull',
     });
   }
-  addNewDoctor() {
-    let doctor: Doctor = {
-      id: null,
-      firstName: this.formAddNewDoctor.controls['firstName'].value,
-      lastName: this.formAddNewDoctor.controls['lastName'].value,
-      password: this.formAddNewDoctor.controls['password'].value,
-      gender: this.formAddNewDoctor.controls['gender'].value,
-      phone: this.formAddNewDoctor.controls['phone'].value,
-      email: this.formAddNewDoctor.controls['email'].value,
-      dateOfBirth: this.formAddNewDoctor.controls['dateOfBirth'].value,
-      address: this.formAddNewDoctor.controls['address'].value,
-      specialtyId: this.formAddNewDoctor.controls['specialtyId'].value,
-      avatarFilePath: this.formAddNewDoctor.controls['avatarFilePath'].value,
-    };
-    this.loadingFetchingData = true;
-
-    this.doctorService.addNewDoctor(doctor, this.selectedFile).subscribe({
-      next: (res) => {
-        this.messageService.add({
-          key: 'messageToast',
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Add new Doctor successfully',
-        });
-        this.formAddNewDoctor.reset();
-        this.getListDoctor();
-        this.loadingFetchingData = true;
-      },
-    });
-  }
-  openEditDialog(doctor: any) {
-    this.viewDoctorDetailsVisible = true;
-    this.formEditDoctor.patchValue({
-      id: doctor.id,
-      firstName: doctor.firstName,
-      lastName: doctor.lastName,
-      gender: doctor.gender,
-      phone: doctor.phone,
-      email: doctor.email,
-      dateOfBirth: doctor.dateOfBirth,
-      address: doctor.address,
-      avatarFilePath: doctor.avatarFilePath,
-      specialtyId: doctor.specialty.id,
-      password: doctor.password,
-    });
-    console.log(doctor.password);
-    this.doctorAverageRating = doctor.averageRating;
-    this.doctorNumberOfFeedbacks = doctor.numberOfFeedbacks;
-    this.defaultDate = this.datePipe.transform(doctor.dateOfBirth,'dd-MM-yyyy');
-    this.specialtyName = doctor.specialty.specialtyName;
-    this.doctorFirstName = doctor.firstName;
-    this.doctorLastName = doctor.lastName;
-  }
-  editDoctor() {
-    let doctorInfoForm: Doctor = {
-      id: this.formEditDoctor.controls['id'].value,
-      firstName: this.formEditDoctor.controls['firstName'].value,
-      lastName: this.formEditDoctor.controls['lastName'].value,
-      password: this.formEditDoctor.controls['password'].value,
-      gender: this.formEditDoctor.controls['gender'].value,
-      phone: this.formEditDoctor.controls['phone'].value,
-      email: this.formEditDoctor.controls['email'].value,
-      dateOfBirth: this.formEditDoctor.controls['dateOfBirth'].value,
-      address: this.formEditDoctor.controls['address'].value,
-      specialtyId: this.formEditDoctor.controls['specialtyId'].value,
-      avatarFilePath: this.formEditDoctor.controls['avatarFilePath'].value,
-    };
-    this.loadingFetchingData = true;
-    this.doctorService.editDoctor(
-        doctorInfoForm,
-        this.selectedFile,
-        this.formEditDoctor.controls['id'].value
-      )
-      .subscribe({
-        next: (res) => {
-          this.messageService.add({
-            key: 'messageToast',
-            severity: 'success',
-            summary: 'Success',
-            detail: `Edit Doctor ${this.formEditDoctor.controls['firstName'].value} successfully`,
-          });
-          this.getListDoctor();
-          this.loadingFetchingData = false;
-
-        },
-        error: (res) =>{
-          this.messageService.add({
-            key: 'messageToast',
-            severity: 'error',
-            summary: 'Error',
-            detail: `Edit Doctor ${this.formEditDoctor.controls['firstName'].value} unsuccessfully`,
-          });
-          this.getListDoctor();
-        }
-      });
-  }
+  
   deleteSelectedDoctor(doctor: Doctor) {
-
+    console.log(doctor)
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the selected doctor?',
       header: 'Confirm',
@@ -249,7 +163,6 @@ export class DoctorTableComponent {
               detail: `Delete Doctor '${doctor.firstName}' successfully`,
             });
             this.getListDoctor();
-
           },
         });
       },

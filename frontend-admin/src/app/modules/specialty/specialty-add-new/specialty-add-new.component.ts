@@ -71,14 +71,16 @@ export class SpecialtyAddNewComponent implements OnInit {
     );
   }
   addNewSpecialty() {
-    console.log(this.selectedListDoctor)
-    const listDoctorId = this.selectedListDoctor.map(listDoctor =>
+    if(this.selectedListDoctor!=null){
+
+    }
+    const listDoctorId = this.selectedListDoctor?.map(listDoctor =>
        listDoctor.id
     )
     let newSpecialty: Specialty = {
       id: null,
-      specialtyName: this.formAddSpecialty.controls['specialtyName'].value,
-      headDoctorId: this.formAddSpecialty.controls['specialtyHeadDoctor'].value.id,
+      specialtyName: this.formAddSpecialty.controls['specialtyName']?.value,
+      headDoctorId: this.formAddSpecialty.controls['specialtyHeadDoctor'].value?.id,
       listDoctorId: listDoctorId
   
     };
