@@ -75,16 +75,16 @@
                     <td>{{specialty.specialtyName}}</td>
                     <td style="display: flex; align-items: center; gap: 10px">
                         <p-avatar 
-                                [image]="specialty.headDoctor.profile.avatarFilePath" 
+                                [image]="specialty?.headDoctor?.profile.avatarFilePath" 
                                 size="large" 
                                 shape="circle" />
-                        {{specialty.headDoctor.profile.fullName}}
+                        {{specialty?.headDoctor?.profile.fullName}}
                     
                     </td>
                     <td>
                         <p-avatarGroup styleClass="mb-3">
                             <p-avatar  *ngFor="let doctor of specialty.doctorList"
-                                [image]="doctor.profile.avatarFilePath" 
+                                [image]="doctor?.profile.avatarFilePath" 
                                 size="large" 
                                 shape="circle" />
                         </p-avatarGroup>

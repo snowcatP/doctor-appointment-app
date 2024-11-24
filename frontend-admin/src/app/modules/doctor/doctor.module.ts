@@ -28,10 +28,15 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { ImageModule } from 'primeng/image';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { DoctorAddNewComponent } from './doctor-add-new/doctor-add-new.component';
+import { DoctorEditComponent } from './doctor-edit/doctor-edit.component';
+import { AvatarModule } from 'primeng/avatar';
 @NgModule({
   declarations: [
     DoctorComponent,
-    DoctorTableComponent
+    DoctorTableComponent,
+    DoctorAddNewComponent,
+    DoctorEditComponent,
   ],
   imports: [
     CommonModule,
@@ -62,7 +67,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     SkeletonModule,
     ImageModule,
     ProgressBarModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    AvatarModule
   ]
 })
 export class DoctorModule { }

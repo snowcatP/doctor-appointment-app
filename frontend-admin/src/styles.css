@@ -39,3 +39,6 @@ ol, ul{
 p-panelmenu .p-panelmenu-panel{
     border: none;
 }
+.p-calendar{
+    display: flex;
+}

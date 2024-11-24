@@ -18,9 +18,8 @@ public class DeleteDoctorCommand {
         ApiResponse<DoctorResponse> apiResponse = new ApiResponse<>();
 
         try {
-            Doctor doctor = doctorRepository.findById(id).orElseThrow(() -> new NotFoundException("Doctor Not Found"));
             // Update
-            doctorRepository.deleteById(doctor.getId());
+            doctorRepository.deleteById(id);
             apiResponse.ok();
             apiResponse.setMessage("Doctor successfully deleted");
         }catch(NotFoundException ex){

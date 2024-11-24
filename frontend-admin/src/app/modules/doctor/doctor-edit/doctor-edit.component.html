@@ -1,0 +1,92 @@
+<div class="card flex flex-column md:flex-row gap-3" id="add-doctor-form">
+    <h1 class="heading" style="color: #116aef; font-family: var(--font-family);" >
+        Edit Doctor
+    </h1>
+    <form [formGroup]="formEditDoctor" (ngSubmit)="editDoctor()">
+        <div class="doctor-details-form">
+
+            <div class="general-doctor-information col-3">
+                <img [src]="formEditDoctor.get('avatarFilePath').value" alt="" class="doctor-avatar">
+                <div class="doctor-name">
+                    <span class="label" >Name: </span>
+                    <label>{{doctorFirstName}} {{doctorLastName}}</label>
+                </div>
+                <div class="specialty">
+                    <span class="label" >Specialty: </span>
+                    <label>{{specialtyName}}</label>
+                </div>
+                <div class="reviews" style="flex-direction: column; align-items: center;">
+                    <p-rating [(ngModel)]= "doctorAverageRating" [readonly]="true" [cancel]="false" />
+                    <div>
+                        Based on <p style="margin: 0 5px; color: #3B82F6; font-weight: bold;">{{doctorNumberOfFeedbacks}}</p>  reviews
+                    </div>
+                </div>
+            </div>
+            
+            <div class="edit-form-data col-9">
+                <p-inputGroup>
+                    <span class="font-bold block mb-2">First name: </span>
+                    <input pInputText placeholder="First name" formControlName="firstName">
+                    <span class="font-bold block mb-2">Last name: </span>
+                    <input pInputText placeholder="Last name" formControlName="lastName">
+                </p-inputGroup>
+                <p-inputGroup>
+                    <span class="font-bold block mb-2">Gender: </span>
+                    <p-radioButton label="Male"  [value]="true" formControlName="gender" inputId="male" />
+                    <p-radioButton label="Female"  [value]="false" formControlName="gender" inputId="female" />
+                </p-inputGroup>
+                <p-inputGroup>
+                    <span class="font-bold block mb-2">Password: </span>
+                    <p-password formControlName="password" [toggleMask]="true" />
+                </p-inputGroup>
+                <p-inputGroup>
+                    <span class="font-bold block mb-2">Speciality: </span>
+                    <p-dropdown formControlName="specialtyId" [options]="listSpecialty" optionLabel="specialtyName"
+                        optionValue="id" [filter]="true" filterBy="specialtyName" [showClear]="true" 
+                        placeholder={{specialtyName}} />
+                </p-inputGroup>
+                <p-inputGroup>
+                    <span class="font-bold block mb-2">Birth Day: </span>
+                    <p-calendar dateFormat="dd.mm.yy" [showOnFocus]="false" placeholder={{defaultDate}} [showTime]="false" formControlName="dateOfBirth"
+                        [iconDisplay]="'input'" [showIcon]="true" />
+                </p-inputGroup>
+                <p-inputGroup class="flex-auto">
+                    <span class="font-bold block mb-2">Phone: </span>
+                    <p-inputMask mask="***-999-9999" formControlName="phone" placeholder="999-99-9999" />
+                </p-inputGroup>
+                <p-inputGroup>
+                    <span class="font-bold block mb-2">Address: </span>
+                    <input pInputText placeholder="Address" formControlName="address" />
+                </p-inputGroup>
+                <p-inputGroup>
+                    <span class="font-bold block mb-2">Email: </span>
+                    <input pInputText placeholder="Email" formControlName="email" />
+                </p-inputGroup>
+                <p-inputGroup [style]="{display: 'flex;'}">
+                    <p-toast />
+                    <span class="font-bold block mb-2">Image profile: </span>
+                    <p-fileUpload  
+                    url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000"
+                    [auto]="true" (onUpload)="onUpload($event)" >
+                    <ng-template pTemplate="content">
+                        <ul >
+                            <li *ngIf="selectedFile!=null">
+                                {{ selectedFile?.name }} - {{ selectedFile?.size }} bytes
+                            </li>
+                        </ul>
+                    </ng-template>
+                </p-fileUpload>
+                </p-inputGroup>
+                <div class="save-cancel-container">
+                    <p-button class="save-btn" label="Save" icon="pi pi-check" severity="success" type="submit" />
+                    <p-button class="cancel-btn" label="Cancel" icon="pi pi-times" severity="danger"
+                        (onClick)="viewDoctorDetailsVisible = false" />
+                </div>
+                
+                <p-inputGroup></p-inputGroup>
+            </div>
+        </div>
+        
+    </form>
+</div>
+<p-confirmDialog/>

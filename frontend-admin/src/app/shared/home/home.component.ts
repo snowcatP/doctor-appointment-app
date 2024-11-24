@@ -92,11 +92,11 @@ export class HomeComponent {
           },
           {
             label:'Add New Doctor',
-            route: '/doctor',
+            route: '/doctor/add-doctor',
           },
           {
             label:'Edit Doctor',
-            route: '/doctor',
+            route: '/doctor/edit-doctor',
           }
         ]
       },
