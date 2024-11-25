@@ -43,6 +43,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { PasswordModule } from 'primeng/password';
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 @NgModule({
   declarations: [
     DoctorAppointmentComponent,
@@ -90,7 +91,8 @@ import {MatInputModule} from '@angular/material/input';
     MatFormFieldModule,
     PasswordModule,
     MatSelectModule,
-    MatInputModule
+    MatInputModule,
+    InputTextareaModule
   ],
   providers: [ConfirmationService],
 })

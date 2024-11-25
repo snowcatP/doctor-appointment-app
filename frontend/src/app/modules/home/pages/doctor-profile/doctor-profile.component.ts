@@ -17,6 +17,17 @@ export class DoctorProfileComponent {
 
   feedbackRequest: FeedbackRequest = new FeedbackRequest();
 
+  activeTab: string = 'overview'; // Biến để lưu trạng thái của tab hiện tại
+
+  // Validation flags
+  isRatingValid: boolean = true;
+  isCommentValid: boolean = true;
+
+
+  setActiveTab(tab: string) {
+    this.activeTab = tab;
+  }
+
   constructor(
     private route: ActivatedRoute, 
     private doctorService: DoctorService,
@@ -63,15 +74,27 @@ export class DoctorProfileComponent {
       }
     );
   }
-  activeTab: string = 'overview'; // Biến để lưu trạng thái của tab hiện tại
-  setActiveTab(tab: string) {
-    this.activeTab = tab;
-  }
+  
 
   onSubmitReview() {
+     // Validate rating and comment
+     this.isRatingValid = this.feedbackRequest.rating > 0;
+     this.isCommentValid = this.feedbackRequest.comment.trim().length > 0;
+ 
+     if (!this.isRatingValid || !this.isCommentValid) {
+       this.messageService.add({
+         key: 'messageToast',
+         severity: 'error',
+         summary: 'Error',
+         detail: 'Please provide a rating and a comment.',
+       });
+       return;
+     }
+
     this.feedbackService.createFeedbackForDoctorByPatient(this.feedbackRequest).subscribe(
       (response: ApiResponse) => {
         if (response.statusCode === 200) {
+          console.log(response);
           this.messageService.add({
             key: 'messageToast',
             severity: 'success',
