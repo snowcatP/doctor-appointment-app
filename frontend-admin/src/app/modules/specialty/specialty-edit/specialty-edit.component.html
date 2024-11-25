@@ -11,7 +11,7 @@
             <p-inputGroupAddon><i class="fa-solid fa-user-doctor"></i></p-inputGroupAddon>
             <p-dropdown [options]="doctors" formControlName="specialtyHeadDoctor" [(ngModel)]="selectedDoctor"
                 [filter]="true" filterBy="fullName, id" [showClear]="true" [loading]="false"
-                [placeholder]="headDoctor.profile.fullName" styleClass="w-20rem">
+                [placeholder]="headDoctor?.profile.fullName" styleClass="w-20rem">
                 <ng-template pTemplate="selectedItem">
                     <div class="flex align-items-center gap-2" *ngIf="selectedDoctor">
                         <p-avatar [image]="selectedDoctor.avatarFilePath" styleClass="mr-2" shape="circle" />

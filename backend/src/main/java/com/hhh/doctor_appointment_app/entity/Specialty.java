@@ -21,7 +21,7 @@ public class Specialty {
     private Long id;
     private String specialtyName;
 
-    @OneToMany(mappedBy = "specialty",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "specialty", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Doctor> doctorList = new ArrayList<>();
 
