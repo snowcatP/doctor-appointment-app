@@ -1,11 +1,11 @@
 export class FeedbackRequest {
-    comment: string;
+    comment: string ='';
     rating: number;
     doctorId: number;
 }
 
 export class ReplyFeedbackRequest{
-    comment: string;
+    comment: string ='';
     replyCommentID: number;
     doctorId: number;
     patientId: number;

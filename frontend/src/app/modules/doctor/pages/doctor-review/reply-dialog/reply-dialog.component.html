@@ -6,7 +6,9 @@
       <label class="font-semibold w-6rem">Your review</label>
 
       <textarea id="review_desc" maxlength="100" class="form-control" [(ngModel)]="feedbackRequest.comment"
-        name="comment"></textarea>
+        name="comment" rows="3"
+        cols="30"  pInputTextarea ></textarea>
+        <div *ngIf="!isCommentValid" class="text-danger">Please enter a comment.</div>
       <small class="text-muted"><span id="chars">100</span> characters remaining</small>
     </div>
 
