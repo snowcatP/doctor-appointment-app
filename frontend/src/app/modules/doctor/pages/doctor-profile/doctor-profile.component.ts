@@ -48,7 +48,6 @@ export class DoctorProfileComponent {
       (response: ApiResponse) => {
         this.loading = false; // Stop loading
         if (response.statusCode === 200) {
-          console.log(response)
           this.messageService.add({
             key: 'messageToast',
             severity: 'success',
