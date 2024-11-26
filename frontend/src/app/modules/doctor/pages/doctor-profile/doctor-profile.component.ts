@@ -3,6 +3,7 @@ import { UpdateDoctorProfileRequest, ApiResponse } from '../../../../core/models
 import { DoctorService } from '../../../../core/services/doctor.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { error } from 'jquery';
 @Component({
   selector: 'app-doctor-profile',
   templateUrl: './doctor-profile.component.html',
@@ -47,6 +48,7 @@ export class DoctorProfileComponent {
       (response: ApiResponse) => {
         this.loading = false; // Stop loading
         if (response.statusCode === 200) {
+          console.log(response)
           this.messageService.add({
             key: 'messageToast',
             severity: 'success',
