@@ -45,3 +45,6 @@ p-panelmenu .p-panelmenu-panel{
 .mat-drawer-inner-container{
     overflow-x: hidden !important;
 }
+.p-tag.p-component{
+width: 54px;
+}

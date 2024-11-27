@@ -6,6 +6,7 @@ import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.service.PatientService.Command.DeletePatient.DeletePatientCommand;
 import com.hhh.doctor_appointment_app.service.PatientService.Command.EditPatient.EditPatientCommand;
 import com.hhh.doctor_appointment_app.service.PatientService.Query.GetDetailPatient.GetDetailPatientQuery;
+import com.hhh.doctor_appointment_app.service.PatientService.Query.GetPatient.GetPatientQuery;
 import com.hhh.doctor_appointment_app.service.PatientService.Query.GetPatientWithPage.GetPatientWithPageQuery;
 import com.hhh.doctor_appointment_app.service.PatientService.Query.GetProfilePatient.GetProfilePatientQuery;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +26,8 @@ import java.util.Map;
 public class PatientController {
     @Autowired
     private GetPatientWithPageQuery getPatientsWithPage;
+    @Autowired
+    private GetPatientQuery getPatients;
 
     @Autowired
     private EditPatientCommand editPatientCommand;
@@ -39,10 +42,9 @@ public class PatientController {
     private GetProfilePatientQuery getProfilePatientQuery;
 
     @GetMapping("/list-patient")
-    public ResponseEntity<?> getPatients(@RequestParam(defaultValue = "1") int page,
-                                        @RequestParam(defaultValue = "10") int size){
+    public ResponseEntity<?> getPatients(){
         try{
-            return new ResponseEntity<>(getPatientsWithPage.getPatientsWithPage(page, size), HttpStatus.OK);
+            return new ResponseEntity<>(getPatients.getPatients(), HttpStatus.OK);
         }catch (Exception ex){
             ApiResponse<Object> apiResponse = new ApiResponse<>();
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());

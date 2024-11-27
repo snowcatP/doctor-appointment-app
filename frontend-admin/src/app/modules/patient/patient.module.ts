@@ -1,15 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { DoctorRoutingModule } from './doctor-routing.module';
-import { DoctorComponent } from './doctor.component';
-import { DoctorTableComponent } from './doctor-table/doctor-table.component';
 import { RouterOutlet } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
-import {  FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { IconFieldModule } from 'primeng/iconfield';
@@ -28,28 +24,27 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { ImageModule } from 'primeng/image';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { DoctorAddNewComponent } from './doctor-add-new/doctor-add-new.component';
-import { DoctorEditComponent } from './doctor-edit/doctor-edit.component';
+import { ChipsModule } from 'primeng/chips';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { AvatarModule } from 'primeng/avatar';
+import { AvatarGroupModule } from 'primeng/avatargroup';
+import { PatientTableComponent } from './patient-table/patient-table.component';
+import { PatientComponent } from './patient.component';
+import { PatientRoutingModule } from './patient-routing.module';
 import { TagModule } from 'primeng/tag';
 
 @NgModule({
-  declarations: [
-    DoctorComponent,
-    DoctorTableComponent,
-    DoctorAddNewComponent,
-    DoctorEditComponent,
-  ],
+  declarations: [PatientComponent, PatientTableComponent],
   imports: [
     CommonModule,
-    DoctorRoutingModule,
+    PatientRoutingModule,
     ConfirmDialogModule,
     RouterOutlet,
-    TableModule, 
+    TableModule,
     ToastModule,
-    ToolbarModule, 
-    ButtonModule, 
-    FileUploadModule, 
+    ToolbarModule,
+    ButtonModule,
+    FileUploadModule,
     DialogModule,
     ReactiveFormsModule,
     FormsModule,
@@ -59,7 +54,7 @@ import { TagModule } from 'primeng/tag';
     InputIconModule,
     InputTextModule,
     RadioButtonModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
     InputMaskModule,
     FileUploadModule,
     CalendarModule,
@@ -70,8 +65,12 @@ import { TagModule } from 'primeng/tag';
     ImageModule,
     ProgressBarModule,
     ProgressSpinnerModule,
+    ChipsModule,
+    MultiSelectModule,
     AvatarModule,
-    TagModule
-  ]
+    AvatarGroupModule,
+    InputTextModule,
+    TagModule,
+  ],
 })
-export class DoctorModule { }
+export class PatientModule {}
