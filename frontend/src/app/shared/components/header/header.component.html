@@ -93,7 +93,7 @@
         </a>
       </div>
       <ul class="main-nav">
-        <li class="active" *ngIf="(role$ | async) !== 'NURSE'">
+        <li class="active" *ngIf="(role$ | async) !== 'NURSE' && (role$ | async) !== 'DOCTOR'">
           <a routerLink="/" routerLinkActive="active">Home</a>
         </li>
         <li class="has-submenu" *ngIf="(role$ | async) === 'DOCTOR'">

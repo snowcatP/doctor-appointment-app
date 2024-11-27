@@ -46,7 +46,7 @@ public class UpdateUserPasswordCommand {
 
         if (!user.getPassword()
                 .equals(passwordEncoder.encode(request.getOldPassword()))){
-            throw new UserException("Password does not match");
+            throw new UserException("Old password is incorrect");
         }
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));

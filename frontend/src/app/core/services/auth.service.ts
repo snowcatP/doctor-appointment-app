@@ -86,9 +86,10 @@ export class AuthService {
     return this.http.post<RegisterRequest>(host + '/api/auth/signup', data);
   }
 
-  resetPassword(token: string, newPassword: string, confirmNewPassword: string): Observable<ApiResponse> {
+  resetPassword(token: string, oldPassword: string, newPassword: string, confirmNewPassword: string): Observable<ApiResponse> {
     const url = `${host}/api/auth/reset-password`; // Endpoint của API
     const body = {
+      oldPassword: oldPassword,
       newPassword: newPassword,
       confirmNewPassword: confirmNewPassword
     };

@@ -23,6 +23,10 @@ import {MatInputModule} from '@angular/material/input';
 import { CreateMedicalRecordComponent } from './pages/create-medical-record/create-medical-record.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { PasswordModule } from 'primeng/password';
+import { DividerModule } from 'primeng/divider';
 @NgModule({
   declarations: [
     NurseComponent,
@@ -49,7 +53,11 @@ import {MatSelectModule} from '@angular/material/select';
     MatDialogModule,
     MatInputModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    InputGroupModule,
+    PasswordModule,
+    InputGroupAddonModule,
+    DividerModule
   ],
   providers: [ConfirmationService]
 })
