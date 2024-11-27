@@ -2,24 +2,14 @@
     <h1 class="heading" style="color: #116aef; font-family: var(--font-family);" >
         Edit Doctor
     </h1>
-    <form [formGroup]="formEditDoctor" (ngSubmit)="editDoctor()">
+    <form [formGroup]="formEditPatient" (ngSubmit)="editPatient()">
         <div class="doctor-details-form">
 
             <div class="general-doctor-information col-3">
-                <img [src]="formEditDoctor.get('avatarFilePath').value" alt="" class="doctor-avatar">
+                <img [src]="formEditPatient.get('avatarFilePath').value" alt="" class="doctor-avatar">
                 <div class="doctor-name">
                     <span class="label" >Name: </span>
-                    <label>{{doctorFirstName}} {{doctorLastName}}</label>
-                </div>
-                <div class="specialty">
-                    <span class="label" >Specialty: </span>
-                    <label>{{specialtyName}}</label>
-                </div>
-                <div class="reviews" style="flex-direction: column; align-items: center;">
-                    <p-rating [(ngModel)]= "doctorAverageRating" [readonly]="true" [cancel]="false" />
-                    <div>
-                        Based on <p style="margin: 0 5px; color: #3B82F6; font-weight: bold;">{{doctorNumberOfFeedbacks}}</p>  reviews
-                    </div>
+                    <label>{{patient.fullName}}</label>
                 </div>
             </div>
             
@@ -39,12 +29,7 @@
                     <span class="font-bold block mb-2">Password: </span>
                     <p-password formControlName="password" [toggleMask]="true" />
                 </p-inputGroup>
-                <p-inputGroup>
-                    <span class="font-bold block mb-2">Speciality: </span>
-                    <p-dropdown formControlName="specialtyId" [options]="listSpecialty" optionLabel="specialtyName"
-                        optionValue="id" [filter]="true" filterBy="specialtyName" [showClear]="true" 
-                        placeholder={{specialtyName}} />
-                </p-inputGroup>
+               
                 <p-inputGroup>
                     <span class="font-bold block mb-2">Birth Day: </span>
                     <p-calendar dateFormat="dd.mm.yy" [showOnFocus]="false" placeholder={{defaultDate}} [showTime]="false" formControlName="dateOfBirth"
@@ -76,13 +61,12 @@
                         </ul>
                     </ng-template>
                 </p-fileUpload>
-                </p-inputGroup>
-                <div class="save-cancel-container">
-                    <p-button class="save-btn" label="Save" icon="pi pi-check" severity="success" type="submit" />
-                    <p-button class="cancel-btn" label="Cancel" icon="pi pi-times" severity="danger"
-                    routerLink="/doctor" />
-                </div>
-                
+            </p-inputGroup>
+            <div class="save-cancel-container">
+                <p-button class="save-btn" label="Save" icon="pi pi-check" severity="success" type="submit" />
+                <p-button class="cancel-btn" label="Cancel" icon="pi pi-times" severity="danger"
+                    routerLink="/patient" />
+            </div>
                 <p-inputGroup></p-inputGroup>
             </div>
         </div>

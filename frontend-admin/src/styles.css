@@ -2,49 +2,71 @@
 
 /* font awesome */
 
-.mat-drawer.mat-drawer-side{
+.mat-drawer.mat-drawer-side {
     z-index: 1 !important;
 }
-p-inputMask, p-chips, p-multiselect, p-progressSpinner {
+
+p-inputMask,
+p-chips,
+p-multiselect,
+p-progressSpinner {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-p-dropdown,p-password {
+
+p-dropdown,
+p-password {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.p-inputgroup input, p-button button{
+
+.p-inputgroup input,
+p-button button {
     border-radius: 6px;
 }
-.p-dropdown-filter-container{
+
+.p-dropdown-filter-container {
     display: flex;
 }
+
 .p-dialog .p-dialog-footer button {
     margin: 0 0.5rem 0 0;
     width: auto;
     border-radius: 6px;
 }
-p-radiobutton{
+
+p-radiobutton {
     margin: 0 10px;
 }
-ol, ul{
+
+ol,
+ul {
     padding-left: 0;
     margin: 0;
 }
-*{
+
+* {
     font-family: "Inter var", sans-serif;
 }
-p-panelmenu .p-panelmenu-panel{
+
+p-panelmenu .p-panelmenu-panel {
     border: none;
 }
-.p-calendar{
+
+.p-calendar {
     display: flex;
 }
-.mat-drawer-inner-container{
+
+.mat-drawer-inner-container {
     overflow-x: hidden !important;
 }
-.p-tag.p-component{
-width: 54px;
+
+.p-tag.p-component {
+    width: 54px;
+}
+
+.p-fileupload-content ul {
+    margin: 0 20px;
 }

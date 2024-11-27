@@ -109,6 +109,10 @@ export class HomeComponent {
             label:'Patient List',
             route: '/patient',
           },
+          {
+            label:'Edit Patient',
+            route: '/patient/edit-patient',
+          }
         ]
       },
       {

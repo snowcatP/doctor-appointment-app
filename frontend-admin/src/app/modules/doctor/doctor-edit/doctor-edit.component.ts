@@ -164,6 +164,7 @@ export class DoctorEditComponent {
       avatarFilePath: this.formEditDoctor.controls['avatarFilePath'].value,
     };
     console.log(doctorInfoForm)
+
     this.loadingFetchingData = true;
     this.doctorService.editDoctor(
         doctorInfoForm,
@@ -176,7 +177,7 @@ export class DoctorEditComponent {
             key: 'messageToast',
             severity: 'success',
             summary: 'Success',
-            detail: `Edit Doctor ${this.formEditDoctor.controls['firstName'].value} successfully`,
+            detail: `Edit Doctor ${this.formEditDoctor.controls['firstName'].value + ' ' + this.formEditDoctor.controls['lastName'].value} successfully`,
           });
           this.loadingFetchingData = false;
 
@@ -186,7 +187,7 @@ export class DoctorEditComponent {
             key: 'messageToast',
             severity: 'error',
             summary: 'Error',
-            detail: `Edit Doctor ${this.formEditDoctor.controls['firstName'].value} unsuccessfully`,
+            detail: `Edit Doctor ${this.formEditDoctor.controls['firstName'].value + ' ' + this.formEditDoctor.controls['lastName'].value} unsuccessfully`,
           });
         }
       });
