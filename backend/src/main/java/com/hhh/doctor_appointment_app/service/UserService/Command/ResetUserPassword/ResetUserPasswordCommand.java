@@ -47,6 +47,12 @@ public class ResetUserPasswordCommand {
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new NotFoundException("User not found"));
 
+            if (!passwordEncoder.matches(request.getOldPassword(),user.getPassword())) {
+                System.out.println();
+                apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+                apiResponse.setMessage("Old password is incorrect");
+                return apiResponse;
+            }
             if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
                 apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
                 apiResponse.setMessage("Passwords do not match");
