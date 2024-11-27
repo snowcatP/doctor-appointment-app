@@ -42,6 +42,7 @@ public class EditPatientCommand {
             existingPatient.getProfile().setFirstName(editPatientRequest.getFirstName());
             existingPatient.getProfile().setLastName(editPatientRequest.getLastName());
             existingPatient.getProfile().setGender(editPatientRequest.isGender());
+            existingPatient.getProfile().setAvatarFilePath(editPatientRequest.getAvatarFilePath());
             existingPatient.getProfile().setPhone(editPatientRequest.getPhone());
             existingPatient.getProfile().setDateOfBirth(editPatientRequest.getDateOfBirth());
             existingPatient.getProfile().setAddress(editPatientRequest.getAddress());

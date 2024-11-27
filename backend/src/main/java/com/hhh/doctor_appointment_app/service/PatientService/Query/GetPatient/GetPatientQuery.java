@@ -29,6 +29,7 @@ public class GetPatientQuery {
                     response.setEmail(patient.getProfile().getEmail());
                     response.setDateOfBirth(patient.getProfile().getDateOfBirth());
                     response.setAddress(patient.getProfile().getAddress());
+                    response.setAvatarFilePath(patient.getProfile().getAvatarFilePath());
                     return response;
                 })
                 .collect(Collectors.toList());
