@@ -3,18 +3,22 @@ package com.hhh.doctor_appointment_app.controller;
 import com.hhh.doctor_appointment_app.dto.request.PatientRequest.EditPatientRequest;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
+import com.hhh.doctor_appointment_app.service.FirebaseStorageService;
 import com.hhh.doctor_appointment_app.service.PatientService.Command.DeletePatient.DeletePatientCommand;
 import com.hhh.doctor_appointment_app.service.PatientService.Command.EditPatient.EditPatientCommand;
 import com.hhh.doctor_appointment_app.service.PatientService.Query.GetDetailPatient.GetDetailPatientQuery;
+import com.hhh.doctor_appointment_app.service.PatientService.Query.GetPatient.GetPatientQuery;
 import com.hhh.doctor_appointment_app.service.PatientService.Query.GetPatientWithPage.GetPatientWithPageQuery;
 import com.hhh.doctor_appointment_app.service.PatientService.Query.GetProfilePatient.GetProfilePatientQuery;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +29,8 @@ import java.util.Map;
 public class PatientController {
     @Autowired
     private GetPatientWithPageQuery getPatientsWithPage;
+    @Autowired
+    private GetPatientQuery getPatients;
 
     @Autowired
     private EditPatientCommand editPatientCommand;
@@ -37,12 +43,13 @@ public class PatientController {
 
     @Autowired
     private GetProfilePatientQuery getProfilePatientQuery;
+    @Autowired
+    private FirebaseStorageService firebaseStorageService;
 
     @GetMapping("/list-patient")
-    public ResponseEntity<?> getPatients(@RequestParam(defaultValue = "1") int page,
-                                        @RequestParam(defaultValue = "10") int size){
+    public ResponseEntity<?> getPatients(){
         try{
-            return new ResponseEntity<>(getPatientsWithPage.getPatientsWithPage(page, size), HttpStatus.OK);
+            return new ResponseEntity<>(getPatients.getPatients(), HttpStatus.OK);
         }catch (Exception ex){
             ApiResponse<Object> apiResponse = new ApiResponse<>();
             apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
@@ -54,7 +61,7 @@ public class PatientController {
 
 
     @PutMapping("/edit-patient/{id}")
-    public ResponseEntity<?> editPatient(@PathVariable Long id, @Valid @RequestBody EditPatientRequest editPatientRequest, BindingResult bindingResult){
+    public ResponseEntity<?> editPatient(@PathVariable Long id, @Param("file") MultipartFile file, @ModelAttribute @RequestBody EditPatientRequest editPatientRequest, BindingResult bindingResult){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -64,6 +71,10 @@ public class PatientController {
             return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
+            if(file != null){
+                String fileUrl = firebaseStorageService.uploadFile(file);
+                editPatientRequest.setAvatarFilePath(fileUrl);
+            }
             apiResponse = editPatientCommand.editPatient(id,editPatientRequest);
             // Check if the status code is 500 for duplicated code
             if (HttpStatus.INTERNAL_SERVER_ERROR.value() == apiResponse.getStatusCode()) {

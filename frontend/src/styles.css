@@ -3493,6 +3493,8 @@ html.menu-opened body {
     padding-left: 5px;
     padding-right: 5px;
     width: 16.6%;
+	display: flex;
+	flex-direction: column;
 }
 .time-slot li .timing {
     background-color: #fff;
@@ -3529,15 +3531,14 @@ html.menu-opened body {
 	border: 1px solid #c94747 !important;
 	color: #c94747;
 }
-.time-slot li .timing.selected::before {
+.time-slot li .timing.selected::after {
     color: #42c0fb;
     content: "\f00c";
     font-family: "Font Awesome 5 Free";
 	font-size: 12px;
     font-weight: 900;
-    position: absolute;
-    right: 6px;
-    top: 6px;
+	margin-left: 5px;
+    
 }
 .schedule-list {
     border-bottom: 1px solid #cfcfcf;
@@ -6755,4 +6756,15 @@ body { margin: 0; font-family: Roboto, sans-serif, "Helvetica Neue" ; }
 }
 .table-responsive {
 	min-height: 70vh;
+}
+.spinner-container{
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; 
 }

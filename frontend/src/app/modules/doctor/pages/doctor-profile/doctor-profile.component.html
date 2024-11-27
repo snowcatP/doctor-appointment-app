@@ -73,11 +73,11 @@
   </div>
   <div class="submit-section submit-btn-bottom">
     <button type="submit" class="btn btn-primary submit-btn" [disabled]="loading">Save Changes</button>
-    <div class="spinner-container" *ngIf="loading">
-      <p-progressSpinner styleClass="w-2rem h-2rem" strokeWidth="3" fill="var(--surface-ground)"
-        animationDuration=".5s">
-      </p-progressSpinner>
-    </div>
+  </div>
+  <div class="spinner-container" *ngIf="loading">
+    <p-progressSpinner styleClass="w-2rem h-2rem spinner" strokeWidth="3" fill="var(--surface-ground)"
+      animationDuration=".5s">
+    </p-progressSpinner>
   </div>
   <!-- Spinner -->
   

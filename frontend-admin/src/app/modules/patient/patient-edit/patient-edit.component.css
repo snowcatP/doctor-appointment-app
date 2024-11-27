@@ -1,0 +1,114 @@
+#specialty-section{
+    padding: 20px;
+}
+.save-cancel-container {
+    position: relative;
+}
+
+.save-btn,
+.cancel-btn {
+    margin: 0 5px;
+    float: right;
+}
+p-inputGroup{
+    margin: 20px 0;
+}
+p-dropdown{
+    position: relative;
+    z-index: 1;
+}
+.p-inputgroup {
+    margin-bottom: 20px;
+}
+
+.p-inputgroup span {
+    width: 100px;
+    margin: 10px;
+    text-align: left;
+}
+
+span.mb-2 {
+    text-align: center;
+}
+
+.ml-2 {
+    margin: 10px;
+}
+
+.save-cancel-container {
+    position: relative;
+}
+
+.save-btn,
+.cancel-btn {
+    margin: 0 5px;
+    float: right;
+}
+
+.general-doctor-information .doctor-avatar {
+    width: 150px;
+    height: 150px;
+    margin: 20px auto;
+   
+}
+.general-doctor-information p-image span img{
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+}
+.doctor-avatar {
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+}
+
+p-inputMask, p-fileupload{
+    flex: 1;
+
+}
+
+.doctor-details-form{
+    display: flex;
+}
+.p-calendar {
+    display: flex;
+}
+
+.general-doctor-information {
+    padding: 0 20px;
+    border-right: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.general-doctor-information>div {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.general-doctor-information .label {
+    margin-right: 5px;
+    color: #3B82F6;
+    font-weight: bold;
+    
+}
+#add-doctor-form{
+    padding: 30px;
+}
+p-image img{
+    border-radius: 50%;
+}
+.edit-form-data{
+    padding: 20px;
+}
+.mr-2 {
+    width: 250px !important;
+    height: 250px !important;
+
+}
