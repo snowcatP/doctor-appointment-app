@@ -104,20 +104,16 @@ export class HomeComponent {
         label: 'Patient',
         icon: 'fa fa-users',
         topmenu: true,
-        // items:[
-        //   {
-        //     label:'Doctor List',
-        //     route: '/doctor',
-        //   },
-        //   {
-        //     label:'Add New Doctor',
-        //     route: '/doctor',
-        //   },
-        //   {
-        //     label:'Edit Doctor',
-        //     route: '/doctor',
-        //   }
-        // ]
+        items:[
+          {
+            label:'Patient List',
+            route: '/patient',
+          },
+          {
+            label:'Edit Patient',
+            route: '/patient/edit-patient',
+          }
+        ]
       },
       {
         label: 'Schedules',

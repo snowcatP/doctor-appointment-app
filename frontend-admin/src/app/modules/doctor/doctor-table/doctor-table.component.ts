@@ -196,4 +196,16 @@ export class DoctorTableComponent {
       },
     });
   }
+  getSeverity(gender: boolean) {
+    switch (gender) {
+      case true:
+        return 'success';
+
+      case false:
+        return 'warning';
+
+      default:
+        return null;
+    }
+  }
 }
