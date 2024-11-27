@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/feedback")
@@ -38,9 +39,12 @@ public class FeedbackController {
     public ResponseEntity<?> createFeedbackByPatient(@Valid @RequestBody CreateFeedbackByPatientRequest createFeedbackByPatientRequest, BindingResult bindingResult) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.status(HttpStatus.OK).body(errors);
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(fieldError -> fieldError.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage(errorMessage);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
             apiResponse = createFeedbackByPatientCommand.createFeedbackByPatient(createFeedbackByPatientRequest);
@@ -69,9 +73,12 @@ public class FeedbackController {
     public ResponseEntity<?> replyFeedbackByDoctor(@Valid @RequestBody ReplyFeedbackByDoctorRequest replyFeedbackByDoctorRequest, BindingResult bindingResult) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.status(HttpStatus.OK).body(errors);
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(fieldError -> fieldError.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage(errorMessage);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
         }
         try {
             apiResponse = createReplyFeedbackByDoctorCommand.createReplyFeedbackByDoctor(replyFeedbackByDoctorRequest);

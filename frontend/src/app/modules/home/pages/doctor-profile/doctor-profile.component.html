@@ -539,6 +539,7 @@
                       <i class="active fa fa-star"></i>
                     </label>
                   </div>
+                  <div *ngIf="!isRatingValid" class="text-danger">Please select a rating.</div>
                 </div>
                 <div class="form-group">
                   <label>Your review</label>
@@ -549,6 +550,7 @@
                     [(ngModel)]="feedbackRequest.comment"
                     name="comment"
                   ></textarea>
+                  <div *ngIf="!isCommentValid" class="text-danger">Please enter a comment.</div>
                   <div class="d-flex justify-content-between mt-3">
                     <small class="text-muted"><span id="chars">100</span> characters remaining</small>
                   </div>

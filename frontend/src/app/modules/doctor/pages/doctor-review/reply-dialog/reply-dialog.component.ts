@@ -15,6 +15,8 @@ export class ReplyDialogComponent implements OnInit{
     comment: '',
   };
 
+  isCommentValid: boolean = true;
+
   replyFeedback: ReplyFeedbackRequest = new ReplyFeedbackRequest();
 
   visible: boolean = false;
@@ -35,6 +37,19 @@ export class ReplyDialogComponent implements OnInit{
   onSubmitReview(): void {
     // Send feedbackRequest data back to the parent component
     // this.dialogRef.close(this.feedbackRequest);
+
+    this.isCommentValid = this.feedbackRequest.comment.trim().length > 0;
+ 
+     if (!this.isCommentValid) {
+       this.messageService.add({
+         key: 'messageToast',
+         severity: 'error',
+         summary: 'Error',
+         detail: 'Please provide a comment.',
+       });
+       return;
+     }
+
     this.replyFeedback.comment = this.feedbackRequest.comment;
     this.feedbackService.replyFeedbackForPatientByDoctor(this.replyFeedback).subscribe(
       (response: ApiResponse) => {
