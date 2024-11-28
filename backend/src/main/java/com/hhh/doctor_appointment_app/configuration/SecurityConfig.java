@@ -33,6 +33,7 @@ public class SecurityConfig {
             "api/auth/logout",
             "api/auth/forgot-password",
             "api/auth/reset-password",
+            "api/auth/user/reset-password",
             "api/auth/refreshToken",
             "api/auth/register/user",
             "api/appointment/guest/create-appointment",
