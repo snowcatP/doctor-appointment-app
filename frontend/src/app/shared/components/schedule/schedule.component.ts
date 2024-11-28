@@ -71,21 +71,36 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
     this.generateAppointmentSlots();
     this.webSocketInit();
   }
-
+  
   ngOnChanges(changes: SimpleChanges): void {
     // Handle patient and guest booking
     this.isLoading = true;
     this.store.select(fromAuth.selectRole).subscribe((r) => {
-      if (r === 'PATIENT') {
-        if (
-          this.isReschedule &&
-          changes.selectedApp?.currentValue != undefined
-        ) {
-          const request: GetAppointmentForReschedulingRequest = {
-            doctorEmail: changes.selectedApp?.currentValue?.doctor?.email,
-          };
-          this.appointmentService
+      if (this.isReschedule) {
+        if (r === 'PATIENT'){
+          if (changes.selectedApp?.currentValue != undefined) {
+            const request: GetAppointmentForReschedulingRequest = {
+              doctorEmail: changes.selectedApp?.currentValue?.doctor?.email,
+            };
+            this.appointmentService
             .getAppointmentsForReschedulingByPatient(request)
+            .subscribe({
+              next: (res) => {
+                this.appointmentsBooked = res;
+                this.isLoading = false;
+                setTimeout(() => {
+                  this.handleAppointmentsBooked();
+                }, 100);
+              },
+              error: (err) => {
+                console.log(err);
+                this.isLoading = false;
+              },
+            });
+          }
+        } else {
+          this.appointmentService
+            .getAppointmentsForRescheduling()
             .subscribe({
               next: (res) => {
                 this.appointmentsBooked = res;
@@ -102,7 +117,6 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
         }
       } else {
         if (
-          !this.isReschedule &&
           changes.doctorSelected?.currentValue != undefined
         ) {
           this.appointmentService
