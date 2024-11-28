@@ -63,6 +63,12 @@ const routes: Routes = [
     }
   },
   {
+    path: 'chatbot',
+    loadChildren: () =>
+      import('./modules/chatbot/chatbot.module').then((m) => m.ChatbotModule),
+    title: 'Chatbot',
+  },
+  {
     path: 'error404',
     component: Page404Component,
     title: 'Page 404 - Not Found',

@@ -4289,6 +4289,12 @@ html.menu-opened body {
     flex: 0 0 70%;
     max-width: 70%;
 }
+
+.chat-cont-right.chatbot {
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+}
 .chat-cont-right .chat-header {
 	-webkit-box-align: center;
 	-ms-flex-align: center;
@@ -4396,7 +4402,8 @@ html.menu-opened body {
 	margin-top: 5px;
 }
 .chat-cont-right .chat-body .media.received {
-	margin-bottom: 10px;
+	margin-bottom: 15px;
+	margin-right: 10rem;
 }
 .chat-cont-right .chat-body .media:last-child {
 	margin-bottom: 0;
@@ -4405,7 +4412,7 @@ html.menu-opened body {
 	background-color: #f5f5f6;
 }
 .chat-cont-right .chat-body .media.sent {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 .chat-cont-right .chat-body .media.sent .media-body {
 	-webkit-box-align: flex-end;

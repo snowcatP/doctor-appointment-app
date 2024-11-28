@@ -38,7 +38,8 @@ public class SecurityConfig {
             "api/auth/register/user",
             "api/appointment/guest/create-appointment",
             "api/doctor/search",
-            "api/appointment/search/reference-code"
+            "api/appointment/search/reference-code",
+            "api/ai/chatbot"
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
