@@ -4,6 +4,7 @@ import com.hhh.doctor_appointment_app.dto.mapper.AppointmentMapper;
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentResponse;
 import com.hhh.doctor_appointment_app.entity.Appointment;
+import com.hhh.doctor_appointment_app.enums.AppointmentStatus;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
 import com.hhh.doctor_appointment_app.state.CancelledState;
@@ -28,12 +29,11 @@ public class CancelAppointmentCommand {
             Appointment appointment = appointmentRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Appointment Not Found"));
 
-            // Kiểm tra trạng thái hiện tại để đảm bảo chỉ có thể dời lịch từ trạng thái SCHEDULED
             if (!(appointment.getAppointmentState() instanceof PendingState)) {
                 throw new IllegalStateException("Appointment can only be cancelled from Pending status.");
             }
 
-            appointment.setAppointmentState(new CancelledState());
+            ((PendingState) appointment.getAppointmentState()).cancel(appointment);
             appointmentRepository.saveAndFlush(appointment);
 
             AppointmentResponse appointmentResponse = appointmentMapper.toResponse(appointment);
