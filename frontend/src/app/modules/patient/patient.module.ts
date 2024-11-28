@@ -23,6 +23,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { ReactiveFormsModule } from '@angular/forms';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { PasswordModule } from 'primeng/password';
+import { DividerModule } from 'primeng/divider';
 @NgModule({
   declarations: [
     PatientComponent,
@@ -49,7 +53,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatButtonModule,
     DropdownModule,
     ScrollPanelModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+    PasswordModule,
+    DividerModule
 ]
 })
 export class PatientModule { }

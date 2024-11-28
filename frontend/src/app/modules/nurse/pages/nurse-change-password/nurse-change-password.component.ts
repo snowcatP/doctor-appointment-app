@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ValidationErrors, AbstractControl } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
@@ -20,11 +20,32 @@ export class NurseChangePasswordComponent {
     private messageService: MessageService,
     private router: Router,
   ) {
-    // Khởi tạo form
     this.formChangePassword = this.fb.group({
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
+      oldPassword: ['', [Validators.required, Validators.minLength(8)]],
+      newPassword: ['', [Validators.required, this.passwordValidator]],
       confirmNewPassword: ['', [Validators.required]],
-    });
+    }, { validators: this.passwordsMatchValidator });
+  }
+
+  // Custom validator for password
+  passwordValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (!value) return null;
+
+    const hasNumber = /\d/.test(value);
+    const isValidLength = value.length >= 8;
+
+    if (!hasNumber || !isValidLength) {
+      return { passwordInvalid: true };
+    }
+    return null;
+  }
+
+  // Validator to check if passwords match
+  passwordsMatchValidator(group: FormGroup): ValidationErrors | null {
+    const newPassword = group.get('newPassword')?.value;
+    const confirmNewPassword = group.get('confirmNewPassword')?.value;
+    return newPassword === confirmNewPassword ? null : { passwordsMismatch: true };
   }
 
   showPassword() {
@@ -46,7 +67,7 @@ export class NurseChangePasswordComponent {
       return;
     }
 
-    const { newPassword, confirmNewPassword } = this.formChangePassword.value;
+    const {oldPassword, newPassword, confirmNewPassword } = this.formChangePassword.value;
 
     const token = localStorage.getItem('token'); // Lấy token từ localStorage
 
@@ -61,7 +82,7 @@ export class NurseChangePasswordComponent {
     }
 
     // Gọi AuthService để reset password
-    this.authService.resetPassword(token, newPassword, confirmNewPassword).subscribe(
+    this.authService.resetPassword(token, oldPassword, newPassword, confirmNewPassword).subscribe(
       (response:ApiResponse) => {
         if (response.statusCode === 200) {
           this.messageService.add({
