@@ -106,7 +106,7 @@
                 </div>
               </div>
             </div>
-            <div class="chat-options">
+            <!-- <div class="chat-options">
               <a data-toggle="modal" data-target="#voice_call">
                 <i class="material-icons">local_phone</i>
               </a>
@@ -116,7 +116,7 @@
               <a>
                 <i class="material-icons">more_vert</i>
               </a>
-            </div>
+            </div> -->
           </div>
           <div class="chat-body">
             <div class="chat-scroll" #chatScroll>
@@ -176,7 +176,7 @@
           </div>
           <div class="chat-footer">
             <div class="d-flex justify-content-between align-items-center">
-              <input
+              <!-- <input
                 type="text"
                 pInputText
                 class="full-width"
@@ -184,7 +184,18 @@
                 [(ngModel)]="message"
                 #messageInput
                 (keyup.enter)="sendMessage()"
-              />
+              /> -->
+              <textarea 
+                rows="1"
+                cols="30"
+                pInputTextarea
+                class="full-width"
+                placeholder="Type something"
+                [(ngModel)]="message"
+                #messageInput
+                (keyup.enter)="sendMessage()"
+                [autoResize]="true">
+            </textarea>
               <button
                 mat-mini-fab
                 class="ms-3"

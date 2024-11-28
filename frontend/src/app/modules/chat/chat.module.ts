@@ -20,6 +20,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { DropdownModule } from 'primeng/dropdown';
 import { ToastModule } from 'primeng/toast';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @NgModule({
   declarations: [ChatIndexComponent, ChatComponent],
@@ -44,6 +45,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     DropdownModule,
     ToastModule,
     MatTooltipModule,
+    InputTextareaModule,
   ],
 })
 export class ChatModule {}

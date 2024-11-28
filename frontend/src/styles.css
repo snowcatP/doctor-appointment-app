@@ -3537,7 +3537,7 @@ html.menu-opened body {
     font-family: "Font Awesome 5 Free";
 	font-size: 12px;
     font-weight: 900;
-	margin-left: 5px;
+	/* margin-left: 5px; */
     
 }
 .schedule-list {

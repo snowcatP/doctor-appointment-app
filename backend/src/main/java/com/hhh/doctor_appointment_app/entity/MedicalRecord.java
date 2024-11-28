@@ -23,11 +23,11 @@ public class MedicalRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String bloodType; // Nhom mau
+    private String bloodType;
 
-    private Integer heartRate; // Nhip tim
+    private Integer heartRate;
 
-    private String description; // Symptoms recorded from the patient. ( Cac trieu chung duoc ghi nhan tu benh nhan)
+    private String description; // Symptoms recorded from the patient.
 
     private String diagnosis; // Accurate diagnosis by doctor. ( Chan doan cua bac si)
 
@@ -35,7 +35,7 @@ public class MedicalRecord {
 
     private String prescription; // Prescription or treatment instructions.( Don thuoc hoac huong dan dieu tri)
 
-    private String treatmentPlan; //Ke hoach dieu tri
+    private String treatmentPlan;
 
     private String note;
 

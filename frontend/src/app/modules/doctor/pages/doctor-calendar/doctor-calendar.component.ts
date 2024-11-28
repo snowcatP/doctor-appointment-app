@@ -147,7 +147,6 @@ export class DoctorCalendarComponent implements OnInit {
     this.appointmentService.getAllAppointmentsByDoctorEmail().subscribe({
       next: (res) => {
         this.appointments = res;
-        console.log(this.appointments)
         setTimeout(() => {
           this.processAppointmentData();
           this.isLoading = false;
