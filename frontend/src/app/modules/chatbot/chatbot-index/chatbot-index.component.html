@@ -1,0 +1,81 @@
+<div class="card">
+  <div class="chat-window">
+    <div class="chat-cont-right chatbot">
+      <div class="chat-header">
+        <div class="media">
+          <div class="media-body">
+            <div class="user-name">Chatbot</div>
+          </div>
+        </div>
+        <div class="chat-options">
+          <a (click)="refresh()" matTooltip="Click to refresh the conversation">
+            <mat-icon>refresh</mat-icon>
+          </a>
+        </div>
+      </div>
+      <div class="chat-body">
+        <div class="chat-scroll">
+          <ul class="list-unstyled">
+            <li
+              class="media"
+              *ngFor="let message of messages"
+              [ngClass]="{
+                sent: message.sender !== 'BOT',
+                received: message.sender === 'BOT'
+              }"
+            >
+              <div class="media-body">
+                <div class="msg-box">
+                  <div>
+                    <p>{{ message.result }}</p>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="media received" *ngIf="isSending">
+              <div class="media-body">
+                <div class="msg-box">
+                  <div>
+                    <div class="msg-typing">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="chat-footer">
+        <div class="input-group">
+          <input
+            type="text"
+            class="input-msg-send form-control"
+            placeholder="Type something"
+            [(ngModel)]="prompt"
+            (keyup.enter)="sendMessage()"
+            #promptInput
+            [disabled]="isSending"
+          />
+          <div class="input-group-append">
+            <button
+              mat-mini-fab
+              class="ms-3"
+              color="success"
+              type="button"
+              (click)="sendMessage()"
+            >
+              <mat-icon *ngIf="!isSending">send</mat-icon>
+              <mat-icon *ngIf="isSending"
+                ><mat-spinner diameter="20"></mat-spinner
+              ></mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /Chat Right -->
+  </div>
+</div>

@@ -165,8 +165,10 @@ export class ChatIndexComponent implements OnInit, OnDestroy {
     this.chatSubscription = this.webSocketService
       .on(`/user/chat/conversation/${this.selectedConversation.id}`)
       .subscribe((message: ChatMessageResponse) => {
-        this.selectedConversationData.push(message);
-        this.scrollToBottom();
+        setTimeout(() => {
+          this.selectedConversationData.push(message);
+          this.scrollToBottom();
+        }, 2000);
       });
   }
 

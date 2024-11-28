@@ -106,17 +106,6 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="chat-options">
-              <a data-toggle="modal" data-target="#voice_call">
-                <i class="material-icons">local_phone</i>
-              </a>
-              <a data-toggle="modal" data-target="#video_call">
-                <i class="material-icons">videocam</i>
-              </a>
-              <a>
-                <i class="material-icons">more_vert</i>
-              </a>
-            </div> -->
           </div>
           <div class="chat-body">
             <div class="chat-scroll" #chatScroll>
@@ -171,20 +160,24 @@
                     </div>
                   </div>
                 </li>
+                <li class="media received" *ngIf="isSending">
+                  <div class="media-body">
+                    <div class="msg-box">
+                      <div>
+                        <div class="msg-typing">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
           <div class="chat-footer">
             <div class="d-flex justify-content-between align-items-center">
-              <!-- <input
-                type="text"
-                pInputText
-                class="full-width"
-                placeholder="Type something"
-                [(ngModel)]="message"
-                #messageInput
-                (keyup.enter)="sendMessage()"
-              /> -->
               <textarea 
                 rows="1"
                 cols="30"
