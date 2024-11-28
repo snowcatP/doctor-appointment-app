@@ -84,7 +84,7 @@
               <a
                 *ngIf="appointment.appointmentStatus === 'PENDING'"
                 class="btn btn-sm bg-danger-light"
-                (click)="onChangeStatusAppointment(appointment.id)"
+                (click)="onCancelAppointment(appointment.id)"
               >
                 <i class="fas fa-times"></i> Cancel
               </a>
