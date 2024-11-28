@@ -35,9 +35,9 @@ public class CustomJwtDecoder implements JwtDecoder {
             var response = introspectQuery.introspect(
                     IntrospectRequest.builder().token(token).build());
 
-            if (!response.isValid()) return null;
+            if (!response.isValid()) throw new JwtException("Token invalid");
         } catch (JOSEException | ParseException e) {
-            return null;
+            throw new JwtException("Token invalid");
         }
 
         if (Objects.isNull(nimbusJwtDecoder)) {
