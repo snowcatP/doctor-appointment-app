@@ -12,4 +12,8 @@ public class PendingState implements AppointmentState{
     public String getStatus() {
         return "Pending";
     }
+
+    public void cancel(Appointment appointment) {
+        appointment.setAppointmentState(new CancelledState());
+    }
 }
