@@ -31,6 +31,7 @@ import { authReducer } from './core/states/auth/auth.reducer';
 import { AuthEffect } from './core/states/auth/auth.effects';
 import { ScrollTopModule } from 'primeng/scrolltop';
 import { SharedModule } from './shared/shared.module';
+import { ChatbotModule } from './modules/chatbot/chatbot.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -47,6 +48,7 @@ import { SharedModule } from './shared/shared.module';
     HomeModule,
     BookingAppointmentModule,
     SharedModule,
+    ChatbotModule,
     ScrollTopModule,
     StoreModule.forRoot({ auth: authReducer }, {}),
     EffectsModule.forRoot([AuthEffect]),
