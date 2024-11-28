@@ -166,7 +166,6 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
 
   selectBookingDate(slot: TimeSlot) {
     this.timeSlotSelected = slot;
-    console.log(this.timeSlotSelected)
     this.formBookingDate.controls['bookingDate'].setValue(
       this.timeSlotSelected.date
     );
@@ -182,7 +181,6 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         .getAppointmentsForBooking(this.doctorSelected.id)
         .subscribe({
           next: (res) => {
-            console.log(res)
             this.appointmentsBooked = res;
             this.isLoading = false;
             setTimeout(() => {

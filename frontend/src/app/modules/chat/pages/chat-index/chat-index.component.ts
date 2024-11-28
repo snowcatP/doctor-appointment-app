@@ -52,6 +52,7 @@ export class ChatIndexComponent implements OnInit, OnDestroy {
   isLoadingDataConversation: boolean = false;
   currentUser: User;
   searchConv: string;
+  isTyping: boolean = false;
   private chatSubscription: Subscription;
   private unsubscribe$ = new Subject<void>();
 
