@@ -16,6 +16,7 @@ import com.hhh.doctor_appointment_app.service.UserService.Command.CreateAdmin.Cr
 import com.hhh.doctor_appointment_app.service.UserService.Command.CreateDoctor.CreateDoctorCommand;
 import com.hhh.doctor_appointment_app.service.UserService.Command.CreatePatient.CreatePatientCommand;
 import com.hhh.doctor_appointment_app.service.UserService.Command.ForgotPassword.ForgotPasswordCommand;
+import com.hhh.doctor_appointment_app.service.UserService.Command.ResetPasswordNotLogin.ResetPasswordNotLoginCommand;
 import com.hhh.doctor_appointment_app.service.UserService.Command.ResetUserPassword.ResetUserPasswordCommand;
 import com.hhh.doctor_appointment_app.service.UserService.Command.UserSignup.UserSignupCommand;
 import com.nimbusds.jose.JOSEException;
@@ -59,14 +60,30 @@ public class AccountController {
     @Autowired
     private CreateNurseByAdminCommand createNurseByAdminCommand;
 
+    @Autowired
+    private ResetPasswordNotLoginCommand resetPasswordNotLoginCommand;
+
 
 
     @PostMapping("/forgot-password")
-    public ApiResponse<String> forgotPassword(@RequestBody UserForgotPasswordRequest request) {
-        return ApiResponse.<String>builder()
-                .data(forgotPasswordCommand.forgotPassword(request))
-                .statusCode(HttpStatus.OK.value())
-                .build();
+    public ResponseEntity<?>  forgotPassword(@RequestBody UserForgotPasswordRequest request) {
+        ApiResponse<Object> apiResponse = new ApiResponse<>();
+        try {
+            System.out.println(request.getEmail());
+            apiResponse = forgotPasswordCommand.forgotPassword(request);
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
+        }
+        catch (NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+        catch (Exception ex) {
+
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
     }
 
     @PostMapping("/reset-password")
@@ -77,6 +94,29 @@ public class AccountController {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try {
             apiResponse = resetUserPasswordCommand.resetUserPassword(token,request);
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
+        }
+        catch (NotFoundException ex){
+            apiResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            apiResponse.setMessage(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+        catch (Exception ex) {
+
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+    }
+
+    @PostMapping("/user/reset-password")
+    public ResponseEntity<?> resetPasswordNotLogin(
+            @RequestParam String token,
+            @RequestBody UserChangePasswordRequest request)
+            throws ParseException, JOSEException {
+        ApiResponse<Object> apiResponse = new ApiResponse<>();
+        try {
+            apiResponse = resetPasswordNotLoginCommand.resetUserPasswordNotLogin(token,request);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
         }
         catch (NotFoundException ex){

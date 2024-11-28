@@ -104,5 +104,24 @@ export class AuthService {
       })
     );
   }
+
+  forgotPassword(email: string): Observable<ApiResponse> {
+    const url = `${host}/api/auth/forgot-password`; // Endpoint của API
+    const body = {
+      email: email
+    };
+  
+    return this.http.post<ApiResponse>(url, body);
+  }
+
+  resetPasswordNotLogin(token: string, newPassword: string, confirmNewPassword: string): Observable<ApiResponse> {
+    const url = `${host}/api/auth/user/reset-password`; // Endpoint của API
+    const body = {
+      newPassword: newPassword,
+      confirmNewPassword: confirmNewPassword
+    };
+  
+    return this.http.post<ApiResponse>(url, body, { params: { token } });
+  }
   
 }

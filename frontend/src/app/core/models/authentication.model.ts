@@ -41,3 +41,8 @@ export class LoginSucessResponse {
     this.user = user;
   }
 }
+
+export class UserChangePasswordRequest {
+  password: string;
+  confirmPassword: string;
+}
