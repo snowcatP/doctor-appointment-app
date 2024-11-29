@@ -28,6 +28,11 @@ public class AuthenticateCommand {
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         User user = findUserByUsernameQuery.findUserByUsername(request.getEmail())
                 .orElseThrow(() -> new UnauthenticatedException("User not found"));
+
+        if (!user.getEmail().equals(request.getEmail())) {
+            throw new UnauthenticatedException("Invalid email or password");
+        }
+
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new UnauthenticatedException("Invalid username or password");
         }
