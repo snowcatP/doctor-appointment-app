@@ -32,10 +32,16 @@ public class MedicalRecordResponse {
     private String treatmentPlan; //Ke hoach dieu tri
 
     private String note;
+
     private String filePath;
+
     private LocalDateTime dateCreated;
+
     private LocalDateTime lastModified;
+
     private DoctorResponse doctorResponse;
+
     private AppointmentResponse appointmentResponse;
+
     private NurseResponse nurseResponse;
 }

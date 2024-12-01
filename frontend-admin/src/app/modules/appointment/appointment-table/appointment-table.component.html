@@ -1,0 +1,164 @@
+<div class="card flex justify-content-center">
+    <p-progressSpinner *ngIf="loadingFetchingData" ariaLabel="loading" [style]="{display: 'flex;'}" />
+</div>
+<div class="card" *ngIf="!loadingFetchingData">
+    <p-toolbar>
+    </p-toolbar>
+    <p-toolbar styleClass="mb-4 gap-2">
+        <ng-template pTemplate="left">
+            
+        </ng-template>
+        <ng-template pTemplate="right">
+            <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import"
+                class="mr-2 inline-block" />
+            <p-button severity="help" label="Export" icon="pi pi-upload" />
+        </ng-template>
+    </p-toolbar>
+    
+    <p-table #myTab [value]="appointments" styleClass="p-datatable-striped" [paginator]="true"
+    [tableStyle]="{'min-width': '75rem'}" [rowHover]="true " dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+    [globalFilterFields]="['firstName', 'lastName']" [(selection)]="selectedAppointments">
+    <ng-template pTemplate="header">
+            
+            <tr>
+                <th style="width: 4rem">
+                    <p-tableHeaderCheckbox />
+                </th>
+                <th pSortableColumn="id" style="width:2rem">
+                    <div class="flex justify-content-between align-items-center">
+                        Id <p-sortIcon field="id" />
+                        <p-columnFilter type="text" field="id" display="menu" class="ml-auto" />
+                    </div>
+                </th>
+                <th pSortableColumn="bookingHour" style="width:12rem">
+                    <div class="flex justify-content-between align-items-center">
+                        Booking Hour<p-sortIcon field="bookingHour" />
+                        <p-columnFilter type="text" field="bookingHour" display="menu" class="ml-auto" />
+                    </div>
+                </th>
+                <th pSortableColumn="dateBooking" style="width:12rem">
+                    <div class="flex justify-content-between align-items-center">
+                        Booking Date<p-sortIcon field="dateBooking" />
+                        <p-columnFilter type="text" field="dateBooking" display="menu" class="ml-auto" />
+                    </div>
+                </th>
+                <th style="min-width:10rem">
+                    Patient  
+                    <p-columnFilter type="text" field="fullName" display="menu" class="ml-auto" />
+                </th>
+                <th pSortableColumn="gender" style="width:12rem">
+                    Specialty <p-sortIcon field="doctor.specialty.specialtyName" />
+                    <p-columnFilter type="text" field="doctor.specialty.specialtyName" display="menu" class="ml-auto" />
+                </th>
+                <th pSortableColumn="doctor.fullName" style="min-width:15rem">
+                    Doctor <p-sortIcon field="doctor.fullName" />
+                    <p-columnFilter type="text" field="doctor.fullName" display="menu" class="ml-auto" />
+                </th>
+                <th pSortableColumn="appointmentStatus" style="min-width:15rem">
+                    Status <p-sortIcon field="appointmentStatus" />
+                    <p-columnFilter type="text" field="appointmentStatus" display="menu" class="ml-auto" />
+
+                </th>
+               
+                <th></th>
+            </tr>
+
+
+        </ng-template>
+        <ng-template pTemplate="body" let-appointment class="body">
+            
+                <tr *ngIf="!loadingFetchingData">
+                    <td>
+                        <p-tableCheckbox [value]="appointment" />
+                    </td>
+                    <td>{{appointment.id}}</td>
+                    <td>{{appointment.bookingHour}}</td>
+                    <td> {{appointment.dateBooking | date: 'dd-MM-yyyy'}}</td>
+                    <td>{{appointment.fullName}}</td>
+                    <td>{{appointment.doctor.specialty.specialtyName}}</td>
+                    <td><img class="doctor-avatar" [src]="appointment.doctor.avatarFilePath" alt="" style="margin: 0 10px;">{{appointment.doctor.fullName}}</td>
+                    <td><p-tag styleClass="appointment" [value]="appointment.appointmentStatus" [severity]="getSeverity(appointment.appointmentStatus)" rounded="true" [style]="{width: '100px;'}"/></td>
+                    
+                    <td style="display: flex; justify-content: space-evenly;">
+                        <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" severity="success" (onClick)="openEditDialog(appointment)" />
+                        <p-button icon="far fa-eye" class="mr-2" [rounded]="true" [outlined]="true" severity="warning" (onClick)="openEditDialog(appointment)" />
+                    </td>
+                   
+                </tr>
+                <tr *ngIf="loadingFetchingData">
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                    <td><p-skeleton/></td>
+                </tr>
+        </ng-template>
+    </p-table>
+</div>
+<p-confirmDialog></p-confirmDialog>
+<p-dialog header="Appointment Details" styleClass="appointmentDialog" [modal]="true" [(visible)]="visibleAppointment" [style]="{ width: '80rem' }">
+    <div *ngIf="appointment">
+        <div class="header">
+            <span style="font-weight: bold;">Appointment ID:  </span>{{appointment.id}}
+            <span style="position: absolute; right: 0; margin-right: 20px; font-weight: bold;">Status: <p-tag styleClass="appointment" [value]="appointment.appointmentStatus" [severity]="getSeverity(appointment.appointmentStatus)" rounded="true" [style]="{width: '100px;'}"/></span>
+        </div>
+        <hr>
+        <div class="patient-appointment-information">
+            <div class="patient-section">
+                <h2 class="section-title">Patient Information</h2>
+                <div class="info-group">
+                    <span class="info-label">Name</span>
+                    <span class="info-value">{{appointment.fullName}}</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Patient ID</span>
+                    <span class="info-value">{{appointment.patientId}}</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Age</span>
+                    <span class="info-value">{{patientAge}}</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Contact</span>
+                    <span class="info-value">{{appointment.phone}}</span>
+                </div>
+            </div>
+
+            <div class="appointment-section">
+                <h2 class="section-title">Appointment Information</h2>
+                <div class="info-group">
+                    <span class="info-label">Date</span>
+                    <span class="info-value">{{appointment.dateBooking | date: 'dd-MM-yyyy'}}</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Time</span>
+                    <span class="info-value">{{appointment.bookingHour}}</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Specialty</span>
+                    <span class="info-value">{{appointmentRespone.doctor.specialty.specialtyName}}</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Doctor</span>
+                    <span class="info-value">{{appointmentRespone.doctor.fullName}}</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="medical-information">
+            <h2 class="section-title">Medical Information</h2>
+            <div class="purpose info-group">
+                <span class="purpose-label">Purpose of Visit</span>
+            </div>
+        </div>
+    </div>
+
+
+</p-dialog>

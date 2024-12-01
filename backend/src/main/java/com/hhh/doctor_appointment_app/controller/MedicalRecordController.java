@@ -13,6 +13,7 @@ import com.hhh.doctor_appointment_app.service.MedicalRecordService.Query.GetMedi
 import com.hhh.doctor_appointment_app.service.MedicalRecordService.Query.GetMedicalRecordWithPageByPatient.GetMedicalRecordWithPageByPatientQuery;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -63,7 +64,7 @@ public class MedicalRecordController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addMedicalRecordAndUploadImageByDoctor(
-            @RequestParam("file") MultipartFile file,
+            @Param("file") MultipartFile file,
             @ModelAttribute @Valid AddMedicalRecordRequest addMedicalRecordRequest, // sử dụng ModelAttribute để bind dữ liệu
             BindingResult bindingResult) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();

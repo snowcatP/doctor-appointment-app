@@ -233,6 +233,9 @@ table.table td h2.table-avatar {
     vertical-align: middle;
 	white-space: nowrap;
 }
+.table-avatar a{
+	margin: 0 10px;
+}
 table.table td h2 a {
 	color: #272b41;
 }
@@ -3522,8 +3525,8 @@ html.menu-opened body {
 }
 .time-slot li .timing.booked {
 	background-color: #e9e9e9;
-	border: 1px solid #757575;
-	color: #757575;
+	border: 1px solid #d10826;
+	color: #d10826;
 	cursor: not-allowed;
 }
 .time-slot li .timing.prev {
@@ -3537,7 +3540,7 @@ html.menu-opened body {
     font-family: "Font Awesome 5 Free";
 	font-size: 12px;
     font-weight: 900;
-	/* margin-left: 5px; */
+	margin-left: 5px;
     
 }
 .schedule-list {
@@ -6763,8 +6766,15 @@ body { margin: 0; font-family: Roboto, sans-serif, "Helvetica Neue" ; }
     left: 0;
     width: 100%;
     height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
     display: flex; 
     justify-content: center;
     align-items: center;
     z-index: 1000; 
+}
+.spinner{
+	background-color: rgba(0, 0, 0, 0.5);
+}
+.p-calendar.p-input-icon-right{
+    display: flex;
 }

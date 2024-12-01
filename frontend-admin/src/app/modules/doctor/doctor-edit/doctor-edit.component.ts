@@ -87,7 +87,7 @@ export class DoctorEditComponent {
     this.doctorService.getDoctorDetail(id).subscribe({
       next: (resp) => {
         this.formEditDoctor.patchValue({
-          id: resp.data.id,
+          id: resp.id,
           firstName: resp.data.firstName,
           lastName: resp.data.lastName,
           gender: resp.data.gender,

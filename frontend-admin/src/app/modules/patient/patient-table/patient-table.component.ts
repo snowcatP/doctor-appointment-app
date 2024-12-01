@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Patient } from '../../../core/models/patient';
 import { PatientService } from '../../../core/services/patient.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-patient-table',
@@ -11,7 +12,7 @@ export class PatientTableComponent implements OnInit {
   patients: Patient[] = [];
   loadingFetchingData: boolean;
   selectedPatients: Patient[];
-  constructor(private patientService: PatientService) {}
+  constructor(private patientService: PatientService, private route: Router) {}
   ngOnInit(): void {
     this.getListPatient();
   }
@@ -24,12 +25,14 @@ export class PatientTableComponent implements OnInit {
     });
   }
 
-  openEditDialog(_t89: any) {
-    throw new Error('Method not implemented.');
+  openEditDialog(patient:Patient) {
+    this.route.navigate(['patient/edit-patient'], {queryParams: {id: patient.id}});
   }
 
   deleteMultiplePatient() {}
-  showAddNewPatient() {}
+  showAddNewPatient() {
+    this.route.navigateByUrl('patient/add-patient');
+  }
   getSeverity(gender: boolean) {
     switch (gender) {
       case true:

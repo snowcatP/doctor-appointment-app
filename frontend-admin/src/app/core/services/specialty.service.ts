@@ -12,7 +12,7 @@ export class SpecialtyService {
   getListSpecialty(): Observable<any>{
     return this.http.get<any>(environment.apiEndpoint + '/api/specialty/list-specialty')
   }
-  getSpecialtyDetail(id: number): Observable<any>{
+  getSpecialtyDetail(id: string): Observable<any>{
     return this.http.get(environment.apiEndpoint +`/api/specialty/detail/${id}`);
   }
   addNewSpecialty(specialtyReqeust: Specialty): Observable<any> {

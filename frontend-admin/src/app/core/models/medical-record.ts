@@ -16,3 +16,17 @@ export class MedicalRecord{
     @prop()
     doctorModified: Doctor
 }
+
+export class MedicalRecordResponse {
+    bloodType: string;
+    heartRate: number;
+    description: string;
+    diagnosis: string;
+    allergies: string;
+    prescription: string;
+    treatmentPlan: string;
+    note: string;
+    patientId: number;
+    medicalRecordId: number;
+    constructor() {}
+}
