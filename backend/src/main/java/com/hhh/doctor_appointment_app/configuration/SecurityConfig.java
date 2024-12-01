@@ -33,11 +33,13 @@ public class SecurityConfig {
             "api/auth/logout",
             "api/auth/forgot-password",
             "api/auth/reset-password",
+            "api/auth/user/reset-password",
             "api/auth/refreshToken",
             "api/auth/register/user",
             "api/appointment/guest/create-appointment",
             "api/doctor/search",
-            "api/appointment/search/reference-code"
+            "api/appointment/search/reference-code",
+            "api/ai/chatbot"
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {

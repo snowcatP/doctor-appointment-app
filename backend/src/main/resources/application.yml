@@ -32,13 +32,21 @@ spring:
           auth: true
           starttls:
             enable: true
+  ai:
+    ollama:
+      init:
+        pull-model-strategy: always
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: llama2
+          temperature: 0.7
 
 application:
   apiEndpoint: http://localhost:8080
 
 email:
   sender: ok.byethibye2@gmail.com
-
 origins:
   host: http://localhost:4200
   admin: http://localhost:59640
