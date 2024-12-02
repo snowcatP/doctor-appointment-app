@@ -74,5 +74,10 @@ export class SearchDoctorComponent implements OnInit {
   viewDoctorProfile(doctorId: number): void {
     this.router.navigate(['/doctor-profile/', doctorId]); // Điều hướng với id của bác sĩ
   }
+
+  bookAppointmentNow(doctorId: number):void{
+    this.doctorService.setDoctorId(doctorId);
+    this.router.navigate(['/booking/appointment']);
+  }
 }
 
