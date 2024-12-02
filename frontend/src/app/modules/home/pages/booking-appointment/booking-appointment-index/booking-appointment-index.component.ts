@@ -100,6 +100,34 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
     this.getObservables();
     // this.webSocketInit();
     this.subscribeToActions();
+
+    this.doctorService.currentDoctorId.subscribe(doctorId => {
+      if (doctorId) {
+        this.doctorSelected = this.doctorSelected || new DoctorBooking();
+        this.doctorSelected.id = doctorId;
+
+        this.getDoctorDetails(this.doctorSelected.id)
+      }
+    });
+  }
+
+  getDoctorDetails(id: number): void {
+    this.doctorService.getDoctorDetail(id).subscribe(
+      (response) => {
+        if (response.statusCode === 200) {
+          this.doctorSelected = response.data;
+          console.log(response.data)
+          // Update the form with doctor details
+          this.formBooking.patchValue({
+            doctor: this.doctorSelected.fullName,
+            specialty: this.doctorSelected.specialty.specialtyName
+        });
+        }
+      },
+      (error) => {
+        console.error('Error fetching doctor details', error);
+      }
+    );
   }
 
   ngOnDestroy(): void {

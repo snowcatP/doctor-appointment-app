@@ -14,7 +14,7 @@
             </div>
             <div class="doc-info-cont">
               <h4 class="doc-name">
-                Dr. {{ doctorDetails.firstName }} {{ doctorDetails.lastName }}
+                Dr. {{ doctorDetails?.firstName }} {{ doctorDetails?.lastName }}
               </h4>
               <p class="doc-speciality">
                 BDS, MDS - Oral & Maxillofacial Surgery
@@ -24,13 +24,13 @@
                   src="assets\images\specialities\specialities-05.png"
                   class="img-fluid"
                   alt="Speciality"
-                />{{ doctorDetails.specialty.specialtyName }}
+                />{{ doctorDetails?.specialty?.specialtyName }}
               </p>
               <div class="rating">
                 <i
                   class="fas fa-star"
                   *ngFor="let star of [1, 2, 3, 4, 5]; let i = index"
-                  [ngClass]="{ filled: doctorDetails.averageRating >= i + 1 }"
+                  [ngClass]="{ filled: doctorDetails?.averageRating >= i + 1 }"
                 ></i>
                 <span class="d-inline-block average-rating"
                   >({{ numberOfFeedbacks }})</span
