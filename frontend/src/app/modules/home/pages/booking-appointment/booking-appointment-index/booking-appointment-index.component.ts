@@ -30,14 +30,14 @@ import { SpecialtyService } from '../../../../../core/services/specialty.service
 import { AppointmentService } from '../../../../../core/services/appointment.service';
 import { DoctorService } from '../../../../../core/services/doctor.service';
 import { MessageService } from 'primeng/api';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute  } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromAuth from '../../../../../core/states/auth/auth.reducer';
 import * as AuthActions from '../../../../../core/states/auth/auth.actions';
 import { User } from '../../../../../core/models/authentication.model';
 import { WebSocketService } from '../../../../../core/services/webSocket.service';
 import { Actions, ofType } from '@ngrx/effects';
-
+import * as CryptoJS from 'crypto-js';
 @Component({
   selector: 'app-booking-appointment-index',
   templateUrl: './booking-appointment-index.component.html',
@@ -79,6 +79,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
   modalVisible: boolean = false;
   showPass: boolean = false;
   loginErrorMessage: string = '';
+  doctorId: number;
   private bookingSubscription: Subscription;
   private unsubscribe$ = new Subject<void>();
   constructor(
@@ -90,7 +91,8 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private store: Store<fromAuth.State>,
     private webSocketService: WebSocketService,
-    private actions$: Actions // effects
+    private actions$: Actions, // effects
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -101,14 +103,21 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
     // this.webSocketInit();
     this.subscribeToActions();
 
-    this.doctorService.currentDoctorId.subscribe(doctorId => {
-      if (doctorId) {
-        this.doctorSelected = this.doctorSelected || new DoctorBooking();
-        this.doctorSelected.id = doctorId;
+    const secretKey = '28a57933ee4343d000fe4d347ac74dc96ea35c699c1de470b68c7741b26a513f';
 
-        this.getDoctorDetails(this.doctorSelected.id)
+    this.route.queryParams.subscribe(params => {
+      if (params['doctorId']) {
+        const decryptedId = CryptoJS.AES.decrypt(params['doctorId'], secretKey).toString(CryptoJS.enc.Utf8);
+        this.doctorId = parseInt(decryptedId, 10);
+        if (this.doctorId) {
+          this.doctorSelected = this.doctorSelected || new DoctorBooking();
+          this.doctorSelected.id = this.doctorId;
+  
+          this.getDoctorDetails(this.doctorSelected.id);
+        }
       }
     });
+
   }
 
   getDoctorDetails(id: number): void {
@@ -128,6 +137,10 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         console.error('Error fetching doctor details', error);
       }
     );
+  }
+
+  viewDoctorProfile(doctorId: number): void {
+    this.router.navigate(['/doctor-profile/', doctorId]); // Điều hướng với id của bác sĩ
   }
 
   ngOnDestroy(): void {

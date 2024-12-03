@@ -4,6 +4,8 @@ import { DoctorService } from '../../../../core/services/doctor.service';
 import { FeedbackService } from '../../../../core/services/feedback.service';
 import { FeedbackRequest, ApiResponse } from '../../../../core/models/feedback.model';
 import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
+import * as CryptoJS from 'crypto-js';
 @Component({
   selector: 'app-doctor-profile',
   templateUrl: './doctor-profile.component.html',
@@ -33,6 +35,7 @@ export class DoctorProfileComponent {
     private doctorService: DoctorService,
     private feedbackService: FeedbackService,
     private messageService: MessageService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -122,6 +125,12 @@ export class DoctorProfileComponent {
         });
       }
     );
+  }
+
+  bookAppointmentNow(doctorId: number): void {
+    const secretKey = '28a57933ee4343d000fe4d347ac74dc96ea35c699c1de470b68c7741b26a513f'; // Khóa bí mật
+    const encryptedId = CryptoJS.AES.encrypt(doctorId.toString(), secretKey).toString();
+    this.router.navigate(['/booking/appointment'], { queryParams: { doctorId: encryptedId } });
   }
 }
 
