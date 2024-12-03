@@ -3,6 +3,7 @@ import { DoctorService } from '../../../../core/services/doctor.service';
 import { Router } from '@angular/router';
 import { ReferenceCodeRequest } from '../../../../core/models/appointment.model';
 import { AppointmentService } from '../../../../core/services/appointment.service';
+import * as CryptoJS from 'crypto-js';
 @Component({
   selector: 'app-home-index',
   templateUrl: './home-index.component.html',
@@ -105,5 +106,11 @@ export class HomeIndexComponent {
         console.error('Error fetching appointment', error);
       }
     );
+  }
+
+  bookAppointmentNow(doctorId: number): void {
+    const secretKey = '28a57933ee4343d000fe4d347ac74dc96ea35c699c1de470b68c7741b26a513f'; // Khóa bí mật
+    const encryptedId = CryptoJS.AES.encrypt(doctorId.toString(), secretKey).toString();
+    this.router.navigate(['/booking/appointment'], { queryParams: { doctorId: encryptedId } });
   }
 }
