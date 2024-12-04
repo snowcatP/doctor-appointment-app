@@ -102,4 +102,12 @@ export class DoctorService {
       `${this.baseUrl}/get-all-doctors-booked-of-patient`
     );
   }
+
+  //Share doctor's information when click Book Appointment button
+  private doctorIdSource = new BehaviorSubject<number>(null);
+  currentDoctorId = this.doctorIdSource.asObservable();
+
+  setDoctorId(doctorId: number) {
+    this.doctorIdSource.next(doctorId);
+  }
 }

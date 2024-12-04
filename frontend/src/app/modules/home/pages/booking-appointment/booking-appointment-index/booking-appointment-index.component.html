@@ -41,7 +41,7 @@
                     />
                     <div class="booking-info">
                       <h5>
-                        <a [routerLink]="">{{
+                        <a (click)="viewDoctorProfile(doctorSelected.id)">{{
                           doctorSelected != undefined
                             ? "Dr. " + doctorSelected.fullName
                             : "Unknow Doctor"

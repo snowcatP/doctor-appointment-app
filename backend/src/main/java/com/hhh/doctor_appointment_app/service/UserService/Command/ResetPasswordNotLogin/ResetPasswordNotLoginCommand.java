@@ -1,4 +1,4 @@
-package com.hhh.doctor_appointment_app.service.UserService.Command.ResetUserPassword;
+package com.hhh.doctor_appointment_app.service.UserService.Command.ResetPasswordNotLogin;
 
 import com.hhh.doctor_appointment_app.dto.mapper.UserMapper;
 import com.hhh.doctor_appointment_app.dto.request.UserRequest.UserChangePasswordRequest;
@@ -8,6 +8,7 @@ import com.hhh.doctor_appointment_app.exception.ApplicationException;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.*;
 import com.hhh.doctor_appointment_app.service.EmailService.Query.GetEmailFromToken.GetEmailFromTokenQuery;
+import com.hhh.doctor_appointment_app.service.UserService.Command.ResetUserPassword.ResetUserPasswordCommand;
 import com.nimbusds.jose.JOSEException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,26 +20,15 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 
 @Service
-public class ResetUserPasswordCommand {
-    private static final Logger log = LoggerFactory.getLogger(ResetUserPasswordCommand.class);
-    @Autowired
-    private AdminRepository adminRepository;
-    @Autowired
-    private DoctorRepository doctorRepository;
-    @Autowired
-    private PatientRepository patientRepository;
+public class ResetPasswordNotLoginCommand {
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private RoleRepository roleRepository;
-    @Autowired
-    private UserMapper userMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private GetEmailFromTokenQuery getEmailFromToken;
 
-    public ApiResponse<Object> resetUserPassword(String token, UserChangePasswordRequest request)
+    public ApiResponse<Object> resetUserPasswordNotLogin(String token, UserChangePasswordRequest request)
             throws ParseException, JOSEException {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
@@ -47,12 +37,6 @@ public class ResetUserPasswordCommand {
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new NotFoundException("User not found"));
 
-            if (!passwordEncoder.matches(request.getOldPassword(),user.getPassword())) {
-                System.out.println();
-                apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
-                apiResponse.setMessage("Old password is incorrect");
-                return apiResponse;
-            }
             if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
                 apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
                 apiResponse.setMessage("Passwords do not match");
@@ -73,6 +57,4 @@ public class ResetUserPasswordCommand {
 
         return apiResponse;
     }
-
-
 }

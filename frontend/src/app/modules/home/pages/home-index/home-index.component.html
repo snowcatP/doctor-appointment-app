@@ -172,7 +172,7 @@
                         [alt]="doctor.firstName + ' ' + doctor.lastName"
                         [src]="
                           doctor.avatarFilePath
-                            ? doctor.avatarFilePath
+                            ? doctor?.avatarFilePath
                             : 'assets/images/doctors/doctor-thumb-02.jpg'
                         "
                       />
@@ -181,12 +181,12 @@
                   <div class="pro-content">
                     <h3 class="title">
                       <a (click)="viewDoctorProfile(doctor.id)">
-                        {{ doctor.firstName }} {{ doctor.lastName }}
+                        {{ doctor?.firstName }} {{ doctor?.lastName }}
                       </a>
                       <i class="fas fa-check-circle verified"></i>
                     </h3>
                     <p class="speciality">
-                      {{ doctor.specialty?.specialtyName }}
+                      {{ doctor?.specialty?.specialtyName }}
                     </p>
   
                     <div class="rating">
@@ -196,13 +196,13 @@
                         [ngClass]="{ filled: doctor.averageRating >= i + 1 }"
                       ></i>
                       <span class="d-inline-block average-rating"
-                        >({{ doctor.numberOfFeedbacks }})</span
+                        >({{ doctor?.numberOfFeedbacks }})</span
                       >
                     </div>
   
                     <ul class="available-info">
                       <li>
-                        <i class="fas fa-map-marker-alt"></i> {{ doctor.address }}
+                        <i class="fas fa-map-marker-alt"></i> {{ doctor?.address }}
                       </li>
                       <li>
                         <i class="far fa-clock"></i> Available on Fri, 22 Mar
@@ -226,7 +226,7 @@
                         >
                       </div>
                       <div class="col-6">
-                        <a href="booking.html" class="btn book-btn">Book Now</a>
+                        <a (click)="bookAppointmentNow(doctor?.id)" class="btn book-btn">Book Now</a>
                       </div>
                     </div>
                   </div>

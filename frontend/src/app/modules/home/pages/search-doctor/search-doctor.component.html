@@ -39,8 +39,8 @@
               </div>
               <div class="doc-info-right">
                 <div class="clinic-booking">
-                  <a class="view-pro-btn" (click)="viewDoctorProfile(doctor.id)">View Profile</a>
-                  <a class="apt-btn" [routerLink]="['/booking']">Book Appointment</a>
+                  <a class="view-pro-btn" (click)="viewDoctorProfile(doctor?.id)">View Profile</a>
+                  <a class="apt-btn" (click)="bookAppointmentNow(doctor?.id)">Book Appointment</a>
                 </div>
               </div>
             </div>
