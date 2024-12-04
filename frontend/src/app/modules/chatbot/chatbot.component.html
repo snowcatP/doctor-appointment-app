@@ -1,6 +1,4 @@
-<div *ngIf="mode !== 'modal'">
-  <app-chatbot-index></app-chatbot-index>
-</div>
-<div *ngIf="mode === 'modal'">
-
-</div>
+<app-chatbot-index
+  [mode]="isChatbotMode"
+  (toggleChatbot)="toggleChatbotListener($event)"
+></app-chatbot-index>

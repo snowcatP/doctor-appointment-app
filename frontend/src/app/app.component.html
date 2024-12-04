@@ -2,11 +2,23 @@
 <div class="app-container">
   <main class="p-0" style="min-height: 93vh">
     <router-outlet></router-outlet>
-    <button class="float btn d-flex align-items-center" (click)="toggleChatbot()">
+    <button
+      class="float btn d-flex align-items-center"
+      (click)="toggleChatbot()"
+    >
       <mat-icon>chat</mat-icon>
     </button>
-    <!-- <app-chatbot [visibleChatbot]="visibleChatbot" [mode]="mode"></app-chatbot> -->
   </main>
+  <div
+    class="chatbot"
+    [ngClass]="{ 'show-chat': visibleChatbot, 'hidden-chat': !visibleChatbot }"
+    *ngIf="loadChatbot"
+  >
+    <app-chatbot
+      [mode]="mode"
+      (toggleChatbot)="listenToggleChatbot($event)"
+    ></app-chatbot>
+  </div>
 </div>
 <app-footer></app-footer>
 <p-scrollTop styleClass="custom-scrolltop" />
