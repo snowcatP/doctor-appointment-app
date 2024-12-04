@@ -125,7 +125,6 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
       (response) => {
         if (response.statusCode === 200) {
           this.doctorSelected = response.data;
-          console.log(response.data)
           // Update the form with doctor details
           this.formBooking.patchValue({
             doctor: this.doctorSelected.fullName,
@@ -143,14 +142,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
     this.router.navigate(['/doctor-profile/', doctorId]); // Điều hướng với id của bác sĩ
   }
 
-  ngOnDestroy(): void {
-    // if (this.bookingSubscription) {
-    //   this.bookingSubscription.unsubscribe();
-    // }
-    // this.webSocketService.disconnectSocket();
-    // this.unsubscribe$.next();
-    // this.unsubscribe$.complete(); // Cleanup subscription on component destroy
-  }
+  ngOnDestroy(): void {}
 
   subscribeToActions() {
     this.actions$
@@ -304,7 +296,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (res) => {
             if (res.statusCode === 200) {
-              this.setAppointmentForSuccess(res?.data);
+              this.setAppointmentForSuccess(res?.data, null);
               this.messageService.add({
                 key: 'messageToast',
                 severity: 'success',
@@ -343,15 +335,16 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
   }
 
   setAppointmentForSuccess(
-    guest?: BookingDataGuest,
-    patient?: BookingDataPatient
+    guest: BookingDataGuest,
+    patient: BookingDataPatient
   ) {
-    if (guest) {
+    if (guest != null) {
       this.appointmentService.setAppointmentBookedGuest(guest);
     }
-    if (patient) {
+    if (patient != null) {
       this.appointmentService.setAppointmentBookedPatient(patient);
     }
+
   }
 
   closeBooking() {

@@ -2,7 +2,10 @@
 <div class="app-container">
   <main class="p-0" style="min-height: 93vh">
     <router-outlet></router-outlet>
-    <!-- <app-chatbot></app-chatbot> -->
+    <button class="float btn d-flex align-items-center" (click)="toggleChatbot()">
+      <mat-icon>chat</mat-icon>
+    </button>
+    <!-- <app-chatbot [visibleChatbot]="visibleChatbot" [mode]="mode"></app-chatbot> -->
   </main>
 </div>
 <app-footer></app-footer>

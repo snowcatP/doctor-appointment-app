@@ -12,7 +12,7 @@ export class ChatbotService {
 
   constructor(private http: HttpClient) { }
 
-  sendPrompt(request: ChatbotRequest): Observable<ChatbotMessage[]> {
-    return this.http.post<ChatbotMessage[]>(this.baseUrl, request);
+  sendPrompt(request: ChatbotRequest): Observable<ChatbotMessage> {
+    return this.http.post<ChatbotMessage>(this.baseUrl, request);
   }
 }

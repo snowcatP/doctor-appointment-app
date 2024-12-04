@@ -4,6 +4,7 @@ import {
   ChatbotRequest,
 } from '../../../core/models/chatbot.model';
 import { ChatbotService } from '../../../core/services/chatbot.service';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-chatbot-index',
@@ -20,7 +21,10 @@ export class ChatbotIndexComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  refresh() {}
+  refresh() {
+    if (this.messages.length > 0)
+      this.messages = [];
+  }
 
   sendMessage() {
     this.isSending = true;
@@ -35,7 +39,7 @@ export class ChatbotIndexComponent implements OnInit {
     this.promptInput.nativeElement.value = '';
     this.chatbotService.sendPrompt(request).subscribe({
       next: (res) => {
-        res.forEach((result) => this.messages.push(result));
+        this.messages.push(res);
         this.isSending = false;
       },
       error: (err) => {
@@ -44,4 +48,5 @@ export class ChatbotIndexComponent implements OnInit {
       }
     });
   }
+
 }
