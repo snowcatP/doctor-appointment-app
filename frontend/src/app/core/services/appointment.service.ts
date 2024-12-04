@@ -119,6 +119,21 @@ export class AppointmentService {
     const url = `${host}/api/appointment/search/reference-code`;
     return this.http.post<ApiResponse>(url, referenceCodeRequest);
   }
+// this is dialog to show detail appointment when search in homepage
+  private dialogVisibleSource = new BehaviorSubject<boolean>(false);
+  private appointmentDataSource = new BehaviorSubject<any>(null);
+
+  dialogVisible$ = this.dialogVisibleSource.asObservable();
+  appointmentData$ = this.appointmentDataSource.asObservable();
+
+  showDialog(appointment: any) {
+    this.appointmentDataSource.next(appointment);
+    this.dialogVisibleSource.next(true);
+  }
+
+  hideDialog() {
+    this.dialogVisibleSource.next(false);
+  }
 
   getAppointmentsForNurse(page: number, size: number): Observable<any> {
     const url = `${host}/api/appointment/list/nurse?page=${page}&size=${size}`;

@@ -17,7 +17,9 @@ import { Page404Component } from './components/page-404/page-404.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { SidebarModule } from 'primeng/sidebar';
 import { MatListModule } from '@angular/material/list';
-
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
 @NgModule({
   declarations: [
     ScheduleComponent,
@@ -41,6 +43,10 @@ import { MatListModule } from '@angular/material/list';
     SidebarModule,
     MatButtonModule,
     MatListModule,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule
+    
   ],
   exports: [
     ScheduleComponent,
