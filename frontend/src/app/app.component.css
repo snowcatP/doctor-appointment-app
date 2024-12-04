@@ -5,3 +5,17 @@
 label.focus-label {
     margin: 10px;
 }
+
+.float {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    margin-bottom: 70px;
+    margin-right: 5px;
+    background-color: #09e5ab;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    border: 0;
+    color: white;
+}
