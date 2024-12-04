@@ -10,49 +10,31 @@
           <h5>Doctor</h5>
           <mat-list>
             <mat-list-item>
-              <a
-                matListItemTitle
-                routerLink="/doctor/dashboard"
-                (click)="closeSideBar()"
-                >Dashboard</a
-              >
+              <a matListItemTitle routerLink="/doctor/calendar" (click)="closeSideBar()">My Calendar</a>
             </mat-list-item>
             <mat-list-item>
-              <a
-                matListItemTitle
-                routerLink="/doctor/appointment"
-                (click)="closeSideBar()"
-                >Appointments</a
-              >
+              <a matListItemTitle routerLink="/doctor/appointment" (click)="closeSideBar()">Appointments</a>
             </mat-list-item>
             <mat-list-item>
-              <a
-                matListItemTitle
-                routerLink="/doctor/calendar"
-                (click)="closeSideBar()"
-                >My Calendar</a
-              >
+              <a matListItemTitle routerLink="/doctor/myPatient" (click)="closeSideBar()">My Patients</a>
             </mat-list-item>
             <mat-list-item>
-              <a
-                matListItemTitle
-                routerLink="/doctor/review"
-                (click)="closeSideBar()"
-                >Reviews</a
-              >
+              <a matListItemTitle routerLink="/chat" (click)="closeSideBar()">Chat</a>
             </mat-list-item>
             <mat-list-item>
-              <a
-                matListItemTitle
-                routerLink="/doctor/profile"
-                (click)="closeSideBar()"
-                >Profile Settings</a
-              >
+              <a matListItemTitle routerLink="/chatbot" (click)="closeSideBar()">Chat Bot</a>
             </mat-list-item>
             <mat-list-item>
-              <a matListItemTitle (click)="logout()" (click)="closeSideBar()"
-                >Logout</a
-              >
+              <a matListItemTitle routerLink="/doctor/review" (click)="closeSideBar()">Reviews</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/doctor/profile" (click)="closeSideBar()">Profile Settings</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/doctor/change-password" (click)="closeSideBar()">Change Password</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle (click)="logout()" (click)="closeSideBar()">Logout</a>
             </mat-list-item>
           </mat-list>
         </div>
@@ -60,33 +42,28 @@
           <h5>Patient</h5>
           <mat-list>
             <mat-list-item>
-              <a
-                matListItemTitle
-                routerLink="/patient/dashboard"
-                (click)="closeSideBar()"
-                >Dashboard</a
-              >
+              <a matListItemTitle routerLink="/search-doctor" (click)="closeSideBar()">Search Doctor</a>
             </mat-list-item>
             <mat-list-item>
-              <a
-                matListItemTitle
-                routerLink="/patient/profile"
-                (click)="closeSideBar()"
-                >Profile Settings</a
-              >
+              <a matListItemTitle routerLink="/booking/appointment" (click)="closeSideBar()">Booking</a>
             </mat-list-item>
             <mat-list-item>
-              <a
-                matListItemTitle
-                routerLink="/patient/change-password"
-                (click)="closeSideBar()"
-                >Change Password</a
-              >
+              <a matListItemTitle routerLink="/patient/dashboard" (click)="closeSideBar()">Dashboard</a>
             </mat-list-item>
             <mat-list-item>
-              <a matListItemTitle (click)="logout()" (click)="closeSideBar()"
-                >Logout</a
-              >
+              <a matListItemTitle routerLink="/chat" (click)="closeSideBar()">Chat</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/chatbot" (click)="closeSideBar()">Chat Bot</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/patient/profile" (click)="closeSideBar()">Profile Settings</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/patient/change-password" (click)="closeSideBar()">Change Password</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle (click)="logout()" (click)="closeSideBar()">Logout</a>
             </mat-list-item>
           </mat-list>
         </div>
@@ -94,33 +71,19 @@
           <h5>Nurse</h5>
           <mat-list>
             <mat-list-item>
-              <a
-                matListItemTitle
-                routerLink="/nurse/dashboard"
-                (click)="closeSideBar()"
-                >Dashboard</a
-              >
+              <a matListItemTitle routerLink="/nurse/dashboard" (click)="closeSideBar()">Dashboard</a>
             </mat-list-item>
             <mat-list-item>
-              <a
-                matListItemTitle
-                routerLink="/nurse/profile"
-                (click)="closeSideBar()"
-                >Profile Settings</a
-              >
+              <a matListItemTitle routerLink="/nurse/profile" (click)="closeSideBar()">Profile Settings</a>
             </mat-list-item>
             <mat-list-item>
-              <a
-                matListItemTitle
-                routerLink="/nurse/change-password"
-                (click)="closeSideBar()"
-                >Change Password</a
-              >
+              <a matListItemTitle routerLink="/nurse/change-password" (click)="closeSideBar()">Change Password</a>
             </mat-list-item>
             <mat-list-item>
-              <a matListItemTitle (click)="logout()" (click)="closeSideBar()"
-                >Logout</a
-              >
+              <a matListItemTitle routerLink="/chatbot" (click)="closeSideBar()">Chat Bot</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle (click)="logout()" (click)="closeSideBar()">Logout</a>
             </mat-list-item>
           </mat-list>
         </div>
@@ -128,11 +91,7 @@
       <button mat-icon-button (click)="sidebarVisible = true">
         <mat-icon>menu</mat-icon>
       </button>
-      <a
-        (click)="goToHome()"
-        routerLinkActive="active"
-        class="navbar-brand logo"
-      >
+      <a (click)="goToHome()" routerLinkActive="active" class="navbar-brand logo">
         <img src="assets/images/logo.png" class="img-fluid" alt="Logo" />
       </a>
     </div>
@@ -146,14 +105,11 @@
         </a>
       </div>
       <ul class="main-nav">
-        <li
-          class="active"
-          *ngIf="(role$ | async) !== 'NURSE' && (role$ | async) !== 'DOCTOR'"
-        >
+        <li class="active" *ngIf="(role$ | async) !== 'NURSE' && (role$ | async) !== 'DOCTOR'">
           <a routerLink="/" routerLinkActive="active">Home</a>
         </li>
         <li class="has-submenu" *ngIf="(role$ | async) === 'DOCTOR'">
-          <a href="#">Doctors <i class="fas fa-chevron-down"></i></a>
+          <a routerLink="/doctor/">Doctors <i class="fas fa-chevron-down"></i></a>
           <ul class="submenu">
             <!-- <li><a routerLink="/doctor">Doctor Dashboard</a></li> -->
             <li><a routerLink="/doctor/appointment">Appointments</a></li>
@@ -162,60 +118,37 @@
             <li><a routerLink="/doctor/review">Reviews</a></li>
           </ul>
         </li>
-        <li
-          class="has-submenu"
-          *ngIf="(role$ | async) !== 'DOCTOR' && (role$ | async) !== 'NURSE'"
-        >
-          <a href="#">Patients <i class="fas fa-chevron-down"></i></a>
+        <li class="has-submenu" *ngIf="(role$ | async) !== 'DOCTOR' && (role$ | async) !== 'NURSE'">
+          <a routerLink="/patient/">Patients <i class="fas fa-chevron-down"></i></a>
           <ul class="submenu">
             <li><a [routerLink]="['/search-doctor']">Search Doctor</a></li>
-            <!-- <li><a [routerLink]="['/doctor-profile']">Doctor Profile</a></li> -->
             <li><a [routerLink]="['/booking']">Booking</a></li>
             <li>
-              <a
-                [routerLink]="['/patient']"
-                *ngIf="(role$ | async) === 'PATIENT'"
-                >Patient Dashboard</a
-              >
+              <a [routerLink]="['/patient']" *ngIf="(role$ | async) === 'PATIENT'">Patient Dashboard</a>
             </li>
             <li>
-              <a
-                [routerLink]="['/patient/profile']"
-                *ngIf="(role$ | async) === 'PATIENT'"
-                >Profile Settings</a
-              >
+              <a [routerLink]="['/patient/profile']" *ngIf="(role$ | async) === 'PATIENT'">Profile Settings</a>
             </li>
             <li>
-              <a
-                [routerLink]="['/patient/change-password']"
-                *ngIf="(role$ | async) === 'PATIENT'"
-                >Change Password</a
-              >
+              <a [routerLink]="['/patient/change-password']" *ngIf="(role$ | async) === 'PATIENT'">Change Password</a>
             </li>
             <!-- </div> -->
           </ul>
         </li>
+
+        
+
         <li class="has-submenu" *ngIf="(role$ | async) === 'NURSE'">
-          <a href="#">Nurse <i class="fas fa-chevron-down"></i></a>
+          <a routerLink="/nurse/">Nurse <i class="fas fa-chevron-down"></i></a>
           <ul class="submenu">
             <li>
-              <a [routerLink]="['/nurse']" *ngIf="(role$ | async) === 'NURSE'"
-                >Nurse Dashboard</a
-              >
+              <a [routerLink]="['/nurse']" *ngIf="(role$ | async) === 'NURSE'">Nurse Dashboard</a>
             </li>
             <li>
-              <a
-                [routerLink]="['/nurse/profile']"
-                *ngIf="(role$ | async) === 'NURSE'"
-                >Profile Settings</a
-              >
+              <a [routerLink]="['/nurse/profile']" *ngIf="(role$ | async) === 'NURSE'">Profile Settings</a>
             </li>
             <li>
-              <a
-                [routerLink]="['/nurse/change-password']"
-                *ngIf="(role$ | async) === 'NURSE'"
-                >Change Password</a
-              >
+              <a [routerLink]="['/nurse/change-password']" *ngIf="(role$ | async) === 'NURSE'">Change Password</a>
             </li>
             <!-- </div> -->
           </ul>
@@ -226,32 +159,38 @@
         <li>
           <a routerLink="/chatbot" routerLinkActive="active">Chatbot</a>
         </li>
+        <li *ngIf="(role$ | async) !== 'DOCTOR' && (role$ | async) !== 'NURSE'">
+          <form (ngSubmit)="fetchGetAppointmentByReferenceCode()" #appointmentForm="ngForm">
+            <p-iconField iconPosition="right">
+              <p-inputIcon styleClass="pi pi-search" />
+              <input 
+                type="text" 
+                pInputText 
+                placeholder="Appointment Code" 
+                name="referenceCode"
+                [(ngModel)]="referenceCode" 
+                required 
+                class="small-input"
+                style="width: 320px; height: 42px; font-size: 14px; margin-top: 5px;"
+              />
+            </p-iconField>
+          </form>
+        </li>
       </ul>
     </div>
     <ul class="nav header-navbar-rht">
       <li class="nav-item" *ngIf="!(token$ | async)">
-        <a
-          class="nav-link header-login"
-          routerLink="/auth/login"
-          routerLinkActive="active"
-          >Login / Signup
+        <a class="nav-link header-login" routerLink="/auth/login" routerLinkActive="active">Login / Signup
         </a>
       </li>
       <!-- User Menu -->
-      <li
-        class="nav-item dropdown has-arrow logged-item"
-        *ngIf="token$ | async"
-      >
+      <li class="nav-item dropdown has-arrow logged-item" *ngIf="token$ | async">
         <button class="dropdown-toggle nav-link" [matMenuTriggerFor]="menu">
           <span class="user-img">
-            <img
-              class="rounded-circle"
-              [src]="
+            <img class="rounded-circle" [src]="
                 (user$ | async)?.avatarFilePath ||
                 'assets/images/patients/patient.jpg'
-              "
-              width="40"
-            />
+              " width="40" />
           </span>
         </button>
       </li>
@@ -261,13 +200,9 @@
       <div>
         <div class="user-header">
           <div class="avatar avatar-sm">
-            <img
-              [src]="
+            <img [src]="
                 (user$ | async)?.avatarFilePath || 'assets/images/user.png'
-              "
-              alt="User Image"
-              class="avatar-img rounded-circle"
-            />
+              " alt="User Image" class="avatar-img rounded-circle" />
           </div>
           <div class="user-text">
             <h6>
