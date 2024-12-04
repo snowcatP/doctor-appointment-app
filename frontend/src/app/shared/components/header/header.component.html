@@ -10,19 +10,28 @@
           <h5>Doctor</h5>
           <mat-list>
             <mat-list-item>
-              <a matListItemTitle routerLink="/doctor/dashboard" (click)="closeSideBar()">Dashboard</a>
+              <a matListItemTitle routerLink="/doctor/calendar" (click)="closeSideBar()">My Calendar</a>
             </mat-list-item>
             <mat-list-item>
               <a matListItemTitle routerLink="/doctor/appointment" (click)="closeSideBar()">Appointments</a>
             </mat-list-item>
             <mat-list-item>
-              <a matListItemTitle routerLink="/doctor/calendar" (click)="closeSideBar()">My Calendar</a>
+              <a matListItemTitle routerLink="/doctor/myPatient" (click)="closeSideBar()">My Patients</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/chat" (click)="closeSideBar()">Chat</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/chatbot" (click)="closeSideBar()">Chat Bot</a>
             </mat-list-item>
             <mat-list-item>
               <a matListItemTitle routerLink="/doctor/review" (click)="closeSideBar()">Reviews</a>
             </mat-list-item>
             <mat-list-item>
               <a matListItemTitle routerLink="/doctor/profile" (click)="closeSideBar()">Profile Settings</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/doctor/change-password" (click)="closeSideBar()">Change Password</a>
             </mat-list-item>
             <mat-list-item>
               <a matListItemTitle (click)="logout()" (click)="closeSideBar()">Logout</a>
@@ -33,7 +42,19 @@
           <h5>Patient</h5>
           <mat-list>
             <mat-list-item>
+              <a matListItemTitle routerLink="/search-doctor" (click)="closeSideBar()">Search Doctor</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/booking/appointment" (click)="closeSideBar()">Booking</a>
+            </mat-list-item>
+            <mat-list-item>
               <a matListItemTitle routerLink="/patient/dashboard" (click)="closeSideBar()">Dashboard</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/chat" (click)="closeSideBar()">Chat</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/chatbot" (click)="closeSideBar()">Chat Bot</a>
             </mat-list-item>
             <mat-list-item>
               <a matListItemTitle routerLink="/patient/profile" (click)="closeSideBar()">Profile Settings</a>
@@ -57,6 +78,9 @@
             </mat-list-item>
             <mat-list-item>
               <a matListItemTitle routerLink="/nurse/change-password" (click)="closeSideBar()">Change Password</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a matListItemTitle routerLink="/chatbot" (click)="closeSideBar()">Chat Bot</a>
             </mat-list-item>
             <mat-list-item>
               <a matListItemTitle (click)="logout()" (click)="closeSideBar()">Logout</a>
@@ -85,7 +109,7 @@
           <a routerLink="/" routerLinkActive="active">Home</a>
         </li>
         <li class="has-submenu" *ngIf="(role$ | async) === 'DOCTOR'">
-          <a href="#">Doctors <i class="fas fa-chevron-down"></i></a>
+          <a routerLink="/doctor/">Doctors <i class="fas fa-chevron-down"></i></a>
           <ul class="submenu">
             <!-- <li><a routerLink="/doctor">Doctor Dashboard</a></li> -->
             <li><a routerLink="/doctor/appointment">Appointments</a></li>
@@ -95,10 +119,9 @@
           </ul>
         </li>
         <li class="has-submenu" *ngIf="(role$ | async) !== 'DOCTOR' && (role$ | async) !== 'NURSE'">
-          <a href="#">Patients <i class="fas fa-chevron-down"></i></a>
+          <a routerLink="/patient/">Patients <i class="fas fa-chevron-down"></i></a>
           <ul class="submenu">
             <li><a [routerLink]="['/search-doctor']">Search Doctor</a></li>
-            <!-- <li><a [routerLink]="['/doctor-profile']">Doctor Profile</a></li> -->
             <li><a [routerLink]="['/booking']">Booking</a></li>
             <li>
               <a [routerLink]="['/patient']" *ngIf="(role$ | async) === 'PATIENT'">Patient Dashboard</a>
@@ -116,7 +139,7 @@
         
 
         <li class="has-submenu" *ngIf="(role$ | async) === 'NURSE'">
-          <a href="#">Nurse <i class="fas fa-chevron-down"></i></a>
+          <a routerLink="/nurse/">Nurse <i class="fas fa-chevron-down"></i></a>
           <ul class="submenu">
             <li>
               <a [routerLink]="['/nurse']" *ngIf="(role$ | async) === 'NURSE'">Nurse Dashboard</a>
