@@ -35,18 +35,13 @@ export class BookingAppointmentSuccessComponent implements OnInit {
       if (res.email != undefined) {
         this.appointmentBookedGuestData = res;
         this.isGuest = true;
-        this.isNavigateFromBooking = true;
       }
     });
 
     this.appointmentService.getAppointmentBookedPatient.subscribe((res) => {
       if (res.patientId != undefined) {
         this.appointmentBookedPatientData = res;
-        this.isNavigateFromBooking = true;
       }
     });
-    if(!this.isNavigateFromBooking) {
-      this.router.navigate(['/error404']);
-    }
   }
 }
