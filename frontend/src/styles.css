@@ -4138,6 +4138,7 @@ html.menu-opened body {
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     position: relative;
+	border-radius: 15px;
 }
 .chat-cont-left {
     border-right: 1px solid #f0f0f0;
@@ -4210,9 +4211,12 @@ html.menu-opened body {
 }
 .chat-window .chat-scroll {
 	min-height: 75vh;
-    max-height: calc(100vh - 224px);
+	max-height: calc(100vh - 224px);
     overflow-y: auto;
 	overflow-x: hidden;
+}
+.chat-scroll.chatbot-mode {
+	min-height: 55vh !important;
 }
 .chat-cont-left .chat-users-list {
     background-color: #fff;
@@ -4404,6 +4408,9 @@ html.menu-opened body {
 .chat-cont-right .chat-body .media.received {
 	margin-bottom: 15px;
 	margin-right: 10rem;
+}
+.chat-cont-right .chat-body .media.received.chatbot-mode {
+	margin-right: 4rem !important;
 }
 .chat-cont-right .chat-body .media:last-child {
 	margin-bottom: 0;

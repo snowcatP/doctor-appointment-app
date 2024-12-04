@@ -12,7 +12,8 @@ import * as AuthActions from './core/states/auth/auth.actions';
 export class AppComponent implements OnInit {
   title = 'frontend';
   visibleChatbot: boolean = false;
-  mode: string = 'modal';
+  mode: string = 'window';
+  loadChatbot: boolean = false;
   constructor(private authService: AuthService, private store: Store) {}
 
   ngOnInit(): void {
@@ -75,6 +76,13 @@ export class AppComponent implements OnInit {
   }
 
   toggleChatbot() {
+    this.visibleChatbot = !this.visibleChatbot;
+    if (!this.loadChatbot) {
+      this.loadChatbot = true;
+    }
+  }
+
+  listenToggleChatbot(event: any) {
     this.visibleChatbot = !this.visibleChatbot;
   }
 }

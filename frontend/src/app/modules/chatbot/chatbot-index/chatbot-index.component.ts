@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import {
   ChatbotMessage,
   ChatbotRequest,
@@ -13,6 +13,8 @@ import { ConfirmationService } from 'primeng/api';
 })
 export class ChatbotIndexComponent implements OnInit {
   @ViewChild('promptInput') promptInput: ElementRef;
+  @Input('mode') isChatbotMode: boolean;
+  @Output('toggleChatbot') toggleChatbot: EventEmitter<any> = new EventEmitter()
   openChat: boolean = false;
   isSending: boolean = false;
   messages: ChatbotMessage[] = [];
@@ -20,6 +22,10 @@ export class ChatbotIndexComponent implements OnInit {
   constructor(private chatbotService: ChatbotService) {}
 
   ngOnInit(): void {}
+
+  close() {
+    this.toggleChatbot.emit('false');
+  }
 
   refresh() {
     if (this.messages.length > 0)
