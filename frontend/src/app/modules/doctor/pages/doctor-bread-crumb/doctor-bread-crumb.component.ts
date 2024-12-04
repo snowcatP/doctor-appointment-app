@@ -17,7 +17,9 @@ export class DoctorBreadCrumbComponent implements OnInit {
     '/doctor/review': 'Review',
     '/doctor/myPatient': 'My Patients',
     '/doctor/profile': 'Doctor Profile',
-    '/doctor/patient-profile': 'Patient Profile'
+    '/doctor/patient-profile': 'Patient Profile',
+    '/doctor/appointment': 'Appointments',
+    '/doctor/change-password': 'Change Password',
     // Add more paths as needed
   };
 
