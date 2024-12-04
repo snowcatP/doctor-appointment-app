@@ -1,23 +1,41 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { DoctorService } from '../../../../core/services/doctor.service';
 import { Router } from '@angular/router';
 import { ReferenceCodeRequest } from '../../../../core/models/appointment.model';
 import { AppointmentService } from '../../../../core/services/appointment.service';
 import * as CryptoJS from 'crypto-js';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-home-index',
   templateUrl: './home-index.component.html',
   styleUrl: './home-index.component.css'
 })
-export class HomeIndexComponent {
+export class HomeIndexComponent implements OnDestroy{
 
   referenceCode: string;
   referenceCodeRequest: ReferenceCodeRequest;
   visible: boolean = false;
 
   appointment!: any;
+  private subscription: Subscription = new Subscription();
   ngOnInit(): void {
+    this.subscription.add(
+      this.appointmentService.dialogVisible$.subscribe(
+        visible => this.visible = visible
+      )
+    );
+
+    this.subscription.add(
+      this.appointmentService.appointmentData$.subscribe(
+        data => this.appointment = data
+      )
+    );
+    this.visible = false;
     this.fetchTopRatingDoctors();
+  }
+
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
   }
   specialties: any[] = [
     {
