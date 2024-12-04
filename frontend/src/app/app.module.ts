@@ -32,6 +32,7 @@ import { AuthEffect } from './core/states/auth/auth.effects';
 import { ScrollTopModule } from 'primeng/scrolltop';
 import { SharedModule } from './shared/shared.module';
 import { ChatbotModule } from './modules/chatbot/chatbot.module';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [AppComponent],
@@ -50,6 +51,7 @@ import { ChatbotModule } from './modules/chatbot/chatbot.module';
     SharedModule,
     ChatbotModule,
     ScrollTopModule,
+    MatIconModule,
     StoreModule.forRoot({ auth: authReducer }, {}),
     EffectsModule.forRoot([AuthEffect]),
   ],

@@ -23,11 +23,11 @@ import { FormsModule } from '@angular/forms';
     MatProgressSpinnerModule,
     MatButtonModule,
     MatTooltipModule,
-    FormsModule
+    FormsModule,
   ],
   exports: [
     ChatbotIndexComponent,
     ChatbotComponent
-  ]
+  ],
 })
 export class ChatbotModule { }

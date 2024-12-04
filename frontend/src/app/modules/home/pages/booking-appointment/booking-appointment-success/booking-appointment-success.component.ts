@@ -16,6 +16,7 @@ export class BookingAppointmentSuccessComponent implements OnInit {
   appointmentBookedPatientData: any;
   isFromBooking: boolean = false;
   isGuest: boolean = false;
+  isNavigateFromBooking: boolean = false;
   constructor(
     private appointmentService: AppointmentService,
     private router: Router,
@@ -31,14 +32,16 @@ export class BookingAppointmentSuccessComponent implements OnInit {
     }
 
     this.appointmentService.getAppointmentBookedGuest.subscribe((res) => {
-      if (res) {
+      if (res.email != undefined) {
         this.appointmentBookedGuestData = res;
         this.isGuest = true;
       }
     });
 
     this.appointmentService.getAppointmentBookedPatient.subscribe((res) => {
-      this.appointmentBookedPatientData = res;
+      if (res.patientId != undefined) {
+        this.appointmentBookedPatientData = res;
+      }
     });
   }
 }
