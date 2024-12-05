@@ -12,7 +12,8 @@ import java.util.UUID;
 
 @Entity
 @Builder
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class Appointment {
     @Id

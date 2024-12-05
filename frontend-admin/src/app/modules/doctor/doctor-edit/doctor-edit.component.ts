@@ -87,7 +87,7 @@ export class DoctorEditComponent {
     this.doctorService.getDoctorDetail(id).subscribe({
       next: (resp) => {
         this.formEditDoctor.patchValue({
-          id: resp.data.id,
+          id: id,
           firstName: resp.data.firstName,
           lastName: resp.data.lastName,
           gender: resp.data.gender,
@@ -99,6 +99,8 @@ export class DoctorEditComponent {
           password: resp.data.password,
           specialtyId: resp.data.specialty.id,
         });
+        console.log(resp)
+        console.log(this.formEditDoctor)
         this.doctorAverageRating = resp.data.averageRating
         this.doctorNumberOfFeedbacks = resp.data.numberOfFeedbacks;
         this.specialty = resp.data.specialty;
@@ -107,7 +109,6 @@ export class DoctorEditComponent {
         this.doctorLastName = resp.data.lastName;
         this.defaultDate = this.datePipe.transform(resp.data.dateOfBirth,'dd-MM-yyyy');
         this.cdr.detectChanges();
-        console.log(this.specialtyName)
       },
     });
   }

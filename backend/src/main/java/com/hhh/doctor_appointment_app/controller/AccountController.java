@@ -22,6 +22,7 @@ import com.hhh.doctor_appointment_app.service.UserService.Command.UserSignup.Use
 import com.nimbusds.jose.JOSEException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -203,7 +204,7 @@ public class AccountController {
 
     @PostMapping("/register/nurse")
     public ResponseEntity<?> registerNurseAndUploadFileByAdmin(
-            @RequestParam("file") MultipartFile file,
+            @Param("file") MultipartFile file,
             @ModelAttribute @Valid AddNurseRequest addNurseRequest, // use ModelAttribute to bind data
             BindingResult bindingResult) {
 

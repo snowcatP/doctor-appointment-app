@@ -241,6 +241,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
       };
       this.appointmentService.createAppointmentByPatient(bookingData).subscribe({
         next: (res) => {
+          console.log(res)
           if (res.statusCode === 200) {
             this.setAppointmentForSuccess(null, res?.data);
             this.messageService.add({
@@ -278,6 +279,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         },
       })
     } else {
+      
       this.loading = true; // Start loading
       const bookingData: BookingDataGuest = {
         doctorId: this.doctorSelected.id,

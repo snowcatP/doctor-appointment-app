@@ -2,7 +2,7 @@ import {  prop, required, email, unique } from "@rxweb/reactive-form-validators"
 import { User } from "./user"
 export class Patient{
     @prop({isPrimaryKey:true})
-    id:string
+    id:number
     @prop()
     firstName: string
     @prop()

@@ -98,6 +98,8 @@ public class AppointmentController {
         }
     }
 
+
+
     @PostMapping("/patient/create-appointment")
     public ResponseEntity<?> createAppointmentByPatient(
             @Valid @RequestBody AppointmentByPatientRequest appointmentByPatientRequest,
