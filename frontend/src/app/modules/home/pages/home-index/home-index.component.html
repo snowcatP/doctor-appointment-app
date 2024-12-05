@@ -3,37 +3,17 @@
     <div class="container-fluid">
       <div class="banner-wrapper">
         <div class="banner-header text-center">
-          <h1>Search Doctor, Make an Appointment</h1>
+          <h1>Make an Appointment</h1>
           <p>
             Discover the best doctors, clinic & hospital the city nearest to you.
           </p>
         </div>
   
         <!-- Search -->
-        <div class="search-box">
-          <form (ngSubmit)="fetchGetAppointmentByReferenceCode()" #appointmentForm="ngForm">
-            <div class="form-group search-location">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Code"
-                [(ngModel)]="referenceCode"
-                name="referenceCode"
-              />
-              <span class="form-text">Code of appointment sent to your email</span>
-            </div>
-            <div class="form-group search-info">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Search Doctors"
-              />
-              <span class="form-text">Ex : Nguyen Van A</span>
-            </div>
-            <button type="submit" class="btn btn-primary search-btn">
-              <i class="fas fa-search"></i> <span>Search</span>
-            </button>
-          </form>
+       
+          <div class="search-info-book" style="margin-inline-start: 35%; margin-inline-end: 35%;">
+            <a  [routerLink]="['/booking']" class="btn book-btn-homepage">Book Now</a>
+          </div>
 
           <!-- Appointment Detail Dialog -->
           <p-dialog
@@ -89,7 +69,7 @@
             <p><strong>Phone:</strong> {{ appointment.phone }}</p>
           </div>
         </p-dialog>
-        </div>
+        
         <!-- /Search -->
       </div>
     </div>
@@ -172,7 +152,7 @@
                         [alt]="doctor.firstName + ' ' + doctor.lastName"
                         [src]="
                           doctor.avatarFilePath
-                            ? doctor.avatarFilePath
+                            ? doctor?.avatarFilePath
                             : 'assets/images/doctors/doctor-thumb-02.jpg'
                         "
                       />
@@ -181,12 +161,12 @@
                   <div class="pro-content">
                     <h3 class="title">
                       <a (click)="viewDoctorProfile(doctor.id)">
-                        {{ doctor.firstName }} {{ doctor.lastName }}
+                        {{ doctor?.firstName }} {{ doctor?.lastName }}
                       </a>
                       <i class="fas fa-check-circle verified"></i>
                     </h3>
                     <p class="speciality">
-                      {{ doctor.specialty?.specialtyName }}
+                      {{ doctor?.specialty?.specialtyName }}
                     </p>
   
                     <div class="rating">
@@ -196,13 +176,13 @@
                         [ngClass]="{ filled: doctor.averageRating >= i + 1 }"
                       ></i>
                       <span class="d-inline-block average-rating"
-                        >({{ doctor.numberOfFeedbacks }})</span
+                        >({{ doctor?.numberOfFeedbacks }})</span
                       >
                     </div>
   
                     <ul class="available-info">
                       <li>
-                        <i class="fas fa-map-marker-alt"></i> {{ doctor.address }}
+                        <i class="fas fa-map-marker-alt"></i> {{ doctor?.address }}
                       </li>
                       <li>
                         <i class="far fa-clock"></i> Available on Fri, 22 Mar
@@ -226,7 +206,7 @@
                         >
                       </div>
                       <div class="col-6">
-                        <a href="booking.html" class="btn book-btn">Book Now</a>
+                        <a (click)="bookAppointmentNow(doctor?.id)" class="btn book-btn">Book Now</a>
                       </div>
                     </div>
                   </div>

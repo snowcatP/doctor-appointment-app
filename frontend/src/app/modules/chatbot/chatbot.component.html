@@ -1,4 +1,4 @@
-<!-- <button class="float btn">
-  <mat-icon>{{ openChat ? "chat" : "close" }}</mat-icon>
-</button> -->
-<app-chatbot-index></app-chatbot-index>
+<app-chatbot-index
+  [mode]="isChatbotMode"
+  (toggleChatbot)="toggleChatbotListener($event)"
+></app-chatbot-index>

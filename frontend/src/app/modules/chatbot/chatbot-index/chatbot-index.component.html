@@ -1,27 +1,35 @@
 <div class="card">
   <div class="chat-window">
-    <div class="chat-cont-right chatbot">
+    <div class="chat-cont-right chatbot" [ngStyle]="{'border': isChatbotMode ? '1px solid #D7D3BF' : ''}">
       <div class="chat-header">
-        <div class="media">
-          <div class="media-body">
-            <div class="user-name">Chatbot</div>
-          </div>
-        </div>
+        <h4>Chatbot</h4>
         <div class="chat-options">
           <a (click)="refresh()" matTooltip="Click to refresh the conversation">
             <mat-icon>refresh</mat-icon>
           </a>
+          <a (click)="close()" matTooltip="Click to close" *ngIf="isChatbotMode">
+            <mat-icon>close</mat-icon>
+          </a>
         </div>
       </div>
       <div class="chat-body">
-        <div class="chat-scroll">
+        <div
+          class="chat-scroll"
+          [ngStyle]="{
+            'min-height': isChatbotMode ? '55vh' : '75vh',
+            'max-height': isChatbotMode
+              ? 'calc(100vh - 224px)'
+              : 'calc(100vh - 224px)'
+          }"
+        >
           <ul class="list-unstyled">
             <li
               class="media"
               *ngFor="let message of messages"
               [ngClass]="{
                 sent: message.sender !== 'BOT',
-                received: message.sender === 'BOT'
+                received: message.sender === 'BOT',
+                'chatbot-mode': isChatbotMode
               }"
             >
               <div class="media-body">

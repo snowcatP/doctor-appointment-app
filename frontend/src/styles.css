@@ -2281,7 +2281,7 @@ html.menu-opened body {
 .search-box form {
 	display: -webkit-box;
 	display: -ms-flexbox;
-	display: flex;
+	justify-content: center;
 }
 .search-box .form-control {
     border: 1px solid #ccc;
@@ -2305,6 +2305,13 @@ html.menu-opened body {
     margin-right: 12px;
     position: relative;
     width: 490px;
+}
+.search-box .search-info-book {
+	justify-content: center;
+	-webkit-justify-content: center;
+	-ms-flex-pack: center;
+	display: block;
+	text-align: center;
 }
 .search-info .form-control {
 	background: #fff url(assets/images/search.png) no-repeat 10px center;
@@ -2617,6 +2624,25 @@ html.menu-opened body {
 	padding: 6px;
 }
 .book-btn:hover, .book-btn:focus {
+	background-color: #01cae4;
+	border-color: #01cae4;
+	color: #fff;
+}
+.book-btn-homepage {
+	background-color: #0de0fe;
+    border: 2px solid #0de0fe;
+    color: #fff;
+    font-size: 20px;
+    text-align: center;
+	display: block;
+    font-weight: 500;
+	padding: 12px;
+	cursor: pointer;
+	justify-content: center;
+	width: 180px;
+	height: 60px;
+}
+.book-btn-homepage:hover, .book-btn-homepage:focus {
 	background-color: #01cae4;
 	border-color: #01cae4;
 	color: #fff;
@@ -4141,6 +4167,7 @@ html.menu-opened body {
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     position: relative;
+	border-radius: 15px;
 }
 .chat-cont-left {
     border-right: 1px solid #f0f0f0;
@@ -4213,9 +4240,12 @@ html.menu-opened body {
 }
 .chat-window .chat-scroll {
 	min-height: 75vh;
-    max-height: calc(100vh - 224px);
+	max-height: calc(100vh - 224px);
     overflow-y: auto;
 	overflow-x: hidden;
+}
+.chat-scroll.chatbot-mode {
+	min-height: 55vh !important;
 }
 .chat-cont-left .chat-users-list {
     background-color: #fff;
@@ -4407,6 +4437,9 @@ html.menu-opened body {
 .chat-cont-right .chat-body .media.received {
 	margin-bottom: 15px;
 	margin-right: 10rem;
+}
+.chat-cont-right .chat-body .media.received.chatbot-mode {
+	margin-right: 4rem !important;
 }
 .chat-cont-right .chat-body .media:last-child {
 	margin-bottom: 0;

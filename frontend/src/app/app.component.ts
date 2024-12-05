@@ -11,7 +11,9 @@ import * as AuthActions from './core/states/auth/auth.actions';
 })
 export class AppComponent implements OnInit {
   title = 'frontend';
-
+  visibleChatbot: boolean = false;
+  mode: string = 'window';
+  loadChatbot: boolean = false;
   constructor(private authService: AuthService, private store: Store) {}
 
   ngOnInit(): void {
@@ -71,5 +73,16 @@ export class AppComponent implements OnInit {
         date: 'Please enter valid date format',
       },
     });
+  }
+
+  toggleChatbot() {
+    this.visibleChatbot = !this.visibleChatbot;
+    if (!this.loadChatbot) {
+      this.loadChatbot = true;
+    }
+  }
+
+  listenToggleChatbot(event: any) {
+    this.visibleChatbot = !this.visibleChatbot;
   }
 }

@@ -30,14 +30,14 @@ import { SpecialtyService } from '../../../../../core/services/specialty.service
 import { AppointmentService } from '../../../../../core/services/appointment.service';
 import { DoctorService } from '../../../../../core/services/doctor.service';
 import { MessageService } from 'primeng/api';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute  } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromAuth from '../../../../../core/states/auth/auth.reducer';
 import * as AuthActions from '../../../../../core/states/auth/auth.actions';
 import { User } from '../../../../../core/models/authentication.model';
 import { WebSocketService } from '../../../../../core/services/webSocket.service';
 import { Actions, ofType } from '@ngrx/effects';
-
+import * as CryptoJS from 'crypto-js';
 @Component({
   selector: 'app-booking-appointment-index',
   templateUrl: './booking-appointment-index.component.html',
@@ -79,6 +79,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
   modalVisible: boolean = false;
   showPass: boolean = false;
   loginErrorMessage: string = '';
+  doctorId: number;
   private bookingSubscription: Subscription;
   private unsubscribe$ = new Subject<void>();
   constructor(
@@ -90,7 +91,8 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private store: Store<fromAuth.State>,
     private webSocketService: WebSocketService,
-    private actions$: Actions // effects
+    private actions$: Actions, // effects
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -100,16 +102,47 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
     this.getObservables();
     // this.webSocketInit();
     this.subscribeToActions();
+
+    const secretKey = '28a57933ee4343d000fe4d347ac74dc96ea35c699c1de470b68c7741b26a513f';
+
+    this.route.queryParams.subscribe(params => {
+      if (params['doctorId']) {
+        const decryptedId = CryptoJS.AES.decrypt(params['doctorId'], secretKey).toString(CryptoJS.enc.Utf8);
+        this.doctorId = parseInt(decryptedId, 10);
+        if (this.doctorId) {
+          this.doctorSelected = this.doctorSelected || new DoctorBooking();
+          this.doctorSelected.id = this.doctorId;
+  
+          this.getDoctorDetails(this.doctorSelected.id);
+        }
+      }
+    });
+
   }
 
-  ngOnDestroy(): void {
-    // if (this.bookingSubscription) {
-    //   this.bookingSubscription.unsubscribe();
-    // }
-    // this.webSocketService.disconnectSocket();
-    // this.unsubscribe$.next();
-    // this.unsubscribe$.complete(); // Cleanup subscription on component destroy
+  getDoctorDetails(id: number): void {
+    this.doctorService.getDoctorDetail(id).subscribe(
+      (response) => {
+        if (response.statusCode === 200) {
+          this.doctorSelected = response.data;
+          // Update the form with doctor details
+          this.formBooking.patchValue({
+            doctor: this.doctorSelected.fullName,
+            specialty: this.doctorSelected.specialty.specialtyName
+        });
+        }
+      },
+      (error) => {
+        console.error('Error fetching doctor details', error);
+      }
+    );
   }
+
+  viewDoctorProfile(doctorId: number): void {
+    this.router.navigate(['/doctor-profile/', doctorId]); // Điều hướng với id của bác sĩ
+  }
+
+  ngOnDestroy(): void {}
 
   subscribeToActions() {
     this.actions$
@@ -265,7 +298,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (res) => {
             if (res.statusCode === 200) {
-              this.setAppointmentForSuccess(res?.data);
+              this.setAppointmentForSuccess(res?.data, null);
               this.messageService.add({
                 key: 'messageToast',
                 severity: 'success',
@@ -304,15 +337,16 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
   }
 
   setAppointmentForSuccess(
-    guest?: BookingDataGuest,
-    patient?: BookingDataPatient
+    guest: BookingDataGuest,
+    patient: BookingDataPatient
   ) {
-    if (guest) {
+    if (guest != null) {
       this.appointmentService.setAppointmentBookedGuest(guest);
     }
-    if (patient) {
+    if (patient != null) {
       this.appointmentService.setAppointmentBookedPatient(patient);
     }
+
   }
 
   closeBooking() {

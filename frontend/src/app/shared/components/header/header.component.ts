@@ -8,7 +8,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import * as AuthActions from '../../../core/states/auth/auth.actions';
 import { MessageService } from 'primeng/api';
-
+import { ReferenceCodeRequest } from '../../../core/models/appointment.model';
+import { AppointmentService } from '../../../core/services/appointment.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -19,12 +20,17 @@ export class HeaderComponent implements OnInit {
   user$: Observable<User>;
   role$: Observable<string>;
   sidebarVisible: boolean = false;
+  referenceCode: string;
+  referenceCodeRequest: ReferenceCodeRequest;
+  appointment!: any;
+  visible: boolean = false;
   constructor(
     public accessChecker: NbAccessChecker,
     private store: Store<fromAuth.State>,
     private router: Router,
     private authService: AuthService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private appointmentService: AppointmentService,
   ) {}
 
   ngOnInit(): void {
@@ -96,4 +102,36 @@ export class HeaderComponent implements OnInit {
   closeSideBar() {
     this.sidebarVisible = false;
   }
+
+  fetchGetAppointmentByReferenceCode(): void {
+    if (!this.referenceCode) {
+      this.messageService.add({
+        key: 'messageToast',
+        severity: 'warn',
+        summary: 'Warning',
+        detail: 'Please enter a appointment code.',
+      });
+      return;
+    }
+    this.referenceCodeRequest = { referenceCode: this.referenceCode };
+    this.appointmentService.getAppointmentByReferenceCode(this.referenceCodeRequest).subscribe(
+      (response) => {
+        if (response.statusCode === 200) {
+        this.appointment = response.data;
+        this.appointmentService.showDialog(this.appointment)
+        }else{
+          this.messageService.add({
+            key: 'messageToast',
+            severity: 'error',
+            summary: 'Failed',
+            detail: response.message,
+          });
+        }
+      },
+      (error) => {
+        console.error('Error fetching appointment', error);
+      }
+    );
+  }
+  
 }
