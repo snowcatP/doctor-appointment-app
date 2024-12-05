@@ -112,7 +112,6 @@ export class DoctorTableComponent {
           doctor.avatarFilePath = doctor.avatarFilePath ?? defaultAvatarPath;
           return doctor;
         });
-        console.log(resp);
         this.loadingFetchingData = false;
       },
     });

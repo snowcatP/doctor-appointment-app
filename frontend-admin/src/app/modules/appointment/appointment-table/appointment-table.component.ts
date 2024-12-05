@@ -15,7 +15,7 @@ import { Patient } from '../../../core/models/patient';
 })
 export class AppointmentTableComponent implements OnInit {
   visibleAppointment: any;
-  loadingFetchingData: any;
+  loadingFetchingData: boolean = true;
   appointments: Appointment[];
   doctorFullName: String;
   appointment: Appointment;
@@ -33,6 +33,7 @@ export class AppointmentTableComponent implements OnInit {
     private specialtyService: SpecialtyService
   ) {}
   ngOnInit(): void {
+    this.loadingFetchingData = true;
     this.getListAppoiment();
   }
   getListAppoiment() {
@@ -40,6 +41,7 @@ export class AppointmentTableComponent implements OnInit {
       next: (resp) => {
         this.appointments = resp;
         console.log(resp);
+        this.loadingFetchingData = false;
       },
     });
   }

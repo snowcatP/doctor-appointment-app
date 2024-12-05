@@ -6779,9 +6779,12 @@ body { margin: 0; font-family: Roboto, sans-serif, "Helvetica Neue" ; }
     align-items: center;
     z-index: 1000; 
 }
-.spinner{
+spinner{
 	background-color: rgba(0, 0, 0, 0.5);
 }
 .p-calendar.p-input-icon-right{
     display: flex;
+}
+#terms_accept{
+	margin-right: 10px;
 }
