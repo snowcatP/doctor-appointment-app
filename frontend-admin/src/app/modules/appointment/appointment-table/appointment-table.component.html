@@ -180,8 +180,8 @@
                         <td>{{ medical_record.prescription }}</td>
                         <td>{{ medical_record.treatmentPlan }}</td>
                         <td>{{ medical_record.lastModified | date: 'dd-MM-yyyy' }} </td>
-                        <td>{{medical_record.appointmentResponse.doctor.fullName}} <p-avatar label="V" styleClass="mr-2" size="large"
-                            [image]="medical_record.appointmentResponse.doctor.avatarFilePath" shape="circle" /></td>
+                        <td style="display: flex; justify-content: center; align-items: center;"><p-avatar  styleClass="mr-2" size="large"
+                            [image]="medical_record.appointmentResponse.doctor.avatarFilePath" shape="circle" /> {{medical_record.appointmentResponse.doctor.fullName}} </td>
                     </tr>
                 </ng-template>
             </p-table>
