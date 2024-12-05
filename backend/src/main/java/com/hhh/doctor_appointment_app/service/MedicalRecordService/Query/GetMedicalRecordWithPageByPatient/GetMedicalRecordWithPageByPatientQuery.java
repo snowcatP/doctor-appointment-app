@@ -54,14 +54,17 @@ public class GetMedicalRecordWithPageByPatientQuery {
                 .map(medicalRecord -> {
                     MedicalRecordResponse response = new MedicalRecordResponse();
                     response.setId(medicalRecord.getId());
-                    response.setDescription(medicalRecord.getDescription());
                     response.setFilePath(medicalRecord.getFilePath());
                     response.setDateCreated(medicalRecord.getDateCreated());
                     response.setLastModified(medicalRecord.getLastModified());
                     response.setBloodType(medicalRecord.getBloodType());
                     response.setHeartRate(medicalRecord.getHeartRate());
-                    response.setDiagnosis(medicalRecord.getDiagnosis());
+                    response.setTemperature(medicalRecord.getTemperature());
+                    response.setHeight(medicalRecord.getHeight());
+                    response.setWeight(medicalRecord.getWeight());
+                    response.setDescription(medicalRecord.getDescription());
                     response.setAllergies(medicalRecord.getAllergies());
+                    response.setDiagnosis(medicalRecord.getDiagnosis());
                     response.setPrescription(medicalRecord.getPrescription());
                     response.setTreatmentPlan(medicalRecord.getTreatmentPlan());
                     response.setNote(medicalRecord.getNote());

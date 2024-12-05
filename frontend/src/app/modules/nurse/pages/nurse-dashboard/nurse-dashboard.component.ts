@@ -41,7 +41,6 @@ export class NurseDashboardComponent {
     this.appointmentService.getAppointmentsForNurse(page, pageSize).subscribe(
       (response) => {
         if (response.statusCode === 200) {
-          console.log(response)
           this.appointments = response.data;
           this.totalAppointments = response.totalPage * pageSize;
         } else{

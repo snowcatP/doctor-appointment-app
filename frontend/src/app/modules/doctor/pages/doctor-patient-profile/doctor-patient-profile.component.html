@@ -154,8 +154,8 @@
                                   (click)="viewAppointmentDetails(appointment)">
                                   <i class="far fa-eye"></i> View
                                 </a>
-                                <!-- <a *ngIf="!appointment.medicalRecordResponse 
-                                && (appointment.appointmentStatus === 'ACCEPT' || 
+                                <!-- <a *ngIf="!appointment.medicalRecordResponse
+                                && (appointment.appointmentStatus === 'ACCEPT' ||
                                   appointment.appointmentStatus === 'RESCHEDULED' ||
                                   appointment.appointmentStatus === 'COMPLETED'
                                 )" class="btn btn-sm bg-primary-light" data-toggle="modal"
@@ -245,7 +245,7 @@
                 </div>
               </p-dialog>
             </mat-tab>
-            <mat-tab label="Medical Records" >
+            <mat-tab label="Medical Records">
               <!-- Medical Records Tab -->
               <div id="pat_medical_records">
                 <div class="card card-table mb-0">
@@ -351,7 +351,7 @@
               </div>
               <!-- Medical Record Detail Dialog -->
               <p-dialog header="Medical Record Details" [modal]="true" [(visible)]="visibleMedicalRecord"
-                [style]="{ width: '25rem' }">
+                [style]="{ width: '45rem' }">
                 <div class="row" *ngIf="selectedMedicalRecord">
                   <div class="d-flex justify-content-between pe-2">
                     <p>Created By:</p>
@@ -375,18 +375,44 @@
                   </div>
                   <div class="d-flex justify-content-between pe-2">
                     <p>Heart Rate:</p>
-                    <p>{{ selectedMedicalRecord?.heartRate }}</p>
+                    <p>{{ selectedMedicalRecord?.heartRate }}
+                      <i class="fas fa-heartbeat fa-lg" style="color: #e10909;"></i>
+                    </p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Temperature:</p>
+                    <p>{{ selectedMedicalRecord?.temperature }}&deg;C</p>
                   </div>
                   <div class="d-flex justify-content-between pe-2">
                     <p>Description:</p>
-                    <p>{{ selectedMedicalRecord.description }}</p>
+                    <p>{{ selectedMedicalRecord?.description }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Allergies:</p>
+                    <p>{{ selectedMedicalRecord?.allergies }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Diagnosis:</p>
+                    <p>{{ selectedMedicalRecord?.diagnosis }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Prescription:</p>
+                    <p>{{ selectedMedicalRecord?.prescription }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>TreatmentPlan:</p>
+                    <p>{{ selectedMedicalRecord?.treatmentPlan }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Note:</p>
+                    <p>{{ selectedMedicalRecord?.note }}</p>
                   </div>
                   <div class="d-flex justify-content-between pe-2">
                     <p>File:</p>
                     <P *ngIf="!selectedMedicalRecord?.filePath">None</P>
                   </div>
-                  <div class="doctor-img" *ngIf="selectedMedicalRecord?.filePath">
-                    <p-image [src]="selectedMedicalRecord?.filePath" class="img-fluid" alt="Doctor Image" width="150"
+                  <div *ngIf="selectedMedicalRecord?.filePath" class="d-flex justify-content-between pe-2">
+                    <p-image [src]="selectedMedicalRecord?.filePath" class="img-fluid" alt="Doctor Image" width="580"
                       [preview]="true" />
                   </div>
                   <div class="d-flex justify-content-between pt-4">
@@ -464,7 +490,8 @@
       (onUpdated)="fetchMedicalRecords()">
       <div class="card">
         <div class="card-body" style="min-height: 60vh">
-          <h2 class="card-tittle" style="margin-bottom: 20px;">Edit Medical Record For Patient</h2>
+          <h2 class="card-tittle" style="margin-bottom: 20px;">Edit Medical Record For Patient
+            {{patientDetail?.fullName}}</h2>
           <div class="row form-row">
             <form #reviewForm="ngForm" (ngSubmit)="onUpdate()">
               <mat-dialog-content>
@@ -485,22 +512,42 @@
 
                 </mat-form-field>
 
+                <div appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
+                  <mat-form-field appearance="outline" class="col-sm-5 col-md-3 col-lg-3 col-xl-2"
+                    style="margin-right: 77px; width: 20%;">
+                    <mat-label>Temperature</mat-label>
+                    <input matInput placeholder="Ex: 36.75" name="temperature"
+                      [(ngModel)]="editingMedicalRecord.temperature" type="text" pattern="^\d+(\.\d{1,2})?$" />
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" class="col-sm-5 col-md-3 col-lg-3 col-xl-2"
+                    style="margin-right: 77px; width: 20%;">
+                    <mat-label>Height</mat-label>
+                    <input matInput placeholder="" name="height" [(ngModel)]="editingMedicalRecord.height" type="text"
+                      pattern="^\d+(\.\d{1,2})?$" />
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" class="col-sm-5 col-md-3 col-lg-3 col-xl-2" style="width: 20%;">
+                    <mat-label>Weight</mat-label>
+                    <input matInput placeholder="" name="weight" [(ngModel)]="editingMedicalRecord.weight" type="text"
+                      pattern="^\d+(\.\d{1,2})?$" />
+                  </mat-form-field>
+                </div>
+
                 <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
                   <mat-label>Description</mat-label>
                   <textarea matInput placeholder="Ex. Symptoms recorded from the patient" name="description"
                     [(ngModel)]="editingMedicalRecord.description"></textarea>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
-                  <mat-label>Diagnosis</mat-label>
-                  <textarea matInput placeholder="Ex. Diagnoses of the patient's condition" name="diagnosis"
-                    [(ngModel)]="editingMedicalRecord.diagnosis"></textarea>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
                   <mat-label>Allergies</mat-label>
                   <input matInput placeholder="Ex. Allergy symptoms" name="allergies"
                     [(ngModel)]="editingMedicalRecord.allergies" />
                 </mat-form-field>
+                <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
+                  <mat-label>Diagnosis</mat-label>
+                  <textarea matInput placeholder="Ex. Diagnoses of the patient's condition" name="diagnosis"
+                    [(ngModel)]="editingMedicalRecord.diagnosis"></textarea>
+                </mat-form-field>
+
                 <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
                   <mat-label>Prescription</mat-label>
                   <textarea matInput placeholder="Ex. Vitamin .." name="prescription"
@@ -515,7 +562,7 @@
                   <mat-label>Note</mat-label>
                   <input matInput placeholder="" name="note" [(ngModel)]="editingMedicalRecord.note" />
                 </mat-form-field>
-                <div class="change-avatar">
+                <!-- <div class="change-avatar">
                   <div class="profile-img">
                     <p-image *ngIf="imagePreview" [src]="imagePreview" alt="Doctor Image" width="100%"
                       [preview]="true"></p-image>
@@ -532,8 +579,12 @@
                       JPG, PNG. Max
                       size of 5MB</small>
                   </div>
-                </div>
+                </div> -->
 
+                <div>
+                  <p-image [src]="editingMedicalRecord.filePath" alt="Image" width="500" height="300"
+                    [preview]="true" />
+                </div>
                 <div class="form-group" style="margin-top: 15px">
                   <div class="terms-accept">
                     <div class="custom-checkbox">

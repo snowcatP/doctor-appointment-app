@@ -6,6 +6,10 @@
         [(ngModel)]="searchPatientName" 
             (input)="onSearchChange()" />
     </p-iconField>
+    <h6 style="color:rgb(107, 114, 128) ; font-size: 16px;">Found
+        <span style="color: rgb(20, 101, 214);">
+            {{totalSize}}
+        </span>results</h6>
     <div class="card">
         <div class="col-md-13 col-lg-14 col-xl-15">
             <div class="row row-grid">
@@ -63,6 +67,7 @@
         </div>
     </div>
     <!-- Paginator Component -->
-    <p-paginator [rows]="pageSize" [totalRecords]="totalPatients" [rowsPerPageOptions]="[12,24,36]"
-    (onPageChange)="handlePageEvent($event)"></p-paginator>
+    <p-paginator [rows]="pageSize" [totalRecords]="totalPatients" [rowsPerPageOptions]="[4,8]"
+    (onPageChange)="handlePageEvent($event)" [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"></p-paginator>
 </div>

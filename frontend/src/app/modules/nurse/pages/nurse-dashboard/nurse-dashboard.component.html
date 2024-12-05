@@ -174,7 +174,7 @@
                 </p-dialog>
                 <!-- Medical Record Detail Dialog -->
                 <p-dialog header="Medical Record Details" [modal]="true" [(visible)]="visibleMedicalRecord"
-                    [style]="{ width: '25rem' }">
+                    [style]="{ width: '45rem' }">
                     <div class="row" *ngIf="selectedMedicalRecord">
                         <div class="d-flex justify-content-between pe-2">
                             <p>Doctor:</p>
@@ -194,19 +194,44 @@
                         </div>
                         <div class="d-flex justify-content-between pe-2">
                             <p>Heart Rate:</p>
-                            <p>{{ selectedMedicalRecord?.medicalRecordResponse?.heartRate }}</p>
+                            <p>{{ selectedMedicalRecord?.medicalRecordResponse?.heartRate }} 
+                                <i class="fas fa-heartbeat fa-lg" style="color: #e10909;"></i> </p>
+                        </div>
+                        <div class="d-flex justify-content-between pe-2">
+                            <p>Temperature:</p>
+                            <p>{{ selectedMedicalRecord?.medicalRecordResponse?.temperature }}&deg;C</p>
                         </div>
                         <div class="d-flex justify-content-between pe-2">
                             <p>Description:</p>
                             <p>{{ selectedMedicalRecord?.medicalRecordResponse?.description }}</p>
                         </div>
                         <div class="d-flex justify-content-between pe-2">
+                            <p>Allergies</p>
+                            <p>{{ selectedMedicalRecord?.medicalRecordResponse?.allergies }}</p>
+                        </div>
+                        <div class="d-flex justify-content-between pe-2">
+                            <p>Diagnosis:</p>
+                            <p>{{ selectedMedicalRecord?.medicalRecordResponse?.diagnosis }}</p>
+                          </div>
+                          <div class="d-flex justify-content-between pe-2">
+                            <p>Prescription:</p>
+                            <p>{{ selectedMedicalRecord?.medicalRecordResponse?.prescription }}</p>
+                          </div>
+                          <div class="d-flex justify-content-between pe-2">
+                            <p>TreatmentPlan:</p>
+                            <p>{{ selectedMedicalRecord?.medicalRecordResponse?.treatmentPlan }}</p>
+                          </div>
+                          <div class="d-flex justify-content-between pe-2">
+                            <p>Note:</p>
+                            <p>{{ selectedMedicalRecord?.medicalRecordResponse?.note }}</p>
+                          </div>
+                        <div class="d-flex justify-content-between pe-2">
                             <p>File:</p>
                             <p *ngIf="!selectedMedicalRecord?.medicalRecordResponse?.filePath">None</p>
                         </div>
-                        <div class="doctor-img" *ngIf="selectedMedicalRecord?.medicalRecordResponse?.filePath">
+                        <div *ngIf="selectedMedicalRecord?.medicalRecordResponse?.filePath">
                             <p-image [src]="selectedMedicalRecord?.medicalRecordResponse?.filePath" class="img-fluid" alt="File Image"
-                                width="150" [preview]="true" />
+                                width="580" [preview]="true" />
                         </div>
                        
                         <div class="d-flex justify-content-between pt-4">

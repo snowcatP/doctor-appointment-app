@@ -36,7 +36,11 @@ export class MedicalRecordService {
 
     formData.append('bloodType', addMedicalRecordRequest.bloodType.toString());
     formData.append('heartRate', addMedicalRecordRequest.heartRate.toString());
+    formData.append('temperature', addMedicalRecordRequest.temperature.toString());
+    formData.append('height', addMedicalRecordRequest.height.toString());
+    formData.append('weight', addMedicalRecordRequest.weight.toString());
     formData.append('description', addMedicalRecordRequest.description || '');
+    formData.append('allergies', addMedicalRecordRequest.allergies || '');
     formData.append('patientId', addMedicalRecordRequest.patientId.toString());
     formData.append('appointmentId', addMedicalRecordRequest.appointmentId.toString());
 
@@ -55,9 +59,12 @@ export class MedicalRecordService {
     }
     formData.append('bloodType', editMedicalRecordRequest.bloodType.toString());
     formData.append('heartRate', editMedicalRecordRequest.heartRate.toString());
+    formData.append('temperature', editMedicalRecordRequest.temperature.toString());
+    formData.append('height', editMedicalRecordRequest.height.toString());
+    formData.append('weight', editMedicalRecordRequest.weight.toString());
     formData.append('description', editMedicalRecordRequest.description || '');
-    formData.append('diagnosis', editMedicalRecordRequest.diagnosis || '');
     formData.append('allergies', editMedicalRecordRequest.allergies || '');
+    formData.append('diagnosis', editMedicalRecordRequest.diagnosis || '');
     formData.append('prescription', editMedicalRecordRequest.prescription || '');
     formData.append('treatmentPlan', editMedicalRecordRequest.treatmentPlan || '');
     formData.append('note', editMedicalRecordRequest.note || '');

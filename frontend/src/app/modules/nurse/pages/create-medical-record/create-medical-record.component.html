@@ -6,7 +6,7 @@
                 <mat-dialog-content>
                     <mat-form-field appearance="outline" class="col-sm-5 col-md-3 col-lg-3 col-xl-4"
                         style="margin-right: 20px;">
-                        <mat-label >Blood Group</mat-label>
+                        <mat-label>Blood Group</mat-label>
                         <mat-select required [(ngModel)]="medicalRecordRequest.bloodType" name="bloodType">
                             <mat-option value="A">A</mat-option>
                             <mat-option value="B">B</mat-option>
@@ -16,29 +16,39 @@
                     </mat-form-field>
                     <mat-form-field appearance="outline" class="col-sm-5 col-md-3 col-lg-3 col-xl-4">
                         <mat-label>Heart Rate</mat-label>
-                        <input matInput placeholder="Ex. 80" name="heartRate" [(ngModel)]="medicalRecordRequest.heartRate" required type="number" />
-
+                        <input matInput placeholder="Ex. 80" name="heartRate"
+                            [(ngModel)]="medicalRecordRequest.heartRate" required type="number" />
                     </mat-form-field>
-                    
-                    <mat-form-field
-                        appearance="outline"
-                        class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1"
-                      >
+                    <br>
+                    <mat-form-field appearance="outline" class="col-sm-5 col-md-3 col-lg-3 col-xl-2"
+                        style="margin-right: 77px; width: 18%;">
+                        <mat-label>Temperature</mat-label>
+                        <input matInput placeholder="Ex: 36.75" name="temperature" [(ngModel)]="medicalRecordRequest.temperature"
+                         type="text" pattern="^\d+(\.\d{1,2})?$" />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="col-sm-5 col-md-3 col-lg-3 col-xl-2"
+                        style="margin-right: 77px; width: 18%;">
+                        <mat-label>Height</mat-label>
+                        <input matInput placeholder="" name="height" [(ngModel)]="medicalRecordRequest.height"
+                        type="text" pattern="^\d+(\.\d{1,2})?$" />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="col-sm-5 col-md-3 col-lg-3 col-xl-2" style="width: 18%;">
+                        <mat-label>Weight</mat-label>
+                        <input matInput placeholder="" name="weight" [(ngModel)]="medicalRecordRequest.weight"
+                        type="text" pattern="^\d+(\.\d{1,2})?$" />
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1" style="width: 69%;">
                         <mat-label>Description</mat-label>
-                        <textarea
-                          matInput
-                          placeholder="Ex. Symptoms recorded from the patient"
-                          name="description"
-                          required
-                          [(ngModel)]="medicalRecordRequest.description"
-                        ></textarea>
-                      </mat-form-field>
-                    <!-- <div class="col-sm-5 col-md-3 col-lg-3 col-xl-6">
-                        <label>Description</label>
-                        <textarea id="review_desc" maxlength="100" class="form-control" name="comment"
-                            [(ngModel)]="medicalRecordRequest.description" name="description"></textarea>
-                        <small class="text-muted"><span id="chars">255</span> characters remaining</small>
-                    </div> -->
+                        <textarea matInput placeholder="Ex. Symptoms recorded from the patient" name="description"
+                            required [(ngModel)]="medicalRecordRequest.description"></textarea>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1" style="width: 69%;">
+                        <mat-label>Allergies</mat-label>
+                        <textarea matInput placeholder="Ex. Symptoms recorded from the patient" name="allergies"
+                            required [(ngModel)]="medicalRecordRequest.allergies"></textarea>
+                    </mat-form-field>
+                    <br>
                     <div class="change-avatar">
                         <div class="profile-img">
                             <p-image *ngIf="imagePreview" [src]="imagePreview" alt="Doctor Image" width="100%"

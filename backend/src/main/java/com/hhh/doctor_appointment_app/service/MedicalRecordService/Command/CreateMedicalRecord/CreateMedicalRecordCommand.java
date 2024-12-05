@@ -79,7 +79,11 @@ public class CreateMedicalRecordCommand {
 
             medicalRecord.setBloodType(addRequest.getBloodType());
             medicalRecord.setHeartRate(addRequest.getHeartRate());
+            medicalRecord.setTemperature(addRequest.getTemperature());
+            medicalRecord.setHeight(addRequest.getHeight());
+            medicalRecord.setWeight(addRequest.getWeight());
             medicalRecord.setDescription(addRequest.getDescription());
+            medicalRecord.setAllergies(addRequest.getAllergies());
 
             medicalRecord.setFilePath(addRequest.getFilePath());
             medicalRecord.setPatient(patient);
