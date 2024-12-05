@@ -1,6 +1,7 @@
 import {  prop, required, email, unique } from "@rxweb/reactive-form-validators"
 import { Patient } from "./patient"
-import { Doctor } from "./doctor"
+import { Doctor, DoctorResponse } from "./doctor"
+import { Appointment, AppointmentResponse } from "./appointment"
 export class MedicalRecord{
     @prop({isPrimaryKey: true})
     medicalRecordId: string
@@ -18,6 +19,7 @@ export class MedicalRecord{
 }
 
 export class MedicalRecordResponse {
+    id: number;
     bloodType: string;
     heartRate: number;
     description: string;
@@ -28,5 +30,6 @@ export class MedicalRecordResponse {
     note: string;
     patientId: number;
     medicalRecordId: number;
+    appointmentResponse: AppointmentResponse
     constructor() {}
 }

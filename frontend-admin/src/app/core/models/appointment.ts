@@ -49,4 +49,5 @@ export class Appointment {
   doctor: Doctor;
   @prop()
   specialty: Specialty;
+  
 }

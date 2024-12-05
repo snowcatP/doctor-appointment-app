@@ -117,6 +117,10 @@ export class HomeComponent {
             route: '/patient',
           },
           {
+            label: 'Patient Dashboard',
+            route: '/patient/dashboard',
+          },
+          {
             label: 'Edit Patient',
             route: '/patient/edit-patient',
           },

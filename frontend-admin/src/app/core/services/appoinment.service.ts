@@ -16,4 +16,7 @@ export class AppoinmentService {
   getAppointmentDetail(id: number): Observable<any>{
     return this.http.get<AppointmentResponse>(environment.apiEndpoint + `/api/appointment/patient/detail/${id}`)
   }
+  getListAppointmentOfAPatient(id: number): Observable<any>{
+    return this.http.get<AppointmentResponse>(environment.apiEndpoint + `/api/appointment/list/patient/${id}`)
+  }
 }
