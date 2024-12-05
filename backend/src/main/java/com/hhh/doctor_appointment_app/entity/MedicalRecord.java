@@ -23,20 +23,19 @@ public class MedicalRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //Information filled by Nurse
     private String bloodType;
-
     private Integer heartRate;
-
+    private Double temperature; // Nhiet do co the
+    private Double weight; // Can nang
+    private Double height; // Chieu cao
     private String description; // Symptoms recorded from the patient.
-
-    private String diagnosis; // Accurate diagnosis by doctor. ( Chan doan cua bac si)
-
     private String allergies; // Record patient allergies. ( Ghi nhan cac trieu chung di ung cua benh nhan)
 
+    //Information filled by Doctor
+    private String diagnosis; // Accurate diagnosis by doctor. ( Chan doan cua bac si)
     private String prescription; // Prescription or treatment instructions.( Don thuoc hoac huong dan dieu tri)
-
     private String treatmentPlan;
-
     private String note;
 
     private String filePath;

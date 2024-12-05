@@ -78,12 +78,17 @@ public class EditMedicalRecordCommand {
             }
             existingMedicalRecord.setBloodType(editMedicalRecordRequest.getBloodType());
             existingMedicalRecord.setHeartRate(editMedicalRecordRequest.getHeartRate());
-            existingMedicalRecord.setDiagnosis(editMedicalRecordRequest.getDiagnosis());
+            existingMedicalRecord.setTemperature(existingMedicalRecord.getTemperature());
+            existingMedicalRecord.setHeight(existingMedicalRecord.getHeight());
+            existingMedicalRecord.setWeight(existingMedicalRecord.getWeight());
+            existingMedicalRecord.setDescription(editMedicalRecordRequest.getDescription());
             existingMedicalRecord.setAllergies(editMedicalRecordRequest.getAllergies());
+
+            existingMedicalRecord.setDiagnosis(editMedicalRecordRequest.getDiagnosis());
             existingMedicalRecord.setPrescription(editMedicalRecordRequest.getPrescription());
             existingMedicalRecord.setTreatmentPlan(editMedicalRecordRequest.getTreatmentPlan());
             existingMedicalRecord.setNote(editMedicalRecordRequest.getNote());
-            existingMedicalRecord.setDescription(editMedicalRecordRequest.getDescription());
+
             existingMedicalRecord.setDoctorModified(doctor);
 
             medicalRecordRepository.saveAndFlush(existingMedicalRecord);
