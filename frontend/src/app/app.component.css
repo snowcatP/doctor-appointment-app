@@ -19,7 +19,7 @@ label.focus-label {
     border: 0;
     color: white;
     z-index: 1000;
-    transition: transform 0.3s ease 0.2s, background-color 0.3s ease;
+    transition: transform 0.2s ease 0.2s, background-color 0.3s ease;
 }
 
 .float:hover {
