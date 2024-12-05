@@ -8,13 +8,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, Long> {
     @Query("SELECT m FROM MedicalRecord m")
     Page<MedicalRecord> getMedicalRecordsWithPage(Pageable pageable);
 
     Page<MedicalRecord> findMedicalRecordByPatient_Id(Long patientId, Pageable pageable);
-
+    List<MedicalRecord> findAllByPatient_Id(Long patientId);
     Page<MedicalRecord> findByPatient_Profile_Email(String email, Pageable pageable);
 
     Page<MedicalRecord> findMedicalRecordsByPatient_Id(Long id, Pageable pageable);

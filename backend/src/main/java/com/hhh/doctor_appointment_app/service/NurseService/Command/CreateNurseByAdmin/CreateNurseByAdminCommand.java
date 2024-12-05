@@ -46,7 +46,7 @@ public class CreateNurseByAdminCommand {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try{
             //Check file has null ?
-            if (!file.isEmpty()) {
+            if (file != null) {
                 // Upload file to Firebase Storage if file not null
                 String fileUrl = firebaseStorageService.uploadFile(file);
                 addNurseRequest.setAvatarFilePath(fileUrl);

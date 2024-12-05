@@ -15,7 +15,6 @@ const BELOWMONITOR = 'screen and (max-width: 1023px)';
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
-
   navItems = navItems;
   items: MenuItem[];
 
@@ -33,8 +32,10 @@ export class HomeComponent {
     return this.isMobileScreen;
   }
 
-  constructor(private breakpointObserver: BreakpointObserver, private navService: NavService) {
-
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private navService: NavService
+  ) {
     this.htmlElement = document.querySelector('html')!;
     this.htmlElement.classList.add('light-theme');
     this.layoutChangesSubscription = this.breakpointObserver
@@ -48,72 +49,82 @@ export class HomeComponent {
       });
   }
 
-  ngOnInit(): void { 
-    this.items =[
+  ngOnInit(): void {
+    this.items = [
       {
-        label:'Dashboard',
+        label: 'Dashboard',
         icon: 'fas fa-tachometer-alt',
         route: '/dashboard',
-        topmenu: true
+        topmenu: true,
       },
       {
-        label:'Appointments',
+        label: 'Appointments',
         icon: 'far fa-calendar-check',
         route: '/dashboard',
-        topmenu: true
+        topmenu: true,
+        items: [
+          {
+            label: 'Appointment List',
+            route: '/appointment',
+          },
+        ],
       },
       {
-        label:'Specialty',
+        label: 'Specialty',
         icon: 'fa fa-hospital',
         topmenu: true,
-        items:[
+        items: [
           {
-            label:'Specialty List',
+            label: 'Specialty List',
             route: '/specialty',
           },
           {
-            label:'Add New Specialty',
+            label: 'Add New Specialty',
             route: '/specialty/add-specialty',
           },
           {
-            label:'Edit Specialty',
+            label: 'Edit Specialty',
             route: '/specialty/edit-specialty',
-          }
-        ]
+          },
+        ],
       },
       {
         label: 'Doctors',
         icon: 'fa fa-user-md',
         topmenu: true,
-        items:[
+        items: [
           {
-            label:'Doctor List',
+            label: 'Doctor List',
             route: '/doctor',
           },
           {
-            label:'Add New Doctor',
+            label: 'Add New Doctor',
             route: '/doctor/add-doctor',
           },
           {
-            label:'Edit Doctor',
+            label: 'Edit Doctor',
             route: '/doctor/edit-doctor',
-          }
-        ]
+          },
+        ],
       },
       {
         label: 'Patient',
         icon: 'fa fa-users',
         topmenu: true,
-        items:[
+        items: [
           {
-            label:'Patient List',
+            label: 'Patient List',
             route: '/patient',
           },
           {
-            label:'Edit Patient',
+            label: 'Patient Dashboard',
+            route: '/patient/dashboard',
+          },
+          {
+            label: 'Edit Patient',
             route: '/patient/edit-patient',
-          }
-        ]
+          },
+        ],
       },
       {
         label: 'Schedules',
@@ -134,11 +145,11 @@ export class HomeComponent {
         //   }
         // ]
       },
-    ]
+    ];
   }
 
   ngOnDestroy() {
-    this.layoutChangesSubscription.unsubscribe(); 
+    this.layoutChangesSubscription.unsubscribe();
   }
 
   toggleCollapsed() {

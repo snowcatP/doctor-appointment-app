@@ -4,23 +4,26 @@
 <div class="card" *ngIf="!loadingFetchingData">
     <p-toolbar>
     </p-toolbar>
-    <p-toolbar styleClass="mb-4 gap-2">
-        <ng-template pTemplate="left">
-            <p-button severity="success" label="New" icon="pi pi-plus" class="mr-2"
-                (onClick)="showAddNewPatient()" />
-            <p-button severity="danger" label="Delete" icon="pi pi-trash" 
-                [disabled]="!selectedPatients || !selectedPatients.length" (onClick)="deleteMultiplePatient()"/>
-        </ng-template>
-        <ng-template pTemplate="right">
-            <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import"
-                class="mr-2 inline-block" />
-            <p-button severity="help" label="Export" icon="pi pi-upload" />
-        </ng-template>
-    </p-toolbar>
     
-    <p-table #myTab [value]="patients" styleClass="p-datatable-striped" [paginator]="true"
+    
+    <p-table #myTab [columns]="cols" [exportHeader]="'customExportHeader'" [value]="patients" styleClass="p-datatable-striped" [paginator]="true"
     [tableStyle]="{'min-width': '75rem'}" [rowHover]="true " dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
     [globalFilterFields]="['firstName', 'lastName']" [(selection)]="selectedPatients">
+    <ng-template pTemplate="caption">
+        <p-toolbar styleClass="mb-4 gap-2">
+            <ng-template pTemplate="left">
+                <p-button severity="success" label="New" icon="pi pi-plus" class="mr-2"
+                    (onClick)="showAddNewPatient()" />
+                <p-button severity="danger" label="Delete" icon="pi pi-trash" 
+                    [disabled]="!selectedPatients || !selectedPatients.length" (onClick)="deleteMultiplePatient()"/>
+            </ng-template>
+            <ng-template pTemplate="right">
+                <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import"
+                    class="mr-2 inline-block" />
+                <p-button severity="help" label="Export" icon="pi pi-upload" (onClick)="myTab.exportCSV()"/>
+            </ng-template>
+        </p-toolbar>
+    </ng-template>
     <ng-template pTemplate="header">
             
             <tr>
@@ -91,7 +94,7 @@
                     <td>{{patient.dateOfBirth | date: 'dd-MM-yyyy'}}</td>
                     <td style="display: flex; justify-content: space-evenly;">
                         <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" severity="success" (onClick)="openEditDialog(patient)" />
-                        <p-button icon="far fa-eye" class="mr-2" [rounded]="true" [outlined]="true" severity="warning" (onClick)="openEditDialog(patient)" />
+                        <p-button icon="far fa-eye" class="mr-2" [rounded]="true" [outlined]="true" severity="warning" (onClick)="openPatientDashboard(patient)" />
                     </td>
                    
                 </tr>

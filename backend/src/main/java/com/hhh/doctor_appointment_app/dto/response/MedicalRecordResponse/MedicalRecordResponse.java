@@ -31,10 +31,16 @@ public class MedicalRecordResponse {
     private String prescription; // Prescription or treatment instructions.( Don thuoc hoac huong dan dieu tri)
     private String treatmentPlan;
     private String note;
+
     private String filePath;
+
     private LocalDateTime dateCreated;
+
     private LocalDateTime lastModified;
+
     private DoctorResponse doctorResponse;
+
     private AppointmentResponse appointmentResponse;
+
     private NurseResponse nurseResponse;
 }

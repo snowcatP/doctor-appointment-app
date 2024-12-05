@@ -154,8 +154,8 @@
                                   (click)="viewAppointmentDetails(appointment)">
                                   <i class="far fa-eye"></i> View
                                 </a>
-                                <!-- <a *ngIf="!appointment.medicalRecordResponse 
-                                && (appointment.appointmentStatus === 'ACCEPT' || 
+                                <!-- <a *ngIf="!appointment.medicalRecordResponse
+                                && (appointment.appointmentStatus === 'ACCEPT' ||
                                   appointment.appointmentStatus === 'RESCHEDULED' ||
                                   appointment.appointmentStatus === 'COMPLETED'
                                 )" class="btn btn-sm bg-primary-light" data-toggle="modal"
@@ -509,6 +509,7 @@
                   <mat-label>Heart Rate</mat-label>
                   <input matInput placeholder="Ex. 80" name="heartRate" [(ngModel)]="editingMedicalRecord.heartRate"
                     required type="number" />
+
                 </mat-form-field>
 
                 <div appearance="outline" class="col-sm-12 col-md-6 col-lg-6 col-xl-9 pb-1">
@@ -583,8 +584,15 @@
                 <div>
                   <p-image [src]="editingMedicalRecord.filePath" alt="Image" width="500" height="300"
                     [preview]="true" />
+                <div class="form-group" style="margin-top: 15px">
+                  <div class="terms-accept">
+                    <div class="custom-checkbox">
+                      <input type="checkbox" id="terms_accept" required />
+                      <label for="terms_accept"  style="margin-left: 10px;" >I have read and accept
+                        <a href="#">Terms & Conditions</a></label>
+                    </div>
+                  </div>
                 </div>
-
               </mat-dialog-content>
 
               <mat-dialog-actions>

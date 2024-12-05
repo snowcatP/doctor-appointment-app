@@ -66,7 +66,13 @@ p-panelmenu .p-panelmenu-panel {
 .p-tag.p-component {
     width: 54px;
 }
+.appointment.p-tag.p-component {
+    width: 100px;
+}
 
 .p-fileupload-content ul {
     margin: 0 20px;
+}
+.medical_record  > tr{
+    border: solid 1px !important;
 }
