@@ -589,7 +589,7 @@
                   </div>
                 </div> -->
 
-                <div>
+                <div *ngIf="editingMedicalRecord.filePath">
                   <p-image [src]="editingMedicalRecord.filePath" alt="Image" width="500" height="300"
                     [preview]="true" />
                 </div>
