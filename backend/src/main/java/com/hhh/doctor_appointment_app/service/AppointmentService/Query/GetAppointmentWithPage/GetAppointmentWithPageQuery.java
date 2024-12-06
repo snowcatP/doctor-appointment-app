@@ -31,16 +31,18 @@ public class GetAppointmentWithPageQuery {
     private DoctorMapper doctorMapper;
 
     @PreAuthorize("hasRole('ADMIN')")
-    public PageResponse<List<AppointmentResponse>> getAppointmentsWithPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page-1, size, Sort.by("dateBooking").descending());
-        Page<Appointment> appointmentPage = appointmentRepository.getAppointmentsWithPage(pageable);
+    public List<AppointmentResponse> getAppointmentsWithPage(int page, int size) {
 
-        //Convert entities to responses
-        List<AppointmentResponse> appointmentResponses = appointmentPage.getContent().stream()
+        List<Appointment> listAppointment = appointmentRepository.findAll();
+
+        // Convert entities to response DTOs
+        List<AppointmentResponse> appointmentResponses = listAppointment.stream()
                 .map(appointment -> {
                     AppointmentResponse response = new AppointmentResponse();
                     response.setId(appointment.getId());
                     response.setFullName(appointment.getFullName());
+                    response.setPatientId(appointment.getPatient().getId());
+                    response.setPatientBirthday(appointment.getPatient().getProfile().getDateOfBirth());
                     response.setPhone(appointment.getPhone());
                     response.setEmail(appointment.getEmail());
                     response.setReason(appointment.getReason());
@@ -53,12 +55,8 @@ public class GetAppointmentWithPageQuery {
                 })
                 .collect(Collectors.toList());
 
-        //Create PageResponse Object
-        PageResponse<List<AppointmentResponse>> pageResponse = new PageResponse<>();
-        pageResponse.ok(appointmentResponses);
-        double total = Math.ceil((double) appointmentPage.getTotalElements() / size);
-        pageResponse.setTotalPage((int) total);
-
-        return pageResponse;
+        // Return the list of AppointmentResponse objects
+        return appointmentResponses;
     }
+
 }

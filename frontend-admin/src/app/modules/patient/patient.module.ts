@@ -33,9 +33,10 @@ import { PatientComponent } from './patient.component';
 import { PatientRoutingModule } from './patient-routing.module';
 import { TagModule } from 'primeng/tag';
 import { PatientEditComponent } from './patient-edit/patient-edit.component';
+import { PatientDashboardComponent } from './patient-dashboard/patient-dashboard.component';
 
 @NgModule({
-  declarations: [PatientComponent, PatientTableComponent, PatientEditComponent],
+  declarations: [PatientComponent, PatientTableComponent, PatientEditComponent, PatientDashboardComponent],
   imports: [
     CommonModule,
     PatientRoutingModule,

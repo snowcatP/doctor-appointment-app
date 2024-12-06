@@ -78,6 +78,7 @@ export class DoctorAppointmentComponent implements OnInit {
       .subscribe(
         (response) => {
           if (response.statusCode === 200) {
+            console.log(response)
             this.appointments = response.data;
             this.filteredAppointments = [...this.appointments];
             this.totalAppointments = (response.totalPage - 1) * pageSize + this.filteredAppointments.length;

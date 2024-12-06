@@ -217,6 +217,7 @@ export class DoctorPatientProfileComponent {
 
   clickEditMedicalRecord(medicalRecord: any): void {
     this.editingMedicalRecord = { ...medicalRecord };
+    console.log(this.editingMedicalRecord)
     this.editingMedicalRecord.medicalRecordId = medicalRecord.id;
     this.isEditFormVisible = true;
   }

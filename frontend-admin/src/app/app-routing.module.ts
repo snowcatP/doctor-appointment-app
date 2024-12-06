@@ -40,7 +40,13 @@ const routes: Routes = [
         path: 'patient',
         loadChildren: () =>
           import('./modules/patient/patient.module').then((m)=> m.PatientModule)
-      }
+      },
+      {
+        path: 'appointment',
+        loadChildren: () =>
+          import('./modules/appointment/appointment.module').then((m)=> m.AppointmentModule)
+      },
+
 
     ],
   },

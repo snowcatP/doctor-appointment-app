@@ -66,7 +66,7 @@ public class CreateMedicalRecordCommand {
 //            }
 
             //Check file has null ?
-            if (!file.isEmpty()) {
+            if (file!=null) {
                 // Upload file to Firebase Storage if file not null
                 String fileUrl = firebaseStorageService.uploadFile(file);
                 addRequest.setFilePath(fileUrl);
@@ -79,7 +79,11 @@ public class CreateMedicalRecordCommand {
 
             medicalRecord.setBloodType(addRequest.getBloodType());
             medicalRecord.setHeartRate(addRequest.getHeartRate());
+            medicalRecord.setTemperature(addRequest.getTemperature());
+            medicalRecord.setHeight(addRequest.getHeight());
+            medicalRecord.setWeight(addRequest.getWeight());
             medicalRecord.setDescription(addRequest.getDescription());
+            medicalRecord.setAllergies(addRequest.getAllergies());
 
             medicalRecord.setFilePath(addRequest.getFilePath());
             medicalRecord.setPatient(patient);
@@ -90,6 +94,7 @@ public class CreateMedicalRecordCommand {
 
             medicalRecord.setAppointment(appointment);
             medicalRecordRepository.saveAndFlush(medicalRecord);
+
 
             MedicalRecordResponse medicalRecordResponse = medicalRecordMapper.toResponse(medicalRecord);
             apiResponse.ok(medicalRecordResponse);

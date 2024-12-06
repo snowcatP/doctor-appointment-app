@@ -11,4 +11,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PageResponse<T>  extends  ApiResponse<T> {
     private double totalPage;
+    private Long totalSize;
 }

@@ -11,7 +11,16 @@ import { Doctor } from '../../../core/models/doctor';
 import { DoctorService } from '../../../core/services/doctor.service';
 import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
+interface Column {
+  field: string;
+  header: string;
+  customExportHeader?: string;
+}
 
+interface ExportColumn {
+  title: string;
+  dataKey: string;
+}
 @Component({
   selector: 'app-specialty-table',
   templateUrl: './specialty-table.component.html',
@@ -27,6 +36,9 @@ export class SpecialtyTableComponent implements OnInit {
   selectedSpecialty: Specialty[];
   viewSpecilatyDetailsVisible: any;
   formEditDoctor: FormGroup<any>;
+  cols!: Column[];
+
+  exportColumns!: ExportColumn[];
   constructor(
     private specialtyService: SpecialtyService,
     private doctorService: DoctorService,
@@ -37,7 +49,16 @@ export class SpecialtyTableComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.getListSpecialty();
-
+    this.cols = [
+      { field: 'id', header: 'Specialty Id', customExportHeader: 'Specialty Id' },
+      { field: 'specialtyName', header: 'Specialty Name', customExportHeader: 'Specialty Name' },
+      { field: 'headDoctor', header: 'Head Doctor', customExportHeader: 'Head Doctor' },
+      { field: 'doctorList', header: 'Doctor List', customExportHeader: 'Doctor List'  },
+    ];
+    this.exportColumns = this.cols.map((col) => ({
+      title: col.header,
+      dataKey: col.field,
+    }));
   }
   getListSpecialty() {
     this.specialtyService.getListSpecialty().subscribe({

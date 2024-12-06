@@ -1,0 +1,256 @@
+<div class="dashboard card flex flex-column md:flex-row gap-3">
+    <!-- Patient and Doctor Information -->
+    <div class="header">
+        <div class="info">
+            <div class="info-item">
+                <div
+                    style="width: 50px; height: 50px; border-radius: 50%; background-color: #3B82F6; display: flex; justify-content: center; align-items: center;">
+
+                    <i class="fas fa-user" style="color: #fff;"></i>
+                </div>
+                <p><strong>{{patient.fullName}}</strong><br><span>Name</span></p>
+            </div>
+            <div class="info-item">
+                <div
+                    style="width: 50px; height: 50px; border-radius: 50%; background-color: #3B82F6; display: flex; justify-content: center; align-items: center;">
+
+                    <i *ngIf="patient.gender" class="fas fa-mars" style="color: #fff;"></i>
+                    <i *ngIf="!patient.gender" class="fas fa-venus" style="color: #fff;"></i>
+                </div>
+                <p><strong> {{patient.gender ? 'Male': 'Female'}}</strong><br><span>Gender</span></p>
+            </div>
+            <div class="info-item">
+                <div
+                    style="width: 50px; height: 50px; border-radius: 50%; background-color: #3B82F6; display: flex; justify-content: center; align-items: center;">
+                    <i class="fas fa-stethoscope" style="color: #fff;"></i>
+                </div>
+                <p><strong>{{patientAge}}</strong><br><span>Age</span></p>
+            </div>
+            <div class="info-item">
+                <div
+                    style="width: 50px; height: 50px; border-radius: 50%; background-color: #3B82F6; display: flex; justify-content: center; align-items: center;">
+                    <i class="fas fa-notes-medical" style="color: #fff;"></i>
+                </div>
+                <p><strong>{{firstMedicalRecord.bloodType}}</strong><br><span>Blood Type</span></p>
+            </div>
+        </div>
+        <div class="profile">
+            <p-avatar styleClass="mr-2" size="xlarge" shape="circle" [image]="patient.avatarFilePath" />
+        </div>
+    </div>
+
+    <!-- Health Stats Section -->
+    <div class="stats">
+        <div class="stat-card col-xs-4">
+            <div class="stat-header" style="color: #f44336;">
+                <i class="icon">⚠️</i>
+                <h3>Treatment Plan</h3>
+            </div>
+            <p>Recent visits</p>
+            <div class="stat-table ">
+                <p-table [value]="medical_records" styleClass="medical_record" [tableStyle]="{ 'width': '100%'}">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Treatment plan</th>
+                            <th>Date Created</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-medical_record>
+                        <tr style="text-align: center;">
+                            <td>{{ medical_record.treatmentPlan }}</td>
+                            <td>{{ medical_record.lastModified | date: 'dd-MM-yyyy' }} </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="stat-card col-xs-4">
+            <div class="stat-header" style="color: #2196f3;">
+                <i class="icon">💧</i>
+                <h3>Diagnosis</h3>
+            </div>
+            <p>Recent visits</p>
+            <div class="stat-table">
+                <p-table [value]="medical_records" styleClass="medical_record" [tableStyle]="{ 'width': '100%' }">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Diagnosis</th>
+                            <th>Date Created</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-medical_record>
+                        <tr style="text-align: center;">
+                            <td>{{ medical_record.diagnosis }}</td>
+                            <td>{{ medical_record.lastModified | date: 'dd-MM-yyyy' }} </td>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="stat-card col-xs-4">
+            <div class="stat-header" style="color: #4caf50;">
+                <i class="icon">💓</i>
+                <h3>Heart Rate</h3>
+            </div>
+            <p>Recent visits</p>
+            <div class="stat-table">
+                <p-table [value]="medical_records" styleClass="medical_record" [tableStyle]="{ 'width': '100%' }">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Heart Rate</th>
+                            <th>Date Created</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-medical_record>
+                        <tr style="text-align: center;">
+                            <td>{{ medical_record.heartRate }}</td>
+                            <td>{{ medical_record.lastModified | date: 'dd-MM-yyyy' }} </td>
+
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+            </div>
+        </div>
+        <div class="stat-card col-xs-4">
+            <div class="stat-header" style="color: #ff9800;">
+                <i class="icon">🧪</i>
+                <h3>Prescription</h3>
+            </div>
+            <p>Recent visits</p>
+            <div class="stat-table">
+                <p-table [value]="medical_records" styleClass="medical_record" [tableStyle]="{ 'width': '100%' }">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Prescription</th>
+                            <th>Date Created</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-medical_record>
+                        <tr style="text-align: center;">
+                            <td>{{ medical_record.prescription }}</td>
+                            <td>{{ medical_record.lastModified | date: 'dd-MM-yyyy' }} </td>
+
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid my-4">
+        <!-- Doctor Visits and Reports Section -->
+        <div class="row">
+            <div class="col">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Doctor Visits</h5>
+                    </div>
+                    <div class="card-body">
+                        <p-table [value]="medical_records" styleClass="medical_record"
+                            [tableStyle]="{ 'width': '100%' }">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Doctor</th>
+                                    <th>Date</th>
+                                    <th>Specialty</th>
+                                    <th>Report ID</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-medical_record>
+                                <tr>
+                                    <td style="display: flex; align-items: center; justify-content: center;"> <p-avatar
+                                            styleClass="mr-2" size="large"
+                                            [image]="medical_record.appointmentResponse.doctor.avatarFilePath"
+                                            shape="circle" /> {{medical_record.appointmentResponse.doctor.fullName}}
+                                    </td>
+                                    <td>{{ medical_record.lastModified | date: 'dd-MM-yyyy' }} </td>
+                                    <td>{{ medical_record.appointmentResponse.doctor.specialty | date: 'dd-MM-yyyy' }}
+                                    </td>
+                                    <td>#{{ medical_record.id}} </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Reports</h5>
+                    </div>
+                    <div class="card-body">
+                        <p-table [value]="medical_records" styleClass="medical_record"
+                        [tableStyle]="{ 'width': '100%' }">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Report ID</th>
+                                <th>Report link</th>
+                                <th>Date</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-medical_record>
+                            <tr>
+                                <td>#{{ medical_record.id}} </td>
+                                <td><a [href]="medical_record.id"></a></td>
+                                <td>{{ medical_record.lastModified | date: 'dd-MM-yyyy' }} </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Health Activity, Pharmacy, and Timeline -->
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Health Activity</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <img src="https://img.freepik.com/free-vector/opening-soon-background-with-typography_23-2147886472.jpg?t=st=1733424065~exp=1733427665~hmac=0a624677bf8a6e2ae0a7b3c0be00d5ce6b75725940693246c10c4c07a6d27769&w=740" alt="Health Activity" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Pharmacy</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <img src="https://img.freepik.com/free-vector/opening-soon-background-with-typography_23-2147886472.jpg?t=st=1733424065~exp=1733427665~hmac=0a624677bf8a6e2ae0a7b3c0be00d5ce6b75725940693246c10c4c07a6d27769&w=740" alt="Pharmacy" class="img-fluid">
+                        <h3>$980</h3>
+                        <p>Average Spending</p>
+                        <p class="text-success">+20% vs last month</p>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Timeline</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="timeline">
+                            <li>
+                                <span>An hour ago</span>
+                                Dr. Janie McDonald - sent a new prescription. <br>
+                                Medicine Name - <span class="text-danger">Amocvmillin</span>
+                            </li>
+                            <li>
+                                <span>An hour ago</span>
+                                Dr. Hector Banks - uploaded a report. <br>
+                                Report Name - <span class="text-primary">Lisymopril</span>
+                            </li>
+                            <li>
+                                <span>An hour ago</span>
+                                Dr. Deena Cooley - sent medicine details. <br>
+                                Medicine Name - <span class="text-danger">Predymysone</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>

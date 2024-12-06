@@ -19,7 +19,16 @@ import { SpecialtyService } from '../../../core/services/specialty.service';
 import { first, forkJoin } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { Route, Router } from '@angular/router';
+interface Column {
+  field: string;
+  header: string;
+  customExportHeader?: string;
+}
 
+interface ExportColumn {
+  title: string;
+  dataKey: string;
+}
 @Component({
   selector: 'app-doctor-table',
   templateUrl: './doctor-table.component.html',
@@ -44,6 +53,9 @@ export class DoctorTableComponent {
   loadingFetchingData: boolean = true;
   totalSize: number = 0;
   totalSizePercent: number = 0;
+  cols!: Column[];
+
+  exportColumns!: ExportColumn[];
   constructor(
     private doctorService: DoctorService,
     private specialtyService: SpecialtyService,
@@ -58,6 +70,21 @@ export class DoctorTableComponent {
     this.loadingFetchingData = true;
     this.getListDoctor();
     this.getListSpecialty();
+    this.cols = [
+      { field: 'id', header: 'Id', customExportHeader: 'Appointment Id' },
+      { field: 'firstName', header: 'First Name', customExportHeader: 'First Name' },
+      { field: 'lastName', header: 'Last Name', customExportHeader: 'Last Name' },
+      { field: 'gender', header: 'Gender', customExportHeader: 'Gender'  },
+      { field: 'address', header: 'Address', customExportHeader: 'Address'  },
+      { field: 'averageRating', header: 'Rating', customExportHeader: 'Rating'  },
+      { field: 'phone', header: 'Phone', customExportHeader: 'Phone'  },
+      { field: 'email', header: 'Email', customExportHeader: 'Email'  },
+      { field: 'dateOfBirth', header: 'BirthDay', customExportHeader: 'BirthDay'   }
+    ];
+    this.exportColumns = this.cols.map((col) => ({
+      title: col.header,
+      dataKey: col.field,
+    }));
     this.formAddNewDoctor = this.fb.group({
       firstName: ['', [RxwebValidators.required()]],
       lastName: ['', [RxwebValidators.required()]],
@@ -112,7 +139,6 @@ export class DoctorTableComponent {
           doctor.avatarFilePath = doctor.avatarFilePath ?? defaultAvatarPath;
           return doctor;
         });
-        console.log(resp);
         this.loadingFetchingData = false;
       },
     });

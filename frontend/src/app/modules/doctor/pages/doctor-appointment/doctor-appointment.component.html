@@ -29,8 +29,10 @@
               />
               <div class="profile-det-info">
                 <h3>
-                  <a class="external-link" *ngIf="appointment?.patientResponse?.id" (click)="viewPatientProfile(appointment?.patientResponse?.id)">{{ appointment.fullName }}</a>
-                  <a class="external-link" *ngIf="appointment?.patientResponse?.id === null">{{ appointment.fullName }}</a>
+                  <a class="external-link" style="cursor: pointer;" *ngIf="appointment?.patientResponse?.id" (click)="viewPatientProfile(appointment?.patientResponse?.id)">
+                    {{ appointment.fullName }}
+                  </a>
+                  <a class="external-link" style="cursor: pointer;" *ngIf="appointment?.patientResponse?.id === null">{{ appointment.fullName }}</a>
                 </h3>
                 <div class="patient-details">
                   <h5>

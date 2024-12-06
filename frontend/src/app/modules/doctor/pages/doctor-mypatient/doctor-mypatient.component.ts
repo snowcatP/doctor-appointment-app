@@ -9,10 +9,10 @@ import { Router } from '@angular/router';
 export class DoctorMypatientComponent {
   patients: any[] = [];
   totalPatients: number = 0;
-  pageSize: number = 12;
+  pageSize: number = 8;
   currentPage: number = 1;
   searchPatientName: string = '';
-
+  totalSize: number = 0;
   constructor(private doctorService: DoctorService,
     private router: Router,
   ) { }
@@ -25,8 +25,10 @@ export class DoctorMypatientComponent {
     this.doctorService.getAllPatientsOfDoctor(page, pageSize,patientName).subscribe(
       (response) => {
         if (response.statusCode === 200) {
+          console.log(response)
           this.patients = response.data;
           this.totalPatients = response.totalPage * pageSize;
+          this.totalSize = response.totalSize;
         } else{
           console.log(response)
         }

@@ -52,10 +52,7 @@ public class GetAllPatientOfDoctorQuery {
         Set<Long> patientIds = new HashSet<>();
         //Convert entities to responses
         List<PatientResponse> appointmentResponses = appointmentPage.getContent().stream()
-                .filter(appointment -> {
-                    // Allow appointments with patients or guests
-                    return appointment.getPatient() == null || patientIds.add(appointment.getPatient().getId());
-                })
+
                 .map(appointment -> {
                     PatientResponse response = new PatientResponse();
                     if (appointment.getPatient() != null) {
@@ -84,7 +81,7 @@ public class GetAllPatientOfDoctorQuery {
         pageResponse.ok(appointmentResponses);
         double total = Math.ceil((double) appointmentPage.getTotalElements() / size);
         pageResponse.setTotalPage((int) total);
-
+        pageResponse.setTotalSize(appointmentPage.getTotalElements());
         return pageResponse;
     }
 }

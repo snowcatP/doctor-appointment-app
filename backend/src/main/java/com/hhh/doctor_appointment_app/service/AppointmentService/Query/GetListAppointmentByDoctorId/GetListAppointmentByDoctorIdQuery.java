@@ -90,7 +90,7 @@ public class GetListAppointmentByDoctorIdQuery {
         pageResponse.ok(appointmentResponses);
         double total = Math.ceil((double) appointmentPage.getTotalElements() / size);
         pageResponse.setTotalPage((int) total);
-
+        pageResponse.setTotalSize(appointmentPage.getTotalElements());
         return pageResponse;
     }
 }
