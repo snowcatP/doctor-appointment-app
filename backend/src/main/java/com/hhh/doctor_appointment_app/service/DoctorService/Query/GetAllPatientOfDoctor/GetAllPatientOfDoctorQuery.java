@@ -46,7 +46,7 @@ public class GetAllPatientOfDoctorQuery {
         Doctor doctor = doctorRepository.findDoctorByProfile_Email(username).orElseThrow(() -> new NotFoundException("Doctor Not Found"));
 
         Pageable pageable = PageRequest.of(page-1, size);
-        Page<Appointment> appointmentPage = appointmentRepository.findByDoctorEmailAndPatientNameContainingIgnoreCase(username,patientName,pageable);
+        Page<Appointment> appointmentPage = appointmentRepository.findDistinctAppointments(username,patientName,pageable);
 
         // Remove duplicate patients by using a set of patient IDs
         Set<Long> patientIds = new HashSet<>();
