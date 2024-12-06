@@ -143,6 +143,43 @@ export class DoctorAppointmentComponent implements OnInit {
     );
   }
 
+  onChangeInProgressOfAppointment(id: number) {
+    this.appointmentService.changeInProgressOfAppointmentByDoctor(id).subscribe(
+      (response: ApiResponse) => {
+        if (response.statusCode === 200) {
+          this.messageService.add({
+            key: 'messageToast',
+            severity: 'success',
+            summary: 'Success',
+            detail: response.message || 'Status changed successfully',
+          });
+          setTimeout(() => {
+            this.fetchGetListAppointmentsOfDoctor(
+              this.currentPage,
+              this.pageSize
+            );
+          }, 1000);
+        } else {
+          this.messageService.add({
+            key: 'messageToast',
+            severity: 'error',
+            summary: 'Error',
+            detail: response.message || 'Failed to change status',
+          });
+        }
+      },
+      (error) => {
+        console.error('Failed to change status', error);
+        this.messageService.add({
+          key: 'messageToast',
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to change status due to server error',
+        });
+      }
+    );
+  }
+
   onCancelAppointment(id: number) {
     this.appointmentService.cancelAppointmentByDoctor(id).subscribe(
       (response: ApiResponse) => {

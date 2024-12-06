@@ -80,6 +80,9 @@ public class Appointment {
             case CANCELLED -> {
                 return new CancelledState();
             }
+            case IN_PROGRESS -> {
+                return new InProgessState();
+            }
             default -> throw new IllegalStateException("Unknown state type");
         }
     }

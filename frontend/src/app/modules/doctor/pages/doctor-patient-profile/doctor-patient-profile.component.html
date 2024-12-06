@@ -131,22 +131,23 @@
                             </td>
                             <td>
                               <span class="badge badge-pill" [ngClass]="{
-                                  'bg-primary-light':
-                                    appointment.appointmentStatus === 'ACCEPT',
-                                  'bg-info-light':
-                                    appointment.appointmentStatus ===
-                                    'RESCHEDULED',
-                                  'bg-success-light':
-                                    appointment.appointmentStatus ===
-                                    'COMPLETED',
-                                  'bg-warning-light':
-                                    appointment.appointmentStatus === 'PENDING',
-                                  'bg-danger-light':
-                                    appointment.appointmentStatus ===
-                                    'CANCELLED'
-                                }">
-                                {{ appointment.appointmentStatus }}
-                              </span>
+                                'bg-primary-light':
+                                  appointment.appointmentStatus === 'ACCEPT',
+                                'bg-info-light':
+                                  appointment.appointmentStatus === 'RESCHEDULED',
+                                'bg-success-light':
+                                  appointment.appointmentStatus === 'COMPLETED',
+                                'bg-warning-light':
+                                  appointment.appointmentStatus === 'PENDING',
+                                'bg-danger-light':
+                                  appointment.appointmentStatus === 'CANCELLED',
+                              }" *ngIf="appointment.appointmentStatus != 'IN_PROGRESS'">
+                              {{ appointment.appointmentStatus }}
+                            </span>
+                            <span class="badge badge-pill" style="background-color: rgb(29, 216, 85); color: rgb(255, 255, 255);" 
+                            *ngIf="appointment.appointmentStatus === 'IN_PROGRESS'">
+                            {{ appointment.appointmentStatus }}
+                            </span>
                             </td>
                             <td class="text-right">
                               <div class="appointment-action">
@@ -216,19 +217,23 @@
                     <p>Status:</p>
                     <p>
                       <span class="badge badge-pill" [ngClass]="{
-            'bg-primary-light':
-              selectedAppointment.appointmentStatus === 'ACCEPT',
-            'bg-info-light':
-              selectedAppointment.appointmentStatus === 'RESCHEDULED',
-            'bg-success-light':
-              selectedAppointment.appointmentStatus === 'COMPLETED',
-            'bg-warning-light':
-              selectedAppointment.appointmentStatus === 'PENDING',
-            'bg-danger-light':
-              selectedAppointment.appointmentStatus === 'CANCELLED'
-          }">
-                        {{ selectedAppointment?.appointmentStatus }}
-                      </span>
+                        'bg-primary-light':
+                          selectedAppointment.appointmentStatus === 'ACCEPT',
+                        'bg-info-light':
+                        selectedAppointment.appointmentStatus === 'RESCHEDULED',
+                        'bg-success-light':
+                        selectedAppointment.appointmentStatus === 'COMPLETED',
+                        'bg-warning-light':
+                        selectedAppointment.appointmentStatus === 'PENDING',
+                        'bg-danger-light':
+                        selectedAppointment.appointmentStatus === 'CANCELLED',
+                      }" *ngIf="selectedAppointment.appointmentStatus != 'IN_PROGRESS'">
+                      {{ selectedAppointment.appointmentStatus }}
+                    </span>
+                    <span class="badge badge-pill" style="background-color: rgb(29, 216, 85); color: rgb(255, 255, 255);" 
+                    *ngIf="selectedAppointment.appointmentStatus === 'IN_PROGRESS'">
+                    {{ selectedAppointment.appointmentStatus }}
+                    </span>
                     </p>
                   </div>
                   <div class="row d-flex justify-content-between pe-0">
@@ -283,22 +288,25 @@
                             </td>
                             <td>
                               <span class="badge badge-pill" [ngClass]="{
-                                  'bg-primary-light':
-                                  medicalRecord.appointmentResponse?.appointmentStatus === 'ACCEPT',
-                                  'bg-info-light':
-                                  medicalRecord.appointmentResponse?.appointmentStatus ===
-                                    'RESCHEDULED',
-                                  'bg-success-light':
-                                  medicalRecord.appointmentResponse?.appointmentStatus ===
-                                    'COMPLETED',
-                                  'bg-warning-light':
-                                  medicalRecord.appointmentResponse?.appointmentStatus === 'PENDING',
-                                  'bg-danger-light':
-                                  medicalRecord.appointmentResponse?.appointmentStatus ===
-                                    'CANCELLED'
-                                }">
-                                {{ medicalRecord.appointmentResponse?.appointmentStatus }}
-                              </span>
+                                'bg-primary-light':
+                                medicalRecord.appointmentResponse?.appointmentStatus === 'ACCEPT',
+                                'bg-info-light':
+                                medicalRecord.appointmentResponse?.appointmentStatus === 'RESCHEDULED',
+                                'bg-success-light':
+                                medicalRecord.appointmentResponse?.appointmentStatus === 'COMPLETED',
+                                'bg-warning-light':
+                                medicalRecord.appointmentResponse?.appointmentStatus === 'PENDING',
+                                'bg-danger-light':
+                                medicalRecord.appointmentResponse?.appointmentStatus === 'CANCELLED',
+                              }" *ngIf="medicalRecord.appointmentResponse?.appointmentStatus != 'IN_PROGRESS'">
+                              {{ medicalRecord.appointmentResponse?.appointmentStatus }}
+                            </span>
+                            <span class="badge badge-pill" style="background-color: rgb(29, 216, 85); color: rgb(255, 255, 255);" 
+                            *ngIf="medicalRecord.appointmentResponse?.appointmentStatus === 'IN_PROGRESS'">
+                            {{ medicalRecord.appointmentResponse?.appointmentStatus }}
+                            </span>
+
+                              
                             </td>
                             <td>{{ medicalRecord?.description }}</td>
                             <td *ngIf="medicalRecord?.filePath">
