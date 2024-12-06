@@ -189,6 +189,7 @@ export class DoctorAppointmentComponent implements OnInit {
 
   closeRescheduleDialog(): void {
     this.rescheduleVisible = false;
+    this.timeSlotSelected = null;
   }
 
   selectBookingDate(slot: TimeSlot) {

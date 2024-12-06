@@ -3557,8 +3557,8 @@ html.menu-opened body {
 }
 .time-slot li .timing.prev {
 	background-color: #fff;
-	border: 1px solid #c94747 !important;
-	color: #c94747;
+	border: 1px solid #09e5ab !important;
+	color: #09e5ab;
 }
 .time-slot li .timing.selected::after {
     color: #42c0fb;
@@ -3566,7 +3566,7 @@ html.menu-opened body {
     font-family: "Font Awesome 5 Free";
 	font-size: 12px;
     font-weight: 900;
-	margin-left: 5px;
+	/* margin-left: 5px; */
     
 }
 .schedule-list {
@@ -6820,4 +6820,8 @@ spinner{
 }
 #terms_accept{
 	margin-right: 10px;
+}
+
+.ng-trigger {
+	border-radius: 50%;
 }

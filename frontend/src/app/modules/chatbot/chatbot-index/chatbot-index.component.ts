@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import {
   ChatbotMessage,
   ChatbotRequest,
@@ -23,6 +23,10 @@ export class ChatbotIndexComponent implements OnInit {
   constructor(private chatbotService: ChatbotService) {}
 
   ngOnInit(): void {}
+
+  ngAfterViewInit(): void {
+    this.promptInput.nativeElement.focus();
+  }
 
   close() {
     this.toggleChatbot.emit('false');

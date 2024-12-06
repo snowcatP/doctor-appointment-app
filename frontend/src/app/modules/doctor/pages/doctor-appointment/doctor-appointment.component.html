@@ -93,13 +93,6 @@
               <!-- Show Reschedule and Complete buttons if status is ACCEPT -->
               <a
                 *ngIf="appointment.appointmentStatus === 'ACCEPT'"
-                class="btn btn-sm bg-info-light"
-                (click)="openRescheduleDialog(appointment)"
-              >
-                <i class="fa-solid fa-rotate"></i> Reschedule
-              </a>
-              <a
-                *ngIf="appointment.appointmentStatus === 'ACCEPT'"
                 class="btn btn-sm bg-success-light"
                 (click)="onChangeStatusAppointment(appointment.id)"
               >
@@ -107,7 +100,10 @@
               </a>
               <!-- Show Reschedule buttons if status is Reschedule -->
               <a
-                *ngIf="appointment.appointmentStatus === 'RESCHEDULED'"
+                *ngIf="
+                  appointment.appointmentStatus !== 'CANCELLED' &&
+                  appointment.appointmentStatus !== 'PENDING'
+                "
                 class="btn btn-sm bg-info-light"
                 (click)="openRescheduleDialog(appointment)"
               >
@@ -274,6 +270,7 @@
         mat-flat-button
         extended
         (click)="submitRescheduleAppointment()"
+        [disabled]="!timeSlotSelected"
       >
         Done
       </button>

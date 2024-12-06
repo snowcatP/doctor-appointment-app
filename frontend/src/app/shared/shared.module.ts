@@ -45,8 +45,8 @@ import { InputTextModule } from 'primeng/inputtext';
     MatListModule,
     IconFieldModule,
     InputIconModule,
-    InputTextModule
-    
+    InputTextModule,
+    MatTooltipModule,
   ],
   exports: [
     ScheduleComponent,

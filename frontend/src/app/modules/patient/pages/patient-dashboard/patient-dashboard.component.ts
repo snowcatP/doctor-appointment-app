@@ -212,5 +212,6 @@ export class PatientDashboardComponent {
 
   closeRescheduleDialog() {
     this.rescheduleVisible = false;
+    this.selectedAppointment = null;
   }
 }
