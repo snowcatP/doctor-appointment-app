@@ -42,7 +42,7 @@ public class LLamaAIService {
                 Map.of("prompt", request.getPrompt()),
                 OllamaOptions.create()
                     .withModel(OllamaModel.LLAMA3_2)
-                    .withTemperature(0.7));
+                    .withTemperature(0.8));
 
         ChatResponse response = chatModel.call(prompt);
 
