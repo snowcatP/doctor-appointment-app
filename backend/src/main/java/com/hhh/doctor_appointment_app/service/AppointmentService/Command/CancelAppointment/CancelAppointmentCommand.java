@@ -14,6 +14,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 @Service
 public class CancelAppointmentCommand {
     @Autowired
@@ -29,17 +36,54 @@ public class CancelAppointmentCommand {
             Appointment appointment = appointmentRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Appointment Not Found"));
 
-            if (!(appointment.getAppointmentState() instanceof PendingState)) {
-                throw new IllegalStateException("Appointment can only be cancelled from Pending status.");
+            AppointmentStatus currentStatus = appointment.getAppointmentStatus();
+            LocalDateTime now = LocalDateTime.now();
+
+            // Change `dateBooking` & `bookingHour` to `LocalDateTime`
+            LocalDate dateBooking = appointment.getDateBooking().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate();
+
+            String bookingHour = appointment.getBookingHour();
+            LocalTime bookingStartTime;
+
+            try {
+                String startTime = bookingHour.split(" - ")[0];
+                bookingStartTime = LocalTime.parse(startTime, DateTimeFormatter.ofPattern("HH:mm"));
+            } catch (DateTimeParseException | ArrayIndexOutOfBoundsException e) {
+                throw new IllegalArgumentException("Invalid bookingHour format. Expected format: 'HH:mm - HH:mm'", e);
             }
 
-            ((PendingState) appointment.getAppointmentState()).cancel(appointment);
+            LocalDateTime appointmentDateTime = LocalDateTime.of(dateBooking, bookingStartTime);
+
+            // Check logic
+            if (currentStatus == AppointmentStatus.PENDING) {
+                // Pending can be cancelled any time
+                appointment.setAppointmentStatus(AppointmentStatus.CANCELLED);
+                apiResponse.setMessage("Appointment cancelled successfully.");
+            } else if (currentStatus == AppointmentStatus.ACCEPT || currentStatus == AppointmentStatus.RESCHEDULED) {
+                // Accept or Reschedule just only be cancelled before 3 hours
+                if (now.isBefore(appointmentDateTime.minusHours(3))) {
+                    appointment.setAppointmentStatus(AppointmentStatus.CANCELLED);
+                    apiResponse.setMessage("Appointment cancelled successfully.");
+                } else {
+                    apiResponse.setMessage("Cannot cancel the appointment within 3 hours before the scheduled time.");
+                    apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+                    return apiResponse;
+                }
+            } else {
+                // Other states are not allowed to be canceled.
+                apiResponse.setMessage("Appointment cannot be cancelled in its current status.");
+                apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+                return apiResponse;
+            }
+
+            // Save new status
             appointmentRepository.saveAndFlush(appointment);
 
             AppointmentResponse appointmentResponse = appointmentMapper.toResponse(appointment);
-            apiResponse.setMessage("Appointment Cancelled Successfully!");
             apiResponse.ok(appointmentResponse);
             return apiResponse;
+
 
         } catch (NotFoundException ex) {
             return ApiResponse.builder()

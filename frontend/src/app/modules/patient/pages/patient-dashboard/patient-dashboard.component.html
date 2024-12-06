@@ -61,51 +61,40 @@
                           </span>
                         </td>
                         <td>
-                          <span
-                            class="badge badge-pill"
-                            [ngClass]="{
-                              'bg-primary-light':
-                                appointment.appointmentStatus === 'ACCEPT',
-                              'bg-info-light':
-                                appointment.appointmentStatus === 'RESCHEDULED',
-                              'bg-success-light':
-                                appointment.appointmentStatus === 'COMPLETED',
-                              'bg-warning-light':
-                                appointment.appointmentStatus === 'PENDING',
-                              'bg-danger-light':
-                                appointment.appointmentStatus === 'CANCELLED'
-                            }"
-                          >
-                            {{ appointment.appointmentStatus }}
-                          </span>
+                          <span class="badge badge-pill" [ngClass]="{
+                            'bg-primary-light':
+                              appointment.appointmentStatus === 'ACCEPT',
+                            'bg-info-light':
+                              appointment.appointmentStatus === 'RESCHEDULED',
+                            'bg-success-light':
+                              appointment.appointmentStatus === 'COMPLETED',
+                            'bg-warning-light':
+                              appointment.appointmentStatus === 'PENDING',
+                            'bg-danger-light':
+                              appointment.appointmentStatus === 'CANCELLED',
+                          }" *ngIf="appointment.appointmentStatus != 'IN_PROGRESS'">
+                          {{ appointment.appointmentStatus }}
+                        </span>
+                        <span class="badge badge-pill" style="background-color: rgb(29, 216, 85);  color: rgb(255, 255, 255);"
+                        *ngIf="appointment.appointmentStatus === 'IN_PROGRESS'">
+                        {{ appointment.appointmentStatus }}
+                        </span>
                         </td>
-                        <td class="text-LEFT">
+                        <td class="text-right">
                           <div class="table-action d-flex justify-content-end">
-                            <button
-                              class="btn btn-sm bg-warning-light me-2"
-                              (click)="viewAppointmentDetails(appointment)"
-                              type="button"
-                            >
+                            <button class="btn btn-sm bg-warning-light me-2"
+                              (click)="viewAppointmentDetails(appointment)" type="button">
                               <i class="far fa-eye"></i> View
                             </button>
-                            <button
-                              *ngIf="
-                                appointment.appointmentStatus !== 'CANCELLED' &&
-                                appointment.appointmentStatus !== 'PENDING'
-                              "
-                              class="btn btn-sm bg-info-light me-2"
-                              (click)="openRescheduleDialog(appointment)"
-                            >
-                              <i class="fa-solid fa-rotate"></i> Reschedule
-                            </button>
-                            <button
-                              *ngIf="
-                                appointment.appointmentStatus === 'PENDING'
-                              "
-                              class="btn btn-sm bg-danger-light me-2"
-                              (click)="onCancelAppointment(appointment.id)"
-                            >
+                            <button *ngIf="appointment.appointmentStatus === 'PENDING' || appointment.appointmentStatus === 'ACCEPT'
+                            || appointment.appointmentStatus === 'RESCHEDULED'"
+                              class="btn btn-sm bg-danger-light me-2" (click)="onCancelAppointment(appointment.id)">
                               <i class="fas fa-times"></i> Cancel
+                            </button>
+                            <!-- Show Reschedule and Complete buttons if status is ACCEPT -->
+                            <button *ngIf="appointment.appointmentStatus === 'ACCEPT'"
+                              class="btn btn-sm bg-info-light me-2" (click)="openRescheduleDialog(appointment)">
+                              <i class="fa-solid fa-rotate"></i> Reschedule
                             </button>
                           </div>
                         </td>
@@ -114,31 +103,18 @@
                   </table>
                 </div>
                 <!-- Paginator Component -->
-                <p-paginator
-                  [rows]="pageSize"
-                  [totalRecords]="totalAppointments"
-                  [rowsPerPageOptions]="[10, 20]"
-                  (onPageChange)="handlePageEvent($event)"
-                  [showCurrentPageReport]="true"
-                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                ></p-paginator>
+                <p-paginator [rows]="pageSize" [totalRecords]="totalAppointments" [rowsPerPageOptions]="[10, 20]"
+                  (onPageChange)="handlePageEvent($event)" [showCurrentPageReport]="true"
+                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"></p-paginator>
               </div>
             </div>
           </div>
           <!-- Appointment Detail Dialog -->
-          <p-dialog
-            header="Appointment Details"
-            [modal]="true"
-            [(visible)]="visible"
-            [style]="{ width: '30rem' }"
-          >
+          <p-dialog header="Appointment Details" [modal]="true" [(visible)]="visible" [style]="{ width: '30rem' }">
             <div class="row" *ngIf="selectedAppointment">
               <div class="d-flex justify-content-between pe-2">
                 <p>Doctor:</p>
-                <p>
-                  Dr. {{ selectedAppointment?.doctor?.firstName }}
-                  {{ selectedAppointment?.doctor?.lastName }}
-                </p>
+                <p>Dr. {{ selectedAppointment?.doctor?.firstName }} {{ selectedAppointment?.doctor?.lastName }}</p>
               </div>
               <div class="d-flex justify-content-between pe-2">
                 <p>Patient Name:</p>
@@ -163,43 +139,32 @@
               <div class="d-flex justify-content-between pe-2">
                 <p>Status:</p>
                 <p>
-                  <span
-                    class="badge badge-pill"
-                    [ngClass]="{
-                      'bg-primary-light':
-                        selectedAppointment.appointmentStatus === 'ACCEPT',
-                      'bg-info-light':
-                        selectedAppointment.appointmentStatus === 'RESCHEDULED',
-                      'bg-success-light':
-                        selectedAppointment.appointmentStatus === 'COMPLETED',
-                      'bg-warning-light':
-                        selectedAppointment.appointmentStatus === 'PENDING',
-                      'bg-danger-light':
-                        selectedAppointment.appointmentStatus === 'CANCELLED'
-                    }"
-                  >
+                  <span class="badge badge-pill" [ngClass]="{
+        'bg-primary-light':
+          selectedAppointment.appointmentStatus === 'ACCEPT',
+        'bg-info-light':
+          selectedAppointment.appointmentStatus === 'RESCHEDULED',
+        'bg-success-light':
+          selectedAppointment.appointmentStatus === 'COMPLETED',
+        'bg-warning-light':
+          selectedAppointment.appointmentStatus === 'PENDING',
+        'bg-danger-light':
+          selectedAppointment.appointmentStatus === 'CANCELLED'
+      }">
                     {{ selectedAppointment?.appointmentStatus }}
                   </span>
                 </p>
               </div>
               <div class="row d-flex justify-content-between pe-0">
                 <p class="col-4">Reason:</p>
-                <div
-                  class="col-8 pe-0 d-flex justify-content-end"
-                  style="text-align: justify"
-                >
-                  <p-scrollPanel
-                    [style]="{ width: '100%', height: '100%' }"
-                    class="mh-25"
-                  >
+                <div class="col-8 pe-0 d-flex justify-content-end" style="text-align: justify">
+                  <p-scrollPanel [style]="{ width: '100%', height: '100%' }" class="mh-25">
                     {{ selectedAppointment?.reason }}
                   </p-scrollPanel>
                 </div>
               </div>
               <div class="d-flex justify-content-between pt-4">
-                <button mat-raised-button (click)="visible = !visible">
-                  Close
-                </button>
+                <button mat-raised-button (click)="visible = !visible">Close</button>
               </div>
             </div>
           </p-dialog>
@@ -220,7 +185,7 @@
                         <th>Appointment Status</th>
                         <th>Description</th>
                         <th>Attachment</th>
-                        <th>Created</th>
+                        <th>Created By</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -229,92 +194,81 @@
                         <td>{{ medicalRecord.id }}</td>
                         <td>
                           {{
-                            medicalRecord.dateCreated
-                              | date : "dd MMM yyyy, hh:mm a"
+                          medicalRecord.dateCreated
+                          | date : "dd MMM yyyy, hh:mm a"
                           }}
                         </td>
                         <td>
                           {{
-                            medicalRecord.appointmentResponse?.dateBooking
-                              | date : "dd MMM yyyy"
+                          medicalRecord.appointmentResponse?.dateBooking
+                          | date : "dd MMM yyyy"
                           }}
                           <span class="d-block text-info">
                             {{ medicalRecord.appointmentResponse?.bookingHour }}
                           </span>
                         </td>
                         <td>
-                          <span
-                            class="badge badge-pill"
-                            [ngClass]="{
-                              'bg-primary-light':
-                                medicalRecord.appointmentResponse
-                                  ?.appointmentStatus === 'ACCEPT',
-                              'bg-info-light':
-                                medicalRecord.appointmentResponse
-                                  ?.appointmentStatus === 'RESCHEDULED',
-                              'bg-success-light':
-                                medicalRecord.appointmentResponse
-                                  ?.appointmentStatus === 'COMPLETED',
-                              'bg-warning-light':
-                                medicalRecord.appointmentResponse
-                                  ?.appointmentStatus === 'PENDING',
-                              'bg-danger-light':
-                                medicalRecord.appointmentResponse
-                                  ?.appointmentStatus === 'CANCELLED'
-                            }"
-                          >
-                            {{
-                              medicalRecord.appointmentResponse
-                                ?.appointmentStatus
-                            }}
-                          </span>
+                          <span class="badge badge-pill" [ngClass]="{
+                            'bg-primary-light':
+                            medicalRecord.appointmentResponse
+                            ?.appointmentStatus === 'ACCEPT',
+                            'bg-info-light':
+                            medicalRecord.appointmentResponse
+                            ?.appointmentStatus === 'RESCHEDULED',
+                            'bg-success-light':
+                            medicalRecord.appointmentResponse
+                            ?.appointmentStatus === 'COMPLETED',
+                            'bg-warning-light':
+                            medicalRecord.appointmentResponse
+                            ?.appointmentStatus === 'PENDING',
+                            'bg-danger-light':
+                            medicalRecord.appointmentResponse
+                            ?.appointmentStatus === 'CANCELLED',
+                          }" *ngIf="medicalRecord.appointmentResponse
+                          ?.appointmentStatus != 'IN_PROGRESS'">
+                          {{ medicalRecord.appointmentResponse
+                                  ?.appointmentStatus }}
+                        </span>
+                        <span class="badge badge-pill" style="background-color: rgb(29, 216, 85);  color: rgb(255, 255, 255);"
+                        *ngIf="medicalRecord.appointmentResponse
+                                  ?.appointmentStatus === 'IN_PROGRESS'">
+                        {{ medicalRecord.appointmentResponse
+                                  ?.appointmentStatus }}
+                        </span>
+
                         </td>
                         <td>{{ medicalRecord?.description }}</td>
                         <td>
-                          <a [href]="medicalRecord?.filePath" target="_blank"
-                            >File</a
-                          >
+                          <a [href]="medicalRecord?.filePath" target="_blank">File</a>
                         </td>
                         <td>
                           <h2 class="table-avatar">
-                            <a
-                              (click)="
+                            <a (click)="
                                 viewDoctorProfile(
                                   medicalRecord.doctorResponse?.id
                                 )
-                              "
-                              class="avatar avatar-sm mr-3"
-                            >
-                              <img
-                                class="avatar-img rounded-circle"
-                                [src]="
-                                  medicalRecord.doctorResponse
-                                    ?.avatarFilePath || 'assets/images/user.png'
-                                "
-                                alt="User Image"
-                              />
+                              " class="avatar avatar-sm mr-3">
+                              <img class="avatar-img rounded-circle" [src]="
+                                  medicalRecord.doctorResponse?.avatarFilePath ||
+                                  'assets/images/user.png'
+                                " alt="User Image" />
                             </a>
-                            <a
-                              (click)="
+                            <a (click)="
                                 viewDoctorProfile(
                                   medicalRecord.doctorResponse?.id
                                 )
-                              "
-                              >Dr. {{ medicalRecord.doctorResponse?.firstName }}
+                              ">Dr. {{ medicalRecord.doctorResponse?.firstName }}
                               {{ medicalRecord.doctorResponse?.lastName }}
                               <span>{{
                                 medicalRecord.doctorResponse?.specialty
-                                  ?.specialtyName
-                              }}</span>
+                                ?.specialtyName
+                                }}</span>
                             </a>
                           </h2>
                         </td>
                         <td class="text-right">
                           <div class="table-action">
-                            <a
-                              class="btn btn-sm bg-info-light"
-                              (click)="viewMedicalRecordDetails(medicalRecord)"
-                            >
+                            <a class="btn btn-sm bg-info-light" (click)="viewMedicalRecordDetails(medicalRecord)">
                               <i class="far fa-eye"></i> View
                             </a>
                           </div>
@@ -324,74 +278,82 @@
                   </table>
                 </div>
                 <!-- Paginator Component -->
-                <p-paginator
-                  [rows]="pageSize"
-                  [totalRecords]="totalMedicalRecords"
-                  [rowsPerPageOptions]="[10, 20]"
-                  (onPageChange)="handlePageEvent($event)"
-                ></p-paginator>
+                <p-paginator [rows]="pageSize" [totalRecords]="totalMedicalRecords" [rowsPerPageOptions]="[10, 20]"
+                  (onPageChange)="handlePageEvent($event)"></p-paginator>
               </div>
             </div>
           </div>
           <!-- Medical Record Detail Dialog -->
-          <p-dialog
-            header="Medical Record Details"
-            [modal]="true"
-            [(visible)]="visibleMedicalRecord"
-            [style]="{ width: '25rem' }"
-          >
-            <div class="row" *ngIf="selectedMedicalRecord">
-              <div class="d-flex justify-content-between pe-2">
-                <p>Doctor:</p>
-                <p>
-                  Dr. {{ selectedMedicalRecord?.doctorResponse?.firstName }}
-                  {{ selectedMedicalRecord?.doctorResponse?.lastName }}
-                </p>
-              </div>
-              <div class="d-flex justify-content-between pe-2">
-                <p>Created Date:</p>
-                <p>
-                  {{
-                    selectedMedicalRecord.dateCreated
-                      | date : "dd MMM yyyy, hh:mm a"
-                  }}
-                </p>
-              </div>
-              <div class="d-flex justify-content-between pe-2">
-                <p>Last Modified:</p>
-                <p>
-                  {{
-                    selectedMedicalRecord.lastModified
-                      | date : "dd MMM yyyy, hh:mm a"
-                  }}
-                </p>
-              </div>
-              <div class="d-flex justify-content-between pe-2">
-                <p>Description:</p>
-                <p>{{ selectedMedicalRecord.description }}</p>
-              </div>
-              <div class="d-flex justify-content-between pe-2">
-                <p>File:</p>
-              </div>
-              <div class="doctor-img">
-                <p-image
-                  [src]="selectedMedicalRecord?.filePath"
-                  class="img-fluid"
-                  alt="Doctor Image"
-                  width="150"
-                  [preview]="true"
-                />
-              </div>
-              <div class="d-flex justify-content-between pt-4">
-                <button
-                  mat-raised-button
-                  (click)="visibleMedicalRecord = !visibleMedicalRecord"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </p-dialog>
+          <p-dialog header="Medical Record Details" [modal]="true" [(visible)]="visibleMedicalRecord"
+                [style]="{ width: '45rem' }">
+                <div class="row" *ngIf="selectedMedicalRecord">
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Created By:</p>
+                    <p>Nurse. {{ selectedMedicalRecord?.nurseResponse?.fullName }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Created Date:</p>
+                    <p>{{selectedMedicalRecord.dateCreated | date: "dd MMM yyyy, hh:mm a"}}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Last Modified:</p>
+                    <p>{{selectedMedicalRecord.lastModified | date : "dd MMM yyyy, hh:mm a"}}</p>
+                  </div>
+                  <div *ngIf="selectedMedicalRecord?.doctorResponse" class="d-flex justify-content-between pe-2">
+                    <p>Edited By:</p>
+                    <p>Dr. {{ selectedMedicalRecord?.doctorResponse?.fullName }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Blood Group:</p>
+                    <p>{{ selectedMedicalRecord?.bloodType }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Heart Rate:</p>
+                    <p>{{ selectedMedicalRecord?.heartRate }}
+                      <i class="fas fa-heartbeat fa-lg" style="color: #e10909;"></i>
+                    </p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Temperature:</p>
+                    <p>{{ selectedMedicalRecord?.temperature }}&deg;C</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Description:</p>
+                    <p>{{ selectedMedicalRecord?.description }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Allergies:</p>
+                    <p>{{ selectedMedicalRecord?.allergies }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Diagnosis:</p>
+                    <p>{{ selectedMedicalRecord?.diagnosis }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Prescription:</p>
+                    <p>{{ selectedMedicalRecord?.prescription }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>TreatmentPlan:</p>
+                    <p>{{ selectedMedicalRecord?.treatmentPlan }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>Note:</p>
+                    <p>{{ selectedMedicalRecord?.note }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between pe-2">
+                    <p>File:</p>
+                    <P *ngIf="!selectedMedicalRecord?.filePath">None</P>
+                  </div>
+                  <div *ngIf="selectedMedicalRecord?.filePath" class="d-flex justify-content-between pe-2">
+                    <p-image [src]="selectedMedicalRecord?.filePath" class="img-fluid" alt="" width="580"
+                      [preview]="true" />
+                  </div>
+                  <div class="d-flex justify-content-between pt-4">
+                    <button mat-raised-button (click)="visibleMedicalRecord = !visibleMedicalRecord">Close</button>
+                  </div>
+                </div>
+              </p-dialog>
         </mat-tab>
       </mat-tab-group>
     </div>
