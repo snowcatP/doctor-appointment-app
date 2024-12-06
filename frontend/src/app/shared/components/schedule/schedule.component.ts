@@ -141,25 +141,32 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.bookingSubscription) {
-      this.bookingSubscription.unsubscribe();
-    }
-    this.webSocketService.disconnectSocket();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete(); // Cleanup subscription on component destroy
+    // if (this.bookingSubscription) {
+    //   this.bookingSubscription.unsubscribe();
+    // }
+    // this.webSocketService.disconnectSocket();
+    // this.unsubscribe$.next();
+    // this.unsubscribe$.complete(); // Cleanup subscription on component destroy
   }
 
   webSocketInit() {
-    this.webSocketService
-      .connectSocket()
-      .pipe(filter((state) => state))
-      .subscribe(() => {
-        this.bookingSubscription = this.webSocketService
-          .on('/topic/booking/notifications')
-          .subscribe((notification: BookingNotification) => {
-            this.handleAppointmentSendFromWs(notification);
-          });
-      });
+    // this.webSocketService
+    //   .connectSocket()
+    //   .pipe(filter((state) => state))
+    //   .subscribe(() => {
+    //     this.bookingSubscription = this.webSocketService
+    //       .on('/topic/booking/notifications')
+    //       .subscribe((notification: BookingNotification) => {
+    //         this.handleAppointmentSendFromWs(notification);
+    //       });
+    //   });
+
+    // this.bookingSubscription = this.webSocketService
+    //   .on('/topic/booking/notifications')
+    //   .subscribe((notification: BookingNotification) => {
+    //     this.handleAppointmentSendFromWs(notification);
+    //     console.log('aa')
+    //   });
   }
 
   handleAppointmentSendFromWs(app: BookingNotification) {

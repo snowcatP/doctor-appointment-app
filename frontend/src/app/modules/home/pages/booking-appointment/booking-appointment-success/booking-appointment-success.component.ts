@@ -39,7 +39,7 @@ export class BookingAppointmentSuccessComponent implements OnInit {
     });
 
     this.appointmentService.getAppointmentBookedPatient.subscribe((res) => {
-      if (res.patientId != undefined) {
+      if (res.doctor.id != undefined) {
         this.appointmentBookedPatientData = res;
       }
     });

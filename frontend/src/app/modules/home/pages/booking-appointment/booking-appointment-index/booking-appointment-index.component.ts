@@ -279,7 +279,6 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         },
       })
     } else {
-      
       this.loading = true; // Start loading
       const bookingData: BookingDataGuest = {
         doctorId: this.doctorSelected.id,

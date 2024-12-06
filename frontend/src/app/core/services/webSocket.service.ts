@@ -23,7 +23,7 @@ export class WebSocketService {
       },
       onDisconnect: () => {
         console.log('Disconnected from WebSocket');
-        this.state$.next(false);
+        // this.state$.next(false);
       },
       onStompError: (frame) => {
         console.error('STOMP error:', frame);
@@ -62,8 +62,8 @@ export class WebSocketService {
 
   connectSocket(): Observable<boolean> {
     if (!this.client.connected) {
-      this.client.activate();
     }
+    this.client.activate();
     return this.state$.asObservable();
   }
 
@@ -71,6 +71,7 @@ export class WebSocketService {
     if (this.client && this.client.connected) {
       this.client.deactivate();
       this.state$.next(false);
+      this.state$.complete();
     }
   }
 }
