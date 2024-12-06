@@ -85,6 +85,11 @@ export class AppointmentService {
     return this.http.put<ApiResponse>(url, id);
   }
 
+  changeInProgressOfAppointmentByDoctor(id: number): Observable<any> {
+    const url = `${host}/api/appointment/in-progress/${id}`;
+    return this.http.put<ApiResponse>(url, id);
+  }
+
   cancelAppointmentByDoctor(id: number): Observable<any> {
     const url = `${host}/api/appointment/cancel/${id}`;
     return this.http.put<ApiResponse>(url, id);

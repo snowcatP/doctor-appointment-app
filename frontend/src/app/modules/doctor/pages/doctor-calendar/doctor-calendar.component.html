@@ -116,7 +116,7 @@
         (click)="visibleSchedule = !visibleSchedule"
         *ngIf="
           selectedAppointment.appointmentStatus != 'CANCELLED' &&
-          selectedAppointment.appointmentStatus != 'RESCHEDULED' &&
+          selectedAppointment.appointmentStatus != 'PENDING' &&
           checkValidDate(selectedAppointment)
         "
       >
@@ -154,8 +154,8 @@
       [disabled]="!timeSlotSelected"
       (click)="submitRescheduleAppointment()"
     >
-      <mat-icon iconPositionEnd>chevron_right</mat-icon>
-      Next
+      <mat-icon iconPositionEnd>check</mat-icon>
+      Done
     </button>
   </div>
 </p-dialog>

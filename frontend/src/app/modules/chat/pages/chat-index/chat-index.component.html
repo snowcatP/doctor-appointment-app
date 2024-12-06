@@ -187,7 +187,9 @@
                 [(ngModel)]="message"
                 #messageInput
                 (keyup.enter)="sendMessage()"
-                [autoResize]="true">
+                [autoResize]="true"
+                [disabled]="isSending"
+                >
             </textarea>
               <button
                 mat-mini-fab

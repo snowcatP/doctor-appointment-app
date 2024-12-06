@@ -3,6 +3,7 @@ package com.hhh.doctor_appointment_app.service.MedicalRecordService.Query.GetMed
 import com.hhh.doctor_appointment_app.dto.mapper.AppointmentMapper;
 import com.hhh.doctor_appointment_app.dto.mapper.DoctorMapper;
 import com.hhh.doctor_appointment_app.dto.mapper.MedicalRecordMapper;
+import com.hhh.doctor_appointment_app.dto.mapper.NurseMapper;
 import com.hhh.doctor_appointment_app.dto.response.MedicalRecordResponse.MedicalRecordResponse;
 import com.hhh.doctor_appointment_app.dto.response.PageResponse;
 import com.hhh.doctor_appointment_app.entity.MedicalRecord;
@@ -35,6 +36,9 @@ public class GetMedicalRecordOfPatientQuery {
     @Autowired
     private AppointmentMapper appointmentMapper;
 
+    @Autowired
+    private NurseMapper nurseMapper;
+
     public PageResponse<List<MedicalRecordResponse>> getMedicalRecordsWithPageOfPatient(int page, int size) {
         var context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();
@@ -49,12 +53,23 @@ public class GetMedicalRecordOfPatientQuery {
                 .map(medicalRecord -> {
                     MedicalRecordResponse response = new MedicalRecordResponse();
                     response.setId(medicalRecord.getId());
-                    response.setDescription(medicalRecord.getDescription());
                     response.setFilePath(medicalRecord.getFilePath());
                     response.setDateCreated(medicalRecord.getDateCreated());
                     response.setLastModified(medicalRecord.getLastModified());
+                    response.setBloodType(medicalRecord.getBloodType());
+                    response.setHeartRate(medicalRecord.getHeartRate());
+                    response.setTemperature(medicalRecord.getTemperature());
+                    response.setHeight(medicalRecord.getHeight());
+                    response.setWeight(medicalRecord.getWeight());
+                    response.setDescription(medicalRecord.getDescription());
+                    response.setAllergies(medicalRecord.getAllergies());
+                    response.setDiagnosis(medicalRecord.getDiagnosis());
+                    response.setPrescription(medicalRecord.getPrescription());
+                    response.setTreatmentPlan(medicalRecord.getTreatmentPlan());
+                    response.setNote(medicalRecord.getNote());
                     response.setDoctorResponse(doctorMapper.toResponse(medicalRecord.getDoctorModified()));
                     response.setAppointmentResponse(appointmentMapper.toResponse(medicalRecord.getAppointment()));
+                    response.setNurseResponse(nurseMapper.toResponse(medicalRecord.getNurse()));
                     return response;
                 })
                 .collect(Collectors.toList());
