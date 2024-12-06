@@ -49,7 +49,7 @@
                     }" *ngIf="appointment.appointmentStatus != 'IN_PROGRESS'">
                     {{ appointment.appointmentStatus }}
                   </span>
-                  <span class="badge badge-pill" style="background-color: rgb(29, 216, 85); color: rgb(255, 255, 255);" 
+                  <span class="badge badge-pill" style="background-color: rgb(29, 216, 85); color: rgb(255, 255, 255);"
                   *ngIf="appointment.appointmentStatus === 'IN_PROGRESS'">
                   {{ appointment.appointmentStatus }}
                   </span>
@@ -100,7 +100,7 @@
                 (click)="onChangeInProgressOfAppointment(appointment.id)">
                 <i class="fa-duotone fa-solid fa-spinner"></i> In Progress
               </a>
-              
+
               <!-- Show Complete buttons if status is In_Progress -->
               <a *ngIf="appointment.appointmentStatus === 'IN_PROGRESS'" class="btn btn-sm bg-success-light"
               (click)="onChangeStatusAppointment(appointment.id)">
@@ -224,6 +224,13 @@
         Cancel
       </button>
       <button type="submit" mat-flat-button extended (click)="submitRescheduleAppointment()">
+      <button
+        type="submit"
+        mat-flat-button
+        extended
+        (click)="submitRescheduleAppointment()"
+        [disabled]="!timeSlotSelected"
+      >
         Done
       </button>
     </div>

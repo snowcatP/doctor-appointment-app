@@ -6,7 +6,7 @@
           <div id="pat_appointments">
             <div class="card card-table mb-3">
               <div class="card-body">
-                <div class="table-responsive" style="min-height: 70vh;">
+                <div class="table-responsive" style="min-height: 70vh">
                   <table class="table table-hover table-center mb-3">
                     <thead>
                       <tr>
@@ -14,9 +14,17 @@
                         <th>Appointment Date</th>
                         <th>Status</th>
                         <th class="d-flex justify-content-end">
-                          <p-dropdown [options]="filterOptions" [(ngModel)]="selectedOption" [checkmark]="true"
-                            optionLabel="name" [showClear]="true" placeholder="Filter" resetFilterOnHide="true"
-                            [style]="{ 'min-width': '50px' }" (onChange)="applyFilter($event)" />
+                          <p-dropdown
+                            [options]="filterOptions"
+                            [(ngModel)]="selectedOption"
+                            [checkmark]="true"
+                            optionLabel="name"
+                            [showClear]="true"
+                            placeholder="Filter"
+                            resetFilterOnHide="true"
+                            [style]="{ 'min-width': '50px' }"
+                            (onChange)="applyFilter($event)"
+                          />
                         </th>
                       </tr>
                     </thead>
@@ -25,16 +33,24 @@
                         <td>
                           <h2 class="table-avatar">
                             <a class="avatar avatar-sm me-3">
-                              <p-image [src]="
+                              <p-image
+                                [src]="
                                   appointment.doctor.avatarFilePath ||
                                   'assets/images/user.png'
-                                " alt="Doctor Image" width="100%" [preview]="true" class="booking-doc-img" />
+                                "
+                                alt="Doctor Image"
+                                width="100%"
+                                [preview]="true"
+                                class="booking-doc-img"
+                              />
                             </a>
-                            <a (click)="viewDoctorProfile(appointment.doctor.id)">Dr. {{ appointment.doctor.firstName }}
+                            <a
+                              (click)="viewDoctorProfile(appointment.doctor.id)"
+                              >Dr. {{ appointment.doctor.firstName }}
                               {{ appointment.doctor.lastName }}
                               <span>{{
                                 appointment.doctor.specialty.specialtyName
-                                }}</span>
+                              }}</span>
                             </a>
                           </h2>
                         </td>
@@ -59,7 +75,7 @@
                           }" *ngIf="appointment.appointmentStatus != 'IN_PROGRESS'">
                           {{ appointment.appointmentStatus }}
                         </span>
-                        <span class="badge badge-pill" style="background-color: rgb(29, 216, 85);  color: rgb(255, 255, 255);" 
+                        <span class="badge badge-pill" style="background-color: rgb(29, 216, 85);  color: rgb(255, 255, 255);"
                         *ngIf="appointment.appointmentStatus === 'IN_PROGRESS'">
                         {{ appointment.appointmentStatus }}
                         </span>
@@ -70,7 +86,7 @@
                               (click)="viewAppointmentDetails(appointment)" type="button">
                               <i class="far fa-eye"></i> View
                             </button>
-                            <button *ngIf="appointment.appointmentStatus === 'PENDING' || appointment.appointmentStatus === 'ACCEPT' 
+                            <button *ngIf="appointment.appointmentStatus === 'PENDING' || appointment.appointmentStatus === 'ACCEPT'
                             || appointment.appointmentStatus === 'RESCHEDULED'"
                               class="btn btn-sm bg-danger-light me-2" (click)="onCancelAppointment(appointment.id)">
                               <i class="fas fa-times"></i> Cancel
@@ -213,13 +229,13 @@
                           {{ medicalRecord.appointmentResponse
                                   ?.appointmentStatus }}
                         </span>
-                        <span class="badge badge-pill" style="background-color: rgb(29, 216, 85);  color: rgb(255, 255, 255);" 
+                        <span class="badge badge-pill" style="background-color: rgb(29, 216, 85);  color: rgb(255, 255, 255);"
                         *ngIf="medicalRecord.appointmentResponse
                                   ?.appointmentStatus === 'IN_PROGRESS'">
                         {{ medicalRecord.appointmentResponse
                                   ?.appointmentStatus }}
                         </span>
-                         
+
                         </td>
                         <td>{{ medicalRecord?.description }}</td>
                         <td>
@@ -345,17 +361,36 @@
 </div>
 
 <!-- Reschedule Dialog -->
-<p-dialog header="Reschedule Appointment" [(visible)]="rescheduleVisible" [modal]="true" [style]="{ width: '55rem' }">
+<p-dialog
+  header="Reschedule Appointment"
+  [(visible)]="rescheduleVisible"
+  [modal]="true"
+  [style]="{ width: '55rem' }"
+>
   <!-- Schedule -->
-  <app-schedule [isReschedule]="true" [selectedApp]="selectedAppointment"
-    (selectedSlot)="handleSelectedSlot($event)"></app-schedule>
+  <app-schedule
+    [isReschedule]="true"
+    [selectedApp]="selectedAppointment"
+    (selectedSlot)="handleSelectedSlot($event)"
+  ></app-schedule>
   <!-- Schedule -->
 
   <div class="d-flex justify-content-between mx-2">
-    <button mat-raised-button extended type="button" (click)="closeRescheduleDialog()">
+    <button
+      mat-raised-button
+      extended
+      type="button"
+      (click)="closeRescheduleDialog()"
+    >
       Cancel
     </button>
-    <button type="submit" mat-flat-button extended (click)="submitRescheduleAppointment()">
+    <button
+      type="submit"
+      mat-flat-button
+      extended
+      (click)="submitRescheduleAppointment()"
+      [disabled]="timeSlotSelected == null"
+    >
       Done
     </button>
   </div>
