@@ -6,6 +6,7 @@ import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.Appointme
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentResponse;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Command.CancelAppointment.CancelAppointmentCommand;
+import com.hhh.doctor_appointment_app.service.AppointmentService.Command.ChangeInProgessingStatusOfAppointment.ChangeInProgressStatusOfAppointmentCommand;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Command.ChangeStatusAppointment.ChangeStatusAppointmentCommand;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Command.CreateAppointment.CreateAppointmentByGuestCommand;
 import com.hhh.doctor_appointment_app.service.AppointmentService.Command.CreateAppointment.CreateAppointmentByPatientCommand;
@@ -84,6 +85,9 @@ public class AppointmentController {
 
     @Autowired
     private GetListAppointmentForNurseQuery getListAppointmentForNurseQuery;
+
+    @Autowired
+    private ChangeInProgressStatusOfAppointmentCommand changeInProgressStatusOfAppointmentCommand;
     @GetMapping("/list")
     public ResponseEntity<?> getAppointments(@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "10") int size){
@@ -173,6 +177,20 @@ public class AppointmentController {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try {
             apiResponse = changeStatusAppointmentCommand.changeStatusAppointmentByDoctor(id);
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
+        }
+        catch (Exception ex) {
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+    }
+
+    @PutMapping("/in-progress/{id}")
+    public ResponseEntity<?> changeInProgressOfAppointmentByDoctor(@PathVariable Long id){
+        ApiResponse<Object> apiResponse = new ApiResponse<>();
+        try {
+            apiResponse = changeInProgressStatusOfAppointmentCommand.changeInProgressStatusOfAppointmentByDoctor(id);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
         }
         catch (Exception ex) {
