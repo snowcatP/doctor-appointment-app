@@ -1,3 +1,4 @@
+import { error } from '@rxweb/reactive-form-validators';
 import { WebSocketService } from './../../../../core/services/webSocket.service';
 import {
   Component,
@@ -117,7 +118,7 @@ export class ChatIndexComponent implements OnInit, OnDestroy {
     this.conversationService.getAllConversationsByUser().subscribe({
       next: (res) => {
         this.conversations = res;
-        this.selectConversation(this.conversations[0]);
+        // this.selectConversation(this.conversations[0]);
         this.isLoadingConversations = false;
       },
       error: (err) => {
@@ -137,26 +138,33 @@ export class ChatIndexComponent implements OnInit, OnDestroy {
   }
 
   sendMessage() {
-    this.isSending = true;
-    const data: ChatMessageRequest = {
-      message: this.message,
-      doctorEmail:
-        this.currentUser.role.roleName == 'DOCTOR'
-          ? this.currentUser.email
-          : this.selectedConversation.doctor.email,
-      patientEmail:
-        this.currentUser.role.roleName == 'PATIENT'
-          ? this.currentUser.email
-          : this.selectedConversation.patient.email,
-      conversationId: this.selectedConversation.id,
-      sender: this.currentUser.role.roleName
-    };
-    this.webSocketService.emit(
-      `/app/chat/${this.selectedConversation.id}`,
-      data
-    );
-    this.messageInput.nativeElement.value = '';
-    this.isSending = false;
+    try {
+      this.isSending = true;
+      const data: ChatMessageRequest = {
+        message: this.message,
+        doctorEmail:
+          this.currentUser.role.roleName == 'DOCTOR'
+            ? this.currentUser.email
+            : this.selectedConversation.doctor.email,
+        patientEmail:
+          this.currentUser.role.roleName == 'PATIENT'
+            ? this.currentUser.email
+            : this.selectedConversation.patient.email,
+        conversationId: this.selectedConversation.id,
+        sender: this.currentUser.role.roleName,
+      };
+      this.webSocketService.emit(
+        `/app/chat/${this.selectedConversation.id}`,
+        data
+      );
+      setTimeout(() => {
+        this.messageInput.nativeElement.value = '';
+        this.isSending = false;
+      }, 500);
+    } catch (error) {
+      console.log(error);
+      this.isSending = false;
+    }
   }
 
   selectConversation(conversation: ConversationResponse) {

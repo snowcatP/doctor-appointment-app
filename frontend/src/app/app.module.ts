@@ -33,6 +33,7 @@ import { ScrollTopModule } from 'primeng/scrolltop';
 import { SharedModule } from './shared/shared.module';
 import { ChatbotModule } from './modules/chatbot/chatbot.module';
 import { MatIconModule } from '@angular/material/icon';
+import { MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
   declarations: [AppComponent],
@@ -54,6 +55,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule,
     StoreModule.forRoot({ auth: authReducer }, {}),
     EffectsModule.forRoot([AuthEffect]),
+    MarkdownModule.forRoot(),
   ],
   providers: [
     { provide: NbRoleProvider, useClass: RoleProviderService },

@@ -1,13 +1,20 @@
 <div class="card">
   <div class="chat-window">
-    <div class="chat-cont-right chatbot" [ngStyle]="{'border': isChatbotMode ? '1px solid #D7D3BF' : ''}">
+    <div
+      class="chat-cont-right chatbot"
+      [ngStyle]="{ border: isChatbotMode ? '1px solid #D7D3BF' : '' }"
+    >
       <div class="chat-header">
         <h4>Chatbot</h4>
         <div class="chat-options">
           <a (click)="refresh()" matTooltip="Click to refresh the conversation">
             <mat-icon>refresh</mat-icon>
           </a>
-          <a (click)="close()" matTooltip="Click to close" *ngIf="isChatbotMode">
+          <a
+            (click)="close()"
+            matTooltip="Click to close"
+            *ngIf="isChatbotMode"
+          >
             <mat-icon>close</mat-icon>
           </a>
         </div>
@@ -17,10 +24,9 @@
           class="chat-scroll"
           [ngStyle]="{
             'min-height': isChatbotMode ? '55vh' : '75vh',
-            'max-height': isChatbotMode
-              ? 'calc(100vh - 224px)'
-              : 'calc(100vh - 224px)'
+            'max-height': isChatbotMode ? '55vh' : 'calc(100vh - 224px)'
           }"
+          #chatScroll
         >
           <ul class="list-unstyled">
             <li
@@ -35,7 +41,8 @@
               <div class="media-body">
                 <div class="msg-box">
                   <div>
-                    <p>{{ message.result }}</p>
+                    <!-- <p>{{ message.result }}</p> -->
+                    <markdown [data]="message.result"></markdown>
                   </div>
                 </div>
               </div>

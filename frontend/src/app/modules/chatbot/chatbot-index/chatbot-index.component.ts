@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import {
   ChatbotMessage,
   ChatbotRequest,
@@ -14,7 +14,8 @@ import { ConfirmationService } from 'primeng/api';
 export class ChatbotIndexComponent implements OnInit {
   @ViewChild('promptInput') promptInput: ElementRef;
   @Input('mode') isChatbotMode: boolean;
-  @Output('toggleChatbot') toggleChatbot: EventEmitter<any> = new EventEmitter()
+  @Output('toggleChatbot') toggleChatbot: EventEmitter<any> = new EventEmitter();
+  @ViewChild('chatScroll') chatScroll: ElementRef<any>;
   openChat: boolean = false;
   isSending: boolean = false;
   messages: ChatbotMessage[] = [];
@@ -22,6 +23,10 @@ export class ChatbotIndexComponent implements OnInit {
   constructor(private chatbotService: ChatbotService) {}
 
   ngOnInit(): void {}
+
+  ngAfterViewInit(): void {
+    this.promptInput.nativeElement.focus();
+  }
 
   close() {
     this.toggleChatbot.emit('false');
@@ -42,10 +47,12 @@ export class ChatbotIndexComponent implements OnInit {
       sender: 'USER'
     };
     this.messages.push(userPrompt);
+    this.scrollToBottom();
     this.promptInput.nativeElement.value = '';
     this.chatbotService.sendPrompt(request).subscribe({
       next: (res) => {
         this.messages.push(res);
+        this.scrollToBottom();
         this.isSending = false;
       },
       error: (err) => {
@@ -54,5 +61,14 @@ export class ChatbotIndexComponent implements OnInit {
       }
     });
   }
-
+  private scrollToBottom(): void {
+    setTimeout(() => {
+      try {
+        this.chatScroll.nativeElement.scrollTop =
+          this.chatScroll.nativeElement.scrollHeight;
+      } catch (err) {
+        console.error('Error scrolling to bottom:', err);
+      }
+    }, 100);
+  }
 }

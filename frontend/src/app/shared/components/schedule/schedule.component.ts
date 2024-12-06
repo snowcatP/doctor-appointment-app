@@ -134,9 +134,9 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-    if (changes.selectedApp?.currentValue != undefined) {
-      this.handleAppointmentsBooked();
-    }
+    // if (changes.selectedApp?.currentValue != undefined) {
+    //   this.handleAppointmentsBooked();
+    // }
     this.isLoading = false;
   }
 
@@ -197,10 +197,16 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
     this.schedules.forEach((week: AppointmentSlot[]) => {
       week.forEach((day: AppointmentSlot) => {
         day.timeSlotsMorning.forEach(
-          (timeSlot: TimeSlot) => (timeSlot.isBooked = false)
+          (timeSlot: TimeSlot) => {
+            timeSlot.isBooked = false;
+            timeSlot.isPassedIn = false;
+          }
         );
         day.timeSlotsAfternoon.forEach(
-          (timeSlot: TimeSlot) => (timeSlot.isBooked = false)
+          (timeSlot: TimeSlot) => {
+            timeSlot.isBooked = false;
+            timeSlot.isPassedIn = false;
+          }
         );
       });
     });
@@ -291,8 +297,13 @@ export class ScheduleComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   selectBookingDate(slot: TimeSlot) {
-    this.timeSlotSelected = slot;
-    this.selectedSlot.emit(this.timeSlotSelected);
+    if (slot == this.timeSlotSelected) {
+      this.timeSlotSelected = null;
+      this.selectedSlot.emit(null);
+    } else {
+      this.timeSlotSelected = slot;
+      this.selectedSlot.emit(this.timeSlotSelected);
+    }
   }
 
   showDialog() {

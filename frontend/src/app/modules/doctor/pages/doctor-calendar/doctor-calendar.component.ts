@@ -75,7 +75,6 @@ export class DoctorCalendarComponent implements OnInit {
 
   handleSelectedSlot(timeslot: TimeSlot) {
     this.timeSlotSelected = timeslot;
-    console.log(this.timeSlotSelected)
   }
 
   submitRescheduleAppointment() {
@@ -95,7 +94,9 @@ export class DoctorCalendarComponent implements OnInit {
               detail: 'Reschedule successfully!',
             });
             this.getData();
-            this.closeModals();
+            setTimeout(() => {
+              this.closeModals();
+            }, 1000);
           } else {
             this.messageService.add({
               key: 'messageToast',
