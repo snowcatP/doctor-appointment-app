@@ -537,8 +537,9 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
 
   private _filterDoctor(value: string): DoctorBooking[] {
     const filterValue = value.toLowerCase();
-    return this.listDoctors.filter((doctor) =>
+    return this.listDoctors.filter((doctor) => 
       doctor.fullName.toLowerCase().includes(filterValue)
+      && doctor.specialty.specialtyName === this.formBooking.controls['specialty'].value
     );
   }
 
