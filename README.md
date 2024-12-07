@@ -15,7 +15,7 @@ Doctor Appointment App is an application that allows users to make appointments 
 1. **Clone repository**
    Use the following command to clone the project to your computer:
    ```bash
-   git clone https://github.com/hao21da/doctor-appointment-app.git
+   git clone https://github.com/snowcatP/doctor-appointment-app.git
 3. **Move into the project folder**
    cd doctor-appointment-app
 4.  **Install necessary packages**
