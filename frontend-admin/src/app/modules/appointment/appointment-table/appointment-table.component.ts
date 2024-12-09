@@ -76,6 +76,7 @@ export class AppointmentTableComponent implements OnInit {
       next: (resp) => {
         this.appointments = resp;
         this.loadingFetchingData = false;
+        console.log(resp)
       },
     });
   }

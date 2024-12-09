@@ -71,7 +71,7 @@
                 <td>{{appointment.bookingHour}}</td>
                 <td> {{appointment.dateBooking | date: 'dd-MM-yyyy'}}</td>
                 <td>{{appointment.fullName}}</td>
-                <td>{{appointment.doctor.specialty.specialtyName}}</td>
+                <td> {{appointment.doctor.specialty.specialtyName}}</td>
                 <td><img class="doctor-avatar" [src]="appointment.doctor.avatarFilePath" alt=""
                         style="margin: 0 10px;">{{appointment.doctor.fullName}}</td>
                 <td><p-tag styleClass="appointment" [value]="appointment.appointmentStatus"
@@ -105,7 +105,8 @@
                 <h2 class="section-title">Patient Information</h2>
                 <div class="info-group">
                     <span class="info-label">Name</span>
-                    <span class="info-value">{{appointment.fullName}}</span>
+                    <span class="info-value"><img class="doctor-avatar" [src]="patient.avatarFilePath" alt=""
+                        style="margin-right: 10px;">{{appointment.fullName}}</span>
                 </div>
                 <div class="info-group">
                     <span class="info-label">Patient ID</span>

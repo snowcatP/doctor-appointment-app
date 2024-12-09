@@ -110,15 +110,13 @@ export class SpecialtyEditComponent implements OnInit {
     );
   }
   editSpecialty() {
-    console.log(  this.formEditSpecialty.controls['specialtyHeadDoctor'].value.id);
     const listDoctorId = this.selectedListDoctor.map(
       (listDoctor) => listDoctor.id
     );
     let editSpecialty: Specialty = {
       id: null,
       specialtyName: this.formEditSpecialty.controls['specialtyName'].value,
-      headDoctorId:
-        this.formEditSpecialty.controls['specialtyHeadDoctor'].value.id,
+      headDoctorId: this.formEditSpecialty.controls['specialtyHeadDoctor'].value.id,
       listDoctorId: listDoctorId,
     };
     this.specialtyService

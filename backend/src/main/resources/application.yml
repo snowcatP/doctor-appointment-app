@@ -2,9 +2,9 @@ spring:
   application:
     name: doctor-appointment-app
   datasource:
-    url: jdbc:mysql://localhost:3306/doc_appointment_app
-    username: root
-    password: hiepbui32
+    url: jdbc:mysql://sql12.freesqldatabase.com:3306/sql12750271
+    username: sql12750271
+    password: KSL2rHsta3
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

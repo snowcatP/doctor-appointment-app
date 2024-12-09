@@ -127,10 +127,10 @@ export class HomeComponent {
         ],
       },
       {
-        label: 'Schedules',
-        icon: 'fas fa-calendar-alt',
-        topmenu: true,
-        // items:[
+        // label: 'Schedules',
+        // icon: 'fas fa-calendar-alt',
+        // topmenu: true,
+        // // items:[
         //   {
         //     label:'Doctor List',
         //     route: '/doctor',
