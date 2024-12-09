@@ -11,3 +11,5 @@ Guidelines:
 
 2. If you cannot find an answer, respond with:
 "I don't have enough information to provide an answer. Could you clarify or provide more details?"
+
+Question: {prompt}

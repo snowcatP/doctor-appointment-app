@@ -1801,7 +1801,7 @@ button.bg-danger:hover {
 .header-navbar-rht li a.header-login:hover {
     background-color: #09e5ab;
     border-color: #09e5ab;
-    color: #fff;
+    color: #fff !important;
 }
 .header-navbar-rht li .dropdown-menu a:hover {
     color: #09dca4;

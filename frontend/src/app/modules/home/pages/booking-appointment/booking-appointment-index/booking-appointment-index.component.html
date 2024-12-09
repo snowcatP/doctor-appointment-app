@@ -104,6 +104,15 @@
                         >
                           Specialty is required.
                         </mat-error>
+                        <mat-error
+                          *ngIf="
+                            formBooking.controls['specialty'].getError(
+                              'invalid'
+                            )
+                          "
+                        >
+                          Specialty is invalid.
+                        </mat-error>
                       </mat-form-field>
                       <mat-form-field
                         appearance="outline"
@@ -134,6 +143,15 @@
                           "
                         >
                           Doctor is required.
+                        </mat-error>
+                        <mat-error
+                          *ngIf="
+                            formBooking.controls['doctor'].getError(
+                              'invalid'
+                            )
+                          "
+                        >
+                        Doctor is invalid.
                         </mat-error>
                       </mat-form-field>
                     </div>
