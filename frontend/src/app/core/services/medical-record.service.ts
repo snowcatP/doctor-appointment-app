@@ -10,8 +10,8 @@ import { ApiResponse } from '../models/patient.model';
 export class MedicalRecordService {
 
   private medicalRecordUrl = `${host}/api/medical-record`;
-  
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient) { }
 
   getMedicalRecordsOfPatient(page: number, size: number): Observable<any> {
     const url = `${this.medicalRecordUrl}/list/patient?page=${page}&size=${size}`;
@@ -31,7 +31,7 @@ export class MedicalRecordService {
     if (file) {
       formData.append('file', file, file.name);
     } else {
-      formData.append('file', new Blob(),'');  // Append null if no file is selected
+      formData.append('file', new Blob(), '');  // Append null if no file is selected
     }
 
     formData.append('bloodType', addMedicalRecordRequest.bloodType.toString());
@@ -55,21 +55,39 @@ export class MedicalRecordService {
     if (file) {
       formData.append('file', file, file.name);
     } else {
-      formData.append('file', new Blob(),'');  // Append null if no file is selected
+      formData.append('file', new Blob(), '');  // Append null if no file is selected
     }
-    formData.append('bloodType', editMedicalRecordRequest.bloodType.toString());
-    formData.append('heartRate', editMedicalRecordRequest.heartRate.toString());
-    formData.append('temperature', editMedicalRecordRequest.temperature.toString());
-    formData.append('height', editMedicalRecordRequest.height.toString());
-    formData.append('weight', editMedicalRecordRequest.weight.toString());
+    formData.append('bloodType', editMedicalRecordRequest.bloodType?.toString() || null);
+    if (editMedicalRecordRequest.heartRate !== null && editMedicalRecordRequest.heartRate !== undefined) {
+      formData.append('heartRate', editMedicalRecordRequest.heartRate.toString());
+    }
+    if (editMedicalRecordRequest.temperature !== null && editMedicalRecordRequest.temperature !== undefined) {
+      formData.append('temperature', editMedicalRecordRequest.temperature.toString());
+    }
+    if (editMedicalRecordRequest.height !== null && editMedicalRecordRequest.height !== undefined) {
+      formData.append('height', editMedicalRecordRequest.height.toString());
+    }
+    if (editMedicalRecordRequest.weight !== null && editMedicalRecordRequest.weight !== undefined) {
+      formData.append('weight', editMedicalRecordRequest.weight.toString());
+    }
     formData.append('description', editMedicalRecordRequest.description || '');
     formData.append('allergies', editMedicalRecordRequest.allergies || '');
     formData.append('diagnosis', editMedicalRecordRequest.diagnosis || '');
     formData.append('prescription', editMedicalRecordRequest.prescription || '');
     formData.append('treatmentPlan', editMedicalRecordRequest.treatmentPlan || '');
     formData.append('note', editMedicalRecordRequest.note || '');
-    formData.append('patientId', editMedicalRecordRequest.patientId.toString());
-    formData.append('medicalRecordId', editMedicalRecordRequest.medicalRecordId.toString());
+    if (editMedicalRecordRequest.patientId !== null && editMedicalRecordRequest.patientId !== undefined) {
+      formData.append('patientId', editMedicalRecordRequest.patientId.toString());
+    }
+    formData.append('emailPatient', editMedicalRecordRequest.emailPatient?.toString() || null);
+    if (editMedicalRecordRequest.medicalRecordId !== null && editMedicalRecordRequest.medicalRecordId !== undefined) {
+      formData.append('medicalRecordId', editMedicalRecordRequest.medicalRecordId.toString());
+    }
     return this.http.put(url, formData);
+  }
+
+  getMedicalRecordDetailById(id: number): Observable<any> {
+    const url = `${this.medicalRecordUrl}/detail/${id}`;
+    return this.http.get<any>(url);
   }
 }
