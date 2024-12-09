@@ -29,4 +29,5 @@ public class EditMedicalRecordRequest {
     private String filePath;
     private Long patientId;
     private Long medicalRecordId;
+    private String emailPatient;
 }

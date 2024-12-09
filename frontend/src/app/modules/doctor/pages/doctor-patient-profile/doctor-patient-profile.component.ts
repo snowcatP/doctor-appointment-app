@@ -233,6 +233,7 @@ export class DoctorPatientProfileComponent {
   onUpdate(): void {
     this.loading = true;
     this.editingMedicalRecord.patientId = this.patientId;
+    console.log(this.editingMedicalRecord)
     this.medicalRecordService.editMedicalRecordForPatient(this.editingMedicalRecord, this.selectedFile).subscribe(
       (response: ApiResponse) => {
         this.loading = false; // Stop loading
@@ -249,6 +250,7 @@ export class DoctorPatientProfileComponent {
             this.fetchMedicalRecordsOfPatientByPatientID(this.patientId, 1, this.pageSizeMR)
           }, 1000);
         } else {
+          console.error('Failed to edit Medical Record', response.message);
           this.messageService.add({
             key: 'messageToast',
             severity: 'error',

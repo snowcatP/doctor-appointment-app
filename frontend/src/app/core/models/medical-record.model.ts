@@ -26,6 +26,7 @@ export class EditMedicalRecordRequest {
     filePath: string;
     patientId: number;
     medicalRecordId: number;
+    emailPatient: string;
     constructor() {}
 }
 

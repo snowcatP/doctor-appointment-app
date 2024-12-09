@@ -3,6 +3,7 @@ package com.hhh.doctor_appointment_app.dto.response.MedicalRecordResponse;
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentResponse;
 import com.hhh.doctor_appointment_app.dto.response.DoctorResponse.DoctorResponse;
 import com.hhh.doctor_appointment_app.dto.response.NurseResponse.NurseResponse;
+import com.hhh.doctor_appointment_app.dto.response.PatientResponse.PatientResponse;
 import com.hhh.doctor_appointment_app.repository.NurseRepository;
 import jakarta.validation.constraints.Size;
 import lombok.*;

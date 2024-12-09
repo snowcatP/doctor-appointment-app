@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AppointmentService } from '../../../../core/services/appointment.service';
 import { Router } from '@angular/router';
 import { AddMedicalRecordRequest } from '../../../../core/models/medical-record.model';
+import { Appointment } from '../../../../core/models/appointment.model';
 @Component({
   selector: 'app-nurse-dashboard',
   templateUrl: './nurse-dashboard.component.html',
@@ -27,8 +28,8 @@ export class NurseDashboardComponent {
   fileName: string | null = null; // Biến để lưu tên tệp không phải là ảnh
   medicalRecordRequest: AddMedicalRecordRequest = new AddMedicalRecordRequest();
   loading: boolean = false; // Add loading state
-
-
+  medicalRecordId: number;
+  patientName: string;
   constructor(private appointmentService: AppointmentService,
     private router: Router,
   ) { }
@@ -42,6 +43,7 @@ export class NurseDashboardComponent {
       (response) => {
         if (response.statusCode === 200) {
           this.appointments = response.data;
+          console.log(this.appointments)
           this.totalAppointments = response.totalPage * pageSize;
         } else{
           console.log(response)
@@ -79,7 +81,7 @@ export class NurseDashboardComponent {
 
   openForm(appointment:any) {
     this.appointmentService.setAppointment(appointment);
-    this.router.navigate(['/nurse/create-medical-record']);
+    this.router.navigate([`/nurse/create-medical-record/${this.patientName}`]);
   }
 
   onFileSelected(event: any): void {
@@ -107,5 +109,11 @@ export class NurseDashboardComponent {
   viewMedicalRecordDetails(medicalRecord: any): void {
     this.selectedMedicalRecord = medicalRecord;
     this.visibleMedicalRecord = true;
+  }
+
+  editMedicalRecord(appointment: any): void{
+    this.appointmentService.setAppointment(appointment);
+    this.medicalRecordId = appointment?.medicalRecordResponse.id;
+    this.router.navigate([`/nurse/edit-medical-record/${this.medicalRecordId}`]);
   }
 }
