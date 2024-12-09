@@ -23,6 +23,7 @@
                 placeholder="Search"
                 style="border-radius: 50px"
                 [(ngModel)]="searchConv"
+                (ngModelChange)="filterConv($event)"
               />
             </div>
           </div>
@@ -36,7 +37,7 @@
             <div class="chat-scroll" *ngIf="!isLoadingConversations">
               <a
                 class="media row d-flex justify-content-between"
-                *ngFor="let conversation of conversations"
+                *ngFor="let conversation of filteredConversation"
                 (click)="selectConversation(conversation)"
                 [ngClass]="{ active: selectedConversation === conversation }"
               >
