@@ -66,7 +66,7 @@ public class CreateMedicalRecordCommand {
 //            }
 
             //Check file has null ?
-            if (file!=null) {
+            if (!file.isEmpty()) {
                 // Upload file to Firebase Storage if file not null
                 String fileUrl = firebaseStorageService.uploadFile(file);
                 addRequest.setFilePath(fileUrl);

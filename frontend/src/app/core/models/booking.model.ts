@@ -56,6 +56,7 @@ interface IBookingDataPatient {
   reason: string;
   dateBooking: Date;
   bookingHour: string;
+  doctor: DoctorBooking;
 }
 export class BookingDataPatient {
   constructor(bookingData?: IBookingDataPatient) {
@@ -65,6 +66,7 @@ export class BookingDataPatient {
     this.reason = bookingData?.reason;
     this.dateBooking = bookingData?.dateBooking;
     this.bookingHour = bookingData?.bookingHour;
+    this.doctor = bookingData?.doctor;
   }
   doctorId: number;
   doctorName: string
@@ -72,6 +74,7 @@ export class BookingDataPatient {
   reason: string;
   dateBooking: Date;
   bookingHour: string;
+  doctor?: DoctorBooking;
 }
 
 export class BookingDataGuest {

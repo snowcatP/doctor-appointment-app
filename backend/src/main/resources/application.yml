@@ -24,8 +24,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587 #25
-    username: ok.byethibye2@gmail.com
-    password: hzdribmtrvoaqcoa
+    username:
+    password:
     properties:
       mail:
         smtp:
@@ -39,7 +39,7 @@ spring:
       base-url: http://localhost:11434
       chat:
         options:
-          model: llama2
+          model: llama3.2
           temperature: 0.7
 
 application:

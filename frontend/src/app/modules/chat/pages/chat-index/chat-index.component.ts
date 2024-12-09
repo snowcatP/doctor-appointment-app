@@ -1,20 +1,13 @@
-import { error } from '@rxweb/reactive-form-validators';
 import { WebSocketService } from './../../../../core/services/webSocket.service';
 import {
   Component,
   ElementRef,
   OnDestroy,
   OnInit,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import {
-  filter,
-  map,
-  Observable,
-  startWith,
-  Subject,
-  Subscription,
-} from 'rxjs';
+import { filter, Observable, Subject, Subscription, takeUntil } from 'rxjs';
 import {
   ChatMessageRequest,
   ChatMessageResponse,
@@ -28,6 +21,7 @@ import { Store } from '@ngrx/store';
 import * as fromAuth from '../../../../core/states/auth/auth.reducer';
 import { User } from '../../../../core/models/authentication.model';
 import { MessageService } from 'primeng/api';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-chat-index',
@@ -39,7 +33,6 @@ export class ChatIndexComponent implements OnInit, OnDestroy {
   @ViewChild('chatScroll') chatScroll: ElementRef;
   message: string = '';
   isSending: boolean = false;
-  conversationId = 'f83011f7-d037-4eee-9212-1c3696dbfeee';
   conversations: ConversationResponse[];
   selectedConversation: ConversationResponse;
   selectedConversationData: ChatMessageResponse[];
@@ -54,6 +47,7 @@ export class ChatIndexComponent implements OnInit, OnDestroy {
   currentUser: User;
   searchConv: string;
   isTyping: boolean = false;
+  isFirstVisit: boolean = true;
   private chatSubscription: Subscription;
   private unsubscribe$ = new Subject<void>();
 
@@ -71,12 +65,12 @@ export class ChatIndexComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.chatSubscription) {
-      this.chatSubscription.unsubscribe();
-    }
-    this.webSocketService.disconnectSocket();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete(); // Cleanup subscription on component destroy
+    // if (this.chatSubscription) {
+    //   this.chatSubscription.unsubscribe();
+    // }
+    // this.webSocketService.disconnectSocket();
+    // this.unsubscribe$.next();
+    // this.unsubscribe$.complete(); // Cleanup subscription on component destroy
   }
 
   handleObservable() {
@@ -118,7 +112,7 @@ export class ChatIndexComponent implements OnInit, OnDestroy {
     this.conversationService.getAllConversationsByUser().subscribe({
       next: (res) => {
         this.conversations = res;
-        // this.selectConversation(this.conversations[0]);
+        this.selectConversation(this.conversations[0]);
         this.isLoadingConversations = false;
       },
       error: (err) => {
@@ -129,12 +123,14 @@ export class ChatIndexComponent implements OnInit, OnDestroy {
   }
 
   webSocketInit() {
-    this.webSocketService
-      .connectSocket()
-      .pipe(filter((state) => state))
-      .subscribe(() => {
-        this.getData();
-      });
+    // this.webSocketService
+    //   .connectSocket()
+    //   .pipe(filter((state) => state))
+    //   .subscribe(() => {
+    //     this.getData();
+    //     this.isFirstVisit = true;
+    //   });
+    this.getData();
   }
 
   sendMessage() {

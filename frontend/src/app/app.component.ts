@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { WebSocketService } from './core/services/webSocket.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ReactiveFormConfig } from '@rxweb/reactive-form-validators';
 import { AuthService } from './core/services/auth.service';
 import { Store } from '@ngrx/store';
@@ -9,12 +10,16 @@ import * as AuthActions from './core/states/auth/auth.actions';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy{
   title = 'frontend';
   visibleChatbot: boolean = false;
   mode: string = 'window';
   loadChatbot: boolean = false;
-  constructor(private authService: AuthService, private store: Store) {}
+  constructor(
+    private authService: AuthService,
+    private store: Store,
+    private WebSocketService: WebSocketService
+  ) {}
 
   ngOnInit(): void {
     if (this.authService.isAuthenticated()) {
@@ -73,6 +78,12 @@ export class AppComponent implements OnInit {
         date: 'Please enter valid date format',
       },
     });
+
+    this.WebSocketService.connectSocket();
+  }
+
+  ngOnDestroy(): void {
+    this.WebSocketService.disconnectSocket();
   }
 
   toggleChatbot() {
