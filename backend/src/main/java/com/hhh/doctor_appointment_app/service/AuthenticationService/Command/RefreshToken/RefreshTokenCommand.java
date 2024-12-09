@@ -68,8 +68,11 @@ public class RefreshTokenCommand {
                 .expiryTime(expiryTime)
                 .build();
 
-        invalidatedRepository.save(invalidatedToken);
-
+        try {
+            invalidatedRepository.save(invalidatedToken);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
         var username = signJwt.getJWTClaimsSet().getSubject();
         User user = findUserByUsernameQuery.findUserByUsername(username)
                 .orElseThrow(() -> new UnauthenticatedException("User not found"));

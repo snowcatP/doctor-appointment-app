@@ -34,6 +34,7 @@ export class ChatIndexComponent implements OnInit, OnDestroy {
   message: string = '';
   isSending: boolean = false;
   conversations: ConversationResponse[];
+  filteredConversation: ConversationResponse[];
   selectedConversation: ConversationResponse;
   selectedConversationData: ChatMessageResponse[];
   visible: boolean = false;
@@ -112,7 +113,8 @@ export class ChatIndexComponent implements OnInit, OnDestroy {
     this.conversationService.getAllConversationsByUser().subscribe({
       next: (res) => {
         this.conversations = res;
-        this.selectConversation(this.conversations[0]);
+        this.filteredConversation = this.conversations;
+        this.selectConversation(this.filteredConversation[0]);
         this.isLoadingConversations = false;
       },
       error: (err) => {
@@ -120,6 +122,16 @@ export class ChatIndexComponent implements OnInit, OnDestroy {
         this.isLoadingConversations = false;
       },
     });
+  }
+
+  filterConv(conv: any) {
+    if (conv === '') {
+      this.filteredConversation = this.conversations;
+      return;
+    }
+    this.filteredConversation = this.conversations.filter((conver) =>
+      conver.doctor.fullName.toLocaleLowerCase().includes(conv)
+    );
   }
 
   webSocketInit() {
