@@ -27,6 +27,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { PasswordModule } from 'primeng/password';
 import { DividerModule } from 'primeng/divider';
+import { EditMedicalRecordComponent } from './pages/edit-medical-record/edit-medical-record.component';
 @NgModule({
   declarations: [
     NurseComponent,
@@ -35,7 +36,8 @@ import { DividerModule } from 'primeng/divider';
        NurseProfileComponent,
        NurseChangePasswordComponent,
        NurseBreadCrumbComponent,
-       CreateMedicalRecordComponent
+       CreateMedicalRecordComponent,
+       EditMedicalRecordComponent
   ],
   imports: [
     CommonModule,
