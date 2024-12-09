@@ -1,269 +1,266 @@
 <!-- Home Banner -->
 <section class="section section-search">
-    <div class="container-fluid">
-      <div class="banner-wrapper">
-        <div class="banner-header text-center">
-          <h1>Make an Appointment</h1>
-          <p>
-            Discover the best doctors, clinic & hospital the city nearest to you.
-          </p>
-        </div>
-  
-        <!-- Search -->
-       
-          <div class="search-info-book" style="margin-inline-start: 35%; margin-inline-end: 35%;">
-            <a  [routerLink]="['/booking']" class="btn book-btn-homepage">Book Now</a>
-          </div>
-
-          <!-- Appointment Detail Dialog -->
-          <p-dialog
-          header="Appointment Details"
-          [modal]="true"
-          [(visible)]="visible"
-          [style]="{ width: '25rem' }"
-        >
-          <div *ngIf="appointment">
-            <p>
-              <strong>Doctor:</strong>Dr.
-              {{ appointment.doctor.firstName }}
-              {{ appointment.doctor.lastName }}
-            </p>
-            <p>
-              <strong>Appointment Date:</strong>
-              {{
-                appointment.dateBooking
-                  | date
-                    : "dd
-                                  MMM yyyy"
-              }}, {{appointment.bookingHour}}
-            </p>
-            <p>
-              <strong>Status:</strong>
-              <span
-                class="badge badge-pill"
-                [ngClass]="{
-                  'bg-primary-light':
-                  appointment.appointmentStatus === 'ACCEPT',
-                  'bg-info-light':
-                  appointment.appointmentStatus ===
-                    'RESCHEDULED',
-                  'bg-success-light':
-                  appointment.appointmentStatus === 'COMPLETED',
-                  'bg-warning-light':
-                  appointment.appointmentStatus === 'PENDING',
-                  'bg-danger-light':
-                  appointment.appointmentStatus === 'CANCELLED'
-                }"
-              >
-                {{ appointment.appointmentStatus }}
-              </span>
-            </p>
-
-            <p>
-              <strong>Reason:</strong> {{ appointment.reason }}
-            </p>
-            <p>
-              <strong>Patient Name:</strong>
-              {{ appointment.fullName }}
-            </p>
-            <p><strong>Phone:</strong> {{ appointment.phone }}</p>
-          </div>
-        </p-dialog>
-        
-        <!-- /Search -->
-      </div>
-    </div>
-  </section>
-  <!-- /Home Banner -->
-  
-  <!-- Clinic and Specialities -->
-  <section class="section section-specialities">
-    <div class="container-fluid">
-      <div class="section-header text-center">
-        <h2>Clinic and Specialities</h2>
-        <p class="sub-title">
-          
+  <div class="container-fluid">
+    <div class="banner-wrapper">
+      <div class="banner-header text-center">
+        <h1>Make an Appointment</h1>
+        <p>
+          Discover the best doctors, clinic & hospital the city nearest to you.
         </p>
       </div>
-      <div class="row justify-content-center">
-        <div class="col-md-9">
+
+      <!-- Search -->
+
+      <div
+        class="search-info-book"
+        style="margin-inline-start: 35%; margin-inline-end: 35%"
+      >
+        <a [routerLink]="['/booking']" class="btn book-btn-homepage"
+          >Book Now</a
+        >
+      </div>
+
+      <!-- Appointment Detail Dialog -->
+      <p-dialog
+        header="Appointment Details"
+        [modal]="true"
+        [(visible)]="visible"
+        [style]="{ width: '25rem' }"
+      >
+        <div *ngIf="appointment">
+          <p>
+            <strong>Doctor:</strong>Dr.
+            {{ appointment.doctor.firstName }}
+            {{ appointment.doctor.lastName }}
+          </p>
+          <p>
+            <strong>Appointment Date:</strong>
+            {{
+              appointment.dateBooking
+                | date
+                  : "dd MMM yyyy"
+            }}, {{ appointment.bookingHour }}
+          </p>
+          <p>
+            <strong>Status:</strong>
+            <span
+              class="badge badge-pill"
+              [ngClass]="{
+                'bg-primary-light': appointment.appointmentStatus === 'ACCEPT',
+                'bg-info-light':
+                  appointment.appointmentStatus === 'RESCHEDULED',
+                'bg-success-light':
+                  appointment.appointmentStatus === 'COMPLETED',
+                'bg-warning-light': appointment.appointmentStatus === 'PENDING',
+                'bg-danger-light': appointment.appointmentStatus === 'CANCELLED'
+              }"
+            >
+              {{ appointment.appointmentStatus }}
+            </span>
+          </p>
+
+          <p><strong>Reason:</strong> {{ appointment.reason }}</p>
+          <p>
+            <strong>Patient Name:</strong>
+            {{ appointment.fullName }}
+          </p>
+          <p><strong>Phone:</strong> {{ appointment.phone }}</p>
+        </div>
+      </p-dialog>
+
+      <!-- /Search -->
+    </div>
+  </div>
+</section>
+<!-- /Home Banner -->
+
+<!-- Clinic and Specialities -->
+<section class="section section-specialities">
+  <div class="container-fluid">
+    <div class="section-header text-center">
+      <h2>Clinic and Specialities</h2>
+      <p class="sub-title"></p>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-9">
+        <p-carousel
+          [value]="specialties"
+          [numVisible]="4"
+          [numScroll]="1"
+          [circular]="true"
+          [autoplayInterval]="3000"
+        >
+          <ng-template let-specialty pTemplate="item">
+            <div class="specialty-item text-center">
+              <div class="specialty-img">
+                <img
+                  [src]="specialty.image"
+                  class="img-fluid"
+                  alt="Specialty"
+                />
+                <span><i class="fa fa-circle" aria-hidden="true"></i></span>
+              </div>
+              <p>{{ specialty.name }}</p>
+            </div>
+          </ng-template>
+        </p-carousel>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Popular Section -->
+<section class="section section-doctor">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="section-header">
+          <h2>Book Our Doctor</h2>
+        </div>
+        <div class="about-content">
+          <p>
+            Click to the doctor in the carousel in the right side for booking an appointment
+          </p>
+          <a href="javascript:;">Read More..</a>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="doctor-slider slider slick-initialized slick-slider">
           <p-carousel
-            [value]="specialties"
-            [numVisible]="4"
-            [numScroll]="1"
-            [circular]="true"
-            [autoplayInterval]="3000"
+            [value]="topRatingDoctors"
+            [numVisible]="3"
+            [numScroll]="3"
+            [circular]="false"
+            [responsiveOptions]="responsiveOptions"
           >
-            <ng-template let-specialty pTemplate="item">
-              <div class="specialty-item text-center">
-                <div class="specialty-img">
+            <ng-template let-doctor pTemplate="item">
+              <div
+                class="profile-widget border-1 surface-border border-round m-2 p-3"
+                style="width: 100%"
+              >
+                <div class="doc-img mb-3">
                   <img
-                    [src]="specialty.image"
-                    class="img-fluid"
-                    alt="Specialty"
+                    class="img-fluid w-full border-round fixed-img"
+                    [alt]="doctor.firstName + ' ' + doctor.lastName"
+                    [src]="
+                      doctor.avatarFilePath
+                        ? doctor?.avatarFilePath
+                        : 'assets/images/doctors/doctor-thumb-02.jpg'
+                    "
                   />
-                  <span><i class="fa fa-circle" aria-hidden="true"></i></span>
                 </div>
-                <p>{{ specialty.name }}</p>
+
+                <div class="pro-content">
+                  <h3 class="title">
+                    <a (click)="viewDoctorProfile(doctor.id)">
+                      {{ doctor?.firstName }} {{ doctor?.lastName }}
+                    </a>
+                    <i class="fas fa-check-circle verified"></i>
+                  </h3>
+                  <p class="speciality">
+                    {{ doctor?.specialty?.specialtyName }}
+                  </p>
+
+                  <div class="rating">
+                    <i
+                      class="fas fa-star"
+                      *ngFor="let star of [1, 2, 3, 4, 5]; let i = index"
+                      [ngClass]="{ filled: doctor.averageRating >= i + 1 }"
+                    ></i>
+                    <span class="d-inline-block average-rating"
+                      >({{ doctor?.numberOfFeedbacks }})</span
+                    >
+                  </div>
+
+                  <ul class="available-info">
+                    <li>
+                      <i class="fas fa-map-marker-alt"></i>
+                      {{ doctor?.address }}
+                    </li>
+                    <li>
+                      <i class="far fa-clock"></i> Available on Fri, 22 Mar
+                    </li>
+                    <li>
+                      <i class="far fa-money-bill-alt"></i> $50 - $300
+                      <i
+                        class="fas fa-info-circle"
+                        data-toggle="tooltip"
+                        title="Additional information"
+                      ></i>
+                    </li>
+                  </ul>
+
+                  <div class="row row-sm">
+                    <div class="col-6">
+                      <a
+                        (click)="viewDoctorProfile(doctor.id)"
+                        class="btn view-btn"
+                        >View Profile</a
+                      >
+                    </div>
+                    <div class="col-6">
+                      <a
+                        (click)="bookAppointmentNow(doctor?.id)"
+                        class="btn book-btn"
+                        >Book Now</a
+                      >
+                    </div>
+                  </div>
+                </div>
               </div>
             </ng-template>
           </p-carousel>
         </div>
       </div>
     </div>
-  </section>
-  
-  <!-- Popular Section -->
-  <section class="section section-doctor">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-lg-4">
-          <div class="section-header">
-            <h2>Book Our Doctor</h2>
-            <p>Lorem Ipsum is simply dummy text</p>
-          </div>
-          <div class="about-content">
-            <p>
-              It is a long established fact that a reader will be distracted by
-              the readable content of a page when looking at its layout. The point
-              of using Lorem Ipsum.
-            </p>
-            <a href="javascript:;">Read More..</a>
-          </div>
+  </div>
+</section>
+<!-- /Popular Section -->
+
+<!-- Availabe Features -->
+<section class="section section-features">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-5 features-img">
+        <img
+          src="assets/images/features/feature.png"
+          class="img-fluid"
+          alt="Feature"
+        />
+      </div>
+      <div class="col-md-7">
+        <div class="section-header">
+          <h2 class="mt-2">Availabe Features in Our Clinic</h2>
+          <p>
+            It is a long established fact that a reader will be distracted by
+            the readable content of a page when looking at its layout.
+          </p>
         </div>
-  
-        <div class="col-lg-8">
-          <div class="doctor-slider slider slick-initialized slick-slider">
-            <p-carousel
-              [value]="topRatingDoctors"
-              [numVisible]="3"
-              [numScroll]="3"
-              [circular]="false"
-              [responsiveOptions]="responsiveOptions"
-            >
-              <ng-template let-doctor pTemplate="item">
-                <div
-                  class="profile-widget border-1 surface-border border-round m-2 p-3"
-                  style="width: 100%"
-                >
-                  <div class="doc-img mb-3">
-                      <img
-                        class="img-fluid w-full border-round fixed-img"
-                        [alt]="doctor.firstName + ' ' + doctor.lastName"
-                        [src]="
-                          doctor.avatarFilePath
-                            ? doctor?.avatarFilePath
-                            : 'assets/images/doctors/doctor-thumb-02.jpg'
-                        "
-                      />
-                  </div>
-  
-                  <div class="pro-content">
-                    <h3 class="title">
-                      <a (click)="viewDoctorProfile(doctor.id)">
-                        {{ doctor?.firstName }} {{ doctor?.lastName }}
-                      </a>
-                      <i class="fas fa-check-circle verified"></i>
-                    </h3>
-                    <p class="speciality">
-                      {{ doctor?.specialty?.specialtyName }}
-                    </p>
-  
-                    <div class="rating">
-                      <i
-                        class="fas fa-star"
-                        *ngFor="let star of [1, 2, 3, 4, 5]; let i = index"
-                        [ngClass]="{ filled: doctor.averageRating >= i + 1 }"
-                      ></i>
-                      <span class="d-inline-block average-rating"
-                        >({{ doctor?.numberOfFeedbacks }})</span
-                      >
-                    </div>
-  
-                    <ul class="available-info">
-                      <li>
-                        <i class="fas fa-map-marker-alt"></i> {{ doctor?.address }}
-                      </li>
-                      <li>
-                        <i class="far fa-clock"></i> Available on Fri, 22 Mar
-                      </li>
-                      <li>
-                        <i class="far fa-money-bill-alt"></i> $50 - $300
-                        <i
-                          class="fas fa-info-circle"
-                          data-toggle="tooltip"
-                          title="Additional information"
-                        ></i>
-                      </li>
-                    </ul>
-  
-                    <div class="row row-sm">
-                      <div class="col-6">
-                        <a
-                          (click)="viewDoctorProfile(doctor.id)"
-                          class="btn view-btn"
-                          >View Profile</a
-                        >
-                      </div>
-                      <div class="col-6">
-                        <a (click)="bookAppointmentNow(doctor?.id)" class="btn book-btn">Book Now</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </ng-template>
-            </p-carousel>
-          </div>
+        <div class="features-slider">
+          <p-carousel
+            [value]="features"
+            [numVisible]="4"
+            [numScroll]="1"
+            [circular]="true"
+            [autoplayInterval]="3000"
+            [showIndicators]="true"
+            [showNavigators]="true"
+          >
+            <ng-template let-feature pTemplate="item">
+              <div class="feature-item text-center">
+                <img
+                  [src]="feature.image"
+                  class="img-fluid"
+                  [alt]="feature.name"
+                />
+                <p>{{ feature.name }}</p>
+              </div>
+            </ng-template>
+          </p-carousel>
         </div>
       </div>
     </div>
-  </section>
-  <!-- /Popular Section -->
-  
-  <!-- Availabe Features -->
-  <section class="section section-features">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-5 features-img">
-          <img
-            src="assets/images/features/feature.png"
-            class="img-fluid"
-            alt="Feature"
-          />
-        </div>
-        <div class="col-md-7">
-          <div class="section-header">
-            <h2 class="mt-2">Availabe Features in Our Clinic</h2>
-            <p>
-              It is a long established fact that a reader will be distracted by
-              the readable content of a page when looking at its layout.
-            </p>
-          </div>
-          <div class="features-slider">
-            <p-carousel
-              [value]="features"
-              [numVisible]="4"
-              [numScroll]="1"
-              [circular]="true"
-              [autoplayInterval]="3000"
-              [showIndicators]="true"
-              [showNavigators]="true"
-            >
-              <ng-template let-feature pTemplate="item">
-                <div class="feature-item text-center">
-                  <img
-                    [src]="feature.image"
-                    class="img-fluid"
-                    [alt]="feature.name"
-                  />
-                  <p>{{ feature.name }}</p>
-                </div>
-              </ng-template>
-            </p-carousel>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- Availabe Features -->
-  
+  </div>
+</section>
+<!-- Availabe Features -->

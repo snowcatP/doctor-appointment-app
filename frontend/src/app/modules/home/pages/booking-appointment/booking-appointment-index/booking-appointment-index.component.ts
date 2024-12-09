@@ -30,7 +30,7 @@ import { SpecialtyService } from '../../../../../core/services/specialty.service
 import { AppointmentService } from '../../../../../core/services/appointment.service';
 import { DoctorService } from '../../../../../core/services/doctor.service';
 import { MessageService } from 'primeng/api';
-import { Router, ActivatedRoute  } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromAuth from '../../../../../core/states/auth/auth.reducer';
 import * as AuthActions from '../../../../../core/states/auth/auth.actions';
@@ -103,21 +103,24 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
     // this.webSocketInit();
     this.subscribeToActions();
 
-    const secretKey = '28a57933ee4343d000fe4d347ac74dc96ea35c699c1de470b68c7741b26a513f';
+    const secretKey =
+      '28a57933ee4343d000fe4d347ac74dc96ea35c699c1de470b68c7741b26a513f';
 
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       if (params['doctorId']) {
-        const decryptedId = CryptoJS.AES.decrypt(params['doctorId'], secretKey).toString(CryptoJS.enc.Utf8);
+        const decryptedId = CryptoJS.AES.decrypt(
+          params['doctorId'],
+          secretKey
+        ).toString(CryptoJS.enc.Utf8);
         this.doctorId = parseInt(decryptedId, 10);
         if (this.doctorId) {
           this.doctorSelected = this.doctorSelected || new DoctorBooking();
           this.doctorSelected.id = this.doctorId;
-  
+
           this.getDoctorDetails(this.doctorSelected.id);
         }
       }
     });
-
   }
 
   getDoctorDetails(id: number): void {
@@ -128,8 +131,8 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
           // Update the form with doctor details
           this.formBooking.patchValue({
             doctor: this.doctorSelected.fullName,
-            specialty: this.doctorSelected.specialty.specialtyName
-        });
+            specialty: this.doctorSelected.specialty.specialtyName,
+          });
         }
       },
       (error) => {
@@ -239,16 +242,71 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         doctorName: this.doctorSelected.fullName,
         reason: this.formBooking.get('reason').value,
       };
-      this.appointmentService.createAppointmentByPatient(bookingData).subscribe({
+      this.appointmentService
+        .createAppointmentByPatient(bookingData)
+        .subscribe({
+          next: (res) => {
+            console.log(res);
+            if (res.statusCode === 200) {
+              this.setAppointmentForSuccess(null, res?.data);
+              this.messageService.add({
+                key: 'messageToast',
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Booked appointment successfully!',
+              });
+              setTimeout(() => {
+                this.loading = false; // Stop loading
+                this.router.navigate([
+                  '/booking/success',
+                  { bookingSuccess: true },
+                ]);
+              }, 2000);
+            } else {
+              this.messageService.add({
+                key: 'messageToast',
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Booked appointment unsuccessfully!',
+              });
+              this.loading = false; // Stop loading
+            }
+          },
+          error: (err) => {
+            this.messageService.add({
+              key: 'messageToast',
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Booked appointment unsuccessfully!',
+            });
+            this.loading = false; // Stop loading
+            console.log(err);
+          },
+        });
+    } else {
+      this.loading = true; // Start loading
+      const bookingData: BookingDataGuest = {
+        doctorId: this.doctorSelected.id,
+        doctorName: this.doctorSelected.fullName,
+        fullName:
+          this.formBooking.get('firstName').value +
+          ' ' +
+          this.formBooking.get('lastName').value,
+        phone: this.formBooking.get('phone').value,
+        email: this.formBooking.get('email').value,
+        reason: this.formBooking.get('reason').value,
+        dateBooking: this.timeSlotSelected.date,
+        bookingHour: this.timeSlotSelected.time,
+      };
+      this.appointmentService.createAppointmentByGuest(bookingData).subscribe({
         next: (res) => {
-          console.log(res)
           if (res.statusCode === 200) {
-            this.setAppointmentForSuccess(null, res?.data);
+            this.setAppointmentForSuccess(res?.data, null);
             this.messageService.add({
               key: 'messageToast',
               severity: 'success',
               summary: 'Success',
-              detail: 'Booked appointment successfully!'
+              detail: 'Booked appointment successfully!',
             });
             setTimeout(() => {
               this.loading = false; // Stop loading
@@ -262,7 +320,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
               key: 'messageToast',
               severity: 'error',
               summary: 'Error',
-              detail: 'Booked appointment unsuccessfully!'
+              detail: 'Booked appointment unsuccessfully!',
             });
             this.loading = false; // Stop loading
           }
@@ -272,66 +330,12 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
             key: 'messageToast',
             severity: 'error',
             summary: 'Error',
-            detail: 'Booked appointment unsuccessfully!'
+            detail: 'Booked appointment unsuccessfully!',
           });
           this.loading = false; // Stop loading
           console.log(err);
         },
-      })
-    } else {
-      this.loading = true; // Start loading
-      const bookingData: BookingDataGuest = {
-        doctorId: this.doctorSelected.id,
-        doctorName: this.doctorSelected.fullName,
-        fullName:
-          this.formBooking.get('firstName').value + ' ' +
-          this.formBooking.get('lastName').value,
-        phone: this.formBooking.get('phone').value,
-        email: this.formBooking.get('email').value,
-        reason: this.formBooking.get('reason').value,
-        dateBooking: this.timeSlotSelected.date,
-        bookingHour: this.timeSlotSelected.time,
-      };
-      this.appointmentService
-        .createAppointmentByGuest(bookingData)
-        .subscribe({
-          next: (res) => {
-            if (res.statusCode === 200) {
-              this.setAppointmentForSuccess(res?.data, null);
-              this.messageService.add({
-                key: 'messageToast',
-                severity: 'success',
-                summary: 'Success',
-                detail: 'Booked appointment successfully!'
-              });
-              setTimeout(() => {
-                this.loading = false; // Stop loading
-                this.router.navigate([
-                  '/booking/success',
-                  { bookingSuccess: true },
-                ]);
-              }, 2000);
-            }else {
-              this.messageService.add({
-                key: 'messageToast',
-                severity: 'error',
-                summary: 'Error',
-                detail: 'Booked appointment unsuccessfully!'
-              });
-              this.loading = false; // Stop loading
-            }
-          },
-          error: (err) => {
-            this.messageService.add({
-              key: 'messageToast',
-              severity: 'error',
-              summary: 'Error',
-              detail: 'Booked appointment unsuccessfully!'
-            });
-            this.loading = false; // Stop loading
-            console.log(err);
-          },
-        });
+      });
     }
   }
 
@@ -345,7 +349,6 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
     if (patient != null) {
       this.appointmentService.setAppointmentBookedPatient(patient);
     }
-
   }
 
   closeBooking() {
@@ -462,6 +465,18 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
       startWith(''),
       map((value) => this._filterDoctor(value || ''))
     );
+    const specialty = this.formBooking.controls['specialty'].getRawValue();
+    if (specialty && !this.isValidSpecialty(specialty)) {
+      this.formBooking.controls['specialty'].clearValidators();
+      this.formBooking.controls['specialty'].setErrors({ invalid: true });
+    } else if (specialty == '') {
+      this.formBooking.controls['specialty'].clearValidators();
+      this.formBooking.controls['specialty'].setErrors({ required: true });
+    }
+  }
+
+  isValidSpecialty(specialty: string) {
+    return this.listSpecialties.some((spe) => spe.specialtyName === specialty);
   }
 
   selectDoctor() {
@@ -474,6 +489,9 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
         this.formBooking
           .get('specialty')
           .setValue(this.doctorSelected.specialty.specialtyName);
+        this.formBooking.controls['doctor'].setErrors(null);
+      } else {
+        this.formBooking.controls['doctor'].setErrors({ invalid: true });
       }
     }
   }
@@ -537,9 +555,16 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
 
   private _filterDoctor(value: string): DoctorBooking[] {
     const filterValue = value.toLowerCase();
-    return this.listDoctors.filter((doctor) => 
-      doctor.fullName.toLowerCase().includes(filterValue)
-      && doctor.specialty.specialtyName === this.formBooking.controls['specialty'].value
+    if (this.formBooking.controls['specialty'].getRawValue() == '') {
+      return this.listDoctors.filter((doctor) =>
+        doctor.fullName.toLowerCase().includes(filterValue)
+      );
+    }
+    return this.listDoctors.filter(
+      (doctor) =>
+        doctor.fullName.toLowerCase().includes(filterValue) &&
+        doctor.specialty.specialtyName ===
+          this.formBooking.controls['specialty'].value
     );
   }
 
@@ -569,7 +594,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
       severity: status ? 'success' : 'error',
       summary: status ? 'Success' : 'Error',
       detail: message,
-      life: 1500  // Thời gian hiển thị toast (ms)
+      life: 1500, // Thời gian hiển thị toast (ms)
     });
   }
 
