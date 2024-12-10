@@ -19,7 +19,7 @@
                   <h2>Login Doccure</h2>
                 </div>
                 <form [formGroup]="formLogin">
-                  <mat-error *ngIf="errorMessage" class="pt-0 pb-1">{{
+                  <mat-error *ngIf="errorMessage" class="pt-0 pb-1" id="errorMessage">{{
                     errorMessage
                   }}</mat-error>
                   <mat-form-field appearance="outline" class="full-width pb-2">
@@ -40,6 +40,7 @@
                       required
                       #email
                       tabindex="1"
+                      id="email"
                     />
                     <mat-error
                       *ngIf="formLogin.controls['email'].hasError('email')"
@@ -68,6 +69,7 @@
                       formControlName="password"
                       required
                       tabindex="2"
+                      id="password"
                     />
                     <button
                       mat-icon-button
@@ -96,6 +98,7 @@
                     class="btn btn-primary btn-block btn-lg full-width"
                     type="submit"
                     [disabled]="!formLogin.valid || isLoading"
+                    id="loginBtn"
                   >
                     <div
                       class="d-flex align-items-center justify-content-center"
