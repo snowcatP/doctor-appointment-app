@@ -5,15 +5,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class LoginPage {
-    private WebDriver driver;
+    private final WebDriver driver;
 
-    private By emailTextBox = By.id("email");
-    private By passwordTextBox = By.id("password");
-    private By loginButton = By.id("loginBtn");
+    private final By emailTextBox = By.id("email");
+    private final By passwordTextBox = By.id("password");
+    private final By loginButton = By.id("loginBtn");
 
-    private By errorMessage = By.id("errorMessage");
+    private final By errorMessage = By.id("errorMessage");
     @Getter
-    private By toast = By.id("toast");
+    private final By toast = By.id("toast");
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;

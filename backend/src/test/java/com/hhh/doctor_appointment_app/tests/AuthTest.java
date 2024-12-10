@@ -1,4 +1,4 @@
-package com.hhh.doctor_appointment_app.tests.AuthenticationTest;
+package com.hhh.doctor_appointment_app.tests;
 
 import com.hhh.doctor_appointment_app.BaseSetup;
 import com.hhh.doctor_appointment_app.poms.LoginPage;
@@ -14,7 +14,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.Duration;
 
@@ -51,13 +53,14 @@ public class AuthTest extends BaseSetup {
             assertEquals("Success\nLogin successfully", toast.getText());
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            fail();
         } finally {
             driver.quit();
         }
     }
 
     @Test
-    public void loginFail() {
+    public void loginFail() throws InterruptedException {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         try {
             driver.get(host + "/auth/login");
@@ -72,8 +75,7 @@ public class AuthTest extends BaseSetup {
             assertEquals("Wrong email or password.", errorMessageElement.getText());
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        } finally {
-            driver.quit();
+            fail();
         }
     }
 
