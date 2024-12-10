@@ -86,6 +86,7 @@
                           (blur)="specialtyChange()"
                           required
                           tabindex="1"
+                          id="specialty"
                         />
                         <mat-autocomplete #autoSpecialty="matAutocomplete">
                           @for (specialty of filteredSpecialties | async; track
@@ -128,6 +129,7 @@
                           (blur)="selectDoctor()"
                           required
                           tabindex="2"
+                          id="doctor"
                         />
                         <mat-autocomplete #autoDoctor="matAutocomplete">
                           @for (doctor of filteredDoctors | async; track doctor)
@@ -146,12 +148,10 @@
                         </mat-error>
                         <mat-error
                           *ngIf="
-                            formBooking.controls['doctor'].getError(
-                              'invalid'
-                            )
+                            formBooking.controls['doctor'].getError('invalid')
                           "
                         >
-                        Doctor is invalid.
+                          Doctor is invalid.
                         </mat-error>
                       </mat-form-field>
                     </div>
@@ -170,6 +170,7 @@
                             required
                             tabindex="3"
                             [readonly]="isLogged$ | async"
+                            id="firstName"
                           />
                           <mat-error
                             *ngIf="
@@ -200,6 +201,7 @@
                             required
                             tabindex="4"
                             [readonly]="isLogged$ | async"
+                            id="lastName"
                           />
                           <mat-error
                             *ngIf="
@@ -232,6 +234,7 @@
                             required
                             tabindex="5"
                             [readonly]="isLogged$ | async"
+                            id="phone"
                           />
                           <mat-error
                             *ngIf="
@@ -272,6 +275,7 @@
                             required
                             tabindex="6"
                             [readonly]="isLogged$ | async"
+                            id="email"
                           />
                           <mat-error
                             *ngIf="
@@ -300,6 +304,7 @@
                           formControlName="reason"
                           required
                           tabindex="7"
+                          id="reason"
                         ></textarea>
                         <mat-error
                           *ngIf="
@@ -329,6 +334,7 @@
                   matStepperNext
                   [disabled]="formBooking.invalid"
                   (click)="getAppointmentsBooked()"
+                  id="nextStep2"
                 >
                   <mat-icon iconPositionEnd>chevron_right</mat-icon>
                   Next
@@ -360,6 +366,7 @@
                 extended
                 matStepperNext
                 [disabled]="formBookingDate.invalid || !timeSlotSelected"
+                id="nextStep3"
               >
                 <mat-icon iconPositionEnd>chevron_right</mat-icon>
                 Next
@@ -421,17 +428,17 @@
                   <div class="booking-item-wrap">
                     <ul class="booking-fee">
                       <li>
-                        Specialty<span>{{
+                        Specialty<span id="specialtyResult">{{
                           formBooking.get("specialty").value
                         }}</span>
                       </li>
                       <li>
-                        Doctor Name<span
+                        Doctor Name<span id="doctorResult"
                           >Dr. {{ doctorSelected?.fullName }}</span
                         >
                       </li>
                       <li>
-                        Patient Name<span>{{
+                        Patient Name<span id="fullNameResult">{{
                           formBooking.get("firstName")?.value +
                             " " +
                             formBooking.get("lastName")?.value
@@ -451,7 +458,7 @@
                         }}</span>
                       </li>
                       <li>
-                        Time Booking<span>{{ timeSlotSelected?.time }}</span>
+                        Time Booking<span id="timeBooking">{{ timeSlotSelected?.time }}</span>
                       </li>
                     </ul>
                   </div>
@@ -460,13 +467,22 @@
               </div>
             </div>
             <div class="d-flex justify-content-between mx-2">
-              <button mat-raised-button extended matStepperPrevious [disabled]="loading">
+              <button
+                mat-raised-button
+                extended
+                matStepperPrevious
+                [disabled]="loading"
+              >
                 <mat-icon>chevron_left</mat-icon>
                 Back
               </button>
               <div class="spinner-container" *ngIf="loading">
-                <p-progressSpinner styleClass="w-2rem h-2rem" strokeWidth="3" fill="var(--surface-ground)"
-                  animationDuration=".5s">
+                <p-progressSpinner
+                  styleClass="w-2rem h-2rem"
+                  strokeWidth="3"
+                  fill="var(--surface-ground)"
+                  animationDuration=".5s"
+                >
                 </p-progressSpinner>
               </div>
               <button

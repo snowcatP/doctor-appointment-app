@@ -73,7 +73,7 @@
     </div>
     <div class="d-flex justify-content-between pe-2">
       <p>Date Booking:</p>
-      <p>{{ selectedAppointment?.dateBooking | date }}</p>
+      <p id="dateBooking">{{ selectedAppointment?.dateBooking | date }}</p>
     </div>
     <div class="d-flex justify-content-between pe-2">
       <p>Booking Hour:</p>
@@ -91,6 +91,7 @@
             'badge-danger': selectedAppointment?.appointmentStatus === 'CANCELLED',
             'badge-success': selectedAppointment?.appointmentStatus === 'ACCEPT',
           }"
+          id="status"
           >{{ selectedAppointment?.appointmentStatus | titlecase }}</span
         >
       </p>
@@ -110,7 +111,7 @@
       </div>
     </div>
     <div class="d-flex justify-content-between pt-4">
-      <button mat-raised-button (click)="visible = !visible">Close</button>
+      <button mat-raised-button (click)="visible = !visible" id="close">Close</button>
       <button
         mat-flat-button
         (click)="visibleSchedule = !visibleSchedule"
@@ -119,6 +120,7 @@
           selectedAppointment.appointmentStatus != 'PENDING' &&
           checkValidDate(selectedAppointment)
         "
+        id="rescheduleBtn"
       >
         Reschedule
       </button>
@@ -144,6 +146,7 @@
       mat-raised-button
       extended
       (click)="visibleSchedule = !visibleSchedule"
+      id="closeReschedule"
     >
       <mat-icon>close</mat-icon>
       Cancel
