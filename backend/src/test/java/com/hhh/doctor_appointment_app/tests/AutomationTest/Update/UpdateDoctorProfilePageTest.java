@@ -1,8 +1,7 @@
-package com.hhh.doctor_appointment_app.tests.Update;
+package com.hhh.doctor_appointment_app.tests.AutomationTest.Update;
 
 import com.hhh.doctor_appointment_app.poms.LoginPage;
 import com.hhh.doctor_appointment_app.poms.UpdateDoctorProfilePage;
-import com.hhh.doctor_appointment_app.poms.UpdatePasswordPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,7 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class UpdatePasswordOfPatientTest {
+public class UpdateDoctorProfilePageTest {
     private WebDriver driver;
 
     @Value("${origins.host}")
@@ -45,23 +44,24 @@ public class UpdatePasswordOfPatientTest {
         try {
             driver.get(host + "/auth/login");
             LoginPage loginPage = new LoginPage(driver);
-            loginPage.enterEmail("hoanghao2112003@gmail.com");
+            loginPage.enterEmail("haonguyen1231@gmail.com");
             loginPage.enterPassword("hao2112003");
             loginPage.clickLogin();
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("toast")));
             Thread.sleep(2000);
-            driver.get(host + "/patient/dashboard");
-            wait.until(ExpectedConditions.elementToBeClickable(By.id("changePasswordBtn")));
-            UpdatePasswordPage updatePasswordPage = new UpdatePasswordPage(driver);
-            updatePasswordPage.clickChangePassword();
+
+            wait.until(ExpectedConditions.elementToBeClickable(By.id("updateProfileBtn")));
+            UpdateDoctorProfilePage updateDoctorProfilePage = new UpdateDoctorProfilePage(driver);
+            updateDoctorProfilePage.clickProfileSettings();
             Thread.sleep(2000);
-            updatePasswordPage.enterOldPassword("hao2112003");
-            updatePasswordPage.enterNewPassword("NguyenHao2112003");
-            updatePasswordPage.enterConfirmPassword("NguyenHao2112003");
-            updatePasswordPage.clickSaveChanges();
+            updateDoctorProfilePage.enterFirstName("NH");
+            updateDoctorProfilePage.enterLastName("Hao");
+            updateDoctorProfilePage.enterPhone("0827894561");
+            updateDoctorProfilePage.enterAddress("Vo Van Ngan St");
+            updateDoctorProfilePage.clickSaveChanges();
 
             WebElement toast = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("toast")));
-            assertEquals("Success\nChange password successfully", toast.getText());
+            assertEquals("Success\nSUCCESS", toast.getText());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         } finally {
@@ -75,23 +75,24 @@ public class UpdatePasswordOfPatientTest {
         try {
             driver.get(host + "/auth/login");
             LoginPage loginPage = new LoginPage(driver);
-            loginPage.enterEmail("hoanghao2112003@gmail.com");
-            loginPage.enterPassword("NguyenHao2112003");
+            loginPage.enterEmail("haonguyen1231@gmail.com");
+            loginPage.enterPassword("hao2112003");
             loginPage.clickLogin();
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("toast")));
             Thread.sleep(2000);
-            driver.get(host + "/patient/dashboard");
-            wait.until(ExpectedConditions.elementToBeClickable(By.id("changePasswordBtn")));
-            UpdatePasswordPage updatePasswordPage = new UpdatePasswordPage(driver);
-            updatePasswordPage.clickChangePassword();
+
+            wait.until(ExpectedConditions.elementToBeClickable(By.id("updateProfileBtn")));
+            UpdateDoctorProfilePage updateDoctorProfilePage = new UpdateDoctorProfilePage(driver);
+            updateDoctorProfilePage.clickProfileSettings();
             Thread.sleep(2000);
-            updatePasswordPage.enterOldPassword("abcxyz123");
-            updatePasswordPage.enterNewPassword("hao2112003");
-            updatePasswordPage.enterConfirmPassword("hao2112003");
-            updatePasswordPage.clickSaveChanges();
+            updateDoctorProfilePage.enterFirstName("NH");
+            updateDoctorProfilePage.enterLastName("Hao");
+            updateDoctorProfilePage.enterPhone("082@!->?94561");
+            updateDoctorProfilePage.enterAddress("Vo Van Ngan St");
+            updateDoctorProfilePage.clickSaveChanges();
 
             WebElement toast = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("toast")));
-            assertEquals("Error\nOld password is incorrect", toast.getText());
+            assertEquals("Error\nPhone number contains invalid characters", toast.getText());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         } finally {

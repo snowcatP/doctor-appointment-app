@@ -1,4 +1,4 @@
-package com.hhh.doctor_appointment_app.tests;
+package com.hhh.doctor_appointment_app.tests.AutomationTest;
 
 import com.hhh.doctor_appointment_app.BaseSetup;
 import com.hhh.doctor_appointment_app.poms.LoginPage;
