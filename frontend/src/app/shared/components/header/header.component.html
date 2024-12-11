@@ -135,9 +135,9 @@
           </ul>
         </li>
         <li class="has-submenu" *ngIf="(role$ | async) !== 'DOCTOR' && (role$ | async) !== 'NURSE'">
-          <a routerLink="/patient/">Patients <i class="fas fa-chevron-down"></i></a>
+          <a routerLink="/patient/" id="patients">Patients <i class="fas fa-chevron-down"></i></a>
           <ul class="submenu">
-            <li><a [routerLink]="['/search-doctor']">Search Doctor</a></li>
+            <li><a [routerLink]="['/search-doctor']" id="search-doctor">Search Doctor</a></li>
             <li><a [routerLink]="['/booking']">Booking</a></li>
             <li>
               <a [routerLink]="['/patient']" *ngIf="(role$ | async) === 'PATIENT'">Patient Dashboard</a>
@@ -180,6 +180,7 @@
             <p-iconField iconPosition="right">
               <p-inputIcon styleClass="pi pi-search" />
               <input 
+                id="appointmentCode"
                 type="text" 
                 pInputText 
                 placeholder="Appointment Code" 

@@ -8,7 +8,7 @@
             <div class="filter-widget">
                 <div class="person-icon">
                     <input type="text" class="form-control" [(ngModel)]="searchRequest.keyword" 
-                    placeholder="Enter doctor name">
+                    placeholder="Enter doctor name" id="doctor-name">
                 </div>
             </div>
 
@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="btn-search">
-                <button type="button" class="btn btn-block" (click)="searchDoctors()">Search</button>
+                <button type="button" class="btn btn-block" (click)="searchDoctors()" id="search-doctor">Search</button>
             </div>	
         </div>
     </div>

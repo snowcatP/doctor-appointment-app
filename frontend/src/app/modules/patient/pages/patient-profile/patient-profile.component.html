@@ -8,7 +8,9 @@
             <div class="form-group">
               <div class="change-avatar">
                 <div class="profile-img">
-                  <p-image [src]="imagePreview" alt="Doctor Image" width="100%" [preview]="true" />
+                  <p-image *ngIf="!imagePreview" [src]="originalProfile.avatarFilePath" alt="Doctor Image" width="100%"
+                    [preview]="true" />
+                  <p-image *ngIf="imagePreview" [src]="imagePreview" alt="Doctor Image" width="100%" [preview]="true" />
                 </div>
                 <div class="upload-img">
                   <div class="change-photo-btn">
@@ -36,8 +38,8 @@
             <div class="form-group">
               <label>Date of Birth</label>
               <div>
-                <p-calendar  [(ngModel)]="updateProfile.dateOfBirth" name="dateOfBirth" [iconDisplay]="'input'" [showIcon]="true" inputStyleClass="custom-calendar"
-                inputId="icondisplay" />
+                <p-calendar [(ngModel)]="updateProfile.dateOfBirth" name="dateOfBirth" [iconDisplay]="'input'"
+                  [showIcon]="true" inputStyleClass="custom-calendar" inputId="icondisplay" />
               </div>
             </div>
           </div>

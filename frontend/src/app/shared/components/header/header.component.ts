@@ -118,7 +118,13 @@ export class HeaderComponent implements OnInit {
       (response) => {
         if (response.statusCode === 200) {
         this.appointment = response.data;
-        this.appointmentService.showDialog(this.appointment)
+        this.appointmentService.showDialog(this.appointment);
+        this.messageService.add({
+          key: 'messageToast',
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Appointment Successfully Found',
+        });
         }else{
           this.messageService.add({
             key: 'messageToast',

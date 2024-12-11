@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DoctorService } from '../../../../core/services/doctor.service';
 import { Router } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-search-doctor',
   templateUrl: './search-doctor.component.html',
@@ -18,7 +19,7 @@ export class SearchDoctorComponent implements OnInit {
     specialtyId: [],
     gender: null
   };
-  constructor(private doctorService: DoctorService, private router: Router) {}
+  constructor(private doctorService: DoctorService, private router: Router, private messageService: MessageService,) {}
 
   ngOnInit(): void {
     this.searchDoctors(this.currentPage, this.pageSize);
@@ -51,10 +52,23 @@ export class SearchDoctorComponent implements OnInit {
         if (response.statusCode === 200) {
           this.doctors = response.data;
           this.totalDoctors = response.totalPage * pageSize;
+        }else {
+          this.messageService.add({
+            key: 'messageToast',
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No doctors available',
+          });
         }
       },
       (error) => {
         console.error('Error searching doctors', error);
+        this.messageService.add({
+          key: 'messageToast',
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No doctors available',
+        });
       }
     );
   }
