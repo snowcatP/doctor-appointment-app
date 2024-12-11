@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### json
+!**/src/main/resources/doctorappointmentwebapp-firebase-adminsdk-4mzt0-6c8d7210ad.json

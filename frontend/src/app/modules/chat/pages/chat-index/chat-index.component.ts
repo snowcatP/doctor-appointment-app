@@ -167,7 +167,6 @@ export class ChatIndexComponent implements OnInit, OnDestroy {
       );
       setTimeout(() => {
         this.messageInput.nativeElement.value = '';
-        this.isSending = false;
       }, 500);
     } catch (error) {
       console.log(error);
@@ -184,6 +183,7 @@ export class ChatIndexComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.selectedConversationData.push(message);
           this.scrollToBottom();
+          this.isSending = false;
         }, 2000);
       });
   }
