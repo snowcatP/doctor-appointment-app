@@ -1,4 +1,4 @@
-package com.hhh.doctor_appointment_app.tests.Seach;
+package com.hhh.doctor_appointment_app.tests.AutomationTest.Seach;
 
 import com.hhh.doctor_appointment_app.BaseSetup;
 import com.hhh.doctor_appointment_app.poms.SeachAppointmentByCode;

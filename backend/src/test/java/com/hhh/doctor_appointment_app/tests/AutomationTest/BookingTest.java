@@ -1,4 +1,4 @@
-package com.hhh.doctor_appointment_app.tests;
+package com.hhh.doctor_appointment_app.tests.AutomationTest;
 
 import com.hhh.doctor_appointment_app.entity.Doctor;
 import com.hhh.doctor_appointment_app.entity.Patient;
