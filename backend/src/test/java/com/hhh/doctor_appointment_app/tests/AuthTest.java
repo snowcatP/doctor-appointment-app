@@ -32,22 +32,18 @@ public class AuthTest extends BaseSetup {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless"); // Run in headless mode
         options.addArguments("--disable-gpu"); // Disable GPU for better compatibility
-        options.addArguments("--window-size=1920,1080"); // Optional: Set a virtual window size
         options.addArguments("--no-sandbox"); // Optional: Improves security for CI environments
         options.addArguments("--disable-dev-shm-usage");
 //        driver = new ChromeDriver(options);
         driver = new ChromeDriver();
+        driver.manage().window().maximize();
     }
 
     @Test
     public void loginSuccess() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         try {
-            driver.get(host + "/auth/login");
-            LoginPage loginPage = new LoginPage(driver);
-            loginPage.enterEmail("admin@gmail.com");
-            loginPage.enterPassword("Hello@123");
-            loginPage.clickLogin();
+            login("admin@gmail.com", "Hello@123");
 
             WebElement toast = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("toast")));
             assertEquals("Success\nLogin successfully", toast.getText());
@@ -63,11 +59,7 @@ public class AuthTest extends BaseSetup {
     public void loginFail() throws InterruptedException {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         try {
-            driver.get(host + "/auth/login");
-            LoginPage loginPage = new LoginPage(driver);
-            loginPage.enterEmail("admin@gmail.com");
-            loginPage.enterPassword("Hello@12345");
-            loginPage.clickLogin();
+            login("admin@gmail.com", "Hello@12345");
 
             WebElement errorMessageElement = wait.until(
                     ExpectedConditions.visibilityOfElementLocated(By.id("errorMessage"))
@@ -77,6 +69,36 @@ public class AuthTest extends BaseSetup {
             System.out.println(e.getMessage());
             fail();
         }
+    }
+
+    @Test
+    public void logout() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        try {
+            login("admin@gmail.com", "Hello@123");
+            Thread.sleep(4000);
+            WebElement menuDropdown =
+                    wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("menu-dropdown")));
+            menuDropdown.click();
+            WebElement logoutButton =
+                    wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("logout")));
+
+            logoutButton.click();
+            WebElement toast =
+                    wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("toast")));
+            assertEquals("Success\nLogout Success", toast.getText());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            fail();
+        }
+    }
+
+    private void login(String email, String password) {
+        driver.get(host + "/auth/login");
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.enterEmail(email);
+        loginPage.enterPassword(password);
+        loginPage.clickLogin();
     }
 
     @AfterEach

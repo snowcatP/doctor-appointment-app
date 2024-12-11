@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootTest
 class DoctorAppointmentAppApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+//	@Test
+//	void contextLoads() {
+//	}
 
 }

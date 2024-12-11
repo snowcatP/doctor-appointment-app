@@ -170,7 +170,7 @@
           </ul>
         </li>
         <li *ngIf="(role$ | async) === 'DOCTOR' || (role$ | async) === 'PATIENT'">
-          <a routerLink="/chat" routerLinkActive="active">Chat</a>
+          <a routerLink="/chat" routerLinkActive="active" id="chat">Chat</a>
         </li>
         <li>
           <a routerLink="/chatbot" routerLinkActive="active">Chatbot</a>
@@ -202,7 +202,7 @@
       </li>
       <!-- User Menu -->
       <li class="nav-item dropdown has-arrow logged-item" *ngIf="token$ | async">
-        <button class="dropdown-toggle nav-link" [matMenuTriggerFor]="menu">
+        <button class="dropdown-toggle nav-link" [matMenuTriggerFor]="menu" id="menu-dropdown">
           <span class="user-img">
             <img class="rounded-circle" [src]="
                 (user$ | async)?.avatarFilePath ||
@@ -230,7 +230,7 @@
         </div>
         <a mat-menu-item (click)="goToDashboard()">Dashboard</a>
         <a mat-menu-item (click)="goToProfile()">Profile Settings</a>
-        <a mat-menu-item (click)="logout()">Logout</a>
+        <a mat-menu-item (click)="logout()" id="logout">Logout</a>
       </div>
     </mat-menu>
   </nav>

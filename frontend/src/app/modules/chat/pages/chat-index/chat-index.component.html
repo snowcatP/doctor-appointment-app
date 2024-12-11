@@ -37,9 +37,11 @@
             <div class="chat-scroll" *ngIf="!isLoadingConversations">
               <a
                 class="media row d-flex justify-content-between"
-                *ngFor="let conversation of filteredConversation"
+                *ngFor="let conversation of filteredConversation; let i = index"
                 (click)="selectConversation(conversation)"
                 [ngClass]="{ active: selectedConversation === conversation }"
+                name="conversation"
+                [id]="'conversation_' + i"
               >
                 <div
                   class="media-img-wrap col-xl-2 col-lg-2 col-md-3 col-sm-2 col-2 p-0"
@@ -108,7 +110,7 @@
               </div>
             </div>
           </div>
-          <div class="chat-body">
+          <div class="chat-body" id="chat-body">
             <div class="chat-scroll" #chatScroll>
               <ul class="list-unstyled" *ngIf="selectedConversation">
                 <li
@@ -190,6 +192,7 @@
                 (keyup.enter)="sendMessage()"
                 [autoResize]="true"
                 [disabled]="isSending"
+                id="messageBox"
                 >
             </textarea>
               <button
@@ -198,6 +201,7 @@
                 color="success"
                 type="button"
                 (click)="sendMessage()"
+                id="sendBtn"
               >
                 <mat-icon *ngIf="!isSending">send</mat-icon>
                 <mat-icon *ngIf="isSending"
