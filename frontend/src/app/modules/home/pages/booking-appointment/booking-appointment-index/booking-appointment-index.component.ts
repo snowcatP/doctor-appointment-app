@@ -267,7 +267,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
                 key: 'messageToast',
                 severity: 'error',
                 summary: 'Error',
-                detail: 'Booked appointment unsuccessfully!',
+                detail: res.message,
               });
               this.loading = false; // Stop loading
             }
@@ -277,7 +277,7 @@ export class BookingAppointmentIndexComponent implements OnInit, OnDestroy {
               key: 'messageToast',
               severity: 'error',
               summary: 'Error',
-              detail: 'Booked appointment unsuccessfully!',
+              detail: err || 'Booked appointment unsuccessfully!',
             });
             this.loading = false; // Stop loading
             console.log(err);

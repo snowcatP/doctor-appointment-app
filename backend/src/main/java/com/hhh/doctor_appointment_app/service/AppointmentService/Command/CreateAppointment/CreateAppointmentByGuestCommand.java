@@ -62,6 +62,19 @@ public class CreateAppointmentByGuestCommand {
                         .build();
             }
 
+            // Check for duplicate appointment times
+            boolean isDuplicate = appointmentRepository.existsByDoctor_IdAndDateBookingAndBookingHour(
+                    doctor.getId(),
+                    appointmentByGuestRequest.getDateBooking(), // Chuyển sang LocalDate để so sánh ngày
+                    appointmentByGuestRequest.getBookingHour()
+            );
+
+            if (isDuplicate) {
+                apiResponse.setMessage("This booking hour is already reserved. Please choose a different time.");
+                apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+                return apiResponse;
+            }
+
             // Generate reference code for the new appointment
             String referenceCode = UUID.randomUUID().toString();
 
