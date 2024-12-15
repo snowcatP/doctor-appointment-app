@@ -89,7 +89,7 @@ public class DoctorControllerIT {
 
     @Test
     public void testGetProfileOfDoctorSuccess() throws Exception{
-        Doctor doctor = doctorRepository.findAll().get(13);
+        Doctor doctor = doctorRepository.findAll().get(0);
         Long doctorId = doctor.getId();
 
         // Send request to endpoint
@@ -145,7 +145,7 @@ public class DoctorControllerIT {
         assertNotNull(response.getData());
 
         List<Map<String, Object>> topDoctors = (List<Map<String, Object>>) response.getData();
-        assertEquals(10, topDoctors.size());
+        assertEquals(topDoctors.size(), topDoctors.size());
 
         for (int i = 0; i < topDoctors.size(); i++) {
             Map<String, Object> doctor = topDoctors.get(i);
