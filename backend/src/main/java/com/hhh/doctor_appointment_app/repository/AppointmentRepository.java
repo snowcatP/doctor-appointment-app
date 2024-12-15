@@ -2,7 +2,6 @@ package com.hhh.doctor_appointment_app.repository;
 
 import com.hhh.doctor_appointment_app.entity.Appointment;
 import com.hhh.doctor_appointment_app.entity.Doctor;
-import com.hhh.doctor_appointment_app.entity.Patient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -83,4 +81,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
                     ")"
     )
     List<Doctor> getDoctorsBookedByPatientId(Long patientId);
+
+    @Query("SELECT COUNT(a) > 0 FROM Appointment a WHERE a.doctor.id = :doctorId AND DATE(a.dateBooking) = :dateBooking AND a.bookingHour = :bookingHour")
+    boolean existsByDoctor_IdAndDateBookingAndBookingHour(
+            @Param("doctorId") Long doctorId,
+            @Param("dateBooking") Date dateBooking,
+            @Param("bookingHour") String bookingHour
+    );
 }

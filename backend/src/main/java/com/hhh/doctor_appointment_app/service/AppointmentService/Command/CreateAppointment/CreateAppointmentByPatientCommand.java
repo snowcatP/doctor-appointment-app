@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.UUID;
@@ -79,6 +80,19 @@ public class CreateAppointmentByPatientCommand {
                         .build();
             }
 
+            // Check for duplicate appointment times
+            boolean isDuplicate = appointmentRepository.existsByDoctor_IdAndDateBookingAndBookingHour(
+                    doctor.getId(),
+                    appointmentByPatientRequest.getDateBooking(),// Chuyển sang LocalDate để so sánh ngày
+                    appointmentByPatientRequest.getBookingHour()
+            );
+
+            if (isDuplicate) {
+                apiResponse.setMessage("This booking hour is already reserved. Please choose a different time.");
+                apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+                return apiResponse;
+            }
+
             // Generate reference code for the new appointment
             String referenceCode = UUID.randomUUID().toString();
 
@@ -131,6 +145,5 @@ public class CreateAppointmentByPatientCommand {
                     .build();
         }
     }
-
 
 }
