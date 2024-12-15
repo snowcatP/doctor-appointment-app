@@ -40,7 +40,7 @@ public class AuthTest extends BaseSetup {
     }
 
     @Test
-    public void loginSuccess() {
+    public void testLoginSuccess() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         try {
             login("admin@gmail.com", "Hello@123");
@@ -56,7 +56,7 @@ public class AuthTest extends BaseSetup {
     }
 
     @Test
-    public void loginFail() throws InterruptedException {
+    public void testLoginFail() throws InterruptedException {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         try {
             login("admin@gmail.com", "Hello@12345");

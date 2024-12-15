@@ -46,15 +46,19 @@ public class AppointmentControllerIT {
     private ObjectMapper objectMapper;
 
     @Autowired
+    private DoctorRepository doctorRepository;
+
+    @Autowired
     private PatientRepository patientRepository;
 
     @Autowired
     private AppointmentRepository appointmentRepository;
     @Test
     public void testGetListAppointmentOfDoctorSuccess() throws Exception {
+        var doctor = doctorRepository.findAll().get(0);
         AuthenticationRequest loginRequest = AuthenticationRequest.builder()
-                .email("haonguyen1231@gmail.com")
-                .password("hao2112003")
+                .email(doctor.getProfile().getEmail())
+                .password("Hello@123")
                 .build();
 
         MvcResult loginResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
@@ -82,9 +86,10 @@ public class AppointmentControllerIT {
 
     @Test
     public void testGetListAppointmentOfPatientSuccess() throws Exception {
+        var doctor = doctorRepository.findAll().get(0);
         AuthenticationRequest loginRequest = AuthenticationRequest.builder()
-                .email("hoanghao2112003@gmail.com")
-                .password("NguyenHao2112003")
+                .email(doctor.getProfile().getEmail())
+                .password("Hello@123")
                 .build();
 
         MvcResult loginResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
@@ -124,7 +129,7 @@ public class AppointmentControllerIT {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        Patient patient = patientRepository.findAll().get(6);
+        Patient patient = patientRepository.findAll().get(0);
         Long patientId = patient.getId();
 
         String loginResponse = loginResult.getResponse().getContentAsString();
@@ -146,7 +151,8 @@ public class AppointmentControllerIT {
 
     @Test
     public void testGetAppointmentByCode() throws Exception {
-        Appointment appointment = appointmentRepository.findAll().get(11);
+        var apps = appointmentRepository.findAll();
+        Appointment appointment = appointmentRepository.findAll().get(apps.size() - 1);
         String appointmentCode = appointment.getReferenceCode();
 
         ReferenceCodeRequest referenceCodeRequest = new ReferenceCodeRequest();
