@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { host } from '../../../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import SockJS from 'sockjs-client/dist/sockjs';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,8 @@ import SockJS from 'sockjs-client/dist/sockjs';
 export class WebSocketService {
   private client: Client;
   private state$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
+  socketClient: any = null;
+  private notificationSubscription: any;
   constructor() {
     let ws = new SockJS(`${host}/ws`);
     this.client = Stomp.over(ws);
@@ -63,6 +65,7 @@ export class WebSocketService {
   connectSocket(): Observable<boolean> {
     if (!this.client.connected) {
     }
+    
     this.client.activate();
     return this.state$.asObservable();
   }

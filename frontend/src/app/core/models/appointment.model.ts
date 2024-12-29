@@ -1,4 +1,4 @@
-import { DoctorResponse } from "./doctor.model";
+import { DoctorResponse } from './doctor.model';
 
 export class AppointmentResponse {
   id: number;
@@ -27,7 +27,7 @@ export class Appointment {
   constructor() {}
 }
 
-export class RescheduleAppointment{
+export class RescheduleAppointment {
   dateBooking: Date;
   bookingHour: string;
 }
@@ -36,26 +36,21 @@ export class GetAppointmentForReschedulingRequest {
   doctorEmail: string;
 }
 
-// export class DoctorResponse {
-//   id: number;
-//   firstName: string;
-//   lastName: string;
-//   fullName: string;
-//   gender: boolean;
-//   phone: string;
-//   email: string;
-//   dateOfBirth: Date;
-//   address: string;
-//   avatarFilePath: string;
-//   constructor() {}
-// }
-
 export interface ApiResponse {
-    statusCode: number;
-    message: string;
-    data?: any; // Use the actual data type if known, such as `data?: UserProfile`
-  }
+  statusCode: number;
+  message: string;
+  data?: any; // Use the actual data type if known, such as `data?: UserProfile`
+}
 
-export class ReferenceCodeRequest{
+export class ReferenceCodeRequest {
   referenceCode: string;
+}
+
+export enum AppointmentStatus {
+  ACCEPT,
+  IN_PROGRESS,
+  COMPLETED,
+  CANCELLED,
+  PENDING,
+  RESCHEDULED,
 }

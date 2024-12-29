@@ -14,8 +14,11 @@ import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
 import com.hhh.doctor_appointment_app.service.EmailService.Command.SendAppointmentNotification.SendAppointmentNotificationCommand;
+import com.hhh.doctor_appointment_app.service.Notification.Notification;
+import com.hhh.doctor_appointment_app.service.Notification.NotificationService;
 import com.hhh.doctor_appointment_app.service.NotificationService.Implement.BookingNotificationService;
 import com.hhh.doctor_appointment_app.service.UserService.Query.FindUserByEmail.FindUserByEmailQuery;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +30,7 @@ import java.time.ZoneId;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class CreateAppointmentByPatientCommand {
     @Autowired
     private AppointmentRepository appointmentRepository;
@@ -48,6 +52,8 @@ public class CreateAppointmentByPatientCommand {
 
     @Autowired
     private SendAppointmentNotificationCommand sendAppointmentNotificationCommand;
+    @Autowired
+    private  NotificationService notificationService;
 
     public ApiResponse<Object> createAppointmentByPatient(AppointmentByPatientRequest appointmentByPatientRequest) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
@@ -117,7 +123,14 @@ public class CreateAppointmentByPatientCommand {
             bookingNotificationService.sendBookingMessage(
                     appointmentMapper.toBookingNotificationResponse(appointment)
             );
-
+            notificationService.sendNotification(
+                    appointment.getDoctor().getProfile().getId().toString(),
+                    Notification.builder()
+                            .status(AppointmentStatus.PENDING)
+                            .message("A new appointment has been booked with you. Please check in the Appointment for more informations")
+                            .appointmentId(appointment.getId())
+                            .build()
+            );
             sendAppointmentNotificationCommand.sendAppointmentNotification(
                     appointment.getEmail(),
                     appointment.getFullName(),
@@ -128,6 +141,7 @@ public class CreateAppointmentByPatientCommand {
                     appointment.getBookingHour(),
                     appointment.getDoctor().getProfile().getFullName()
             );
+
             apiResponse.setMessage("Appointment Created Successfully !");
             apiResponse.ok(appointmentResponse);
             return apiResponse;

@@ -4,6 +4,9 @@ import { ReactiveFormConfig } from '@rxweb/reactive-form-validators';
 import { AuthService } from './core/services/auth.service';
 import { Store } from '@ngrx/store';
 import * as AuthActions from './core/states/auth/auth.actions';
+import SockJS from 'sockjs-client';
+import * as Stomp from 'stompjs';
+import { host } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +18,7 @@ export class AppComponent implements OnInit, OnDestroy{
   visibleChatbot: boolean = false;
   mode: string = 'window';
   loadChatbot: boolean = false;
+  socketClient: any = null;
   constructor(
     private authService: AuthService,
     private store: Store,
@@ -79,6 +83,7 @@ export class AppComponent implements OnInit, OnDestroy{
       },
     });
 
+    console.log("token")
     this.WebSocketService.connectSocket();
   }
 

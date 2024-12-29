@@ -28,5 +28,6 @@ export class DoctorComponent implements OnInit {
         console.log(err);
       }
     );
+    
   }
 }

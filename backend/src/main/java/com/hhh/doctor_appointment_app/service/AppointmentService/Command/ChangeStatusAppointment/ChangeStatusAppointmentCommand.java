@@ -10,6 +10,8 @@ import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
 import com.hhh.doctor_appointment_app.repository.DoctorRepository;
 import com.hhh.doctor_appointment_app.repository.PatientRepository;
 import com.hhh.doctor_appointment_app.service.EmailService.Command.SendEmailWhenAppointmentStatusChange.SendEmailWhenAppointmentStatusChangeCommand;
+import com.hhh.doctor_appointment_app.service.Notification.Notification;
+import com.hhh.doctor_appointment_app.service.Notification.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,8 @@ public class ChangeStatusAppointmentCommand {
 
     @Autowired
     private SendEmailWhenAppointmentStatusChangeCommand sendEmailWhenAppointmentStatusChangeCommand;
+    @Autowired
+    private NotificationService notificationService;
 
     @PreAuthorize("hasRole('DOCTOR')")
     public ApiResponse<Object> changeStatusAppointmentByDoctor(Long id) {
@@ -55,6 +59,8 @@ public class ChangeStatusAppointmentCommand {
             // Chuyển đổi `dateBooking` và `bookingHour` thành `LocalDateTime`
             LocalDate dateBooking = appointment.getDateBooking().toInstant()
                     .atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String formattedDate = dateBooking.format(formatter);
 
             String bookingHour = appointment.getBookingHour();
             LocalTime bookingStartTime;
@@ -87,6 +93,14 @@ public class ChangeStatusAppointmentCommand {
 
             // Lưu trạng thái mới
             appointmentRepository.saveAndFlush(appointment);
+            notificationService.sendNotification(
+                    appointment.getPatient().getProfile().getId().toString(),
+                    Notification.builder()
+                            .status(appointment.getAppointmentStatus())
+                            .message("Appointment with Doctor " + appointment.getDoctor().getProfile().getFullName() + " on " + formattedDate + " at " + bookingHour + ": " + apiResponse.getMessage())
+                            .appointmentId(appointment.getId())
+                            .build()
+            );
 
             sendEmailWhenAppointmentStatusChangeCommand.sendAppointmentNotificationWhenChangeStatus(
                     appointment.getEmail(),

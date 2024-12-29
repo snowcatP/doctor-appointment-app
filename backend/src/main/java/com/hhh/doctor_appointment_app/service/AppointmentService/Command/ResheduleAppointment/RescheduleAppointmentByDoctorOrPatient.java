@@ -5,9 +5,12 @@ import com.hhh.doctor_appointment_app.dto.request.AppointmentRequest.RescheduleW
 import com.hhh.doctor_appointment_app.dto.response.ApiResponse;
 import com.hhh.doctor_appointment_app.dto.response.AppointmentResponse.AppointmentResponse;
 import com.hhh.doctor_appointment_app.entity.Appointment;
+import com.hhh.doctor_appointment_app.enums.AppointmentStatus;
 import com.hhh.doctor_appointment_app.exception.NotFoundException;
 import com.hhh.doctor_appointment_app.repository.AppointmentRepository;
 import com.hhh.doctor_appointment_app.service.EmailService.Command.SendEmailWhenAppointmentStatusChange.SendEmailWhenAppointmentStatusChangeCommand;
+import com.hhh.doctor_appointment_app.service.Notification.Notification;
+import com.hhh.doctor_appointment_app.service.Notification.NotificationService;
 import com.hhh.doctor_appointment_app.state.AcceptState;
 import com.hhh.doctor_appointment_app.state.RescheduledState;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,8 @@ public class RescheduleAppointmentByDoctorOrPatient {
 
     @Autowired
     private SendEmailWhenAppointmentStatusChangeCommand sendEmailWhenAppointmentStatusChangeCommand;
+    @Autowired
+    private NotificationService notificationService;
 
     @PreAuthorize("hasAnyRole('DOCTOR', 'PATIENT')")
     public ApiResponse<Object> rescheduleAppointmentByDoctorOrPatient(Long id, RescheduleWithDateRequest rescheduleWithDateRequest) {
@@ -65,7 +70,14 @@ public class RescheduleAppointmentByDoctorOrPatient {
             appointment.setDateBooking(rescheduleWithDateRequest.getDateBooking());
             appointment.setBookingHour(rescheduleWithDateRequest.getBookingHour());
             appointmentRepository.saveAndFlush(appointment);
-
+            notificationService.sendNotification(
+                    appointment.getPatient().getProfile().getId().toString(),
+                    Notification.builder()
+                            .status(appointment.getAppointmentStatus())
+                            .message("We’re sorry, your appointment has been reschedule due to unforeseen circumstances. Please check your notifications for more details.")
+                            .appointmentId(appointment.getId())
+                            .build()
+            );
             sendEmailWhenAppointmentStatusChangeCommand.sendAppointmentNotificationWhenChangeStatus(
                     appointment.getEmail(),
                     appointment.getFullName(),
