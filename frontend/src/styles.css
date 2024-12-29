@@ -5248,6 +5248,7 @@ html.menu-opened body {
 }
 .appointment-action a {
     font-size: 13px;
+	cursor: pointer;
 }
 .info-details {
     list-style: none;

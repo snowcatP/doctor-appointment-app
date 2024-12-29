@@ -116,7 +116,7 @@ export class PatientDashboardComponent {
   }
 
   onCancelAppointment(id: number) {
-    this.appointmentService.cancelAppointmentByDoctor(id).subscribe(
+    this.appointmentService.cancelAppointmentByPatient(id).subscribe(
       (response: ApiResponse) => {
         if (response.statusCode === 200) {
           this.messageService.add({

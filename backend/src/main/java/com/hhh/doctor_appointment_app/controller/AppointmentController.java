@@ -217,11 +217,24 @@ public class AppointmentController {
         }
     }
 
-    @PutMapping("/cancel/{id}")
+    @PutMapping("/cancel-by-doctor/{id}")
     public ResponseEntity<?> cancelledAppointmentByDoctor(@PathVariable Long id){
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         try {
             apiResponse = cancelAppointmentCommand.cancelAppointmentByDoctor(id);
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
+        }
+        catch (Exception ex) {
+            apiResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            apiResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        }
+    }
+    @PutMapping("/cancel-by-patient/{id}")
+    public ResponseEntity<?> cancelledAppointmentByPatient(@PathVariable Long id){
+        ApiResponse<Object> apiResponse = new ApiResponse<>();
+        try {
+            apiResponse = cancelAppointmentCommand.cancelAppointmentByPatient(id);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK); //  for success
         }
         catch (Exception ex) {

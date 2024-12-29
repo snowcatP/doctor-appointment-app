@@ -91,7 +91,11 @@ export class AppointmentService {
   }
 
   cancelAppointmentByDoctor(id: number): Observable<any> {
-    const url = `${host}/api/appointment/cancel/${id}`;
+    const url = `${host}/api/appointment/cancel-by-doctor/${id}`;
+    return this.http.put<ApiResponse>(url, id);
+  }
+  cancelAppointmentByPatient(id: number): Observable<any> {
+    const url = `${host}/api/appointment/cancel-by-patient/${id}`;
     return this.http.put<ApiResponse>(url, id);
   }
 

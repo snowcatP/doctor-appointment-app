@@ -1,3 +1,4 @@
+import { AppointmentResponse, AppointmentStatus } from "./appointment.model";
 import { DoctorBooking } from "./booking.model";
 
 export class BookingNotification {
@@ -6,4 +7,9 @@ export class BookingNotification {
     dateBooking: Date;
     bookingHour: string;
     constructor() {}
+}
+export interface AppNotification{
+    appointmentId: number;
+    status: 'ACCEPT' |'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED'| 'PENDING' | 'RESCHEDULED'
+    message: string
 }

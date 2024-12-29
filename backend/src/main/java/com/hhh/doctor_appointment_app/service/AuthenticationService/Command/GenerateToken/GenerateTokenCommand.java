@@ -31,6 +31,7 @@ public class GenerateTokenCommand {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getEmail())
+                .claim("email", user.getId().toString())
                 .issuer("docapp.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
