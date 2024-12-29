@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit {
   visible: boolean = false;
   socketClient: any = null;
   private notificationSubscription: any;
+  private audio: HTMLAudioElement;
   constructor(
     public accessChecker: NbAccessChecker,
     private store: Store<fromAuth.State>,
@@ -44,7 +45,11 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService,
     private messageService: MessageService,
     private appointmentService: AppointmentService
-  ) {}
+  ) {
+    this.audio = new Audio();
+    this.audio.src = '../assets/sound/notification.mp3'; // Path to the sound file
+    this.audio.load();
+  }
 
   ngOnInit(): void {
     this.token$ = this.store.select(fromAuth.selectToken);
@@ -69,43 +74,39 @@ export class HeaderComponent implements OnInit {
               switch (notification.status) {
                 case 'PENDING':
                   this.messageService.add({
-                    key: 'messageToast',
+                    key: 'notificationToast',
                     severity: 'success',
                     summary: `AppointmentId: ${notification.appointmentId}`,
                     detail: `${notification.message}`,
                   });
+                  this.playSound();
                   break;
                 case 'ACCEPT':
                   this.messageService.add({
-                    key: 'messageToast',
-                    severity: 'success',
-                    summary: `AppointmentId: ${notification.appointmentId}`,
-                    detail: `${notification.message}`,
-                  });
-                  break;
-                case 'IN_PROGRESS':
-                  this.messageService.add({
-                    key: 'messageToast',
+                    key: 'notificationToast',
                     severity: 'info',
                     summary: `AppointmentId: ${notification.appointmentId}`,
                     detail: `${notification.message}`,
                   });
+                  this.playSound();
                   break;
                 case 'RESCHEDULED':
                   this.messageService.add({
-                    key: 'messageToast',
+                    key: 'notificationToast',
                     severity: 'warn',
                     summary: `AppointmentId: ${notification.appointmentId}`,
                     detail: `${notification.message}`,
                   });
+                  this.playSound();
                   break;
                 case 'CANCELLED':
                   this.messageService.add({
-                    key: 'messageToast',
-                    severity: 'error',
+                    key: 'notificationToast',
+                    severity: 'warn',
                     summary: `AppointmentId: ${notification.appointmentId}`,
                     detail: `${notification.message}`,
                   });
+                  this.playSound();
                   break;
               }
             }
@@ -114,7 +115,11 @@ export class HeaderComponent implements OnInit {
       });
     }
   }
-
+  playSound(): void {
+    this.audio.play().catch((err) => {
+      console.error('Error playing notification sound:', err);
+    });
+  }
   goToHome() {
     this.user$.subscribe((user) => {
       if (user?.role.roleName === 'PATIENT') {

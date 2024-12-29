@@ -46,6 +46,8 @@ public class CancelAppointmentCommand {
             // Change `dateBooking` & `bookingHour` to `LocalDateTime`
             LocalDate dateBooking = appointment.getDateBooking().toInstant()
                     .atZone(ZoneId.systemDefault()).toLocalDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String formattedDate = dateBooking.format(formatter);
 
             String bookingHour = appointment.getBookingHour();
             LocalTime bookingStartTime;
@@ -87,7 +89,7 @@ public class CancelAppointmentCommand {
                     appointment.getPatient().getProfile().getId().toString(),
                     Notification.builder()
                             .status(appointment.getAppointmentStatus())
-                            .message("We’re sorry, your appointment has been canceled due to unforeseen circumstances. Please check your notifications for more details.")
+                            .message("We’re sorry, your appointment on " + formattedDate + " at " + bookingHour + " with Doctor " + appointment.getDoctor().getProfile().getFullName() + " has been canceled due to unforeseen circumstances. Please check your notifications for more informations!")
                             .appointmentId(appointment.getId())
                             .build()
             );
@@ -113,6 +115,7 @@ public class CancelAppointmentCommand {
                     .build();
         }
     }
+
     @PreAuthorize("hasAnyRole('PATIENT')")
     public ApiResponse<Object> cancelAppointmentByPatient(Long id) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
@@ -126,6 +129,8 @@ public class CancelAppointmentCommand {
             // Change `dateBooking` & `bookingHour` to `LocalDateTime`
             LocalDate dateBooking = appointment.getDateBooking().toInstant()
                     .atZone(ZoneId.systemDefault()).toLocalDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String formattedDate = dateBooking.format(formatter);
 
             String bookingHour = appointment.getBookingHour();
             LocalTime bookingStartTime;
@@ -167,7 +172,7 @@ public class CancelAppointmentCommand {
                     appointment.getDoctor().getProfile().getId().toString(),
                     Notification.builder()
                             .status(appointment.getAppointmentStatus())
-                            .message("Patient" + appointment.getPatient().getProfile().getFullName() +" has canceled their appointment on" + appointmentDateTime + ", please check in Apppointment for more informations")
+                            .message("Patient " + appointment.getPatient().getProfile().getFullName() + " has canceled their appointment with you on " + formattedDate + " at " + bookingHour + " , please check in Apppointment for more informations!")
                             .appointmentId(appointment.getId())
                             .build()
             );

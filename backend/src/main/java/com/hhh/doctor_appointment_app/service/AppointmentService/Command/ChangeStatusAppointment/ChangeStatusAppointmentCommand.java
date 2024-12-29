@@ -59,6 +59,8 @@ public class ChangeStatusAppointmentCommand {
             // Chuyển đổi `dateBooking` và `bookingHour` thành `LocalDateTime`
             LocalDate dateBooking = appointment.getDateBooking().toInstant()
                     .atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String formattedDate = dateBooking.format(formatter);
 
             String bookingHour = appointment.getBookingHour();
             LocalTime bookingStartTime;
@@ -95,7 +97,7 @@ public class ChangeStatusAppointmentCommand {
                     appointment.getPatient().getProfile().getId().toString(),
                     Notification.builder()
                             .status(appointment.getAppointmentStatus())
-                            .message(apiResponse.getMessage())
+                            .message("Appointment with Doctor " + appointment.getDoctor().getProfile().getFullName() + " on " + formattedDate + " at " + bookingHour + ": " + apiResponse.getMessage())
                             .appointmentId(appointment.getId())
                             .build()
             );
